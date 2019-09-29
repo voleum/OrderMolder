@@ -46,8 +46,9 @@ public class GoodsChooser extends AppCompatActivity {
                         Good chosenGood = goods.get(position);
 //                        Toast.makeText(getApplicationContext(), chosenGood.toString(), Toast.LENGTH_LONG).show();
                         setResult(OrderActivity.RESULT_OK, new Intent()
-                                .putExtra(OrderActivity.CHOSEN_GOOD_NUMBER, chosenGood.getNumber())
-                                .putExtra(OrderActivity.CHOSEN_GOOD_NAME, chosenGood.getName()));
+                                .putExtra(PlaceholderFragment.CHOSEN_GOOD_NUMBER, chosenGood.getNumber())
+                                .putExtra(PlaceholderFragment.CHOSEN_GOOD_NAME, chosenGood.getName()));
+                        finish();
                     }
                 });
         recyclerView.setAdapter(adapter);
