@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_main">Главное</string>
+    <string name="title_catalogs">Справочники</string>
+    <string name="title_documents">Документы</string>
+    <string name="catalog_company_plural">Организации</string>
+    <string name="catalog_company_singular">Организация</string>
+    <string name="catalog_good_singular">Товар</string>
+    <string name="catalog_good_plural">Товары</string>
+    <string name="catalog_partner_plural">Партнёры</string>
+    <string name="catalog_partner_singular">Партнёр</string>
+    <string name="catalogs">Справочники</string>
+    <string name="document_cash_receipt_plural">Приходные кассовые ордера</string>
+    <string name="document_cash_receipt_singular">Приходный кассовый ордер</string>
+    <string name="document_order_plural">Заказы</string>
+    <string name="document_order_singular">Заказ</string>
+    <string name="documents">Документы</string>
+    <string name="object_date">Дата</string>
+    <string name="object_name">Наименование</string>
+    <string name="object_number">Номер</string>
+    <string name="object_sum">Сумма</string>
+    <string name="object_tin">ИНН</string>
+    <string name="report_debt_plural">Долги</string>
+    <string name="report_debt_singular">Долг</string>
+    <string name="reports">Отчёты</string>
+    <string name="catalog_unit_plural">Единица измерения</string>
+    <string name="catalog_unit_singular">Единицы измерения</string>
+    <string name="object_short_name">Сокращённое наименование</string>
+    <string name="report_stock_plural">Остатки</string>
+    <string name="report_stock_singular">Остаток</string>
+    <string name="catalog_warehouse_plural">Склады</string>
+    <string name="catalog_warehouse_singular">Склад</string>
+    <string name="title_reports">Отчёты</string>
+
+    <string name="title_activity_orders">Заказы</string>
+
+    <string-array name="documents">
+        <item>Заказы</item>
+        <item>Приходные кассовые ордера</item>
+    </string-array>
+
+    <string-array name="catalogs">
+        <item>Организации</item>
+        <item>Партнёры</item>
+        <item>Товары</item>
+        <item>Единицы измерения</item>
+    </string-array>
+
+    <string-array name="reports">
+        <item>Долги</item>
+        <item>Остатки</item>
+    </string-array>
+    <string name="title_new_order">Новый заказ</string>
+    <string name="document_date">Дата</string>
+    <string name="order_tab_goods">Товары</string>
+    <string name="order_tab_main">Основное</string>
+    <string name="cash_receipt_tab_main">Основное</string>
+    <string name="cash_receipt_tab_objects">Объекты расчётов</string>
+    <string name="snackbar_action_undo">Отменить</string>
+    <string name="snackbar_doc_created">Документ создан</string>
+    <string name="snackbar_doc_deleted">Документ удалён</string>
+    <string name="title_activity_cash_receipts">Приходные кассовые ордера</string>
+
+</resources>
