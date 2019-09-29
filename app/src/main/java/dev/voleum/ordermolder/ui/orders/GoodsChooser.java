@@ -1,5 +1,6 @@
 package dev.voleum.ordermolder.ui.orders;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -43,7 +44,11 @@ public class GoodsChooser extends AppCompatActivity {
                     @Override
                     public void onEntryClick(View v, int position) {
                         Good chosenGood = goods.get(position);
-                        Toast.makeText(getApplicationContext(), chosenGood.toString(), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), chosenGood.toString(), Toast.LENGTH_LONG).show();
+                        setResult(OrderActivity.RESULT_OK, new Intent()
+                                .putExtra(PlaceholderFragment.CHOSEN_GOOD_NUMBER, chosenGood.getNumber())
+                                .putExtra(PlaceholderFragment.CHOSEN_GOOD_NAME, chosenGood.getName()));
+                        finish();
                     }
                 });
         recyclerView.setAdapter(adapter);

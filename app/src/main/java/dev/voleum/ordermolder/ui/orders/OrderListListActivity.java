@@ -49,7 +49,7 @@ public class OrderListListActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             Snackbar.make(fab, R.string.snackbar_doc_created, Snackbar.LENGTH_LONG)
                     .setAction(R.string.snackbar_action_undo, (v) -> {
-                        // TODO: сделать отмену
+                        // TODO: make undo button
                     })
                     .show();
         }
