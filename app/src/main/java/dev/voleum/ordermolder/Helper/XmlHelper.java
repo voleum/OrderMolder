@@ -66,7 +66,7 @@ public class XmlHelper {
             xs.setOutput(output, ENCODING_UTF8);
 
             xs.startDocument(ENCODING_UTF8, null);
-            // TODO: написать тело создания xml (namespace == null)
+            // TODO: add code for creating xml (namespace == null)
             xs.endDocument();
 
             xs.flush();

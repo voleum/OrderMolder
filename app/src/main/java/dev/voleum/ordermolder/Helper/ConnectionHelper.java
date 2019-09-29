@@ -17,7 +17,7 @@ public class ConnectionHelper {
     private final String FILE_NAME_INPUT = "From1C.xml";
     private final String FILE_NAME_OUTPUT = "To1C.xml";
 
-    // region // TODO: организовать подстановку из настроек
+    // region // TODO: take arguments from settings
     private String hostname = "ftp.kutuzov-it-ru.1gb.ru";
     private int port = 21;
     private boolean usePassiveMode = true;
