@@ -1,16 +1,14 @@
 package dev.voleum.ordermolder.ui.orders;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
@@ -18,6 +16,11 @@ import java.util.Objects;
 import dev.voleum.ordermolder.R;
 
 public class OrderActivity extends AppCompatActivity {
+
+    public static final int GOOD_CHOOSE_REQUEST = 0;
+    public static final int RESULT_OK = 0;
+    public static final String CHOSEN_GOOD_NUMBER = "chosen_good_number";
+    public static final String CHOSEN_GOOD_NAME = "chosen_good_name";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +63,8 @@ public class OrderActivity extends AppCompatActivity {
         });
 
         fab.setOnClickListener(
-                (view) -> startActivity(new Intent(this, GoodsChooser.class))
-                // TODO: start activity for result
+//                (view) -> startActivity(new Intent(this, GoodsChooser.class))
+                (view) -> startActivityForResult(new Intent(this, GoodsChooser.class), GOOD_CHOOSE_REQUEST)
                 );
 
         if (getIntent().getBooleanExtra(OrderListListActivity.OPEN_FOR_CREATE, true)) {
@@ -79,5 +82,15 @@ public class OrderActivity extends AppCompatActivity {
     public void onBackPressed() {
         // TODO: выдать вопрос о сохранении и вернуть resultCode
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == GOOD_CHOOSE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                // TODO: add the good
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
