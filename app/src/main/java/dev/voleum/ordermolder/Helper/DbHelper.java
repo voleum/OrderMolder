@@ -8,7 +8,8 @@ import androidx.annotation.Nullable;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static DbHelper instance = null;
+//    private static DbHelper instance = null;
+    private static volatile DbHelper instance;
 
     // region Databases
     /**
@@ -54,6 +55,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private DbHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        if (instance != null) throw new RuntimeException("Use getInstance() method to get the single instance of this class."); //CHECK: does it work?
     }
 
     @Override
