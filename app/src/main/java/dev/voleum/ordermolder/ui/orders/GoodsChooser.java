@@ -3,10 +3,8 @@ package dev.voleum.ordermolder.ui.orders;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.Helper.DbHelper;
-import dev.voleum.ordermolder.Helper.MyRecyclerViewAdapter;
+import dev.voleum.ordermolder.Adapter.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.R;
 
@@ -39,8 +37,8 @@ public class GoodsChooser extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         goods = getGoodList();
-        MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(this, goods);
-        adapter.setOnEntryClickListener(new MyRecyclerViewAdapter.OnEntryClickListener() {
+        GoodsChooserRecyclerViewAdapter adapter = new GoodsChooserRecyclerViewAdapter(this, goods);
+        adapter.setOnEntryClickListener(new GoodsChooserRecyclerViewAdapter.OnEntryClickListener() {
                     @Override
                     public void onEntryClick(View v, int position) {
                         Good chosenGood = goods.get(position);
