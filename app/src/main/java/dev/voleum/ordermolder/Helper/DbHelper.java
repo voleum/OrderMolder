@@ -184,7 +184,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public static DbHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new DbHelper(context.getApplicationContext(), DB_NAME, null, DB_VERSION);
+            synchronized (DbHelper.class) {
+                instance = new DbHelper(context.getApplicationContext(), DB_NAME, null, DB_VERSION);
+            }
         }
         return instance;
     }
