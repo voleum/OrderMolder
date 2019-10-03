@@ -23,9 +23,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 import dev.voleum.ordermolder.Helper.DbHelper;
-import dev.voleum.ordermolder.Helper.MyRecyclerViewAdapter;
+import dev.voleum.ordermolder.Helper.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Good;
+import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.R;
 
 /**
@@ -44,7 +45,7 @@ public class PlaceholderFragment extends Fragment {
 
     private RecyclerView recyclerGoods;
     private ArrayList<Good> goodsList;
-    private MyRecyclerViewAdapter adapter;
+    private GoodsChooserRecyclerViewAdapter adapter;
 
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -85,7 +86,7 @@ public class PlaceholderFragment extends Fragment {
                 recyclerGoods = (RecyclerView) root.findViewById(R.id.recycler);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new MyRecyclerViewAdapter(getContext(), goodsList);
+                adapter = new GoodsChooserRecyclerViewAdapter(getContext(), goodsList);
                 recyclerGoods.setAdapter(adapter);
                 FloatingActionButton fab = getActivity().findViewById(R.id.fab);
                 fab.setOnClickListener(
@@ -121,10 +122,12 @@ public class PlaceholderFragment extends Fragment {
     }
 
     private void initializeData(View root) {
-        // TODO: make dbHelper available everywhere in app
         DbHelper dbHelper = DbHelper.getInstance(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c = db.query(DbHelper.TABLE_COMPANIES, null, null, null, null, null, null, null);
+        Cursor c;
+
+        // region Companies
+        c = db.query(DbHelper.TABLE_COMPANIES, null, null, null, null, null, null, null);
 
         Company[] companies = null;
 
@@ -140,12 +143,39 @@ public class PlaceholderFragment extends Fragment {
             } while (c.moveToNext());
         }
         c.close();
+
+        ArrayAdapter<Company> adapterCompany = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, companies);
+        adapterCompany.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinnerCompanies = (Spinner) root.findViewById(R.id.spinnerCompanies);
+        spinnerCompanies.setAdapter(adapterCompany);
+        // endregion
+
+        // region Partners
+        c = db.query(DbHelper.TABLE_PARTNERS, null, null, null, null, null, null, null);
+
+        Partner[] partners = null;
+
+        if (c.moveToFirst()) {
+            partners = new Partner[c.getCount()];
+            int i = 0;
+            int idClIndex = c.getColumnIndex(DbHelper.COLUMN_ID);
+            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+            do {
+                partners[i] = new Partner(c.getString(idClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+                i++;
+            } while (c.moveToNext());
+        }
+        c.close();
         dbHelper.close();
 
-        ArrayAdapter<Company> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, companies);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinnerCompanies = (Spinner) root.findViewById(R.id.spinnerCompanies);
-        spinnerCompanies.setAdapter(adapter);
+        ArrayAdapter<Partner> adapterPartners = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, partners);
+        adapterPartners.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinnerPartners = (Spinner) root.findViewById(R.id.spinnerPartners);
+        spinnerPartners.setAdapter(adapterPartners);
+        // endregion
+
+        dbHelper.close();
     }
 
 }

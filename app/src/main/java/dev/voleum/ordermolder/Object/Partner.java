@@ -4,7 +4,7 @@ public class Partner extends Catalog {
 
     private String tin; // Tax Identification Number
 
-    protected Partner(String number, String name, String tin) {
+    public Partner(String number, String name, String tin) {
         super(number, name);
         this.tin = tin;
     }
