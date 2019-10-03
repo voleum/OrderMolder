@@ -72,4 +72,7 @@
         <item>Stock</item>
     </string-array>
 
+    <string name="sign_plus" translatable="false">+</string>
+    <string name="sign_minus" translatable="false">-</string>
+
 </resources>
