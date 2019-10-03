@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.Helper;
+package dev.voleum.ordermolder.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import javax.security.auth.Subject;
 
 import dev.voleum.ordermolder.Object.Good;
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter {
+public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private ArrayList<Good> goods;
     private OnEntryClickListener mOnEntryClickListener;
@@ -42,7 +42,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter {
         void onEntryClick(View v, int position);
     }
 
-    public MyRecyclerViewAdapter(Context context, ArrayList<Good> goods) {
+    public GoodsChooserRecyclerViewAdapter(Context context, ArrayList<Good> goods) {
         mContext = context;
         this.goods = goods;
     }
@@ -50,7 +50,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        TextView tv = new TextView(parent.getContext());
         View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
         return new GoodViewHolder(v);
     }
