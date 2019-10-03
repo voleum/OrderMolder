@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.Helper.DbHelper;
-import dev.voleum.ordermolder.Helper.GoodsChooserRecyclerViewAdapter;
+import dev.voleum.ordermolder.Adapter.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.R;
 

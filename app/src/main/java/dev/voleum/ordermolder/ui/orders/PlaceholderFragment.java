@@ -23,7 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 import dev.voleum.ordermolder.Helper.DbHelper;
-import dev.voleum.ordermolder.Helper.GoodsChooserRecyclerViewAdapter;
+import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.Object.Partner;
@@ -45,7 +45,7 @@ public class PlaceholderFragment extends Fragment {
 
     private RecyclerView recyclerGoods;
     private ArrayList<Good> goodsList;
-    private GoodsChooserRecyclerViewAdapter adapter;
+    private GoodsOrderRecyclerViewAdapter adapter;
 
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -86,7 +86,7 @@ public class PlaceholderFragment extends Fragment {
                 recyclerGoods = (RecyclerView) root.findViewById(R.id.recycler);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new GoodsChooserRecyclerViewAdapter(getContext(), goodsList);
+                adapter = new GoodsOrderRecyclerViewAdapter(getContext(), goodsList);
                 recyclerGoods.setAdapter(adapter);
                 FloatingActionButton fab = getActivity().findViewById(R.id.fab);
                 fab.setOnClickListener(

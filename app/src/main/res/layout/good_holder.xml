@@ -9,29 +9,33 @@
         android:id="@+id/good_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="9"
+        android:layout_weight="50"
         tools:text="Good name" />
 
     <Button
         android:id="@+id/good_minus"
-        android:text="@string/sign_minus"
+        style="@android:style/Widget.Material.Button.Borderless.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:text="@string/sign_minus" />
 
     <EditText
         android:id="@+id/good_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="10"
         android:inputType="number"
-        android:layout_weight="1"
-        tools:text="10" />
+        android:textAlignment="center"
+        tools:text="10"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/good_plus"
-        android:text="@string/sign_plus"
+        style="@android:style/Widget.Material.Button.Borderless.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:text="@string/sign_plus" />
 
 </LinearLayout>
