@@ -9,6 +9,9 @@
         android:id="@+id/good_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="start|center_vertical"
         android:layout_weight="50"
         tools:text="Good name" />
 
@@ -17,6 +20,7 @@
         style="@android:style/Widget.Material.Button.Borderless.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:text="@string/sign_minus" />
 
@@ -24,17 +28,22 @@
         android:id="@+id/good_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_weight="10"
+        android:autofillHints=""
         android:inputType="number"
+        android:numeric="signed"
         android:textAlignment="center"
-        tools:text="10"
-        android:autofillHints="" />
+        tools:text="10" />
 
     <Button
         android:id="@+id/good_plus"
         style="@android:style/Widget.Material.Button.Borderless.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:text="@string/sign_plus" />
 

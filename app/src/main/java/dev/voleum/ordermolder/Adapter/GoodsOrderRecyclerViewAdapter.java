@@ -44,7 +44,12 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 //            if (mOnEntryClickListener != null) {
 //                mOnEntryClickListener.onEntryClick(v, getLayoutPosition());
 //            }
-            int currentQuantity = Integer.parseInt(goodQuantity.getText().toString());
+            int currentQuantity;
+            try {
+                currentQuantity = Integer.parseInt(goodQuantity.getText().toString());
+            } catch (NumberFormatException e) {
+                currentQuantity = 0;
+            }
             String newQuantity;
             switch (v.getId()) {
                 case R.id.good_plus:
@@ -52,10 +57,9 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                     goodQuantity.setText(newQuantity);
                     break;
                 case R.id.good_minus:
-                    if (currentQuantity > 1) {
-                        newQuantity = String.valueOf(--currentQuantity);
-                        goodQuantity.setText(newQuantity);
-                    }
+                    if (currentQuantity > 1) newQuantity = String.valueOf(--currentQuantity);
+                    else newQuantity = String.valueOf(1);
+                    goodQuantity.setText(newQuantity);
                     break;
             }
         }
