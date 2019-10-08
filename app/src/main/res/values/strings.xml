@@ -55,6 +55,8 @@
     <string name="snackbar_doc_deleted">Document deleted</string>
     <string name="snackbar_action_undo">Undo</string>
 
+    <string name="menu_save">Save</string>
+
     <string-array name="documents">
         <item>Orders</item>
         <item>Cash Receipts</item>
