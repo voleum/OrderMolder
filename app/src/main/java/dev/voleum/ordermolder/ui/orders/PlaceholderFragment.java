@@ -3,6 +3,9 @@ package dev.voleum.ordermolder.ui.orders;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -69,6 +73,7 @@ public class PlaceholderFragment extends Fragment {
         pageViewModel.setIndex(index);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -83,13 +88,17 @@ public class PlaceholderFragment extends Fragment {
                 root = inflater.inflate(R.layout.fragment_order_main, container, false);
                 initializeData(root);
                 TextView tvDate = root.findViewById(R.id.tvDate);
+                tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
                 tvDate.setOnClickListener(v -> {
                     DialogFragment datePickerFragment = new SelectDateFragment();
+                    datePickerFragment.setTargetFragment(this, 0);
                     datePickerFragment.show(getParentFragmentManager(), "DatePicker");
                 });
                 TextView tvTime = root.findViewById(R.id.tvTime);
+                tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
                 tvTime.setOnClickListener(v -> {
                     DialogFragment timePickerFragment = new SelectTimeFragment();
+                    timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
                 break;

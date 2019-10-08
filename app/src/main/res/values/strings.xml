@@ -76,5 +76,6 @@
 
     <string name="sign_plus" translatable="false">+</string>
     <string name="sign_minus" translatable="false">-</string>
+    <string name="sign_currency_ruble" translatable="false">₽</string>
 
 </resources>
