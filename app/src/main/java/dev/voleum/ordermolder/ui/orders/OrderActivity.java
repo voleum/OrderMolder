@@ -1,9 +1,12 @@
 package dev.voleum.ordermolder.ui.orders;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -73,5 +76,12 @@ public class OrderActivity extends AppCompatActivity {
     public void onBackPressed() {
         // TODO: show question about saving and return resultCode
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.doc_menu, menu);
+        return true;
     }
 }

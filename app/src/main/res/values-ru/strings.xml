@@ -60,5 +60,6 @@
     <string name="snackbar_doc_created">Документ создан</string>
     <string name="snackbar_doc_deleted">Документ удалён</string>
     <string name="title_activity_cash_receipts">Приходные кассовые ордера</string>
+    <string name="menu_save">Сохранить</string>
 
 </resources>
