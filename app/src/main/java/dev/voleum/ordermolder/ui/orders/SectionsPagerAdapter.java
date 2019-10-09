@@ -1,13 +1,28 @@
 package dev.voleum.ordermolder.ui.orders;
 
 import android.content.Context;
+import android.view.ViewGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Objects;
+
+import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
+import dev.voleum.ordermolder.Helper.DbHelper;
+import dev.voleum.ordermolder.Object.Company;
+import dev.voleum.ordermolder.Object.Good;
+import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.R;
 
 /**
@@ -19,6 +34,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @StringRes
     private static int[] TAB_TITLES = { R.string.order_tab_main, R.string.order_tab_goods };
     private final Context mContext;
+    private Fragment fragmentMain;
+    private Fragment fragmentGoods;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -43,4 +60,49 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return TAB_TITLES.length;
     }
 
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        Fragment createdFragment = (Fragment) super.instantiateItem(container, position);
+        switch (position) {
+            case 0:
+                fragmentMain = createdFragment;
+                break;
+            case 1:
+                fragmentGoods = createdFragment;
+                break;
+        }
+        return createdFragment;
+    }
+
+    public Hashtable<String, String> getMainInfo() {
+        Hashtable<String, String> info = new Hashtable<>();
+
+        FragmentActivity activity = fragmentMain.getActivity();
+        String companyTin = ((Company) ((Spinner) activity.findViewById(R.id.spinnerCompanies)).getSelectedItem()).getTin();
+        String partnerTin = ((Partner) ((Spinner) activity.findViewById(R.id.spinnerPartners)).getSelectedItem()).getTin();
+
+        String dateTime = (((TextView) activity.findViewById(R.id.tvDate)).getText().toString().replaceAll("\\.", "-"))
+                        .concat(" ")
+                        .concat(((TextView) activity.findViewById(R.id.tvTime)).getText().toString())
+                        .concat(".000");
+
+        info.put("date", dateTime);
+        info.put("companyTin", companyTin);
+        info.put("partnerTin", partnerTin);
+
+        return info;
+    }
+
+    public Hashtable<String, String> getGoodsInfo() {
+        Hashtable<String, String> info = new Hashtable<>();
+        RecyclerView rv = fragmentGoods.getActivity().findViewById(R.id.recycler);
+        ArrayList<Good> goods = ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
+        for (Good good: goods
+             ) {
+            // TODO: put the code of the order, quantity and price
+            info.put("code", good.getNumber());
+        }
+        return info;
+    }
 }
