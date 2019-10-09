@@ -1,19 +1,20 @@
 package dev.voleum.ordermolder.ui.orders;
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Hashtable;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
@@ -63,6 +64,8 @@ public class OrderActivity extends AppCompatActivity {
 
         if (getIntent().getBooleanExtra(OrderListListActivity.OPEN_FOR_CREATE, true)) {
             setTitle(R.string.title_new_order);
+        } else {
+            // TODO: set title like "Order $number$ $date$"
         }
     }
 
@@ -82,6 +85,20 @@ public class OrderActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 //        return super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.doc_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.doc_save:
+                // FIXME: save the document
+                Hashtable<String, String> mainInfo = sectionsPagerAdapter.getMainInfo();
+                Hashtable<String, String> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
+                break;
+            default:
+                break;
+        }
         return true;
     }
 }

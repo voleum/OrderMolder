@@ -113,7 +113,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + TABLE_ORDERS + "("
                 + COLUMN_ID + " integer primary key autoincrement, "
                 + COLUMN_CODE + " text, "
-                + COLUMN_DATE + " text, "
+                + COLUMN_DATE + " real, "
                 + COLUMN_COMPANY + " integer, "
                 + COLUMN_PARTNER + " integer, "
                 + COLUMN_SUM + " integer"

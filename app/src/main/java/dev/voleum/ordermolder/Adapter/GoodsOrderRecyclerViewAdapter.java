@@ -101,4 +101,8 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
     public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
         mOnEntryClickListener = onEntryClickListener;
     }
+
+    public ArrayList<Good> getGoods() {
+        return goods;
+    }
 }
