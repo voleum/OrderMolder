@@ -14,17 +14,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.common.collect.ArrayListMultimap;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Objects;
 
 import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
-import dev.voleum.ordermolder.Helper.DbHelper;
 import dev.voleum.ordermolder.Object.Company;
-import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.R;
 
@@ -78,8 +71,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return createdFragment;
     }
 
-    public Hashtable<String, String> getMainInfo() {
-        Hashtable<String, String> info = new Hashtable<>();
+    public HashMap<String, String> getMainInfo() {
+        HashMap<String, String> info = new HashMap<>();
 
         FragmentActivity activity = fragmentMain.getActivity();
         String companyTin = ((Company) ((Spinner) activity.findViewById(R.id.spinnerCompanies)).getSelectedItem()).getTin();
@@ -91,23 +84,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         .concat(".000");
 
         info.put("date", dateTime);
-        info.put("companyTin", companyTin);
-        info.put("partnerTin", partnerTin);
+        info.put("company_tin", companyTin);
+        info.put("partner_tin", partnerTin);
 
         return info;
     }
 
-    public Hashtable<String, Double> getGoodsInfo() {
-        Hashtable<String, Double> info = new Hashtable<>();
+    public HashMap<Integer, HashMap<String, Object>> getGoodsInfo() {
         RecyclerView rv = fragmentGoods.getActivity().findViewById(R.id.recycler);
-        ArrayList<Good> goodsList = ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoodsList();
-        HashMap<Good, HashMap<String, Double>> goodsValues = ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoodsValues();
-        for (int i = 0; i < goodsList.size(); i++) {
-            Good good = goodsList.get(i);
-            HashMap<String, Double> values = goodsValues.get(good);
-            info.put("price", values.get("price"));
-            info.put("quantity", values.get("quantity"));
-        }
-        return info;
+        return ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
     }
 }

@@ -1,7 +1,5 @@
 package dev.voleum.ordermolder.Adapter;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.common.collect.ArrayListMultimap;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import dev.voleum.ordermolder.Object.Good;
@@ -22,8 +17,7 @@ import dev.voleum.ordermolder.R;
 
 public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Good> goodsList;
-    private HashMap<Good, HashMap<String, Double>> goodsValues;
+    private HashMap<Integer, HashMap<String, Object>> goods;
 
     public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView goodName;
@@ -64,9 +58,8 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public GoodsOrderRecyclerViewAdapter(ArrayList<Good> goodsList, HashMap<Good, HashMap<String, Double>> goodsValues) {
-        this.goodsList = goodsList;
-        this.goodsValues = goodsValues;
+    public GoodsOrderRecyclerViewAdapter(HashMap<Integer, HashMap<String, Object>> goods) {
+        this.goods = goods;
     }
 
     @NonNull
@@ -78,15 +71,14 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-//        Good good = goods.get(position);
-        Good good = goodsList.get(position);
+        Good good = (Good) goods.get(position).get("good");
         ((GoodViewHolder) holder).goodName.setText(good.toString());
         ((GoodViewHolder) holder).goodQuantity.setText("1");
     }
 
     @Override
     public int getItemCount() {
-        return goodsList.size();
+        return goods.size();
     }
 
     @Override
@@ -94,11 +86,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public ArrayList<Good> getGoodsList() {
-        return goodsList;
-    }
-
-    public HashMap<Good, HashMap<String, Double>> getGoodsValues() {
-        return goodsValues;
+    public HashMap<Integer, HashMap<String, Object>> getGoods() {
+        return goods;
     }
 }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Helper.DbHelper;
+import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.Adapter.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.R;
@@ -29,7 +28,7 @@ public class GoodsChooser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_chooser);
         setTitle(R.string.catalog_good_plural);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView = findViewById(R.id.recycler);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //            recyclerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 //        }
@@ -37,18 +36,14 @@ public class GoodsChooser extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         goods = getGoodList();
-        GoodsChooserRecyclerViewAdapter adapter = new GoodsChooserRecyclerViewAdapter(this, goods);
-        adapter.setOnEntryClickListener(new GoodsChooserRecyclerViewAdapter.OnEntryClickListener() {
-                    @Override
-                    public void onEntryClick(View v, int position) {
-                        Good chosenGood = goods.get(position);
-//                        Toast.makeText(getApplicationContext(), chosenGood.toString(), Toast.LENGTH_LONG).show();
-                        setResult(OrderActivity.RESULT_OK, new Intent()
-                                .putExtra(PlaceholderFragment.CHOSEN_GOOD_NUMBER, chosenGood.getNumber())
-                                .putExtra(PlaceholderFragment.CHOSEN_GOOD_NAME, chosenGood.getName()));
-                        finish();
-                    }
-                });
+        GoodsChooserRecyclerViewAdapter adapter = new GoodsChooserRecyclerViewAdapter(goods);
+        adapter.setOnEntryClickListener((v, position) -> {
+            Good chosenGood = goods.get(position);
+            setResult(OrderActivity.RESULT_OK, new Intent()
+                    .putExtra(PlaceholderFragment.CHOSEN_GOOD_NUMBER, chosenGood.getNumber())
+                    .putExtra(PlaceholderFragment.CHOSEN_GOOD_NAME, chosenGood.getName()));
+            finish();
+        });
         recyclerView.setAdapter(adapter);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
