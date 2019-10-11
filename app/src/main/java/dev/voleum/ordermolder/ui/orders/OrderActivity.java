@@ -94,7 +94,7 @@ public class OrderActivity extends AppCompatActivity {
             case R.id.doc_save:
                 // FIXME: save the document
                 Hashtable<String, String> mainInfo = sectionsPagerAdapter.getMainInfo();
-                Hashtable<String, String> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
+                Hashtable<String, Double> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
                 break;
             default:
                 break;

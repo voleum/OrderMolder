@@ -12,16 +12,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.common.collect.ArrayListMultimap;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.R;
 
 public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Good> goods;
-    private OnEntryClickListener mOnEntryClickListener;
-    private Context mContext;
+    private ArrayList<Good> goodsList;
+    private HashMap<Good, HashMap<String, Double>> goodsValues;
 
     public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView goodName;
@@ -31,19 +33,16 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         public GoodViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            goodName = (TextView) view.findViewById(R.id.good_name);
-            goodQuantity = (EditText) view.findViewById(R.id.good_quantity);
-            btnPlus = (Button) view.findViewById(R.id.good_plus);
-            btnMinus = (Button) view.findViewById(R.id.good_minus);
+            goodName = view.findViewById(R.id.good_name);
+            goodQuantity = view.findViewById(R.id.good_quantity);
+            btnPlus = view.findViewById(R.id.good_plus);
+            btnMinus = view.findViewById(R.id.good_minus);
             btnPlus.setOnClickListener(this);
             btnMinus.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-//            if (mOnEntryClickListener != null) {
-//                mOnEntryClickListener.onEntryClick(v, getLayoutPosition());
-//            }
             int currentQuantity;
             try {
                 currentQuantity = Integer.parseInt(goodQuantity.getText().toString());
@@ -65,13 +64,9 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public interface OnEntryClickListener {
-        void onEntryClick(View v, int position);
-    }
-
-    public GoodsOrderRecyclerViewAdapter(Context context, ArrayList<Good> goods) {
-        mContext = context;
-        this.goods = goods;
+    public GoodsOrderRecyclerViewAdapter(ArrayList<Good> goodsList, HashMap<Good, HashMap<String, Double>> goodsValues) {
+        this.goodsList = goodsList;
+        this.goodsValues = goodsValues;
     }
 
     @NonNull
@@ -83,14 +78,15 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Good good = goods.get(position);
+//        Good good = goods.get(position);
+        Good good = goodsList.get(position);
         ((GoodViewHolder) holder).goodName.setText(good.toString());
         ((GoodViewHolder) holder).goodQuantity.setText("1");
     }
 
     @Override
     public int getItemCount() {
-        return goods.size();
+        return goodsList.size();
     }
 
     @Override
@@ -98,11 +94,11 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
-        mOnEntryClickListener = onEntryClickListener;
+    public ArrayList<Good> getGoodsList() {
+        return goodsList;
     }
 
-    public ArrayList<Good> getGoods() {
-        return goods;
+    public HashMap<Good, HashMap<String, Double>> getGoodsValues() {
+        return goodsValues;
     }
 }

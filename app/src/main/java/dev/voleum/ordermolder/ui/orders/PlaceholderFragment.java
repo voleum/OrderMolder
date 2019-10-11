@@ -24,8 +24,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.common.collect.ArrayListMultimap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
@@ -52,6 +54,7 @@ public class PlaceholderFragment extends Fragment {
 
     private RecyclerView recyclerGoods;
     private ArrayList<Good> goodsList;
+    private HashMap<Good, HashMap<String, Double>> goodsValues;
     private GoodsOrderRecyclerViewAdapter adapter;
 
     static PlaceholderFragment newInstance(int index) {
@@ -105,10 +108,11 @@ public class PlaceholderFragment extends Fragment {
             case 2:
                 root = inflater.inflate(R.layout.fragment_goods_list, container, false);
                 goodsList = new ArrayList<>();
+                goodsValues = new HashMap<>();
                 recyclerGoods = root.findViewById(R.id.recycler);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new GoodsOrderRecyclerViewAdapter(getContext(), goodsList);
+                adapter = new GoodsOrderRecyclerViewAdapter(goodsList, goodsValues);
                 recyclerGoods.setAdapter(adapter);
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
@@ -129,9 +133,14 @@ public class PlaceholderFragment extends Fragment {
             if (resultCode == OrderActivity.RESULT_OK) {
                 if (data != null) {
                     // TODO: if the good already in list - increase the quantity
-                    goodsList.add(goodsList.size(), new Good(data.getStringExtra(CHOSEN_GOOD_NUMBER),
+                    Good chosenGood = new Good(data.getStringExtra(CHOSEN_GOOD_NUMBER),
                             data.getStringExtra(CHOSEN_GOOD_NAME),
-                            null));
+                            null);
+                    HashMap<String, Double> values = new HashMap<>();
+                    values.put("price", 0.00);
+                    values.put("quantity", 1.00);
+                    goodsList.add(chosenGood);
+                    goodsValues.put(chosenGood, values);
                     adapter.notifyItemInserted(goodsList.size() + 1);
                 }
             }

@@ -14,7 +14,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.common.collect.ArrayListMultimap;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Objects;
 
@@ -94,14 +97,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return info;
     }
 
-    public Hashtable<String, String> getGoodsInfo() {
-        Hashtable<String, String> info = new Hashtable<>();
+    public Hashtable<String, Double> getGoodsInfo() {
+        Hashtable<String, Double> info = new Hashtable<>();
         RecyclerView rv = fragmentGoods.getActivity().findViewById(R.id.recycler);
-        ArrayList<Good> goods = ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
-        for (Good good: goods
-             ) {
-            // TODO: put the code of the order, quantity and price
-            info.put("code", good.getNumber());
+        ArrayList<Good> goodsList = ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoodsList();
+        HashMap<Good, HashMap<String, Double>> goodsValues = ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoodsValues();
+        for (int i = 0; i < goodsList.size(); i++) {
+            Good good = goodsList.get(i);
+            HashMap<String, Double> values = goodsValues.get(good);
+            info.put("price", values.get("price"));
+            info.put("quantity", values.get("quantity"));
         }
         return info;
     }
