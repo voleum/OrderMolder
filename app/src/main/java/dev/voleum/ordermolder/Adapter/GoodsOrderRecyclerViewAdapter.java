@@ -19,24 +19,71 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private HashMap<Integer, HashMap<String, Object>> goods;
 
-    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnFocusChangeListener {
         public TextView goodName;
         public EditText goodQuantity;
+        public EditText goodPrice;
         public Button btnPlus;
         public Button btnMinus;
-        public GoodViewHolder(View view) {
-            super(view);
-            view.setOnClickListener(this);
-            goodName = view.findViewById(R.id.good_name);
-            goodQuantity = view.findViewById(R.id.good_quantity);
-            btnPlus = view.findViewById(R.id.good_plus);
-            btnMinus = view.findViewById(R.id.good_minus);
-            btnPlus.setOnClickListener(this);
-            btnMinus.setOnClickListener(this);
-        }
 
         @Override
-        public void onClick(View v) {
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus) {
+                int position = getAdapterPosition();
+                HashMap<String, Object> goodInfo = goods.get(position);
+                double quantity = 0;
+                double price = 0;
+                View root = v.getRootView();
+                switch (v.getId()) {
+                    case R.id.good_quantity:
+                        try {
+                            quantity = Double.parseDouble(((EditText) v).getText().toString());
+                        } catch (NumberFormatException e) {
+                            quantity = 0;
+                        }
+                        goodInfo.put("quantity", quantity);
+                        EditText etPrice = root.findViewById(R.id.good_price);
+                        try {
+                            price = Double.parseDouble((etPrice.getText().toString()));
+                        } catch (NumberFormatException e) {
+                            price = 0;
+                        }
+                        break;
+                    case R.id.good_price:
+                        try {
+                            price = Double.parseDouble(((EditText) v).getText().toString());
+                        } catch (NumberFormatException e) {
+                            price = 0;
+                        }
+                        goodInfo.put("price", price);
+                        EditText etQuantity = root.findViewById(R.id.good_price);
+                        try {
+                            quantity = Double.parseDouble((etQuantity.getText().toString()));
+                        } catch (NumberFormatException e) {
+                            quantity = 0;
+                        }
+                        break;
+                }
+                double sum = quantity * price;
+                goodInfo.put("sum", sum);
+            }
+        }
+
+        public GoodViewHolder(View view) {
+            super(view);
+            goodName = view.findViewById(R.id.good_name);
+            goodQuantity = view.findViewById(R.id.good_quantity);
+            goodPrice = view.findViewById(R.id.good_price);
+            btnPlus = view.findViewById(R.id.good_plus);
+            btnMinus = view.findViewById(R.id.good_minus);
+            btnPlus.setOnClickListener(v -> onButtonClick(v));
+            btnMinus.setOnClickListener(v -> onButtonClick(v));
+            goodQuantity.setOnFocusChangeListener(this);
+            goodPrice.setOnFocusChangeListener(this);
+        }
+
+        private void onButtonClick(View v) {
+            // TODO: put quantity into goods HashMap
             int currentQuantity;
             try {
                 currentQuantity = Integer.parseInt(goodQuantity.getText().toString());

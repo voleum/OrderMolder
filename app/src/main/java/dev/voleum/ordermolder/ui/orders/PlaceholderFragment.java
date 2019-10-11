@@ -30,8 +30,8 @@ import java.util.Objects;
 
 import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Helper.SelectDateFragment;
-import dev.voleum.ordermolder.Helper.SelectTimeFragment;
+import dev.voleum.ordermolder.Fragment.SelectDateFragment;
+import dev.voleum.ordermolder.Fragment.SelectTimeFragment;
 import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.Object.Partner;
@@ -90,6 +90,7 @@ public class PlaceholderFragment extends Fragment {
                 TextView tvDate = root.findViewById(R.id.tvDate);
                 tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
                 tvDate.setOnClickListener(v -> {
+                    // TODO: date from TextView to DatePicker
                     DialogFragment datePickerFragment = new SelectDateFragment();
                     datePickerFragment.setTargetFragment(this, 0);
                     datePickerFragment.show(getParentFragmentManager(), "DatePicker");
@@ -97,6 +98,7 @@ public class PlaceholderFragment extends Fragment {
                 TextView tvTime = root.findViewById(R.id.tvTime);
                 tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
                 tvTime.setOnClickListener(v -> {
+                    // TODO: time from TextView to TimePicker
                     DialogFragment timePickerFragment = new SelectTimeFragment();
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
