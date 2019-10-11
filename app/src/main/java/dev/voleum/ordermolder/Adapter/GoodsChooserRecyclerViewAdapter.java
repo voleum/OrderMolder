@@ -20,7 +20,6 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private ArrayList<Good> goods;
     private OnEntryClickListener mOnEntryClickListener;
-    private Context mContext;
 
     public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView textView;
@@ -42,8 +41,7 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
         void onEntryClick(View v, int position);
     }
 
-    public GoodsChooserRecyclerViewAdapter(Context context, ArrayList<Good> goods) {
-        mContext = context;
+    public GoodsChooserRecyclerViewAdapter(ArrayList<Good> goods) {
         this.goods = goods;
     }
 

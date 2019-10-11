@@ -1,9 +1,6 @@
 package dev.voleum.ordermolder;
 
-import android.content.ContentValues;
 import android.content.res.Resources;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
@@ -19,8 +16,8 @@ import dev.voleum.ordermolder.Fragment.FragmentDocuments;
 import dev.voleum.ordermolder.Fragment.FragmentCatalogs;
 import dev.voleum.ordermolder.Fragment.FragmentMain;
 import dev.voleum.ordermolder.Fragment.FragmentReports;
-import dev.voleum.ordermolder.Helper.DbAsyncTask;
-import dev.voleum.ordermolder.Helper.DbHelper;
+import dev.voleum.ordermolder.Database.DbAsyncTask;
+import dev.voleum.ordermolder.Database.DbHelper;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.Helper;
+package dev.voleum.ordermolder.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -44,7 +44,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_GOOD = "good";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_SUM = "sum";
-    public static final String COLUMN_COUNT = "count";
+    public static final String COLUMN_QUANTITY = "count";
     public static final String COLUMN_OBJECT = "object";
     public static final String COLUMN_UNIT = "unit";
     public static final String COLUMN_TIN = "tin"; // Tax Identification Number
@@ -128,7 +128,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_DATE + " text, "
                 + COLUMN_COMPANY + " integer, "
                 + COLUMN_PARTNER + " integer, "
-                + COLUMN_COUNT + " integer, "
+                + COLUMN_QUANTITY + " integer, "
                 + COLUMN_OBJECT + " text"
                 + ")");
         // endregion
@@ -149,7 +149,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_ID + " integer primary key autoincrement, "
                 + COLUMN_GOOD + " integer, "
                 + COLUMN_WAREHOUSE + " integer, "
-                + COLUMN_COUNT + " integer"
+                + COLUMN_QUANTITY + " integer"
                 + ")");
         // endregion
 
@@ -168,8 +168,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_ID + " integer primary key autoincrement, "
                 + COLUMN_ORDER_CODE + " text, "
                 + COLUMN_POSITION + " integer,  "
-                + COLUMN_GOOD + " integer, "
-                + COLUMN_COUNT + " integer, "
+                + COLUMN_GOOD + " text, "
+                + COLUMN_QUANTITY + " integer, "
                 + COLUMN_PRICE + " integer, "
                 + COLUMN_SUM + " integer"
                 + ")");

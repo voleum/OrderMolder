@@ -24,14 +24,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.common.collect.ArrayListMultimap;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
-import dev.voleum.ordermolder.Helper.DbHelper;
+import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.Helper.SelectDateFragment;
 import dev.voleum.ordermolder.Helper.SelectTimeFragment;
 import dev.voleum.ordermolder.Object.Company;
@@ -53,8 +51,7 @@ public class PlaceholderFragment extends Fragment {
     private PageViewModel pageViewModel;
 
     private RecyclerView recyclerGoods;
-    private ArrayList<Good> goodsList;
-    private HashMap<Good, HashMap<String, Double>> goodsValues;
+    private HashMap<Integer, HashMap<String, Object>> goods;
     private GoodsOrderRecyclerViewAdapter adapter;
 
     static PlaceholderFragment newInstance(int index) {
@@ -107,12 +104,11 @@ public class PlaceholderFragment extends Fragment {
                 break;
             case 2:
                 root = inflater.inflate(R.layout.fragment_goods_list, container, false);
-                goodsList = new ArrayList<>();
-                goodsValues = new HashMap<>();
+                goods = new HashMap<>();
                 recyclerGoods = root.findViewById(R.id.recycler);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new GoodsOrderRecyclerViewAdapter(goodsList, goodsValues);
+                adapter = new GoodsOrderRecyclerViewAdapter(goods);
                 recyclerGoods.setAdapter(adapter);
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
@@ -136,12 +132,13 @@ public class PlaceholderFragment extends Fragment {
                     Good chosenGood = new Good(data.getStringExtra(CHOSEN_GOOD_NUMBER),
                             data.getStringExtra(CHOSEN_GOOD_NAME),
                             null);
-                    HashMap<String, Double> values = new HashMap<>();
+                    int position = goods.size();
+                    HashMap<String, Object> values = new HashMap<>();
+                    values.put("good", chosenGood);
                     values.put("price", 0.00);
                     values.put("quantity", 1.00);
-                    goodsList.add(chosenGood);
-                    goodsValues.put(chosenGood, values);
-                    adapter.notifyItemInserted(goodsList.size() + 1);
+                    goods.put(position, values);
+                    adapter.notifyItemInserted(position + 1);
                 }
             }
         }
