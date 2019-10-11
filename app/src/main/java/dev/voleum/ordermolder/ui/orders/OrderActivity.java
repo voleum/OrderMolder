@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import dev.voleum.ordermolder.Database.DbAsyncSaveDoc;
 import dev.voleum.ordermolder.R;
 
 public class OrderActivity extends AppCompatActivity {
@@ -91,12 +92,13 @@ public class OrderActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.doc_save:
-                // FIXME: save the document
                 HashMap<String, String> mainInfo = sectionsPagerAdapter.getMainInfo();
                 HashMap<Integer, HashMap<String, Object>> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
                 HashMap<String, Map> orderInfo = new HashMap<>();
                 orderInfo.put("main_info", mainInfo);
                 orderInfo.put("goods_info", goodsInfo);
+                DbAsyncSaveDoc dbAsyncSaveDoc = new DbAsyncSaveDoc(this);
+                dbAsyncSaveDoc.execute(orderInfo);
                 break;
             default:
                 break;
