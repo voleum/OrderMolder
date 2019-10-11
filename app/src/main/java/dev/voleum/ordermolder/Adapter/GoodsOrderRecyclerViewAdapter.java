@@ -1,7 +1,5 @@
 package dev.voleum.ordermolder.Adapter;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,38 +10,80 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.R;
 
 public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Good> goods;
-    private OnEntryClickListener mOnEntryClickListener;
-    private Context mContext;
+    private HashMap<Integer, HashMap<String, Object>> goods;
 
-    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnFocusChangeListener {
         public TextView goodName;
         public EditText goodQuantity;
+        public EditText goodPrice;
         public Button btnPlus;
         public Button btnMinus;
-        public GoodViewHolder(View view) {
-            super(view);
-            view.setOnClickListener(this);
-            goodName = (TextView) view.findViewById(R.id.good_name);
-            goodQuantity = (EditText) view.findViewById(R.id.good_quantity);
-            btnPlus = (Button) view.findViewById(R.id.good_plus);
-            btnMinus = (Button) view.findViewById(R.id.good_minus);
-            btnPlus.setOnClickListener(this);
-            btnMinus.setOnClickListener(this);
-        }
 
         @Override
-        public void onClick(View v) {
-//            if (mOnEntryClickListener != null) {
-//                mOnEntryClickListener.onEntryClick(v, getLayoutPosition());
-//            }
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus) {
+                int position = getAdapterPosition();
+                HashMap<String, Object> goodInfo = goods.get(position);
+                double quantity = 0;
+                double price = 0;
+                View root = v.getRootView();
+                switch (v.getId()) {
+                    case R.id.good_quantity:
+                        try {
+                            quantity = Double.parseDouble(((EditText) v).getText().toString());
+                        } catch (NumberFormatException e) {
+                            quantity = 0;
+                        }
+                        goodInfo.put("quantity", quantity);
+                        EditText etPrice = root.findViewById(R.id.good_price);
+                        try {
+                            price = Double.parseDouble((etPrice.getText().toString()));
+                        } catch (NumberFormatException e) {
+                            price = 0;
+                        }
+                        break;
+                    case R.id.good_price:
+                        try {
+                            price = Double.parseDouble(((EditText) v).getText().toString());
+                        } catch (NumberFormatException e) {
+                            price = 0;
+                        }
+                        goodInfo.put("price", price);
+                        EditText etQuantity = root.findViewById(R.id.good_price);
+                        try {
+                            quantity = Double.parseDouble((etQuantity.getText().toString()));
+                        } catch (NumberFormatException e) {
+                            quantity = 0;
+                        }
+                        break;
+                }
+                double sum = quantity * price;
+                goodInfo.put("sum", sum);
+            }
+        }
+
+        public GoodViewHolder(View view) {
+            super(view);
+            goodName = view.findViewById(R.id.good_name);
+            goodQuantity = view.findViewById(R.id.good_quantity);
+            goodPrice = view.findViewById(R.id.good_price);
+            btnPlus = view.findViewById(R.id.good_plus);
+            btnMinus = view.findViewById(R.id.good_minus);
+            btnPlus.setOnClickListener(v -> onButtonClick(v));
+            btnMinus.setOnClickListener(v -> onButtonClick(v));
+            goodQuantity.setOnFocusChangeListener(this);
+            goodPrice.setOnFocusChangeListener(this);
+        }
+
+        private void onButtonClick(View v) {
+            // TODO: put quantity into goods HashMap
             int currentQuantity;
             try {
                 currentQuantity = Integer.parseInt(goodQuantity.getText().toString());
@@ -65,12 +105,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public interface OnEntryClickListener {
-        void onEntryClick(View v, int position);
-    }
-
-    public GoodsOrderRecyclerViewAdapter(Context context, ArrayList<Good> goods) {
-        mContext = context;
+    public GoodsOrderRecyclerViewAdapter(HashMap<Integer, HashMap<String, Object>> goods) {
         this.goods = goods;
     }
 
@@ -83,7 +118,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Good good = goods.get(position);
+        Good good = (Good) goods.get(position).get("good");
         ((GoodViewHolder) holder).goodName.setText(good.toString());
         ((GoodViewHolder) holder).goodQuantity.setText("1");
     }
@@ -98,11 +133,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
-        mOnEntryClickListener = onEntryClickListener;
-    }
-
-    public ArrayList<Good> getGoods() {
+    public HashMap<Integer, HashMap<String, Object>> getGoods() {
         return goods;
     }
 }

@@ -1,6 +1,6 @@
 // TODO: Delete this class and call in MainActivity
 
-package dev.voleum.ordermolder.Helper;
+package dev.voleum.ordermolder.Database;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
