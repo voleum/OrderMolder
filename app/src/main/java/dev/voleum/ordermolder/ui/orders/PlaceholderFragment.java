@@ -25,13 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
-import dev.voleum.ordermolder.Helper.DbHelper;
-import dev.voleum.ordermolder.Helper.SelectDateFragment;
-import dev.voleum.ordermolder.Helper.SelectTimeFragment;
+import dev.voleum.ordermolder.Database.DbHelper;
+import dev.voleum.ordermolder.Fragment.SelectDateFragment;
+import dev.voleum.ordermolder.Fragment.SelectTimeFragment;
 import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.Object.Partner;
@@ -51,7 +51,7 @@ public class PlaceholderFragment extends Fragment {
     private PageViewModel pageViewModel;
 
     private RecyclerView recyclerGoods;
-    private ArrayList<Good> goodsList;
+    private HashMap<Integer, HashMap<String, Object>> goods;
     private GoodsOrderRecyclerViewAdapter adapter;
 
     static PlaceholderFragment newInstance(int index) {
@@ -90,6 +90,7 @@ public class PlaceholderFragment extends Fragment {
                 TextView tvDate = root.findViewById(R.id.tvDate);
                 tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
                 tvDate.setOnClickListener(v -> {
+                    // TODO: date from TextView to DatePicker
                     DialogFragment datePickerFragment = new SelectDateFragment();
                     datePickerFragment.setTargetFragment(this, 0);
                     datePickerFragment.show(getParentFragmentManager(), "DatePicker");
@@ -97,6 +98,7 @@ public class PlaceholderFragment extends Fragment {
                 TextView tvTime = root.findViewById(R.id.tvTime);
                 tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
                 tvTime.setOnClickListener(v -> {
+                    // TODO: time from TextView to TimePicker
                     DialogFragment timePickerFragment = new SelectTimeFragment();
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
@@ -104,11 +106,11 @@ public class PlaceholderFragment extends Fragment {
                 break;
             case 2:
                 root = inflater.inflate(R.layout.fragment_goods_list, container, false);
-                goodsList = new ArrayList<>();
+                goods = new HashMap<>();
                 recyclerGoods = root.findViewById(R.id.recycler);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new GoodsOrderRecyclerViewAdapter(getContext(), goodsList);
+                adapter = new GoodsOrderRecyclerViewAdapter(goods);
                 recyclerGoods.setAdapter(adapter);
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
@@ -129,10 +131,16 @@ public class PlaceholderFragment extends Fragment {
             if (resultCode == OrderActivity.RESULT_OK) {
                 if (data != null) {
                     // TODO: if the good already in list - increase the quantity
-                    goodsList.add(goodsList.size(), new Good(data.getStringExtra(CHOSEN_GOOD_NUMBER),
+                    Good chosenGood = new Good(data.getStringExtra(CHOSEN_GOOD_NUMBER),
                             data.getStringExtra(CHOSEN_GOOD_NAME),
-                            null));
-                    adapter.notifyItemInserted(goodsList.size() + 1);
+                            null);
+                    int position = goods.size();
+                    HashMap<String, Object> values = new HashMap<>();
+                    values.put("good", chosenGood);
+                    values.put("price", 0.00);
+                    values.put("quantity", 1.00);
+                    goods.put(position, values);
+                    adapter.notifyItemInserted(position + 1);
                 }
             }
         }

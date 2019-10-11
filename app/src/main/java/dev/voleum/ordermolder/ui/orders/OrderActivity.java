@@ -3,20 +3,20 @@ package dev.voleum.ordermolder.ui.orders;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
+import dev.voleum.ordermolder.Database.DbAsyncSaveDoc;
 import dev.voleum.ordermolder.R;
 
 public class OrderActivity extends AppCompatActivity {
@@ -92,9 +92,13 @@ public class OrderActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.doc_save:
-                // FIXME: save the document
-                Hashtable<String, String> mainInfo = sectionsPagerAdapter.getMainInfo();
-                Hashtable<String, String> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
+                HashMap<String, String> mainInfo = sectionsPagerAdapter.getMainInfo();
+                HashMap<Integer, HashMap<String, Object>> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
+                HashMap<String, Map> orderInfo = new HashMap<>();
+                orderInfo.put("main_info", mainInfo);
+                orderInfo.put("goods_info", goodsInfo);
+                DbAsyncSaveDoc dbAsyncSaveDoc = new DbAsyncSaveDoc(this);
+                dbAsyncSaveDoc.execute(orderInfo);
                 break;
             default:
                 break;
