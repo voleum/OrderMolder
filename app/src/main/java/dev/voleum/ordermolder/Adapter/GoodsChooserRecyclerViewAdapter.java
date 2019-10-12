@@ -43,11 +43,6 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
         return goods.size();
     }
 
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
     public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
         this.onEntryClickListener = onEntryClickListener;
     }

@@ -6,8 +6,7 @@ public class Order extends Document {
 
     }
 
-    public Order(String code, String date, Company company, Partner partner, double sum) {
-        super(code, date, company, partner, sum);
+    public Order(String uid, String date, String companyUid, String partnerUid, double sum) {
+        super(uid, date, companyUid, partnerUid, sum);
     }
-
 }

@@ -50,6 +50,11 @@ public class PlaceholderFragment extends Fragment {
 
     private RecyclerView recyclerGoods;
     private HashMap<Integer, HashMap<String, Object>> goods;
+
+    public GoodsOrderRecyclerViewAdapter getAdapter() {
+        return adapter;
+    }
+
     private GoodsOrderRecyclerViewAdapter adapter;
 
     static PlaceholderFragment newInstance(int index) {
@@ -142,6 +147,10 @@ public class PlaceholderFragment extends Fragment {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public double getSum() {
+        return adapter.getSum();
     }
 
     private void initializeData(View root) {

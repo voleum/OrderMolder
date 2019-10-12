@@ -2,18 +2,11 @@ package dev.voleum.ordermolder.Object;
 
 public class CashReceipt extends Document {
 
-    private String object;
+    public CashReceipt() {
 
-    public CashReceipt(String code, String date, Company company, Partner partner, int sum, String object) {
-        super(code, date, company, partner, sum);
-        this.object = object;
     }
 
-    public String getObject() {
-        return object;
-    }
-
-    public void setObject(String object) {
-        this.object = object;
+    public CashReceipt(String uid, String date, String companyUid, String partnerUid, int sum, String object) {
+        super(uid, date, companyUid, partnerUid, sum);
     }
 }

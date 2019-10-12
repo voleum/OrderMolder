@@ -5,19 +5,19 @@ import androidx.annotation.NonNull;
 abstract class Document extends Obj {
 
     protected String date;
-    protected Company company;
-    protected Partner partner;
+    protected String companyUid;
+    protected String partnerUid;
     protected double sum;
 
     protected Document() {
 
     }
 
-    protected Document(String uid, String date, Company company, Partner partner, double sum) {
+    protected Document(String uid, String date, String companyUid, String partnerUid, double sum) {
         super(uid);
         this.date = date;
-        this.company = company;
-        this.partner = partner;
+        this.companyUid = companyUid;
+        this.partnerUid = partnerUid;
         this.sum = sum;
     }
 
@@ -35,20 +35,20 @@ abstract class Document extends Obj {
         this.date = date;
     }
 
-    public Company getCompany() {
-        return company;
+    public String getCompanyUid() {
+        return companyUid;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompanyUid(String companyUid) {
+        this.companyUid = companyUid;
     }
 
-    public Partner getPartner() {
-        return partner;
+    public String getPartnerUid() {
+        return partnerUid;
     }
 
-    public void setPartner(Partner partner) {
-        this.partner = partner;
+    public void setPartnerUid(String partnerUid) {
+        this.partnerUid = partnerUid;
     }
 
     public double getSum() {
