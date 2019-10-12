@@ -1,30 +1,30 @@
 package dev.voleum.ordermolder.Object;
 
-import java.io.Serializable;
+import androidx.annotation.NonNull;
 
-abstract class Document implements Serializable {
+abstract class Document extends Obj {
 
-    protected String code;
     protected String date;
     protected Company company;
     protected Partner partner;
     protected double sum;
 
+    protected Document() {
 
-    protected Document(String code, String date, Company company, Partner partner, double sum) {
-        this.code = code;
+    }
+
+    protected Document(String uid, String date, Company company, Partner partner, double sum) {
+        super(uid);
         this.date = date;
         this.company = company;
         this.partner = partner;
         this.sum = sum;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
+    @NonNull
+    @Override
+    public String toString() {
+        return date + " / " + uid;
     }
 
     public String getDate() {
@@ -55,7 +55,7 @@ abstract class Document implements Serializable {
         return sum;
     }
 
-    public void setSum(int sum) {
+    public void setSum(double sum) {
         this.sum = sum;
     }
 }

@@ -9,8 +9,11 @@ import dev.voleum.ordermolder.MainActivity;
 
 public class Company extends Catalog {
 
-    public Company(String tin, String name) {
-        super(tin, name);
+    private String tin;
+
+    public Company(String uid, String name, String tin) {
+        super(uid, name);
+        this.tin = tin;
     }
 
     public Company(String tin) {
@@ -19,23 +22,24 @@ public class Company extends Catalog {
     }
 
     public String getTin() {
-        return code;
+        return tin;
     }
 
     public void setTin(String tin) {
-        this.code = tin;
+        this.tin = tin;
     }
 
     private class DbAsyncGetCompany extends AsyncTask<String, Void, Void> {
         @Override
-        protected Void doInBackground(String... tins) {
-            if (tins.length > 0) {
+        protected Void doInBackground(String... uids) {
+            if (uids.length > 0) {
                 DbHelper dbHelper = DbHelper.getInstance(MainActivity.getAppContext());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 String selection = DbHelper.COLUMN_TIN + " = ?";
-                Cursor c = db.query(DbHelper.TABLE_COMPANIES, null, selection, tins, null, null, null, "1");
+                Cursor c = db.query(DbHelper.TABLE_COMPANIES, null, selection, uids, null, null, null, "1");
                 if (c.moveToFirst()) {
-                    code = c.getString(c.getColumnIndex(DbHelper.COLUMN_TIN));
+                    uid = c.getString(c.getColumnIndex(DbHelper.COLUMN_UID));
+                    tin = c.getString(c.getColumnIndex(DbHelper.COLUMN_TIN));
                     name = c.getString(c.getColumnIndex(DbHelper.COLUMN_NAME));
                 }
                 c.close();

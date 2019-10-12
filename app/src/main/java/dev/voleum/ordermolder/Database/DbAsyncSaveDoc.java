@@ -42,10 +42,9 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Void, Void> 
                     goodInfo = goodsInfo.get(i);
                     sumGood = (Double) goodInfo.get("sum");
                     cv.clear();
-                    // TODO: put the number of order
-                    cv.put(DbHelper.COLUMN_ORDER_CODE, "001");
-                    cv.put(DbHelper.COLUMN_POSITION, i);
-                    cv.put(DbHelper.COLUMN_GOOD, ((Good) goodInfo.get("good")).getNumber());
+                    cv.put(DbHelper.COLUMN_ORDER_UID, mainInfo.get("uid"));
+                    cv.put(DbHelper.COLUMN_POSITION, i + 1);
+                    cv.put(DbHelper.COLUMN_GOOD_UID, ((Good) goodInfo.get("good")).getUid());
                     cv.put(DbHelper.COLUMN_QUANTITY, (Double) goodInfo.get("quantity"));
                     cv.put(DbHelper.COLUMN_PRICE, (Double) goodInfo.get("price"));
                     cv.put(DbHelper.COLUMN_SUM, sumGood);
@@ -54,13 +53,12 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Void, Void> 
                 }
 
                 cv.clear();
-                // TODO: put the number
-                cv.put(DbHelper.COLUMN_CODE, "001");
+                cv.put(DbHelper.COLUMN_UID, mainInfo.get("uid"));
                 cv.put(DbHelper.COLUMN_DATE, mainInfo.get("date"));
-                cv.put(DbHelper.COLUMN_COMPANY, mainInfo.get("company_tin"));
-                cv.put(DbHelper.COLUMN_PARTNER, mainInfo.get("partner_tin"));
+                cv.put(DbHelper.COLUMN_COMPANY_UID, mainInfo.get("company_uid"));
+                cv.put(DbHelper.COLUMN_PARTNER_UID, mainInfo.get("partner_uid"));
                 cv.put(DbHelper.COLUMN_SUM, sumOrder);
-                db.insert(DbHelper.TABLE_ORDERS, null, cv);
+                db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
             }
             db.setTransactionSuccessful();
         } catch (Exception e) {
