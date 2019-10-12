@@ -1,10 +1,14 @@
 package dev.voleum.ordermolder.ui.orders;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -22,9 +26,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import dev.voleum.ordermolder.Database.DbAsyncSaveDoc;
-import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Order;
-import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.R;
 
 public class OrderActivity extends AppCompatActivity {
@@ -62,8 +64,19 @@ public class OrderActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 1) fab.show();
-                else fab.hide();
+                if (position == 1) {
+                    fab.show();
+                }
+                else {
+                    fab.hide();
+                    View focusedView = getCurrentFocus();
+                    if (focusedView != null) focusedView.clearFocus();
+                    double sum = sectionsPagerAdapter.getSum();
+                    ((TextView) findViewById(R.id.order_tv_sum)).setText(String.valueOf(sum));
+                    InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+
+                }
             }
 
             @Override
@@ -86,7 +99,9 @@ public class OrderActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     saveDoc();
                     if (getIntent().getBooleanExtra(OrderListListActivity.OPEN_FOR_CREATE, true)) {
-                        setResult(OrderListListActivity.RESULT_CREATED, new Intent());
+                        Intent intent = new Intent();
+                        intent.putExtra("order", orderObj);
+                        setResult(OrderListListActivity.RESULT_CREATED, intent);
                     } else {
                         setResult(OrderListListActivity.RESULT_SAVED);
                     }
@@ -115,6 +130,10 @@ public class OrderActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        View focusedView = getCurrentFocus();
+        if (focusedView != null) focusedView.clearFocus();
+        InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
@@ -139,8 +158,8 @@ public class OrderActivity extends AppCompatActivity {
             orderObj.setUid(UUID.randomUUID().toString());
         }
         orderObj.setDate((String) mainInfo.get("date"));
-        orderObj.setCompany(new Company((String) mainInfo.get("company_uid")));
-        orderObj.setPartner(new Partner((String) mainInfo.get("partner_uid")));
+        orderObj.setCompanyUid((String) mainInfo.get("company_uid"));
+        orderObj.setPartnerUid((String) mainInfo.get("partner_uid"));
         orderObj.setSum((Double) mainInfo.get("sum"));
 
         mainInfo.put("uid", orderObj.getUid());

@@ -71,6 +71,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return createdFragment;
     }
 
+    public double getSum() {
+        return ((PlaceholderFragment) fragmentGoods).getSum();
+    }
+
     public HashMap<String, Object> getMainInfo() {
         HashMap<String, Object> info = new HashMap<>();
 

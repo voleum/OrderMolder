@@ -36,6 +36,7 @@
         android:autofillHints=""
         android:inputType="number"
         android:textAlignment="center"
+        android:imeOptions="actionDone"
         tools:text="10" />
 
     <Button
@@ -53,6 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:inputType="number"
+        android:textAlignment="center"
+        android:imeOptions="actionDone"
         tools:text="1000"/>
 
     <TextView
