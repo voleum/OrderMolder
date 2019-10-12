@@ -28,7 +28,7 @@ public class GoodsChooser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_chooser);
         setTitle(R.string.catalog_good_plural);
-        recyclerView = findViewById(R.id.recycler);
+        recyclerView = findViewById(R.id.recycler_goods);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //            recyclerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 //        }
@@ -40,8 +40,7 @@ public class GoodsChooser extends AppCompatActivity {
         adapter.setOnEntryClickListener((v, position) -> {
             Good chosenGood = goods.get(position);
             setResult(OrderActivity.RESULT_OK, new Intent()
-                    .putExtra(PlaceholderFragment.CHOSEN_GOOD_NUMBER, chosenGood.getNumber())
-                    .putExtra(PlaceholderFragment.CHOSEN_GOOD_NAME, chosenGood.getName()));
+                    .putExtra("good", chosenGood));
             finish();
         });
         recyclerView.setAdapter(adapter);
@@ -49,6 +48,7 @@ public class GoodsChooser extends AppCompatActivity {
     }
 
     private ArrayList<Good> getGoodList() {
+        // TODO: AsyncTask
         DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c = db.query(DbHelper.TABLE_GOODS, null, null, null, null, null, null);

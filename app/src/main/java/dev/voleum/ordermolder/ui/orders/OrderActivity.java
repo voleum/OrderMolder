@@ -1,15 +1,19 @@
 package dev.voleum.ordermolder.ui.orders;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.HashMap;
@@ -17,6 +21,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.Database.DbAsyncSaveDoc;
+import dev.voleum.ordermolder.Object.Company;
+import dev.voleum.ordermolder.Object.Order;
+import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.R;
 
 public class OrderActivity extends AppCompatActivity {
@@ -24,6 +31,8 @@ public class OrderActivity extends AppCompatActivity {
     protected ViewPager viewPager;
     protected FloatingActionButton fab;
     protected SectionsPagerAdapter sectionsPagerAdapter;
+
+    private Order orderObj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +79,35 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
-    @Override
     public void onBackPressed() {
-        // TODO: show question about saving and return resultCode
-        super.onBackPressed();
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    saveDoc();
+                    if (getIntent().getBooleanExtra(OrderListListActivity.OPEN_FOR_CREATE, true)) {
+                        setResult(OrderListListActivity.RESULT_CREATED, new Intent());
+                    } else {
+                        setResult(OrderListListActivity.RESULT_SAVED);
+                    }
+                    finish();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    finish();
+                    break;
+                default:
+                    dialog.cancel();
+            }
+        };
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setMessage(R.string.dialog_save_doc)
+                .setPositiveButton(R.string.dialog_yes, dialogClickListener)
+                .setNegativeButton(R.string.dialog_no, dialogClickListener)
+                .setNeutralButton(R.string.dialog_cancel, dialogClickListener)
+                .show();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        return super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.doc_menu, menu);
         return true;
     }
@@ -91,18 +115,33 @@ public class OrderActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
             case R.id.doc_save:
-                HashMap<String, String> mainInfo = sectionsPagerAdapter.getMainInfo();
-                HashMap<Integer, HashMap<String, Object>> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
-                HashMap<String, Map> orderInfo = new HashMap<>();
-                orderInfo.put("main_info", mainInfo);
-                orderInfo.put("goods_info", goodsInfo);
-                DbAsyncSaveDoc dbAsyncSaveDoc = new DbAsyncSaveDoc(this);
-                dbAsyncSaveDoc.execute(orderInfo);
+                saveDoc();
+                Snackbar.make(findViewById(R.id.constraintLayout), R.string.snackbar_doc_saved, Snackbar.LENGTH_LONG)
+                        .show();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    private void saveDoc() {
+        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getMainInfo();
+        HashMap<Integer, HashMap<String, Object>> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
+        HashMap<String, Map> orderInfo = new HashMap<>();
+        orderInfo.put("main_info", mainInfo);
+        orderInfo.put("goods_info", goodsInfo);
+        DbAsyncSaveDoc dbAsyncSaveDoc = new DbAsyncSaveDoc(this);
+        dbAsyncSaveDoc.execute(orderInfo);
+        orderObj = new Order("001",
+                (String) mainInfo.get("date"),
+                new Company((String) mainInfo.get("company_tin")),
+                new Partner((String) mainInfo.get("partner_tin")),
+                (Double) mainInfo.get("sum")
+        );
     }
 }

@@ -4,8 +4,8 @@ public class Good extends Catalog {
 
     private Unit unit;
 
-    public Good(String number, String name, Unit unit) {
-        super(number, name);
+    public Good(String code, String name, Unit unit) {
+        super(code, name);
         this.unit = unit;
     }
 

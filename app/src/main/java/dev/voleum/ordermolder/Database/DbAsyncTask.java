@@ -16,6 +16,8 @@ public class DbAsyncTask extends AsyncTask<DbHelper, Void, Void> {
         db.delete(DbHelper.TABLE_GOODS, null, null);
         db.delete(DbHelper.TABLE_UNITS, null, null);
         db.delete(DbHelper.TABLE_GOODS_GROUPS, null, null);
+        db.delete(DbHelper.TABLE_ORDERS, null, null);
+        db.delete(DbHelper.TABLE_GOODS_TABLE, null, null);
         ContentValues cv = new ContentValues();
         for (int i = 1; i <= 3; i++) {
             cv.clear();

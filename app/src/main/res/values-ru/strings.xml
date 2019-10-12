@@ -61,5 +61,10 @@
     <string name="snackbar_doc_deleted">Документ удалён</string>
     <string name="title_activity_cash_receipts">Приходные кассовые ордера</string>
     <string name="menu_save">Сохранить</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="dialog_no">Нет</string>
+    <string name="dialog_yes">Да</string>
+    <string name="dialog_save_doc">Сохранить документ?</string>
+    <string name="snackbar_doc_saved">Документ сохранён</string>
 
 </resources>

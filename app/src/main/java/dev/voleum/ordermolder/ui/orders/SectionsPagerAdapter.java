@@ -29,13 +29,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
     private static int[] TAB_TITLES = { R.string.order_tab_main, R.string.order_tab_goods };
-    private final Context mContext;
+    private final Context context;
     private Fragment fragmentMain;
     private Fragment fragmentGoods;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
-        mContext = context;
+        this.context = context;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getString(TAB_TITLES[position]);
+        return context.getResources().getString(TAB_TITLES[position]);
     }
 
     @Override
@@ -71,27 +71,29 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return createdFragment;
     }
 
-    public HashMap<String, String> getMainInfo() {
-        HashMap<String, String> info = new HashMap<>();
+    public HashMap<String, Object> getMainInfo() {
+        HashMap<String, Object> info = new HashMap<>();
 
         FragmentActivity activity = fragmentMain.getActivity();
-        String companyTin = ((Company) ((Spinner) activity.findViewById(R.id.spinnerCompanies)).getSelectedItem()).getTin();
-        String partnerTin = ((Partner) ((Spinner) activity.findViewById(R.id.spinnerPartners)).getSelectedItem()).getTin();
+        String companyTin = ((Company) ((Spinner) activity.findViewById(R.id.order_spinner_companies)).getSelectedItem()).getTin();
+        String partnerTin = ((Partner) ((Spinner) activity.findViewById(R.id.order_spinner_partners)).getSelectedItem()).getTin();
+        double sum = Double.parseDouble(((TextView) activity.findViewById(R.id.order_tv_sum)).getText().toString());
 
-        String dateTime = (((TextView) activity.findViewById(R.id.tvDate)).getText().toString().replaceAll("\\.", "-"))
+        String dateTime = (((TextView) activity.findViewById(R.id.order_tv_date)).getText().toString().replaceAll("\\.", "-"))
                         .concat(" ")
-                        .concat(((TextView) activity.findViewById(R.id.tvTime)).getText().toString())
+                        .concat(((TextView) activity.findViewById(R.id.order_tv_time)).getText().toString())
                         .concat(".000");
 
         info.put("date", dateTime);
         info.put("company_tin", companyTin);
         info.put("partner_tin", partnerTin);
+        info.put("sum", sum);
 
         return info;
     }
 
     public HashMap<Integer, HashMap<String, Object>> getGoodsInfo() {
-        RecyclerView rv = fragmentGoods.getActivity().findViewById(R.id.recycler);
+        RecyclerView rv = fragmentGoods.getActivity().findViewById(R.id.recycler_goods);
         return ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
     }
 }

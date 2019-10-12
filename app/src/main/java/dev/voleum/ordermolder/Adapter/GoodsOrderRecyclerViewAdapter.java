@@ -19,6 +19,47 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private HashMap<Integer, HashMap<String, Object>> goods;
 
+    public GoodsOrderRecyclerViewAdapter(HashMap<Integer, HashMap<String, Object>> goods) {
+        this.goods = goods;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.good_holder, parent, false);
+        return new GoodViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Good good = (Good) goods.get(position).get("good");
+        ((GoodViewHolder) holder).goodName.setText(good.toString());
+        ((GoodViewHolder) holder).goodQuantity.setText("1");
+    }
+
+    @Override
+    public int getItemCount() {
+        return goods.size();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    public HashMap<Integer, HashMap<String, Object>> getGoods() {
+        return goods;
+    }
+
+    public double getSum() {
+        double sum = 0.0;
+        for (int i = 0; i < goods.size(); i++) {
+            HashMap<String, Object> good = goods.get(i);
+            sum += (Double) good.get("sum");
+        }
+        return sum;
+    }
+
     public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnFocusChangeListener {
         public TextView goodName;
         public EditText goodQuantity;
@@ -34,6 +75,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                 double quantity = 0;
                 double price = 0;
                 View root = v.getRootView();
+                TextView tvSum = root.findViewById(R.id.order_tv_sum);
                 switch (v.getId()) {
                     case R.id.good_quantity:
                         try {
@@ -56,7 +98,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                             price = 0;
                         }
                         goodInfo.put("price", price);
-                        EditText etQuantity = root.findViewById(R.id.good_price);
+                        EditText etQuantity = root.findViewById(R.id.good_quantity);
                         try {
                             quantity = Double.parseDouble((etQuantity.getText().toString()));
                         } catch (NumberFormatException e) {
@@ -66,6 +108,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                 }
                 double sum = quantity * price;
                 goodInfo.put("sum", sum);
+                tvSum.setText(String.valueOf(getSum()));
             }
         }
 
@@ -103,37 +146,5 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                     break;
             }
         }
-    }
-
-    public GoodsOrderRecyclerViewAdapter(HashMap<Integer, HashMap<String, Object>> goods) {
-        this.goods = goods;
-    }
-
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.good_holder, parent, false);
-        return new GoodViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Good good = (Good) goods.get(position).get("good");
-        ((GoodViewHolder) holder).goodName.setText(good.toString());
-        ((GoodViewHolder) holder).goodQuantity.setText("1");
-    }
-
-    @Override
-    public int getItemCount() {
-        return goods.size();
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    public HashMap<Integer, HashMap<String, Object>> getGoods() {
-        return goods;
     }
 }

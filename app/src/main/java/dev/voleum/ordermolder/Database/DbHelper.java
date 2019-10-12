@@ -15,7 +15,7 @@ public class DbHelper extends SQLiteOpenHelper {
     /**
      * FIXME: Do all final variable private & not static
      */
-    private static final String DB_NAME = "database";
+    private static final String DB_NAME = "db_order_molder";
     private static final int DB_VERSION = 1;
     // endregion
 
@@ -114,9 +114,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_ID + " integer primary key autoincrement, "
                 + COLUMN_CODE + " text, "
                 + COLUMN_DATE + " real, "
-                + COLUMN_COMPANY + " integer, "
-                + COLUMN_PARTNER + " integer, "
-                + COLUMN_SUM + " integer"
+                + COLUMN_COMPANY + " text, "
+                + COLUMN_PARTNER + " text, "
+                + COLUMN_SUM + " double"
                 + ")");
         // endregion
 
@@ -169,9 +169,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_ORDER_CODE + " text, "
                 + COLUMN_POSITION + " integer,  "
                 + COLUMN_GOOD + " text, "
-                + COLUMN_QUANTITY + " integer, "
-                + COLUMN_PRICE + " integer, "
-                + COLUMN_SUM + " integer"
+                + COLUMN_QUANTITY + " double, "
+                + COLUMN_PRICE + " double, "
+                + COLUMN_SUM + " double"
                 + ")");
         // endregion
 
