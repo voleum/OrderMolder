@@ -1,5 +1,6 @@
 package dev.voleum.ordermolder;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int MENU_ITEM_CATALOGS = 2;
     public static final int MENU_ITEM_REPORTS = 3;
 
-    public static Resources resources = null;
+    private static Context appContext = null;
+    private static Resources resources = null;
 
     private int checkedMenuItem = MENU_ITEM_MAIN;
 
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        appContext = getApplicationContext();
         resources = getResources();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -123,6 +126,14 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View v) {
         DbAsyncTask dbAsyncTask = new DbAsyncTask();
         dbAsyncTask.execute(DbHelper.getInstance(getApplicationContext()));
+    }
+
+    public static Context getAppContext() {
+        return appContext;
+    }
+
+    public static Resources getRess() {
+        return resources;
     }
 
 }

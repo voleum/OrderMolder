@@ -18,7 +18,7 @@ import dev.voleum.ordermolder.R;
 
 public class FragmentDocuments extends androidx.fragment.app.ListFragment {
 
-    private final String[] documents = MainActivity.resources.getStringArray(R.array.documents);
+    private final String[] documents = MainActivity.getRess().getStringArray(R.array.documents);
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

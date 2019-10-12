@@ -1,6 +1,5 @@
 package dev.voleum.ordermolder.Adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,32 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.security.auth.Subject;
 
 import dev.voleum.ordermolder.Object.Good;
 
 public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private ArrayList<Good> goods;
-    private OnEntryClickListener mOnEntryClickListener;
-
-    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView textView;
-        public GoodViewHolder(View view) {
-            super(view);
-            view.setOnClickListener(this);
-            textView = (TextView) view;
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (mOnEntryClickListener != null) {
-                mOnEntryClickListener.onEntryClick(v, getLayoutPosition());
-            }
-        }
-    }
+    private OnEntryClickListener onEntryClickListener;
 
     public interface OnEntryClickListener {
         void onEntryClick(View v, int position);
@@ -69,6 +49,22 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
-        mOnEntryClickListener = onEntryClickListener;
+        this.onEntryClickListener = onEntryClickListener;
+    }
+
+    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView textView;
+        public GoodViewHolder(View view) {
+            super(view);
+            view.setOnClickListener(this);
+            textView = (TextView) view;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (onEntryClickListener != null) {
+                onEntryClickListener.onEntryClick(v, getLayoutPosition());
+            }
+        }
     }
 }

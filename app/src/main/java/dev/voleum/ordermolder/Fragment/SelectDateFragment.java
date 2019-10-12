@@ -40,6 +40,6 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
         Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         String newDate = df.format(cal);
-        ((TextView) ((PlaceholderFragment) getTargetFragment()).getActivity().findViewById(R.id.tvDate)).setText(newDate);
+        ((TextView) getTargetFragment().getActivity().findViewById(R.id.order_tv_date)).setText(newDate);
     }
 }
