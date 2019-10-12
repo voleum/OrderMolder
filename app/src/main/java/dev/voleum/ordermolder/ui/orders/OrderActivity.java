@@ -19,6 +19,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import dev.voleum.ordermolder.Database.DbAsyncSaveDoc;
 import dev.voleum.ordermolder.Object.Company;
@@ -132,16 +133,22 @@ public class OrderActivity extends AppCompatActivity {
     private void saveDoc() {
         HashMap<String, Object> mainInfo = sectionsPagerAdapter.getMainInfo();
         HashMap<Integer, HashMap<String, Object>> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
+
+        if (orderObj == null) {
+            orderObj = new Order();
+            orderObj.setUid(UUID.randomUUID().toString());
+        }
+        orderObj.setDate((String) mainInfo.get("date"));
+        orderObj.setCompany(new Company((String) mainInfo.get("company_uid")));
+        orderObj.setPartner(new Partner((String) mainInfo.get("partner_uid")));
+        orderObj.setSum((Double) mainInfo.get("sum"));
+
+        mainInfo.put("uid", orderObj.getUid());
+
         HashMap<String, Map> orderInfo = new HashMap<>();
         orderInfo.put("main_info", mainInfo);
         orderInfo.put("goods_info", goodsInfo);
         DbAsyncSaveDoc dbAsyncSaveDoc = new DbAsyncSaveDoc(this);
         dbAsyncSaveDoc.execute(orderInfo);
-        orderObj = new Order("001",
-                (String) mainInfo.get("date"),
-                new Company((String) mainInfo.get("company_tin")),
-                new Partner((String) mainInfo.get("partner_tin")),
-                (Double) mainInfo.get("sum")
-        );
     }
 }

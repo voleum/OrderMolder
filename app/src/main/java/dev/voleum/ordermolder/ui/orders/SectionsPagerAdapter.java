@@ -75,8 +75,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         HashMap<String, Object> info = new HashMap<>();
 
         FragmentActivity activity = fragmentMain.getActivity();
-        String companyTin = ((Company) ((Spinner) activity.findViewById(R.id.order_spinner_companies)).getSelectedItem()).getTin();
-        String partnerTin = ((Partner) ((Spinner) activity.findViewById(R.id.order_spinner_partners)).getSelectedItem()).getTin();
+        String companyUid = ((Company) ((Spinner) activity.findViewById(R.id.order_spinner_companies)).getSelectedItem()).getUid();
+        String partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.order_spinner_partners)).getSelectedItem()).getUid();
         double sum = Double.parseDouble(((TextView) activity.findViewById(R.id.order_tv_sum)).getText().toString());
 
         String dateTime = (((TextView) activity.findViewById(R.id.order_tv_date)).getText().toString().replaceAll("\\.", "-"))
@@ -85,8 +85,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         .concat(".000");
 
         info.put("date", dateTime);
-        info.put("company_tin", companyTin);
-        info.put("partner_tin", partnerTin);
+        info.put("company_uid", companyUid);
+        info.put("partner_uid", partnerUid);
         info.put("sum", sum);
 
         return info;

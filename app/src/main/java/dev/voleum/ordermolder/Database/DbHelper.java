@@ -31,10 +31,12 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TABLE_STOCK = "stock";
     public static final String TABLE_PRICE_LIST = "price_list";
     public static final String TABLE_GOODS_TABLE = "goods_table";
+    public static final String TABLE_WAREHOUSES = "warehouses";
     // endregion
 
     // region Columns
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_UID = "uid";
     public static final String COLUMN_CODE = "code";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_NAME = "name";
@@ -45,12 +47,18 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_SUM = "sum";
     public static final String COLUMN_QUANTITY = "count";
-    public static final String COLUMN_OBJECT = "object";
     public static final String COLUMN_UNIT = "unit";
     public static final String COLUMN_TIN = "tin"; // Tax Identification Number
-    public static final String COLUMN_ORDER_CODE = "order_code";
     public static final String COLUMN_POSITION = "position";
-    public static final String COLUMN_GROUP_CODE = "group_code";
+    // UIDs
+    public static final String COLUMN_ORDER_UID = "order_uid";
+    public static final String COLUMN_GROUP_UID = "group_uid";
+    public static final String COLUMN_UNIT_UID = "unit_uid";
+    public static final String COLUMN_COMPANY_UID = "company_uid";
+    public static final String COLUMN_PARTNER_UID = "partner_uid";
+    public static final String COLUMN_OBJECT_UID = "object_uid";
+    public static final String COLUMN_WAREHOUSE_UID = "warehouse_uid";
+    public static final String COLUMN_GOOD_UID = "good_uid";
     // endregion
 
     private DbHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
@@ -64,7 +72,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Companies
         db.execSQL("create table "
                 + TABLE_COMPANIES + "("
-                + COLUMN_ID + " integer primary key autoincrement, "
+                + COLUMN_UID + " text, "
                 + COLUMN_TIN + " text, "
                 + COLUMN_NAME + " text"
                 + ")");
@@ -73,7 +81,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Partners
         db.execSQL("create table "
                 + TABLE_PARTNERS + "("
-                + COLUMN_ID + " integer primary key autoincrement, "
+                + COLUMN_UID + " text, "
                 + COLUMN_TIN + " text, "
                 + COLUMN_NAME + " text"
                 + ")");
@@ -82,7 +90,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Units
         db.execSQL("create table "
                 + TABLE_UNITS + "("
-                + COLUMN_ID + " integer primary key autoincrement, "
+                + COLUMN_UID + " text, "
                 + COLUMN_CODE + " integer, "
                 + COLUMN_NAME + " text"
                 + ")");
@@ -91,8 +99,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Goods groups
         db.execSQL("create table "
                 + TABLE_GOODS_GROUPS + "("
-                + COLUMN_ID + " integer primary key autoincrement, "
-                + COLUMN_CODE + " text, "
+                + COLUMN_UID + " text, "
                 + COLUMN_NAME + " text "
                 + ")");
         // endregion
@@ -100,22 +107,28 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Goods
         db.execSQL("create table "
                 + TABLE_GOODS + "("
-                + COLUMN_ID + " integer primary key autoincrement, "
-                + COLUMN_CODE + " text, "
+                + COLUMN_UID + " text, "
                 + COLUMN_NAME + " text, "
-                + COLUMN_GROUP_CODE + " text, "
-                + COLUMN_UNIT + " integer"
+                + COLUMN_GROUP_UID + " text, "
+                + COLUMN_UNIT_UID + " text"
+                + ")");
+        // endregion
+
+        // region Warehouses
+        db.execSQL("create table "
+                + TABLE_WAREHOUSES + "("
+                + COLUMN_UID + " text, "
+                + COLUMN_NAME + " text "
                 + ")");
         // endregion
 
         // region Orders
         db.execSQL("create table "
                 + TABLE_ORDERS + "("
-                + COLUMN_ID + " integer primary key autoincrement, "
-                + COLUMN_CODE + " text, "
+                + COLUMN_UID + " text UNIQUE, "
                 + COLUMN_DATE + " real, "
-                + COLUMN_COMPANY + " text, "
-                + COLUMN_PARTNER + " text, "
+                + COLUMN_COMPANY_UID + " text, "
+                + COLUMN_PARTNER_UID + " text, "
                 + COLUMN_SUM + " double"
                 + ")");
         // endregion
@@ -123,13 +136,12 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Cash receipts
         db.execSQL("create table "
                 + TABLE_CASH_RECEIPTS + "("
-                + COLUMN_ID + " integer primary key autoincrement, "
-                + COLUMN_CODE + " text, "
-                + COLUMN_DATE + " text, "
-                + COLUMN_COMPANY + " integer, "
-                + COLUMN_PARTNER + " integer, "
-                + COLUMN_QUANTITY + " integer, "
-                + COLUMN_OBJECT + " text"
+                + COLUMN_UID + " text, "
+                + COLUMN_DATE + " real, "
+                + COLUMN_COMPANY_UID + " text, "
+                + COLUMN_PARTNER_UID + " text, "
+                + COLUMN_QUANTITY + " double, "
+                + COLUMN_OBJECT_UID + " text"
                 + ")");
         // endregion
 
@@ -137,9 +149,9 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("create table "
                 + TABLE_STOCK + "("
                 + COLUMN_ID + " integer primary key autoincrement, "
-                + COLUMN_COMPANY + " integer, "
-                + COLUMN_PARTNER + " integer, "
-                + COLUMN_SUM + " integer"
+                + COLUMN_COMPANY_UID + " text, "
+                + COLUMN_PARTNER_UID + " text, "
+                + COLUMN_SUM + " double"
                 + ")");
         // endregion
 
@@ -147,9 +159,9 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("create table "
                 + TABLE_DEBTS + "("
                 + COLUMN_ID + " integer primary key autoincrement, "
-                + COLUMN_GOOD + " integer, "
-                + COLUMN_WAREHOUSE + " integer, "
-                + COLUMN_QUANTITY + " integer"
+                + COLUMN_GOOD_UID + " text, "
+                + COLUMN_WAREHOUSE_UID + " text, "
+                + COLUMN_QUANTITY + " double"
                 + ")");
         // endregion
 
@@ -157,8 +169,8 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("create table "
                 + TABLE_PRICE_LIST + "("
                 + COLUMN_ID + " integer primary key autoincrement, "
-                + COLUMN_GOOD + " integer, "
-                + COLUMN_PRICE + " integer"
+                + COLUMN_GOOD_UID + " text, "
+                + COLUMN_PRICE + " double"
                 + ")");
         // endregion
 
@@ -166,9 +178,9 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("create table "
                 + TABLE_GOODS_TABLE + "("
                 + COLUMN_ID + " integer primary key autoincrement, "
-                + COLUMN_ORDER_CODE + " text, "
+                + COLUMN_ORDER_UID + " text, "
                 + COLUMN_POSITION + " integer,  "
-                + COLUMN_GOOD + " text, "
+                + COLUMN_GOOD_UID + " text, "
                 + COLUMN_QUANTITY + " double, "
                 + COLUMN_PRICE + " double, "
                 + COLUMN_SUM + " double"
