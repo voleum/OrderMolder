@@ -1,8 +1,11 @@
 package dev.voleum.ordermolder.Adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -42,11 +45,6 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         return goods.size();
     }
 
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
     public HashMap<Integer, HashMap<String, Object>> getGoods() {
         return goods;
     }
@@ -60,15 +58,25 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         return sum;
     }
 
-    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnFocusChangeListener {
+    public class GoodViewHolder extends RecyclerView.ViewHolder {
         public TextView goodName;
         public EditText goodQuantity;
         public EditText goodPrice;
         public Button btnPlus;
         public Button btnMinus;
 
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
+        public TextView.OnEditorActionListener onEditorActionListener = (v, actionId, event) -> {
+            switch (actionId) {
+                case EditorInfo.IME_ACTION_DONE:
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    v.clearFocus();
+                    return true;
+            }
+            return false;
+        };
+
+        public View.OnFocusChangeListener onFocusChangeListener = (v, hasFocus) -> {
             if (!hasFocus) {
                 int position = getAdapterPosition();
                 HashMap<String, Object> goodInfo = goods.get(position);
@@ -110,7 +118,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                 goodInfo.put("sum", sum);
                 tvSum.setText(String.valueOf(getSum()));
             }
-        }
+        };
 
         public GoodViewHolder(View view) {
             super(view);
@@ -119,13 +127,16 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
             goodPrice = view.findViewById(R.id.good_price);
             btnPlus = view.findViewById(R.id.good_plus);
             btnMinus = view.findViewById(R.id.good_minus);
-            btnPlus.setOnClickListener(v -> onButtonClick(v));
-            btnMinus.setOnClickListener(v -> onButtonClick(v));
-            goodQuantity.setOnFocusChangeListener(this);
-            goodPrice.setOnFocusChangeListener(this);
+            btnPlus.setOnClickListener(this::onButtonClick);
+            btnMinus.setOnClickListener(this::onButtonClick);
+            goodQuantity.setOnFocusChangeListener(onFocusChangeListener);
+            goodQuantity.setOnEditorActionListener(onEditorActionListener);
+            goodPrice.setOnFocusChangeListener(onFocusChangeListener);
+            goodPrice.setOnEditorActionListener(onEditorActionListener);
         }
 
         private void onButtonClick(View v) {
+            v.requestFocus();
             // TODO: put quantity into goods HashMap
             int currentQuantity;
             try {

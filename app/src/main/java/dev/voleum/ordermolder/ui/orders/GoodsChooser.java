@@ -51,7 +51,13 @@ public class GoodsChooser extends AppCompatActivity {
         // TODO: AsyncTask
         DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c = db.query(DbHelper.TABLE_GOODS, null, null, null, null, null, null);
+        Cursor c = db.query(DbHelper.TABLE_GOODS,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
         goods = new ArrayList<>();
 
         if (c.moveToFirst()) {
