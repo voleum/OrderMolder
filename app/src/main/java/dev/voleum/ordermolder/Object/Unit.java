@@ -4,8 +4,8 @@ public class Unit extends Catalog {
 
     private String shortName;
 
-    protected Unit(String number, String name, String shortName) {
-        super(number, name);
+    protected Unit(String code, String name, String shortName) {
+        super(code, name);
         this.shortName = shortName;
     }
 

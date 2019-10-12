@@ -11,7 +11,7 @@ import dev.voleum.ordermolder.R;
 
 public class FragmentCatalogs extends androidx.fragment.app.ListFragment {
 
-    private final String[] catalogs = MainActivity.resources.getStringArray(R.array.catalogs);
+    private final String[] catalogs = MainActivity.getRess().getStringArray(R.array.catalogs);
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

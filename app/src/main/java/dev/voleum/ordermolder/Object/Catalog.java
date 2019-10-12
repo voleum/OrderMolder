@@ -2,13 +2,18 @@ package dev.voleum.ordermolder.Object;
 
 import androidx.annotation.NonNull;
 
-abstract class Catalog {
+import java.io.Serializable;
 
-    protected String number;
+abstract class Catalog implements Serializable {
+
+    protected String code;
     protected String name;
 
-    protected Catalog(String number, String name) {
-        this.number = number;
+    protected Catalog() {
+    }
+
+    protected Catalog(String code, String name) {
+        this.code = code;
         this.name = name;
     }
 
@@ -18,12 +23,12 @@ abstract class Catalog {
         return name;
     }
 
-    public String getNumber() {
-        return number;
+    public String getCode() {
+        return code;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
