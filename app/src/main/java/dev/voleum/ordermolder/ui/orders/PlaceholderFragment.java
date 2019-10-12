@@ -155,10 +155,11 @@ public class PlaceholderFragment extends Fragment {
         if (c.moveToFirst()) {
             Company[] companies = new Company[c.getCount()];
             int i = 0;
+            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
             int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             do {
-                companies[i] = new Company(c.getString(tinClIndex), c.getString(nameClIndex));
+                companies[i] = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
                 i++;
             } while (c.moveToNext());
 
@@ -175,10 +176,11 @@ public class PlaceholderFragment extends Fragment {
         if (c.moveToFirst()) {
             Partner[] partners = new Partner[c.getCount()];
             int i = 0;
+            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
             int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             do {
-                partners[i] = new Partner(c.getString(tinClIndex), c.getString(nameClIndex));
+                partners[i] = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
                 i++;
             } while (c.moveToNext());
 

@@ -55,11 +55,11 @@ public class GoodsChooser extends AppCompatActivity {
         goods = new ArrayList<>();
 
         if (c.moveToFirst()) {
-            int numberIndex = c.getColumnIndex(DbHelper.COLUMN_CODE);
+            int uidIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int nameIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             int unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT);
             do {
-                goods.add(new Good(c.getString(numberIndex), c.getString(nameIndex), null));
+                goods.add(new Good(c.getString(uidIndex), c.getString(nameIndex), null));
             } while (c.moveToNext());
         }
 
