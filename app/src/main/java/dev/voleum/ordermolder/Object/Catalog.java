@@ -2,18 +2,16 @@ package dev.voleum.ordermolder.Object;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
+abstract class Catalog extends Obj {
 
-abstract class Catalog implements Serializable {
-
-    protected String code;
     protected String name;
 
     protected Catalog() {
+
     }
 
-    protected Catalog(String code, String name) {
-        this.code = code;
+    protected Catalog(String uid, String name) {
+        super(uid);
         this.name = name;
     }
 
@@ -21,14 +19,6 @@ abstract class Catalog implements Serializable {
     @Override
     public String toString() {
         return name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {
