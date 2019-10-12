@@ -1,28 +1,30 @@
 package dev.voleum.ordermolder.Object;
 
-abstract class Document {
+import java.io.Serializable;
 
-    protected int number;
+abstract class Document implements Serializable {
+
+    protected String code;
     protected String date;
     protected Company company;
     protected Partner partner;
-    protected int sum;
+    protected double sum;
 
 
-    protected Document(int number, String date, Company company, Partner partner, int sum) {
-        this.number = number;
+    protected Document(String code, String date, Company company, Partner partner, double sum) {
+        this.code = code;
         this.date = date;
         this.company = company;
         this.partner = partner;
         this.sum = sum;
     }
 
-    public int getNumber() {
-        return number;
+    public String getCode() {
+        return code;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDate() {
@@ -49,7 +51,7 @@ abstract class Document {
         this.partner = partner;
     }
 
-    public int getSum() {
+    public double getSum() {
         return sum;
     }
 
