@@ -34,6 +34,7 @@ import dev.voleum.ordermolder.Fragment.SelectDateFragment;
 import dev.voleum.ordermolder.Fragment.SelectTimeFragment;
 import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Good;
+import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
@@ -52,7 +53,22 @@ public class PlaceholderFragment extends Fragment {
     private RecyclerView recyclerGoods;
     private HashMap<Integer, HashMap<String, Object>> goods;
 
+    private Company[] companies;
+    private Partner[] partners;
+    private Warehouse[] warehouses;
+
     private GoodsOrderRecyclerViewAdapter adapter;
+    private ArrayAdapter<Company> adapterCompany;
+    private ArrayAdapter<Partner> adapterPartners;
+    private ArrayAdapter<Warehouse> adapterWarehouses;
+
+    private HashMap<String, Integer> hashCompanies;
+    private HashMap<String, Integer> hashPartners;
+    private HashMap<String, Integer> hashWarehouses;
+
+    private Spinner spinnerCompanies;
+    private Spinner spinnerPartners;
+    private Spinner spinnerWarehouses;
 
     static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -83,35 +99,53 @@ public class PlaceholderFragment extends Fragment {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         View root = null;
+        Order orderObj =((OrderActivity) getActivity()).getOrderObj();
         switch (index) {
             case 1:
                 root = inflater.inflate(R.layout.fragment_order_main, container, false);
-                initializeData(root);
                 TextView tvDate = root.findViewById(R.id.order_tv_date);
-                tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
+                TextView tvTime = root.findViewById(R.id.order_tv_time);
+                spinnerPartners = root.findViewById(R.id.order_spinner_partners);
+                spinnerCompanies = root.findViewById(R.id.order_spinner_companies);
+                spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
+                initializeData(root);
                 tvDate.setOnClickListener(v -> {
                     // TODO: date from TextView to DatePicker
                     DialogFragment datePickerFragment = new SelectDateFragment();
                     datePickerFragment.setTargetFragment(this, 0);
                     datePickerFragment.show(getParentFragmentManager(), "DatePicker");
                 });
-                TextView tvTime = root.findViewById(R.id.order_tv_time);
-                tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
                 tvTime.setOnClickListener(v -> {
                     // TODO: time from TextView to TimePicker
                     DialogFragment timePickerFragment = new SelectTimeFragment();
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
+                if (orderObj == null) {
+                    tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
+                    tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
+                } else {
+                    TextView tvSum = root.findViewById(R.id.order_tv_sum);
+                    tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
+                    tvTime.setText(orderObj.getDate().substring(12, 19));
+                    tvSum.setText(String.valueOf(orderObj.getSum()));
+                    spinnerCompanies.setSelection(hashCompanies.get(orderObj.getCompanyUid()));
+                    spinnerPartners.setSelection(hashPartners.get(orderObj.getPartnerUid()));
+                    spinnerWarehouses.setSelection(hashWarehouses.get(orderObj.getWarehouseUid()));
+                }
                 break;
             case 2:
                 root = inflater.inflate(R.layout.fragment_goods_list, container, false);
                 goods = new HashMap<>();
+                if (orderObj != null) {
+                    fillGoodList(orderObj.getUid());
+                }
                 recyclerGoods = root.findViewById(R.id.recycler_goods);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
                 adapter = new GoodsOrderRecyclerViewAdapter(goods);
                 recyclerGoods.setAdapter(adapter);
+
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
                         (view) -> startActivityForResult(new Intent(getActivity(), GoodsChooser.class), GOOD_CHOOSE_REQUEST)
@@ -160,19 +194,20 @@ public class PlaceholderFragment extends Fragment {
         c = db.query(DbHelper.TABLE_COMPANIES, null, null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
-            Company[] companies = new Company[c.getCount()];
+            companies = new Company[c.getCount()];
+            hashCompanies = new HashMap<>();
             int i = 0;
             int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
             int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             do {
                 companies[i] = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+                hashCompanies.put(companies[i].getUid(), i);
                 i++;
             } while (c.moveToNext());
 
-            ArrayAdapter<Company> adapterCompany = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, companies);
+            adapterCompany = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, companies);
             adapterCompany.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            Spinner spinnerCompanies = root.findViewById(R.id.order_spinner_companies);
             spinnerCompanies.setAdapter(adapterCompany);
         }
         // endregion
@@ -181,19 +216,20 @@ public class PlaceholderFragment extends Fragment {
         c = db.query(DbHelper.TABLE_PARTNERS, null, null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
-            Partner[] partners = new Partner[c.getCount()];
+            partners = new Partner[c.getCount()];
+            hashPartners = new HashMap<>();
             int i = 0;
             int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
             int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             do {
                 partners[i] = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+                hashPartners.put(partners[i].getUid(), i);
                 i++;
             } while (c.moveToNext());
 
-            ArrayAdapter<Partner> adapterPartners = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, partners);
+            adapterPartners = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, partners);
             adapterPartners.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            Spinner spinnerPartners = root.findViewById(R.id.order_spinner_partners);
             spinnerPartners.setAdapter(adapterPartners);
         }
         // endregion
@@ -202,18 +238,19 @@ public class PlaceholderFragment extends Fragment {
         c = db.query(DbHelper.TABLE_WAREHOUSES, null, null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
-            Warehouse[] warehouses = new Warehouse[c.getCount()];
+            warehouses = new Warehouse[c.getCount()];
+            hashWarehouses = new HashMap<>();
             int i = 0;
             int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             do {
                 warehouses[i] = new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex));
+                hashWarehouses.put(warehouses[i].getUid(), i);
                 i++;
             } while (c.moveToNext());
 
-            ArrayAdapter<Warehouse> adapterWarehouses = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, warehouses);
+            adapterWarehouses = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, warehouses);
             adapterWarehouses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            Spinner spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
             spinnerWarehouses.setAdapter(adapterWarehouses);
         }
         // endregion
@@ -222,4 +259,31 @@ public class PlaceholderFragment extends Fragment {
         dbHelper.close();
     }
 
+    private void fillGoodList(String uid) {
+        // TODO: AsyncTask
+        DbHelper dbHelper = DbHelper.getInstance(getContext());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] selectionArgs = { uid };
+        String sql = "SELECT *"
+                + " FROM " + DbHelper.TABLE_GOODS_TABLE
+                + " LEFT JOIN " + DbHelper.TABLE_GOODS
+                + " ON " + DbHelper.COLUMN_GOOD_UID + " = " + DbHelper.COLUMN_UID
+                + " WHERE " + DbHelper.COLUMN_ORDER_UID + " = ?"
+                + " ORDER BY " + DbHelper.COLUMN_POSITION;
+        Cursor c = db.rawQuery(sql, selectionArgs);
+        int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
+        int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+        int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+        int unitClIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
+        if (c.moveToFirst()) {
+            HashMap<String, Object> goodUidHash = new HashMap<>();
+           do {
+               goodUidHash.clear();
+               goodUidHash.put("good", new Good(c.getString(uidClIndex), c.getString(nameClIndex), null));
+               goods.put(c.getInt(positionClIndex), goodUidHash);
+           } while (c.moveToNext());
+        }
+        c.close();
+        db.close();
+    }
 }
