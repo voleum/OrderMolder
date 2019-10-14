@@ -85,7 +85,7 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
-        if (getIntent().getBooleanExtra(OrderListListActivity.OPEN_FOR_CREATE, true)) {
+        if (getIntent().getBooleanExtra(OrderListListActivity.IS_CREATING, true)) {
             setTitle(R.string.title_new_order);
         } else {
             // TODO: set title like "Order $number$ $date$"
@@ -97,15 +97,16 @@ public class OrderActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    saveDoc();
-                    if (getIntent().getBooleanExtra(OrderListListActivity.OPEN_FOR_CREATE, true)) {
+                    if (saveDoc()) {
                         Intent intent = new Intent();
                         intent.putExtra("order", orderObj);
-                        setResult(OrderListListActivity.RESULT_CREATED, intent);
-                    } else {
-                        setResult(OrderListListActivity.RESULT_SAVED);
+                        if (getIntent().getBooleanExtra(OrderListListActivity.IS_CREATING, true)) {
+                            setResult(OrderListListActivity.RESULT_CREATED, intent);
+                        } else {
+                            setResult(OrderListListActivity.RESULT_SAVED);
+                        }
+                        finish();
                     }
-                    finish();
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     finish();
@@ -140,8 +141,6 @@ public class OrderActivity extends AppCompatActivity {
                 break;
             case R.id.doc_save:
                 saveDoc();
-                Snackbar.make(findViewById(R.id.constraintLayout), R.string.snackbar_doc_saved, Snackbar.LENGTH_LONG)
-                        .show();
                 break;
             default:
                 break;
@@ -149,9 +148,15 @@ public class OrderActivity extends AppCompatActivity {
         return true;
     }
 
-    private void saveDoc() {
-        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getMainInfo();
+    private boolean saveDoc() {
         HashMap<Integer, HashMap<String, Object>> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
+        if (goodsInfo.isEmpty()) {
+            Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT)
+                    .setGestureInsetBottomIgnored(true)
+                    .show();
+            return false;
+        }
+        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getMainInfo();
 
         if (orderObj == null) {
             orderObj = new Order();
@@ -169,5 +174,7 @@ public class OrderActivity extends AppCompatActivity {
         orderInfo.put("goods_info", goodsInfo);
         DbAsyncSaveDoc dbAsyncSaveDoc = new DbAsyncSaveDoc(this);
         dbAsyncSaveDoc.execute(orderInfo);
+
+        return true;
     }
 }
