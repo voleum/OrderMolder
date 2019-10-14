@@ -49,7 +49,10 @@ public class OrderListListActivity extends AppCompatActivity {
         adapter = new OrderListRecyclerViewAdapter(orders);
         adapter.setOnEntryCLickListener((v, position) -> {
             Order clickedOrder = orders.get(position);
-            // TODO: open for edit
+            Intent intentOut = new Intent(OrderListListActivity.this, OrderActivity.class);
+            intentOut.putExtra(IS_CREATING, false);
+            intentOut.putExtra("order",clickedOrder);
+            startActivityForResult(intentOut, REQUEST_CODE);
         });
         recyclerOrders.setAdapter(adapter);
 

@@ -89,6 +89,7 @@ public class OrderActivity extends AppCompatActivity {
             setTitle(R.string.title_new_order);
         } else {
             // TODO: set title like "Order $number$ $date$"
+            orderObj = (Order) getIntent().getSerializableExtra("order");
         }
     }
 
@@ -146,6 +147,10 @@ public class OrderActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    protected Order getOrderObj() {
+        return orderObj;
     }
 
     private boolean saveDoc() {

@@ -1,5 +1,6 @@
 package dev.voleum.ordermolder.ui.orders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.Spinner;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 
 import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.Object.Company;
+import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
@@ -102,5 +104,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public HashMap<Integer, HashMap<String, Object>> getGoodsInfo() {
         RecyclerView rv = fragmentGoods.getActivity().findViewById(R.id.recycler_goods);
         return ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
+    }
+
+    public Order getOrderObj() {
+        return ((OrderActivity) context).getOrderObj();
     }
 }

@@ -58,7 +58,7 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Voi
                     sumGood = (Double) goodInfo.get("sum");
                     cv.clear();
                     cv.put(DbHelper.COLUMN_ORDER_UID, mainInfo.get("uid"));
-                    cv.put(DbHelper.COLUMN_POSITION, i + 1);
+                    cv.put(DbHelper.COLUMN_POSITION, i);
                     cv.put(DbHelper.COLUMN_GOOD_UID, ((Good) goodInfo.get("good")).getUid());
                     cv.put(DbHelper.COLUMN_QUANTITY, (Double) goodInfo.get("quantity"));
                     cv.put(DbHelper.COLUMN_PRICE, (Double) goodInfo.get("price"));
