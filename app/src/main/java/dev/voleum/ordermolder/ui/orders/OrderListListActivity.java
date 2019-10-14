@@ -51,7 +51,7 @@ public class OrderListListActivity extends AppCompatActivity {
             Order clickedOrder = orders.get(position);
             Intent intentOut = new Intent(OrderListListActivity.this, OrderActivity.class);
             intentOut.putExtra(IS_CREATING, false);
-            intentOut.putExtra("order",clickedOrder);
+            intentOut.putExtra("order", clickedOrder);
             startActivityForResult(intentOut, REQUEST_CODE);
         });
         recyclerOrders.setAdapter(adapter);
