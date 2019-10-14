@@ -1,24 +1,39 @@
 package dev.voleum.ordermolder.Database;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import dev.voleum.ordermolder.Object.Good;
+import dev.voleum.ordermolder.R;
 
-public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Void, Void> {
+public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Void> {
 
     @SuppressLint("StaticFieldLeak")
     private Context context;
 
+    private boolean undoPressed;
+
     public DbAsyncSaveDoc(Context context) {
         super();
         this.context = context;
+    }
+
+    @Override
+    protected void onProgressUpdate(Boolean... values) {
+        super.onProgressUpdate(values);
+        Snackbar.make(((Activity) context).findViewById(R.id.view_pager), R.string.snackbar_doc_saved, Snackbar.LENGTH_LONG)
+                .setGestureInsetBottomIgnored(true)
+                .setAction(R.string.snackbar_action_undo, v -> undoPressed = true)
+                .show();
     }
 
     @Override
@@ -60,7 +75,10 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Void, Void> 
                 cv.put(DbHelper.COLUMN_SUM, sumOrder);
                 db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
             }
-            db.setTransactionSuccessful();
+            undoPressed = false;
+            publishProgress(true);
+            Thread.sleep(2750);
+            if (!undoPressed) db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
