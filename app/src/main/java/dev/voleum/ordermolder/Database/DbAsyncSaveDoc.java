@@ -72,6 +72,7 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Voi
                 cv.put(DbHelper.COLUMN_DATE, mainInfo.get("date"));
                 cv.put(DbHelper.COLUMN_COMPANY_UID, mainInfo.get("company_uid"));
                 cv.put(DbHelper.COLUMN_PARTNER_UID, mainInfo.get("partner_uid"));
+                cv.put(DbHelper.COLUMN_WAREHOUSE_UID, mainInfo.get("warehouse_uid"));
                 cv.put(DbHelper.COLUMN_SUM, sumOrder);
                 db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
             }

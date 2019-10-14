@@ -15,6 +15,7 @@ public class DbAsyncTask extends AsyncTask<DbHelper, Void, Void> {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(DbHelper.TABLE_COMPANIES, null, null);
         db.delete(DbHelper.TABLE_PARTNERS, null, null);
+        db.delete(DbHelper.TABLE_WAREHOUSES, null, null);
         db.delete(DbHelper.TABLE_GOODS, null, null);
         db.delete(DbHelper.TABLE_UNITS, null, null);
         db.delete(DbHelper.TABLE_GOODS_GROUPS, null, null);
@@ -57,7 +58,7 @@ public class DbAsyncTask extends AsyncTask<DbHelper, Void, Void> {
             cv.put(DbHelper.COLUMN_UNIT_UID, unitUid);
             db.insert(DbHelper.TABLE_GOODS, null, cv);
         }
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 1; i <= 2; i++) {
             cv.clear();
             cv.put(DbHelper.COLUMN_UID, getNewUid());
             cv.put(DbHelper.COLUMN_NAME, "Warehouse " + i);

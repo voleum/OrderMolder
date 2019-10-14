@@ -35,6 +35,7 @@ import dev.voleum.ordermolder.Fragment.SelectTimeFragment;
 import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.Object.Partner;
+import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
 
 /**
@@ -150,6 +151,7 @@ public class PlaceholderFragment extends Fragment {
     }
 
     private void initializeData(View root) {
+        // TODO: AsyncTask
         DbHelper dbHelper = DbHelper.getInstance(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
@@ -193,6 +195,26 @@ public class PlaceholderFragment extends Fragment {
             adapterPartners.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             Spinner spinnerPartners = root.findViewById(R.id.order_spinner_partners);
             spinnerPartners.setAdapter(adapterPartners);
+        }
+        // endregion
+
+        // region Warehouses
+        c = db.query(DbHelper.TABLE_WAREHOUSES, null, null, null, null, null, null, null);
+
+        if (c.moveToFirst()) {
+            Warehouse[] warehouses = new Warehouse[c.getCount()];
+            int i = 0;
+            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+            do {
+                warehouses[i] = new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex));
+                i++;
+            } while (c.moveToNext());
+
+            ArrayAdapter<Warehouse> adapterWarehouses = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, warehouses);
+            adapterWarehouses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Spinner spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
+            spinnerWarehouses.setAdapter(adapterWarehouses);
         }
         // endregion
 

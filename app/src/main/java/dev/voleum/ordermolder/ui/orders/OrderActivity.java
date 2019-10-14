@@ -165,6 +165,7 @@ public class OrderActivity extends AppCompatActivity {
         orderObj.setDate((String) mainInfo.get("date"));
         orderObj.setCompanyUid((String) mainInfo.get("company_uid"));
         orderObj.setPartnerUid((String) mainInfo.get("partner_uid"));
+        orderObj.setWarehouseUid((String) mainInfo.get("warehouse_uid"));
         orderObj.setSum((Double) mainInfo.get("sum"));
 
         mainInfo.put("uid", orderObj.getUid());

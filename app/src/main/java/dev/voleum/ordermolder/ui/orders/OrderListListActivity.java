@@ -107,12 +107,14 @@ public class OrderListListActivity extends AppCompatActivity {
             int dateIndex = c.getColumnIndex((DbHelper.COLUMN_DATE));
             int companyIndex = c.getColumnIndex((DbHelper.COLUMN_COMPANY_UID));
             int partnerIndex = c.getColumnIndex((DbHelper.COLUMN_PARTNER_UID));
+            int warehouseIndex = c.getColumnIndex((DbHelper.COLUMN_WAREHOUSE_UID));
             int sumIndex = c.getColumnIndex((DbHelper.COLUMN_SUM));
             do {
                 orders.add(new Order(c.getString(uidIndex),
                         c.getString(dateIndex),
                         c.getString(companyIndex),
                         c.getString(partnerIndex),
+                        c.getString(warehouseIndex),
                         c.getDouble(sumIndex)));
             } while (c.moveToNext());
         }

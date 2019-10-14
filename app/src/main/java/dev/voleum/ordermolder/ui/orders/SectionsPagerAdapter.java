@@ -19,6 +19,7 @@ import java.util.HashMap;
 import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Partner;
+import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
 
 /**
@@ -81,6 +82,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         FragmentActivity activity = fragmentMain.getActivity();
         String companyUid = ((Company) ((Spinner) activity.findViewById(R.id.order_spinner_companies)).getSelectedItem()).getUid();
         String partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.order_spinner_partners)).getSelectedItem()).getUid();
+        String warehouseUid = ((Warehouse) ((Spinner) activity.findViewById(R.id.order_spinner_warehouses)).getSelectedItem()).getUid();
         double sum = Double.parseDouble(((TextView) activity.findViewById(R.id.order_tv_sum)).getText().toString());
 
         String dateTime = (((TextView) activity.findViewById(R.id.order_tv_date)).getText().toString().replaceAll("\\.", "-"))
@@ -91,6 +93,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         info.put("date", dateTime);
         info.put("company_uid", companyUid);
         info.put("partner_uid", partnerUid);
+        info.put("warehouse_uid", warehouseUid);
         info.put("sum", sum);
 
         return info;
