@@ -57,9 +57,11 @@
     <string name="document_date">Date</string>
 
     <string name="snackbar_doc_created">Document created</string>
-    <string name="snackbar_doc_saved">Document created</string>
+    <string name="snackbar_doc_saved">Document saved</string>
     <string name="snackbar_doc_deleted">Document deleted</string>
     <string name="snackbar_action_undo">Undo</string>
+    <string name="snackbar_empty_goods_list">Goods list is empty!</string>
+    <string name="snackbar_unknown_doc_type">Unknown document type</string>
 
     <string name="menu_save">Save</string>
 

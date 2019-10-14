@@ -57,6 +57,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/order_spinner_companies" />
 
+            <Spinner
+                android:id="@+id/order_spinner_warehouses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/order_spinner_partners" />
+
             <TextView
                 android:id="@+id/order_tv_sum"
                 android:layout_width="wrap_content"
@@ -64,7 +74,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/order_spinner_partners"
+                app:layout_constraintTop_toBottomOf="@id/order_spinner_warehouses"
                 tools:text="1000" />
 
             <TextView
@@ -75,7 +85,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/sign_currency_ruble"
                 app:layout_constraintStart_toEndOf="@id/order_tv_sum"
-                app:layout_constraintTop_toBottomOf="@id/order_spinner_partners" />
+                app:layout_constraintTop_toBottomOf="@id/order_spinner_warehouses" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
