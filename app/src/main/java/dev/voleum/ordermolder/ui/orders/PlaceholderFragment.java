@@ -110,14 +110,12 @@ public class PlaceholderFragment extends Fragment {
                 spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
                 initializeData(root);
                 tvDate.setOnClickListener(v -> {
-                    // TODO: date from TextView to DatePicker
-                    DialogFragment datePickerFragment = new SelectDateFragment();
+                    DialogFragment datePickerFragment = new SelectDateFragment(tvDate.getText().toString().substring(0, 10));
                     datePickerFragment.setTargetFragment(this, 0);
                     datePickerFragment.show(getParentFragmentManager(), "DatePicker");
                 });
                 tvTime.setOnClickListener(v -> {
-                    // TODO: time from TextView to TimePicker
-                    DialogFragment timePickerFragment = new SelectTimeFragment();
+                    DialogFragment timePickerFragment = new SelectTimeFragment(tvTime.getText().toString().substring(0, 5));
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
@@ -127,7 +125,7 @@ public class PlaceholderFragment extends Fragment {
                 } else {
                     TextView tvSum = root.findViewById(R.id.order_tv_sum);
                     tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
-                    tvTime.setText(orderObj.getDate().substring(12, 19));
+                    tvTime.setText(orderObj.getDate().substring(11, 19));
                     tvSum.setText(String.valueOf(orderObj.getSum()));
                     spinnerCompanies.setSelection(hashCompanies.get(orderObj.getCompanyUid()));
                     spinnerPartners.setSelection(hashPartners.get(orderObj.getPartnerUid()));
@@ -166,12 +164,14 @@ public class PlaceholderFragment extends Fragment {
                 if (data != null) {
                     // TODO: if the good already in list - increase the quantity
                     Good chosenGood = (Good) data.getSerializableExtra("good");
+                    double quantity = data.getDoubleExtra("quantity", 1.0);
+                    double price = data.getDoubleExtra("price", 1.0);
                     int position = goods.size();
                     HashMap<String, Object> values = new HashMap<>();
                     values.put("good", chosenGood);
-                    values.put("price", 0.0);
-                    values.put("quantity", 1.0);
-                    values.put("sum", 0.0);
+                    values.put("quantity", quantity);
+                    values.put("price", price);
+                    values.put("sum", quantity * price);
                     goods.put(position, values);
                     adapter.notifyItemInserted(position + 1);
                 }
@@ -275,11 +275,17 @@ public class PlaceholderFragment extends Fragment {
         int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
         int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
         int unitClIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
+        int quantutyClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
+        int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
+        int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
         if (c.moveToFirst()) {
             HashMap<String, Object> goodUidHash = new HashMap<>();
            do {
                goodUidHash.clear();
                goodUidHash.put("good", new Good(c.getString(uidClIndex), c.getString(nameClIndex), null));
+               goodUidHash.put("quantity", c.getDouble(quantutyClIndex));
+               goodUidHash.put("price", c.getDouble(priceClIndex));
+               goodUidHash.put("sum", c.getDouble(sumClIndex));
                goods.put(c.getInt(positionClIndex), goodUidHash);
            } while (c.moveToNext());
         }

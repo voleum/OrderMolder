@@ -15,16 +15,23 @@ import java.util.Map;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.R;
 
-public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Void> {
+public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Boolean> {
 
     @SuppressLint("StaticFieldLeak")
     private Context context;
 
     private boolean undoPressed;
+    private String title;
 
     public DbAsyncSaveDoc(Context context) {
         super();
         this.context = context;
+    }
+
+    @Override
+    protected void onPostExecute(Boolean saved) {
+        super.onPostExecute(saved);
+        if (!saved) ((Activity) context).setTitle(title);
     }
 
     @Override
@@ -37,7 +44,7 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Voi
     }
 
     @Override
-    protected Void doInBackground(HashMap<String, Map>... orders) {
+    protected Boolean doInBackground(HashMap<String, Map>... orders) {
         DbHelper dbHelper = DbHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
@@ -75,11 +82,16 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Voi
                 cv.put(DbHelper.COLUMN_WAREHOUSE_UID, mainInfo.get("warehouse_uid"));
                 cv.put(DbHelper.COLUMN_SUM, sumOrder);
                 db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+
+                undoPressed = false;
+                publishProgress(true);
+                Thread.sleep(2750);
+                if (!undoPressed) {
+                    db.setTransactionSuccessful();
+                    title = mainInfo.get("date").substring(0, 19).replace("-", ".");
+                    return true;
+                }
             }
-            undoPressed = false;
-            publishProgress(true);
-            Thread.sleep(2750);
-            if (!undoPressed) db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -37,6 +37,8 @@ public class OrderActivity extends AppCompatActivity {
 
     private Order orderObj;
 
+    private boolean isCreating;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,10 +88,13 @@ public class OrderActivity extends AppCompatActivity {
         });
 
         if (getIntent().getBooleanExtra(OrderListListActivity.IS_CREATING, true)) {
+            isCreating = true;
             setTitle(R.string.title_new_order);
         } else {
-            // TODO: set title like "Order $number$ $date$"
+            isCreating = false;
             orderObj = (Order) getIntent().getSerializableExtra("order");
+            String title = orderObj.getDate().substring(0, 19).replace("-", ".");
+            setTitle(title);
         }
     }
 
@@ -101,11 +106,8 @@ public class OrderActivity extends AppCompatActivity {
                     if (saveDoc()) {
                         Intent intent = new Intent();
                         intent.putExtra("order", orderObj);
-                        if (getIntent().getBooleanExtra(OrderListListActivity.IS_CREATING, true)) {
-                            setResult(OrderListListActivity.RESULT_CREATED, intent);
-                        } else {
-                            setResult(OrderListListActivity.RESULT_SAVED);
-                        }
+                        int result = isCreating ? OrderListListActivity.RESULT_CREATED : OrderListListActivity.RESULT_SAVED;
+                        setResult(result, intent);
                         finish();
                     }
                     break;

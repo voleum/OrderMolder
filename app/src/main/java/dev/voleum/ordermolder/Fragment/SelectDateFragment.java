@@ -19,18 +19,32 @@ import androidx.fragment.app.DialogFragment;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.ui.orders.PlaceholderFragment;
 
 public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+    private int yy;
+    private int mm;
+    private int dd;
+
+    public SelectDateFragment() {
+        setCurrentDate();
+    }
+
+    public SelectDateFragment(String date) {
+        try {
+            yy = Integer.parseInt(date.substring(6, 10));
+            mm = Integer.parseInt(date.substring(3, 5)) - 1;
+            dd = Integer.parseInt(date.substring(0, 2));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            setCurrentDate();
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        final Calendar calendar = Calendar.getInstance();
-        int yy = calendar.get(Calendar.YEAR);
-        int mm = calendar.get(Calendar.MONTH);
-        int dd = calendar.get(Calendar.DAY_OF_MONTH);
         return new DatePickerDialog(Objects.requireNonNull(getActivity()), this, yy, mm, dd);
     }
 
@@ -41,5 +55,12 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         String newDate = df.format(cal);
         ((TextView) getTargetFragment().getActivity().findViewById(R.id.order_tv_date)).setText(newDate);
+    }
+
+    private void setCurrentDate() {
+        final Calendar calendar = Calendar.getInstance();
+        yy = calendar.get(Calendar.YEAR);
+        mm = calendar.get(Calendar.MONTH);
+        dd = calendar.get(Calendar.DAY_OF_MONTH);
     }
 }
