@@ -35,9 +35,13 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Good good = (Good) goods.get(position).get("good");
+        HashMap<String, Object> goodData = goods.get(position);
+        Good good = (Good) goodData.get("good");
+        double quantity = (double) goodData.get("quantity");
+        double price = (double) goodData.get("price");
         ((GoodViewHolder) holder).goodName.setText(good.toString());
-        ((GoodViewHolder) holder).goodQuantity.setText("1");
+        ((GoodViewHolder) holder).goodQuantity.setText(String.valueOf(quantity));
+        ((GoodViewHolder) holder).goodPrice.setText(String.valueOf(price));
     }
 
     @Override
@@ -136,7 +140,6 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         }
 
         private void onButtonClick(View v) {
-            v.requestFocus();
             // TODO: put quantity into goods HashMap
             int currentQuantity;
             try {

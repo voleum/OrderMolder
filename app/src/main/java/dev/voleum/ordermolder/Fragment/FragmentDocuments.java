@@ -10,6 +10,8 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.Objects;
 
 import dev.voleum.ordermolder.ui.orders.OrderListListActivity;
@@ -31,6 +33,17 @@ public class FragmentDocuments extends androidx.fragment.app.ListFragment {
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        startActivity(new Intent(getActivity(), OrderListListActivity.class));
+        switch (position) {
+            case 0:
+                startActivity(new Intent(getActivity(), OrderListListActivity.class));
+                break;
+            case 1:
+                // TODO: startActivity(new Intent(getActivity(), CashReceiptListListActivity.class));
+                break;
+            default:
+                Snackbar.make(l, R.string.snackbar_unknown_doc_type, Snackbar.LENGTH_SHORT)
+                        .setGestureInsetBottomIgnored(true)
+                        .show();
+        }
     }
 }

@@ -3,9 +3,7 @@ package dev.voleum.ordermolder.ui.orders;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -26,7 +23,7 @@ import dev.voleum.ordermolder.R;
 
 public class OrderListListActivity extends AppCompatActivity {
 
-    public final static String OPEN_FOR_CREATE = "open_for_create";
+    public final static String IS_CREATING = "is_creating";
 
     public final static int REQUEST_CODE = 0;
     public final static int RESULT_SAVED = 2;
@@ -52,14 +49,17 @@ public class OrderListListActivity extends AppCompatActivity {
         adapter = new OrderListRecyclerViewAdapter(orders);
         adapter.setOnEntryCLickListener((v, position) -> {
             Order clickedOrder = orders.get(position);
-            // TODO: open for edit
+            Intent intentOut = new Intent(OrderListListActivity.this, OrderActivity.class);
+            intentOut.putExtra(IS_CREATING, false);
+            intentOut.putExtra("order", clickedOrder);
+            startActivityForResult(intentOut, REQUEST_CODE);
         });
         recyclerOrders.setAdapter(adapter);
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener((view) -> {
                     Intent intentOut = new Intent(OrderListListActivity.this, OrderActivity.class);
-                    intentOut.putExtra(OPEN_FOR_CREATE, true);
+                    intentOut.putExtra(IS_CREATING, true);
                     startActivityForResult(intentOut, REQUEST_CODE);
                 }
         );
@@ -75,18 +75,10 @@ public class OrderListListActivity extends AppCompatActivity {
         int position;
         switch (resultCode) {
             case RESULT_SAVED:
-                Snackbar.make(fab, R.string.snackbar_doc_saved, Snackbar.LENGTH_LONG)
-                        .show();
-                position = orders.size();
-                orders.add(position, (Order) data.getSerializableExtra("order"));
-                adapter.notifyItemInserted(position + 1);
+                position = orders.indexOf(data.getSerializableExtra("order"));
+                adapter.notifyItemChanged(position + 1);
                 break;
             case RESULT_CREATED:
-                Snackbar.make(fab, R.string.snackbar_doc_created, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.snackbar_action_undo, (v) -> {
-                            // TODO: make undo button
-                        })
-                        .show();
                 position = orders.size();
                 orders.add(position, (Order) data.getSerializableExtra("order"));
                 adapter.notifyItemInserted(position + 1);
@@ -118,12 +110,14 @@ public class OrderListListActivity extends AppCompatActivity {
             int dateIndex = c.getColumnIndex((DbHelper.COLUMN_DATE));
             int companyIndex = c.getColumnIndex((DbHelper.COLUMN_COMPANY_UID));
             int partnerIndex = c.getColumnIndex((DbHelper.COLUMN_PARTNER_UID));
+            int warehouseIndex = c.getColumnIndex((DbHelper.COLUMN_WAREHOUSE_UID));
             int sumIndex = c.getColumnIndex((DbHelper.COLUMN_SUM));
             do {
                 orders.add(new Order(c.getString(uidIndex),
                         c.getString(dateIndex),
                         c.getString(companyIndex),
                         c.getString(partnerIndex),
+                        c.getString(warehouseIndex),
                         c.getDouble(sumIndex)));
             } while (c.moveToNext());
         }

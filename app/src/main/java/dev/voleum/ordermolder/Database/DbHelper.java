@@ -40,10 +40,6 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_CODE = "code";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_COMPANY = "company";
-    public static final String COLUMN_PARTNER = "partner";
-    public static final String COLUMN_WAREHOUSE = "warehouse";
-    public static final String COLUMN_GOOD = "good";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_SUM = "sum";
     public static final String COLUMN_QUANTITY = "count";
@@ -129,6 +125,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_DATE + " real, "
                 + COLUMN_COMPANY_UID + " text, "
                 + COLUMN_PARTNER_UID + " text, "
+                + COLUMN_WAREHOUSE_UID + " text, "
                 + COLUMN_SUM + " double"
                 + ")");
         // endregion

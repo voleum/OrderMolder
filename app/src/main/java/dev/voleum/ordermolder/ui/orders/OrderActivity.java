@@ -37,6 +37,8 @@ public class OrderActivity extends AppCompatActivity {
 
     private Order orderObj;
 
+    private boolean isCreating;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,10 +87,14 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
-        if (getIntent().getBooleanExtra(OrderListListActivity.OPEN_FOR_CREATE, true)) {
+        if (getIntent().getBooleanExtra(OrderListListActivity.IS_CREATING, true)) {
+            isCreating = true;
             setTitle(R.string.title_new_order);
         } else {
-            // TODO: set title like "Order $number$ $date$"
+            isCreating = false;
+            orderObj = (Order) getIntent().getSerializableExtra("order");
+            String title = orderObj.getDate().substring(0, 19).replace("-", ".");
+            setTitle(title);
         }
     }
 
@@ -97,15 +103,13 @@ public class OrderActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    saveDoc();
-                    if (getIntent().getBooleanExtra(OrderListListActivity.OPEN_FOR_CREATE, true)) {
+                    if (saveDoc()) {
                         Intent intent = new Intent();
                         intent.putExtra("order", orderObj);
-                        setResult(OrderListListActivity.RESULT_CREATED, intent);
-                    } else {
-                        setResult(OrderListListActivity.RESULT_SAVED);
+                        int result = isCreating ? OrderListListActivity.RESULT_CREATED : OrderListListActivity.RESULT_SAVED;
+                        setResult(result, intent);
+                        finish();
                     }
-                    finish();
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     finish();
@@ -140,8 +144,6 @@ public class OrderActivity extends AppCompatActivity {
                 break;
             case R.id.doc_save:
                 saveDoc();
-                Snackbar.make(findViewById(R.id.constraintLayout), R.string.snackbar_doc_saved, Snackbar.LENGTH_LONG)
-                        .show();
                 break;
             default:
                 break;
@@ -149,9 +151,19 @@ public class OrderActivity extends AppCompatActivity {
         return true;
     }
 
-    private void saveDoc() {
-        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getMainInfo();
+    protected Order getOrderObj() {
+        return orderObj;
+    }
+
+    private boolean saveDoc() {
         HashMap<Integer, HashMap<String, Object>> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
+        if (goodsInfo.isEmpty()) {
+            Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT)
+                    .setGestureInsetBottomIgnored(true)
+                    .show();
+            return false;
+        }
+        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getMainInfo();
 
         if (orderObj == null) {
             orderObj = new Order();
@@ -160,6 +172,7 @@ public class OrderActivity extends AppCompatActivity {
         orderObj.setDate((String) mainInfo.get("date"));
         orderObj.setCompanyUid((String) mainInfo.get("company_uid"));
         orderObj.setPartnerUid((String) mainInfo.get("partner_uid"));
+        orderObj.setWarehouseUid((String) mainInfo.get("warehouse_uid"));
         orderObj.setSum((Double) mainInfo.get("sum"));
 
         mainInfo.put("uid", orderObj.getUid());
@@ -169,5 +182,7 @@ public class OrderActivity extends AppCompatActivity {
         orderInfo.put("goods_info", goodsInfo);
         DbAsyncSaveDoc dbAsyncSaveDoc = new DbAsyncSaveDoc(this);
         dbAsyncSaveDoc.execute(orderInfo);
+
+        return true;
     }
 }
