@@ -1,6 +1,5 @@
 package dev.voleum.ordermolder.ui.orders;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.Spinner;
@@ -102,7 +101,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public HashMap<Integer, HashMap<String, Object>> getGoodsInfo() {
-        RecyclerView rv = fragmentGoods.getActivity().findViewById(R.id.recycler_goods);
+        RecyclerView rv = fragmentGoods.getActivity().findViewById(R.id.recycler_tabdoc);
         return ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
     }
 

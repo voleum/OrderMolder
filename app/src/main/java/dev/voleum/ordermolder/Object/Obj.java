@@ -1,9 +1,8 @@
 package dev.voleum.ordermolder.Object;
 
 import java.io.Serializable;
-import java.util.UUID;
 
-abstract class Obj implements Serializable {
+public abstract class Obj implements Serializable {
 
     protected String uid;
 
@@ -19,7 +18,7 @@ abstract class Obj implements Serializable {
         return uid;
     }
 
-    public void setUid(String code) {
-        this.uid = code;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

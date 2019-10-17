@@ -2,7 +2,7 @@ package dev.voleum.ordermolder.Object;
 
 import androidx.annotation.NonNull;
 
-abstract class Catalog extends Obj {
+public abstract class Catalog extends Obj {
 
     protected String name;
 

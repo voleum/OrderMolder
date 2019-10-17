@@ -2,7 +2,7 @@ package dev.voleum.ordermolder.Object;
 
 import androidx.annotation.NonNull;
 
-abstract class Document extends Obj {
+public abstract class Document extends Obj {
 
     protected String date;
     protected String companyUid;

@@ -6,7 +6,7 @@ public class CashReceipt extends Document {
 
     }
 
-    public CashReceipt(String uid, String date, String companyUid, String partnerUid, int sum, String object) {
+    public CashReceipt(String uid, String date, String companyUid, String partnerUid, double sum) {
         super(uid, date, companyUid, partnerUid, sum);
     }
 }
