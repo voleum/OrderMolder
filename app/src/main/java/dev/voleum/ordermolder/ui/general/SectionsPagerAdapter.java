@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.ui.orders;
+package dev.voleum.ordermolder.ui.general;
 
 import android.content.Context;
 import android.view.ViewGroup;
@@ -17,11 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.HashMap;
 
 import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
+import dev.voleum.ordermolder.Adapter.ObjectsCashReceiptRecyclerViewAdapter;
 import dev.voleum.ordermolder.Object.Company;
-import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.ui.orders.PlaceholderFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -29,15 +30,26 @@ import dev.voleum.ordermolder.R;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+    public static final int TYPE_ORDER = 0;
+    public static final int TYPE_CASH_RECEIPT = 1;
+
     @StringRes
-    private static int[] TAB_TITLES = { R.string.order_tab_main, R.string.order_tab_goods };
+    private int[] TAB_TITLES;
     private final Context context;
     private Fragment fragmentMain;
-    private Fragment fragmentGoods;
+    private Fragment fragmentSecondary;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm, int typeDoc) {
         super(fm);
         this.context = context;
+        switch (typeDoc) {
+            case TYPE_ORDER:
+                TAB_TITLES = new int[]{R.string.order_tab_main, R.string.order_tab_goods};
+                break;
+            case TYPE_CASH_RECEIPT:
+                TAB_TITLES = new int[]{R.string.cash_receipt_tab_main, R.string.cash_receipt_tab_objects};
+
+        }
     }
 
     @Override
@@ -67,17 +79,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 fragmentMain = createdFragment;
                 break;
             case 1:
-                fragmentGoods = createdFragment;
+                fragmentSecondary = createdFragment;
                 break;
         }
         return createdFragment;
     }
 
     public double getSum() {
-        return ((PlaceholderFragment) fragmentGoods).getSum();
+        return ((PlaceholderFragment) fragmentSecondary).getSum();
     }
 
-    public HashMap<String, Object> getMainInfo() {
+    public HashMap<String, Object> getOrderMainInfo() {
         HashMap<String, Object> info = new HashMap<>();
 
         FragmentActivity activity = fragmentMain.getActivity();
@@ -100,12 +112,40 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return info;
     }
 
+    public HashMap<String, Object> getCashReceiptMainInfo() {
+        HashMap<String, Object> info = new HashMap<>();
+
+        FragmentActivity activity = fragmentMain.getActivity();
+        String companyUid = ((Company) ((Spinner) activity.findViewById(R.id.order_spinner_companies)).getSelectedItem()).getUid();
+        String partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.order_spinner_partners)).getSelectedItem()).getUid();
+        String warehouseUid = ((Warehouse) ((Spinner) activity.findViewById(R.id.order_spinner_warehouses)).getSelectedItem()).getUid();
+        double sum = Double.parseDouble(((TextView) activity.findViewById(R.id.order_tv_sum)).getText().toString());
+
+        String dateTime = (((TextView) activity.findViewById(R.id.order_tv_date)).getText().toString().replaceAll("\\.", "-"))
+                .concat(" ")
+                .concat(((TextView) activity.findViewById(R.id.order_tv_time)).getText().toString())
+                .concat(".000");
+
+        info.put("date", dateTime);
+        info.put("company_uid", companyUid);
+        info.put("partner_uid", partnerUid);
+        info.put("warehouse_uid", warehouseUid);
+        info.put("sum", sum);
+
+        return info;
+    }
+
     public HashMap<Integer, HashMap<String, Object>> getGoodsInfo() {
-        RecyclerView rv = fragmentGoods.getActivity().findViewById(R.id.recycler_tabdoc);
+        RecyclerView rv = fragmentSecondary.getActivity().findViewById(R.id.recycler_tabdoc);
         return ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
     }
 
-    public Order getOrderObj() {
-        return ((OrderActivity) context).getOrderObj();
+    public HashMap<Integer, HashMap<String, Object>> getObjectsInfo() {
+        RecyclerView rv = fragmentSecondary.getActivity().findViewById(R.id.recycler_tabdoc);
+        return ((ObjectsCashReceiptRecyclerViewAdapter) rv.getAdapter()).getObjects();
     }
+
+//    public Order getOrderObj() {
+//        return ((OrderActivity) context).getOrderObj();
+//    }
 }
