@@ -5,20 +5,20 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import dev.voleum.ordermolder.Fragment.FragmentDocuments;
-import dev.voleum.ordermolder.Fragment.FragmentCatalogs;
-import dev.voleum.ordermolder.Fragment.FragmentMain;
-import dev.voleum.ordermolder.Fragment.FragmentReports;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import dev.voleum.ordermolder.Database.DbAsyncTask;
 import dev.voleum.ordermolder.Database.DbHelper;
+import dev.voleum.ordermolder.Fragment.FragmentCatalogs;
+import dev.voleum.ordermolder.Fragment.FragmentDocuments;
+import dev.voleum.ordermolder.Fragment.FragmentMain;
+import dev.voleum.ordermolder.Fragment.FragmentReports;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -22,7 +22,8 @@ import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.ui.orders.PlaceholderFragment;
+import dev.voleum.ordermolder.ui.cashreceipts.PlaceholderCashReceiptFragment;
+import dev.voleum.ordermolder.ui.orders.PlaceholderOrderFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -38,17 +39,18 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private final Context context;
     private Fragment fragmentMain;
     private Fragment fragmentSecondary;
+    private int typeDoc;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm, int typeDoc) {
         super(fm);
         this.context = context;
+        this.typeDoc = typeDoc;
         switch (typeDoc) {
             case TYPE_ORDER:
                 TAB_TITLES = new int[]{R.string.order_tab_main, R.string.order_tab_goods};
                 break;
             case TYPE_CASH_RECEIPT:
                 TAB_TITLES = new int[]{R.string.cash_receipt_tab_main, R.string.cash_receipt_tab_objects};
-
         }
     }
 
@@ -56,7 +58,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        switch (typeDoc) {
+            case TYPE_ORDER:
+                return PlaceholderOrderFragment.newInstance(position + 1);
+            case TYPE_CASH_RECEIPT:
+                return PlaceholderCashReceiptFragment.newInstance(position + 1);
+        }
+        return PlaceholderOrderFragment.newInstance(position + 1);
     }
 
     @Nullable
@@ -86,7 +94,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public double getSum() {
-        return ((PlaceholderFragment) fragmentSecondary).getSum();
+        return ((PlaceholderCashReceiptFragment) fragmentSecondary).getSum();
     }
 
     public HashMap<String, Object> getOrderMainInfo() {
@@ -98,9 +106,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         String warehouseUid = ((Warehouse) ((Spinner) activity.findViewById(R.id.order_spinner_warehouses)).getSelectedItem()).getUid();
         double sum = Double.parseDouble(((TextView) activity.findViewById(R.id.order_tv_sum)).getText().toString());
 
-        String dateTime = (((TextView) activity.findViewById(R.id.order_tv_date)).getText().toString().replaceAll("\\.", "-"))
+        String dateTime = (((TextView) activity.findViewById(R.id.tv_date)).getText().toString().replaceAll("\\.", "-"))
                         .concat(" ")
-                        .concat(((TextView) activity.findViewById(R.id.order_tv_time)).getText().toString())
+                        .concat(((TextView) activity.findViewById(R.id.tv_time)).getText().toString())
                         .concat(".000");
 
         info.put("date", dateTime);
@@ -121,9 +129,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         String warehouseUid = ((Warehouse) ((Spinner) activity.findViewById(R.id.order_spinner_warehouses)).getSelectedItem()).getUid();
         double sum = Double.parseDouble(((TextView) activity.findViewById(R.id.order_tv_sum)).getText().toString());
 
-        String dateTime = (((TextView) activity.findViewById(R.id.order_tv_date)).getText().toString().replaceAll("\\.", "-"))
+        String dateTime = (((TextView) activity.findViewById(R.id.tv_date)).getText().toString().replaceAll("\\.", "-"))
                 .concat(" ")
-                .concat(((TextView) activity.findViewById(R.id.order_tv_time)).getText().toString())
+                .concat(((TextView) activity.findViewById(R.id.tv_time)).getText().toString())
                 .concat(".000");
 
         info.put("date", dateTime);

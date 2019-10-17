@@ -42,7 +42,7 @@ import dev.voleum.ordermolder.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlaceholderFragment extends Fragment {
+public class PlaceholderOrderFragment extends Fragment {
 
     private static final int GOOD_CHOOSE_REQUEST = 0;
 
@@ -70,8 +70,8 @@ public class PlaceholderFragment extends Fragment {
     private Spinner spinnerPartners;
     private Spinner spinnerWarehouses;
 
-    public static PlaceholderFragment newInstance(int index) {
-        PlaceholderFragment fragment = new PlaceholderFragment();
+    public static PlaceholderOrderFragment newInstance(int index) {
+        PlaceholderOrderFragment fragment = new PlaceholderOrderFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
@@ -103,8 +103,8 @@ public class PlaceholderFragment extends Fragment {
         switch (index) {
             case 1:
                 root = inflater.inflate(R.layout.fragment_order_main, container, false);
-                TextView tvDate = root.findViewById(R.id.order_tv_date);
-                TextView tvTime = root.findViewById(R.id.order_tv_time);
+                TextView tvDate = root.findViewById(R.id.tv_date);
+                TextView tvTime = root.findViewById(R.id.tv_time);
                 spinnerPartners = root.findViewById(R.id.order_spinner_partners);
                 spinnerCompanies = root.findViewById(R.id.order_spinner_companies);
                 spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
@@ -275,7 +275,7 @@ public class PlaceholderFragment extends Fragment {
         int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
         int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
         int unitClIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
-        int quantutyClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
+        int quantityClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
         int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
         int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
         if (c.moveToFirst()) {
@@ -283,7 +283,7 @@ public class PlaceholderFragment extends Fragment {
            do {
                goodUidHash.clear();
                goodUidHash.put("good", new Good(c.getString(uidClIndex), c.getString(nameClIndex), null));
-               goodUidHash.put("quantity", c.getDouble(quantutyClIndex));
+               goodUidHash.put("quantity", c.getDouble(quantityClIndex));
                goodUidHash.put("price", c.getDouble(priceClIndex));
                goodUidHash.put("sum", c.getDouble(sumClIndex));
                goods.put(c.getInt(positionClIndex), goodUidHash);
