@@ -68,5 +68,6 @@
     <string name="snackbar_doc_saved">Документ сохранён</string>
     <string name="snackbar_empty_goods_list">Список товаров пуст!</string>
     <string name="snackbar_unknown_doc_type">Неизвестный тип документа</string>
+    <string name="title_activity_unknown">Неизвестные документы</string>
 
 </resources>

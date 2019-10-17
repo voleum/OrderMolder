@@ -1,9 +1,10 @@
-package dev.voleum.ordermolder.ui.ui.general;
+package dev.voleum.ordermolder.ui.general;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +48,31 @@ public class DocListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        DocListRecyclerViewAdapter.OnEntryCLickListener onEntryCLickListener = (v, position) -> {
+            Document clickedDoc = arrayDocs.get(position);
+            Intent intentOut;
+            switch (docType) {
+                case TYPE_ORDER:
+                    intentOut = new Intent(DocListActivity.this, Order.class);
+                    break;
+                case TYPE_CASH_RECEIPT:
+                    intentOut = new Intent(DocListActivity.this, CashReceipt.class);
+                    break;
+                default:
+                    intentOut = null;
+            }
+            intentOut.putExtra(IS_CREATING, false);
+            intentOut.putExtra(DOC, clickedDoc);
+            startActivityForResult(intentOut, REQUEST_CODE);
+        };
+
+        View.OnClickListener fabClickListener = v -> {
+            Intent intentOut;
+            intentOut = new Intent(DocListActivity.this, getIntent().getSerializableExtra(DOC_ACTIVITY).getClass());
+            intentOut.putExtra(IS_CREATING, true);
+            startActivityForResult(intentOut, REQUEST_CODE);
+        };
+
         docType = getIntent().getStringExtra(DOC_TYPE);
         setContentView(R.layout.activity_doc_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -57,25 +83,23 @@ public class DocListActivity extends AppCompatActivity {
         recyclerDocs.setLayoutManager(new LinearLayoutManager(this));
         fillDocList();
         adapter = new DocListRecyclerViewAdapter(arrayDocs);
-        adapter.setOnEntryCLickListener((v, position) -> {
-            Document clickedDoc = arrayDocs.get(position);
-            Intent intentOut = new Intent(DocListActivity.this, getIntent().getSerializableExtra(DOC_ACTIVITY).getClass());
-            intentOut.putExtra(IS_CREATING, false);
-            intentOut.putExtra(DOC, clickedDoc);
-            startActivityForResult(intentOut, REQUEST_CODE);
-        });
+        adapter.setOnEntryCLickListener(onEntryCLickListener);
         recyclerDocs.setAdapter(adapter);
 
         fab = findViewById(R.id.fab);
-        fab.setOnClickListener((view) -> {
-                    Intent intentOut = new Intent(DocListActivity.this, getIntent().getSerializableExtra(DOC_ACTIVITY).getClass());
-                    intentOut.putExtra(IS_CREATING, true);
-                    startActivityForResult(intentOut, REQUEST_CODE);
-                }
-        );
+        fab.setOnClickListener(fabClickListener);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        setTitle(R.string.title_activity_orders);
+        switch (docType) {
+            case TYPE_ORDER:
+                setTitle(R.string.title_activity_orders);
+                break;
+            case TYPE_CASH_RECEIPT:
+                setTitle(R.string.title_activity_cash_receipts);
+                break;
+            default:
+                setTitle(R.string.title_activity_unknown);
+        }
 
     }
 
@@ -115,8 +139,10 @@ public class DocListActivity extends AppCompatActivity {
         switch (docType) {
             case TYPE_ORDER:
                 table = DbHelper.TABLE_ORDERS;
+                break;
             case TYPE_CASH_RECEIPT:
                 table = DbHelper.TABLE_CASH_RECEIPTS;
+                break;
             default:
                 table = "";
         }

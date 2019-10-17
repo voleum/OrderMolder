@@ -70,7 +70,7 @@ public class PlaceholderFragment extends Fragment {
     private Spinner spinnerPartners;
     private Spinner spinnerWarehouses;
 
-    static PlaceholderFragment newInstance(int index) {
+    public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);

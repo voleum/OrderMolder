@@ -29,6 +29,6 @@ public class FragmentMain extends androidx.fragment.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, null);
+        return inflater.inflate(R.layout.fragment_app_main, null);
     }
 }

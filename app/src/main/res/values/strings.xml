@@ -46,6 +46,7 @@
 
     <string name="title_activity_orders">Orders</string>
     <string name="title_activity_cash_receipts">Cash receipts</string>
+    <string name="title_activity_unknown">Unknown documents</string>
 
     <string name="title_new_order">New order</string>
 

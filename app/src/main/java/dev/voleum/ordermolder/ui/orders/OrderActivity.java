@@ -28,7 +28,8 @@ import java.util.UUID;
 import dev.voleum.ordermolder.Database.DbAsyncSaveDoc;
 import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.ui.ui.general.DocListActivity;
+import dev.voleum.ordermolder.ui.general.DocListActivity;
+import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -46,7 +47,8 @@ public class OrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_doc);
         sectionsPagerAdapter = new SectionsPagerAdapter(
                 this,
-                getSupportFragmentManager());
+                getSupportFragmentManager(),
+                SectionsPagerAdapter.TYPE_ORDER);
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
@@ -164,7 +166,7 @@ public class OrderActivity extends AppCompatActivity {
                     .show();
             return false;
         }
-        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getMainInfo();
+        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getOrderMainInfo();
 
         if (orderObj == null) {
             orderObj = new Order();
