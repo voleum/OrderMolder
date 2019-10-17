@@ -23,6 +23,8 @@ import dev.voleum.ordermolder.Object.CashReceipt;
 import dev.voleum.ordermolder.Object.Document;
 import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.ui.cashreceipts.CashReceiptActivity;
+import dev.voleum.ordermolder.ui.orders.OrderActivity;
 
 public class DocListActivity extends AppCompatActivity {
 
@@ -53,10 +55,10 @@ public class DocListActivity extends AppCompatActivity {
             Intent intentOut;
             switch (docType) {
                 case TYPE_ORDER:
-                    intentOut = new Intent(DocListActivity.this, Order.class);
+                    intentOut = new Intent(DocListActivity.this, OrderActivity.class);
                     break;
                 case TYPE_CASH_RECEIPT:
-                    intentOut = new Intent(DocListActivity.this, CashReceipt.class);
+                    intentOut = new Intent(DocListActivity.this, CashReceiptActivity.class);
                     break;
                 default:
                     intentOut = null;
@@ -68,7 +70,16 @@ public class DocListActivity extends AppCompatActivity {
 
         View.OnClickListener fabClickListener = v -> {
             Intent intentOut;
-            intentOut = new Intent(DocListActivity.this, getIntent().getSerializableExtra(DOC_ACTIVITY).getClass());
+            switch (docType) {
+                case TYPE_ORDER:
+                    intentOut = new Intent(DocListActivity.this, OrderActivity.class);
+                    break;
+                case TYPE_CASH_RECEIPT:
+                    intentOut = new Intent(DocListActivity.this, CashReceiptActivity.class);
+                    break;
+                default:
+                    intentOut = null;
+            }
             intentOut.putExtra(IS_CREATING, true);
             startActivityForResult(intentOut, REQUEST_CODE);
         };
@@ -175,6 +186,7 @@ public class DocListActivity extends AppCompatActivity {
                                 c.getString(warehouseIndex),
                                 c.getDouble(sumIndex)));
                     } while (c.moveToNext());
+                    break;
                 case TYPE_CASH_RECEIPT:
                     do {
                         arrayDocs.add(new CashReceipt(c.getString(uidIndex),
@@ -183,6 +195,7 @@ public class DocListActivity extends AppCompatActivity {
                                 c.getString(partnerIndex),
                                 c.getDouble(sumIndex)));
                     } while (c.moveToNext());
+                    break;
             }
 
         }

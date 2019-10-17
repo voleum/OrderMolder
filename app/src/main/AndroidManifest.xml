@@ -19,6 +19,9 @@
             android:name=".ui.orders.OrderActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
+            android:name=".ui.cashreceipts.CashReceiptActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".ui.general.DocListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.orders.GoodsChooser" />

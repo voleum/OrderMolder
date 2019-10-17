@@ -22,6 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
     // region Tables
     public static final String TABLE_COMPANIES = "companies";
     public static final String TABLE_PARTNERS = "partners";
+    public static final String TABLE_WAREHOUSES = "warehouses";
     public static final String TABLE_GOODS_GROUPS = "goods_groups";
     public static final String TABLE_GOODS = "goods";
     public static final String TABLE_ORDERS = "orders";
@@ -31,7 +32,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TABLE_STOCK = "stock";
     public static final String TABLE_PRICE_LIST = "price_list";
     public static final String TABLE_GOODS_TABLE = "goods_table";
-    public static final String TABLE_WAREHOUSES = "warehouses";
+    public static final String TABLE_OBJECTS_TABLE = "objects_table";
     // endregion
 
     // region Columns
@@ -42,12 +43,14 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_SUM = "sum";
+    public static final String COLUMN_SUM_CREDIT = "sum_credit";
     public static final String COLUMN_QUANTITY = "count";
     public static final String COLUMN_UNIT = "unit";
     public static final String COLUMN_TIN = "tin"; // Tax Identification Number
     public static final String COLUMN_POSITION = "position";
     // UIDs
     public static final String COLUMN_ORDER_UID = "order_uid";
+    public static final String COLUMN_CASH_RECEIPT_UID = "cash_receipt_uid";
     public static final String COLUMN_GROUP_UID = "group_uid";
     public static final String COLUMN_UNIT_UID = "unit_uid";
     public static final String COLUMN_COMPANY_UID = "company_uid";
@@ -181,6 +184,17 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_QUANTITY + " double, "
                 + COLUMN_PRICE + " double, "
                 + COLUMN_SUM + " double"
+                + ")");
+        // endregion
+
+        // region Objects table
+        db.execSQL("create table "
+                + TABLE_OBJECTS_TABLE + "("
+                + COLUMN_ID + " integer primary key autoincrement, "
+                + COLUMN_CASH_RECEIPT_UID + " text, "
+                + COLUMN_POSITION + " integer,  "
+                + COLUMN_ORDER_UID + " text, "
+                + COLUMN_SUM_CREDIT + " double"
                 + ")");
         // endregion
 

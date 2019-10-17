@@ -54,7 +54,7 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
         Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         String newDate = df.format(cal);
-        ((TextView) getTargetFragment().getActivity().findViewById(R.id.order_tv_date)).setText(newDate);
+        ((TextView) getTargetFragment().getActivity().findViewById(R.id.tv_date)).setText(newDate);
     }
 
     private void setCurrentDate() {

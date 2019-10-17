@@ -49,6 +49,7 @@
     <string name="title_activity_unknown">Unknown documents</string>
 
     <string name="title_new_order">New order</string>
+    <string name="title_new_cash_receipt">New cash receipt</string>
 
     <string name="order_tab_main">Main</string>
     <string name="order_tab_goods">Goods</string>

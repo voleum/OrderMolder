@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder;
+package dev.voleum.ordermolder.ui.general;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -20,7 +20,6 @@ public class HidingFloatingActionButtonBehavior extends FloatingActionButton.Beh
     public HidingFloatingActionButtonBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
 
     @Override
     public boolean onStartNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull FloatingActionButton child, @NonNull View directTargetChild, @NonNull View target, int axes, int type) {
