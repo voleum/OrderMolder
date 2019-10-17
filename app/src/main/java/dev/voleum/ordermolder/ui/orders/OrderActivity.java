@@ -28,6 +28,7 @@ import java.util.UUID;
 import dev.voleum.ordermolder.Database.DbAsyncSaveDoc;
 import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.ui.ui.general.DocListActivity;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -42,7 +43,7 @@ public class OrderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order);
+        setContentView(R.layout.activity_doc);
         sectionsPagerAdapter = new SectionsPagerAdapter(
                 this,
                 getSupportFragmentManager());
@@ -87,12 +88,12 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
-        if (getIntent().getBooleanExtra(OrderListListActivity.IS_CREATING, true)) {
+        if (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true)) {
             isCreating = true;
             setTitle(R.string.title_new_order);
         } else {
             isCreating = false;
-            orderObj = (Order) getIntent().getSerializableExtra("order");
+            orderObj = (Order) getIntent().getSerializableExtra("doc");
             String title = orderObj.getDate().substring(0, 19).replace("-", ".");
             setTitle(title);
         }
@@ -105,8 +106,8 @@ public class OrderActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     if (saveDoc()) {
                         Intent intent = new Intent();
-                        intent.putExtra("order", orderObj);
-                        int result = isCreating ? OrderListListActivity.RESULT_CREATED : OrderListListActivity.RESULT_SAVED;
+                        intent.putExtra("doc", orderObj);
+                        int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                         setResult(result, intent);
                         finish();
                     }

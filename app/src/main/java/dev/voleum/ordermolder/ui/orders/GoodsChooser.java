@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.Adapter.GoodsChooserRecyclerViewAdapter;
+import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.R;
 
@@ -28,7 +28,7 @@ public class GoodsChooser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_chooser);
         setTitle(R.string.catalog_good_plural);
-        recyclerView = findViewById(R.id.recycler_goods);
+        recyclerView = findViewById(R.id.recycler_tabdoc);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //            recyclerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 //        }

@@ -133,12 +133,12 @@ public class PlaceholderFragment extends Fragment {
                 }
                 break;
             case 2:
-                root = inflater.inflate(R.layout.fragment_goods_list, container, false);
+                root = inflater.inflate(R.layout.fragment_tabdoc_list, container, false);
                 goods = new HashMap<>();
                 if (orderObj != null) {
                     fillGoodList(orderObj.getUid());
                 }
-                recyclerGoods = root.findViewById(R.id.recycler_goods);
+                recyclerGoods = root.findViewById(R.id.recycler_tabdoc);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
                 adapter = new GoodsOrderRecyclerViewAdapter(goods);

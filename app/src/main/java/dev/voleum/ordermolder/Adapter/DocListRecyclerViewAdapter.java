@@ -10,19 +10,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import dev.voleum.ordermolder.Object.Order;
+import dev.voleum.ordermolder.Object.Document;
 
-public class OrderListRecyclerViewAdapter extends RecyclerView.Adapter {
+public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Order> orders;
+    private ArrayList<Document> docs;
     private OnEntryCLickListener onEntryCLickListener;
 
     public interface OnEntryCLickListener {
         void onEntryClick(View v, int position);
     }
 
-    public OrderListRecyclerViewAdapter(ArrayList<Order> orders) {
-        this.orders = orders;
+    public DocListRecyclerViewAdapter(ArrayList<Document> docs) {
+        this.docs = docs;
     }
 
     @NonNull
@@ -34,13 +34,13 @@ public class OrderListRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Order order = orders.get(position);
-        ((OrderViewHolder) holder).textView.setText(order.toString());
+        Document doc = docs.get(position);
+        ((OrderViewHolder) holder).textView.setText(doc.toString());
     }
 
     @Override
     public int getItemCount() {
-        return orders.size();
+        return docs.size();
     }
 
     public void setOnEntryCLickListener(OnEntryCLickListener onEntryCLickListener) {

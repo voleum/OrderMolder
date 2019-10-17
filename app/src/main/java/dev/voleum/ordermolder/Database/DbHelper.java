@@ -137,7 +137,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_DATE + " real, "
                 + COLUMN_COMPANY_UID + " text, "
                 + COLUMN_PARTNER_UID + " text, "
-                + COLUMN_QUANTITY + " double, "
+                + COLUMN_SUM + " double, "
                 + COLUMN_OBJECT_UID + " text"
                 + ")");
         // endregion

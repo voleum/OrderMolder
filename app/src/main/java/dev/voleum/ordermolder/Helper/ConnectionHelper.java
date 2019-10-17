@@ -8,7 +8,6 @@ import org.apache.commons.net.ftp.FTPReply;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.SocketException;
 
 import dev.voleum.ordermolder.MainActivity;
 
