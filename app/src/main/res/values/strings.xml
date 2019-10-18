@@ -46,7 +46,12 @@
 
     <string name="title_activity_orders">Orders</string>
     <string name="title_activity_cash_receipts">Cash receipts</string>
-    <string name="title_activity_unknown">Unknown documents</string>
+    <string name="title_activity_companies">Companies</string>
+    <string name="title_activity_partners">Partners</string>
+    <string name="title_activity_goods">Goods</string>
+    <string name="title_activity_units">Units</string>
+    <string name="title_activity_unknown_doc">Unknown documents</string>
+    <string name="title_activity_unknown_cat">Unknown catalog</string>
 
     <string name="title_new_order">New order</string>
     <string name="title_new_cash_receipt">New cash receipt</string>

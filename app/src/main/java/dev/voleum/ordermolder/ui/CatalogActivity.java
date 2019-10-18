@@ -13,25 +13,33 @@ import androidx.constraintlayout.widget.Constraints;
 
 import java.util.Objects;
 
+import dev.voleum.ordermolder.Object.Catalog;
+import dev.voleum.ordermolder.Object.EconomicEntity;
+import dev.voleum.ordermolder.Object.Good;
+import dev.voleum.ordermolder.Object.Unit;
 import dev.voleum.ordermolder.R;
 
 public class CatalogActivity extends AppCompatActivity {
 
-    public static final String DOC_TYPE = "doc_type";
+    public static final String CAT = "cat";
+    public static final String CAT_TYPE = "cat_type";
     public static final int TYPE_UNKNOWN = -1;
     public static final int TYPE_COMPANY = 0;
     public static final int TYPE_PARTNER = 1;
     public static final int TYPE_GOOD = 2;
     public static final int TYPE_UNIT = 3;
 
-    private int docType;
+    private int catType;
+
+    Catalog catalog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cat);
 
-        docType = getIntent().getIntExtra(DOC_TYPE, TYPE_UNKNOWN);
+        catType = getIntent().getIntExtra(CAT_TYPE, TYPE_UNKNOWN);
+        catalog = (Catalog) getIntent().getSerializableExtra(CAT);
 
         Toolbar toolbar = findViewById(R.id.catalog_toolbar);
         setSupportActionBar(toolbar);
@@ -47,10 +55,10 @@ public class CatalogActivity extends AppCompatActivity {
         TextView tvName = new TextView(this);
         tvName.setLayoutParams(nameLayoutParams);
         tvName.setId(View.generateViewId());
-        tvName.setText("Name");
+        tvName.setText(catalog.getName());
         layout.addView(tvName);
 
-        switch (docType) {
+        switch (catType) {
             case TYPE_COMPANY:
             case TYPE_PARTNER:
                 Constraints.LayoutParams tinLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -61,30 +69,29 @@ public class CatalogActivity extends AppCompatActivity {
                 TextView tvTin = new TextView(this);
                 tvTin.setLayoutParams(tinLayoutParams);
                 tvTin.setId(View.generateViewId());
-                tvTin.setText("Tin");
+                tvTin.setText(((EconomicEntity) catalog).getTin());
                 layout.addView(tvTin);
                 break;
             case TYPE_GOOD:
-                Constraints.LayoutParams groupLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                groupLayoutParams.startToStart = R.id.catalog_constraint;
-                groupLayoutParams.setMargins(16, 16, 16, 16);
-                groupLayoutParams.topToBottom = tvName.getId();
-
-                TextView tvGroup = new TextView(this);
-                tvGroup.setLayoutParams(groupLayoutParams);
-                tvGroup.setId(View.generateViewId());
-                tvGroup.setText("Group");
-                layout.addView(tvGroup);
+//                Constraints.LayoutParams groupLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                groupLayoutParams.startToStart = R.id.catalog_constraint;
+//                groupLayoutParams.setMargins(16, 16, 16, 16);
+//                groupLayoutParams.topToBottom = tvName.getId();
+//
+//                TextView tvGroup = new TextView(this);
+//                tvGroup.setLayoutParams(groupLayoutParams);
+//                tvGroup.setId(View.generateViewId());
+//                layout.addView(tvGroup);
 
                 Constraints.LayoutParams unitLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 unitLayoutParams.startToStart = R.id.catalog_constraint;
                 unitLayoutParams.setMargins(16, 16, 16, 16);
-                unitLayoutParams.topToBottom = tvGroup.getId();
+                unitLayoutParams.topToBottom = tvName.getId();
 
                 TextView tvUnit = new TextView(this);
                 tvUnit.setLayoutParams(unitLayoutParams);
                 tvUnit.setId(View.generateViewId());
-                tvUnit.setText("Unit");
+                tvUnit.setText(((Good) catalog).getUnitUid());
                 layout.addView(tvUnit);
                 break;
             case TYPE_UNIT:
@@ -96,13 +103,26 @@ public class CatalogActivity extends AppCompatActivity {
                 TextView tvCode = new TextView(this);
                 tvCode.setLayoutParams(codeLayoutParams);
                 tvCode.setId(View.generateViewId());
-                tvCode.setText("Code");
+                tvCode.setText(String.valueOf(((Unit) catalog).getCode()));
                 layout.addView(tvCode);
+
+                Constraints.LayoutParams fullNameLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                fullNameLayoutParams.startToStart = R.id.catalog_constraint;
+                fullNameLayoutParams.setMargins(16, 16, 16, 16);
+                fullNameLayoutParams.topToBottom = tvCode.getId();
+
+                TextView tvFullName = new TextView(this);
+                tvFullName.setLayoutParams(fullNameLayoutParams);
+                tvFullName.setId(View.generateViewId());
+                tvFullName.setText(((Unit) catalog).getFullName());
+                layout.addView(tvFullName);
                 break;
         }
     }
 
-    private void initializeData() {
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +17,10 @@ import java.util.Objects;
 import dev.voleum.ordermolder.Adapter.CatalogListRecyclerViewAdapter;
 import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.Object.Catalog;
+import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Good;
+import dev.voleum.ordermolder.Object.Partner;
+import dev.voleum.ordermolder.Object.Unit;
 import dev.voleum.ordermolder.R;
 
 public class CatalogListActivity extends AppCompatActivity {
@@ -24,17 +28,24 @@ public class CatalogListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     private ArrayList<Catalog> catalogs;
 
-    private int docType;
+    private int catType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cat_list);
 
-        docType = getIntent().getIntExtra(CatalogActivity.DOC_TYPE, CatalogActivity.TYPE_UNKNOWN);
+        catType = getIntent().getIntExtra(CatalogActivity.CAT_TYPE, CatalogActivity.TYPE_UNKNOWN);
 
-        setContentView(R.layout.activity_chooser);
-        setTitle(R.string.catalog_good_plural);
-        recyclerView = findViewById(R.id.recycler_tabdoc);
+        CatalogListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
+            Catalog clickedCat = catalogs.get(position);
+            Intent intentOut = new Intent(CatalogListActivity.this, CatalogActivity.class)
+                    .putExtra(CatalogActivity.CAT_TYPE, catType)
+                    .putExtra(CatalogActivity.CAT, clickedCat);
+            startActivity(intentOut);
+        };
+
+        recyclerView = findViewById(R.id.recycler_cats);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //            recyclerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 //        }
@@ -43,13 +54,13 @@ public class CatalogListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         catalogs = getCatalogsList();
         CatalogListRecyclerViewAdapter adapter = new CatalogListRecyclerViewAdapter(catalogs);
-        adapter.setOnEntryClickListener((v, position) -> {
-            Catalog chosenCatalog = catalogs.get(position);
-            setResult(RESULT_OK, new Intent()
-                    .putExtra("catalog", chosenCatalog));
-            finish();
-        });
+        adapter.setOnEntryClickListener(onEntryClickListener);
         recyclerView.setAdapter(adapter);
+
+        setTitleDependOnType();
+
+        Toolbar toolbar = findViewById(R.id.catalog_list_toolbar);
+        setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
@@ -60,7 +71,7 @@ public class CatalogListActivity extends AppCompatActivity {
 
         String table;
 
-        switch (docType) {
+        switch (catType) {
             case CatalogActivity.TYPE_COMPANY:
                 table = DbHelper.TABLE_COMPANIES;
                 break;
@@ -87,24 +98,40 @@ public class CatalogListActivity extends AppCompatActivity {
         catalogs = new ArrayList<>();
 
         if (c.moveToFirst()) {
-            // TODO: Finish it
             int uidIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int nameIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            int unitIndex;
-            if (docType == CatalogActivity.TYPE_GOOD) unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT);
+            int tinIndex = -1;
+            int unitIndex = -1;
+            int codeIndex = -1;
+            int fullNameIndex = -1;
+            if (catType == CatalogActivity.TYPE_COMPANY || catType == CatalogActivity.TYPE_PARTNER) tinIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+            if (catType == CatalogActivity.TYPE_GOOD) unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
+            if (catType == CatalogActivity.TYPE_UNIT) {
+                codeIndex = c.getColumnIndex(DbHelper.COLUMN_CODE);
+                fullNameIndex = c.getColumnIndex(DbHelper.COLUMN_FULL_NAME);
+            }
             do {
-                switch (docType) {
+                switch (catType) {
                     case CatalogActivity.TYPE_COMPANY:
-
+                        catalogs.add(new Company(c.getString(uidIndex),
+                                c.getString(nameIndex),
+                                c.getString(tinIndex)));
                         break;
                     case CatalogActivity.TYPE_PARTNER:
-
+                        catalogs.add(new Partner(c.getString(uidIndex),
+                                c.getString(nameIndex),
+                                c.getString(tinIndex)));
                         break;
                     case CatalogActivity.TYPE_GOOD:
-                        catalogs.add(new Good(c.getString(uidIndex), c.getString(nameIndex), null));
+                        catalogs.add(new Good(c.getString(uidIndex),
+                                c.getString(nameIndex),
+                                c.getString(unitIndex)));
                         break;
                     case CatalogActivity.TYPE_UNIT:
-
+                        catalogs.add(new Unit(c.getString(uidIndex),
+                                c.getInt(codeIndex),
+                                c.getString(nameIndex),
+                                c.getString(fullNameIndex)));
                         break;
                 }
             } while (c.moveToNext());
@@ -120,5 +147,22 @@ public class CatalogListActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    private void setTitleDependOnType() {
+        switch (catType) {
+            case CatalogActivity.TYPE_COMPANY:
+                setTitle(R.string.title_activity_companies);
+                break;
+            case CatalogActivity.TYPE_PARTNER:
+                setTitle(R.string.title_activity_partners);
+                break;
+            case CatalogActivity.TYPE_GOOD:
+                setTitle(R.string.title_activity_goods);
+                break;
+            case CatalogActivity.TYPE_UNIT:
+                setTitle(R.string.title_activity_units);
+                break;
+        }
     }
 }

@@ -109,7 +109,7 @@ public class DocListActivity extends AppCompatActivity {
                 setTitle(R.string.title_activity_cash_receipts);
                 break;
             default:
-                setTitle(R.string.title_activity_unknown);
+                setTitle(R.string.title_activity_unknown_doc);
         }
 
     }

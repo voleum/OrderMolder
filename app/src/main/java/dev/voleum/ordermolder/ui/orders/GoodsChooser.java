@@ -66,9 +66,11 @@ public class GoodsChooser extends AppCompatActivity {
         if (c.moveToFirst()) {
             int uidIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int nameIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            int unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT);
+            int unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
             do {
-                goods.add(new Good(c.getString(uidIndex), c.getString(nameIndex), null));
+                goods.add(new Good(c.getString(uidIndex),
+                        c.getString(nameIndex),
+                        c.getString(unitIndex)));
             } while (c.moveToNext());
         }
 

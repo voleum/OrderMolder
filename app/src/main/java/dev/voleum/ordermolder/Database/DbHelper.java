@@ -41,11 +41,11 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_CODE = "code";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_FULL_NAME = "full_name";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_SUM = "sum";
     public static final String COLUMN_SUM_CREDIT = "sum_credit";
     public static final String COLUMN_QUANTITY = "quantity";
-    public static final String COLUMN_UNIT = "unit";
     public static final String COLUMN_TIN = "tin"; // Tax Identification Number
     public static final String COLUMN_POSITION = "position";
     // UIDs
@@ -90,7 +90,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 + TABLE_UNITS + "("
                 + COLUMN_UID + " text, "
                 + COLUMN_CODE + " integer, "
-                + COLUMN_NAME + " text"
+                + COLUMN_NAME + " text, "
+                + COLUMN_FULL_NAME + " text"
                 + ")");
         // endregion
 
