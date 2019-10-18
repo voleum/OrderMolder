@@ -70,5 +70,6 @@
     <string name="snackbar_unknown_doc_type">Неизвестный тип документа</string>
     <string name="title_activity_unknown">Неизвестные документы</string>
     <string name="title_new_cash_receipt">Новый приходный кассовый ордер</string>
+    <string name="snackbar_empty_objects_list">Список объектов расчётов пуст!</string>
 
 </resources>

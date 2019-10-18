@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import dev.voleum.ordermolder.Database.DbAsyncSaveDoc;
+import dev.voleum.ordermolder.Database.DbAsyncSaveOrder;
 import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
@@ -183,8 +183,8 @@ public class OrderActivity extends AppCompatActivity {
         HashMap<String, Map> orderInfo = new HashMap<>();
         orderInfo.put("main_info", mainInfo);
         orderInfo.put("goods_info", goodsInfo);
-        DbAsyncSaveDoc dbAsyncSaveDoc = new DbAsyncSaveDoc(this);
-        dbAsyncSaveDoc.execute(orderInfo);
+        DbAsyncSaveOrder dbAsyncSaveOrder = new DbAsyncSaveOrder(this);
+        dbAsyncSaveOrder.execute(orderInfo);
 
         return true;
     }

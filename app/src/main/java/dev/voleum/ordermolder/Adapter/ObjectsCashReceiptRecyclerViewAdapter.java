@@ -35,9 +35,9 @@ public class ObjectsCashReceiptRecyclerViewAdapter extends RecyclerView.Adapter 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        HashMap<String, Object> goodData = objects.get(position);
-        Order object = (Order) goodData.get("object");
-        double sum = (double) goodData.get("sum");
+        HashMap<String, Object> objectData = objects.get(position);
+        Order object = (Order) objectData.get("object");
+        double sum = (double) objectData.get("sum_credit");
         ((ObjectViewHolder) holder).objectName.setText(object.toString());
         ((ObjectViewHolder) holder).objectSum.setText(String.valueOf(sum));
     }
@@ -55,7 +55,7 @@ public class ObjectsCashReceiptRecyclerViewAdapter extends RecyclerView.Adapter 
         double sum = 0.0;
         for (int i = 0; i < objects.size(); i++) {
             HashMap<String, Object> object = objects.get(i);
-            sum += (Double) object.get("sum");
+            sum += (Double) object.get("sum_credit");
         }
         return sum;
     }
@@ -88,7 +88,7 @@ public class ObjectsCashReceiptRecyclerViewAdapter extends RecyclerView.Adapter 
                         } catch (NumberFormatException e) {
                             objectSum = 0;
                         }
-                        objectInfo.put("sum", objectSum);
+                        objectInfo.put("sum_credit", objectSum);
                 }
                 tvSum.setText(String.valueOf(getSum()));
             }
@@ -96,8 +96,8 @@ public class ObjectsCashReceiptRecyclerViewAdapter extends RecyclerView.Adapter 
 
         public ObjectViewHolder(View view) {
             super(view);
-            objectName = view.findViewById(R.id.good_name);
-            objectSum = view.findViewById(R.id.good_quantity);
+            objectName = view.findViewById(R.id.object_name);
+            objectSum = view.findViewById(R.id.object_sum);
             objectSum.setOnFocusChangeListener(onFocusChangeListener);
             objectSum.setOnEditorActionListener(onEditorActionListener);
         }

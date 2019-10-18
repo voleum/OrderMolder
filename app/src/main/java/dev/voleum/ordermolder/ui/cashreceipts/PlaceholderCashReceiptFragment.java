@@ -39,6 +39,8 @@ import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.ui.orders.PageViewModel;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -154,15 +156,15 @@ public class PlaceholderCashReceiptFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == OBJECT_CHOOSE_REQUEST) {
-            if (resultCode == CashReceiptActivity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 if (data != null) {
                     // TODO: if the object already in list - ignore
-                    Order chosenOrder = (Order) data.getSerializableExtra("order");
-                    double sum = data.getDoubleExtra("sum", 1.0);
+                    Order chosenOrder = (Order) data.getSerializableExtra("object");
+                    double sum = data.getDoubleExtra("sum_credit", 1.0);
                     int position = objects.size();
                     HashMap<String, Object> values = new HashMap<>();
-                    values.put("order", chosenOrder);
-                    values.put("sum", sum);
+                    values.put("object", chosenOrder);
+                    values.put("sum_credit", sum);
                     objects.put(position, values);
                     adapter.notifyItemInserted(position + 1);
                 }
@@ -238,7 +240,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 + " FROM " + DbHelper.TABLE_OBJECTS_TABLE
                 + " LEFT JOIN " + DbHelper.TABLE_ORDERS
                 + " ON " + DbHelper.COLUMN_ORDER_UID + " = " + DbHelper.COLUMN_UID
-                + " WHERE " + DbHelper.COLUMN_ORDER_UID + " = ?"
+                + " WHERE " + DbHelper.COLUMN_CASH_RECEIPT_UID + " = ?"
                 + " ORDER BY " + DbHelper.COLUMN_POSITION;
         Cursor c = db.rawQuery(sql, selectionArgs);
         int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
@@ -253,13 +255,13 @@ public class PlaceholderCashReceiptFragment extends Fragment {
             HashMap<String, Object> objectUidHash = new HashMap<>();
            do {
                objectUidHash.clear();
-               objectUidHash.put("order", new Order(c.getString(uidClIndex),
+               objectUidHash.put("object", new Order(c.getString(uidClIndex),
                        c.getString(dateClIndex),
                        c.getString(companyClIndex),
                        c.getString(partnerClIndex),
                        c.getString(warehouseClIndex),
                        c.getDouble(sumCreditClIndex)));
-               objectUidHash.put("sum", c.getDouble(sumClIndex));
+               objectUidHash.put("sum_credit", c.getDouble(sumClIndex));
                objects.put(c.getInt(positionClIndex), objectUidHash);
            } while (c.moveToNext());
         }

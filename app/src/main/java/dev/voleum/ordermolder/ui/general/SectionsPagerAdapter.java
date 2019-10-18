@@ -94,7 +94,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public double getSum() {
-        return ((PlaceholderCashReceiptFragment) fragmentSecondary).getSum();
+        switch (typeDoc) {
+            case TYPE_ORDER:
+                return ((PlaceholderOrderFragment) fragmentSecondary).getSum();
+            case TYPE_CASH_RECEIPT:
+                return ((PlaceholderCashReceiptFragment) fragmentSecondary).getSum();
+            default:
+                return 0.0;
+        }
     }
 
     public HashMap<String, Object> getOrderMainInfo() {
@@ -124,10 +131,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         HashMap<String, Object> info = new HashMap<>();
 
         FragmentActivity activity = fragmentMain.getActivity();
-        String companyUid = ((Company) ((Spinner) activity.findViewById(R.id.order_spinner_companies)).getSelectedItem()).getUid();
-        String partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.order_spinner_partners)).getSelectedItem()).getUid();
-        String warehouseUid = ((Warehouse) ((Spinner) activity.findViewById(R.id.order_spinner_warehouses)).getSelectedItem()).getUid();
-        double sum = Double.parseDouble(((TextView) activity.findViewById(R.id.order_tv_sum)).getText().toString());
+        String companyUid = ((Company) ((Spinner) activity.findViewById(R.id.cash_receipt_spinner_companies)).getSelectedItem()).getUid();
+        String partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.cash_receipt_spinner_partners)).getSelectedItem()).getUid();
+        double sum = Double.parseDouble(((TextView) activity.findViewById(R.id.cash_receipt_tv_sum)).getText().toString());
 
         String dateTime = (((TextView) activity.findViewById(R.id.tv_date)).getText().toString().replaceAll("\\.", "-"))
                 .concat(" ")
@@ -137,7 +143,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         info.put("date", dateTime);
         info.put("company_uid", companyUid);
         info.put("partner_uid", partnerUid);
-        info.put("warehouse_uid", warehouseUid);
         info.put("sum", sum);
 
         return info;

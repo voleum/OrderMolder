@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import dev.voleum.ordermolder.Database.DbAsyncSaveDoc;
+import dev.voleum.ordermolder.Database.DbAsyncSaveCashReceipt;
 import dev.voleum.ordermolder.Object.CashReceipt;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
@@ -161,7 +161,7 @@ public class CashReceiptActivity extends AppCompatActivity {
     private boolean saveDoc() {
         HashMap<Integer, HashMap<String, Object>> objectsInfo = sectionsPagerAdapter.getObjectsInfo();
         if (objectsInfo.isEmpty()) {
-            Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT)
+            Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT)
                     .setGestureInsetBottomIgnored(true)
                     .show();
             return false;
@@ -182,8 +182,8 @@ public class CashReceiptActivity extends AppCompatActivity {
         HashMap<String, Map> docInfo = new HashMap<>();
         docInfo.put("main_info", mainInfo);
         docInfo.put("objects_info", objectsInfo);
-        DbAsyncSaveDoc dbAsyncSaveDoc = new DbAsyncSaveDoc(this);
-        dbAsyncSaveDoc.execute(docInfo);
+        DbAsyncSaveCashReceipt dbAsyncSaveCashReceipt = new DbAsyncSaveCashReceipt(this);
+        dbAsyncSaveCashReceipt.execute(docInfo);
 
         return true;
     }
