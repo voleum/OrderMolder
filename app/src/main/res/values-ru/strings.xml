@@ -69,8 +69,13 @@
     <string name="snackbar_doc_saved">Документ сохранён</string>
     <string name="snackbar_empty_goods_list">Список товаров пуст!</string>
     <string name="snackbar_unknown_doc_type">Неизвестный тип документа</string>
-    <string name="title_activity_unknown">Неизвестные документы</string>
+    <string name="title_activity_unknown_doc">Неизвестные документы</string>
     <string name="title_new_cash_receipt">Новый приходный кассовый ордер</string>
     <string name="snackbar_empty_objects_list">Список объектов расчётов пуст!</string>
+    <string name="title_activity_companies">Организации</string>
+    <string name="title_activity_goods">Товары</string>
+    <string name="title_activity_partners">Партнёры</string>
+    <string name="title_activity_units">Единицы измерения</string>
+    <string name="title_activity_unknown_cat">Неизвестные справочники</string>
 
 </resources>

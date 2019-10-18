@@ -7,36 +7,32 @@ import android.os.AsyncTask;
 import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.MainActivity;
 
-public class Partner extends Catalog {
-
-    private String tin;
+public class Partner extends EconomicEntity {
 
     public Partner(String uid, String name, String tin) {
-        super(uid, name);
-        this.tin = tin;
+        super(uid, name, tin);
     }
 
     public Partner(String tin) {
-        DbAsyncGetPartner dbAsyncGetCompany = new DbAsyncGetPartner();
-        dbAsyncGetCompany.execute(tin);
+        DbAsyncGetData dbAsyncGetData = new DbAsyncGetData();
+        dbAsyncGetData.execute(tin);
     }
 
-    public String getTin() {
-        return tin;
-    }
-
-    public void setTin(String tin) {
-        this.tin = tin;
-    }
-
-    private class DbAsyncGetPartner extends AsyncTask<String, Void, Void> {
+    private class DbAsyncGetData extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... uids) {
             if (uids.length > 0) {
                 DbHelper dbHelper = DbHelper.getInstance(MainActivity.getAppContext());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 String selection = DbHelper.COLUMN_TIN + " = ?";
-                Cursor c = db.query(DbHelper.TABLE_PARTNERS, null, selection, uids, null, null, null, "1");
+                Cursor c = db.query(DbHelper.TABLE_PARTNERS,
+                        null,
+                        selection,
+                        uids,
+                        null,
+                        null,
+                        null,
+                        "1");
                 if (c.moveToFirst()) {
                     uid = c.getString(c.getColumnIndex(DbHelper.COLUMN_UID));
                     tin = c.getString(c.getColumnIndex(DbHelper.COLUMN_TIN));
