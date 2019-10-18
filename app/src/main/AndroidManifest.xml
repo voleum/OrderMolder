@@ -25,6 +25,7 @@
             android:name=".ui.general.DocListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.orders.GoodsChooser" />
+        <activity android:name=".ui.cashreceipts.ObjectsChooser" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

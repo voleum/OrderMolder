@@ -12,10 +12,10 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.HashMap;
 import java.util.Map;
 
-import dev.voleum.ordermolder.Object.Good;
+import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.R;
 
-public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Boolean> {
+public class DbAsyncSaveCashReceipt extends AsyncTask<HashMap<String, Map>, Boolean, Boolean> {
 
     @SuppressLint("StaticFieldLeak")
     private Context context;
@@ -23,7 +23,7 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Boo
     private boolean undoPressed;
     private String title;
 
-    public DbAsyncSaveDoc(Context context) {
+    public DbAsyncSaveCashReceipt(Context context) {
         super();
         this.context = context;
     }
@@ -44,34 +44,32 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Boo
     }
 
     @Override
-    protected Boolean doInBackground(HashMap<String, Map>... orders) {
+    protected Boolean doInBackground(HashMap<String, Map>... docs) {
         DbHelper dbHelper = DbHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {
             ContentValues cv = new ContentValues();
-            for (HashMap<String, Map> orderInfo: orders
+            for (HashMap<String, Map> docInfo: docs
                  ) {
-                HashMap<String, String> mainInfo = (HashMap<String, String>) orderInfo.get("main_info");
-                HashMap<Integer, HashMap<String, Object>> goodsInfo = (HashMap<Integer, HashMap<String, Object>>) orderInfo.get("goods_info");
+                HashMap<String, String> mainInfo = (HashMap<String, String>) docInfo.get("main_info");
+                HashMap<Integer, HashMap<String, Object>> objectsInfo = (HashMap<Integer, HashMap<String, Object>>) docInfo.get("objects_info");
 
-                double sumGood;
-                double sumOrder = 0;
+                double sumObject;
+                double sumDoc = 0;
 
-                HashMap<String, Object> goodInfo;
+                HashMap<String, Object> objectInfo;
 
-                for (int i = 0; i < goodsInfo.size(); i++) {
-                    goodInfo = goodsInfo.get(i);
-                    sumGood = (Double) goodInfo.get("sum");
+                for (int i = 0; i < objectsInfo.size(); i++) {
+                    objectInfo = objectsInfo.get(i);
+                    sumObject = (Double) objectInfo.get("sum_credit");
                     cv.clear();
-                    cv.put(DbHelper.COLUMN_ORDER_UID, mainInfo.get("uid"));
+                    cv.put(DbHelper.COLUMN_CASH_RECEIPT_UID, mainInfo.get("uid"));
                     cv.put(DbHelper.COLUMN_POSITION, i);
-                    cv.put(DbHelper.COLUMN_GOOD_UID, ((Good) goodInfo.get("good")).getUid());
-                    cv.put(DbHelper.COLUMN_QUANTITY, (Double) goodInfo.get("quantity"));
-                    cv.put(DbHelper.COLUMN_PRICE, (Double) goodInfo.get("price"));
-                    cv.put(DbHelper.COLUMN_SUM, sumGood);
-                    db.insert(DbHelper.TABLE_GOODS_TABLE, null, cv);
-                    sumOrder += sumGood;
+                    cv.put(DbHelper.COLUMN_ORDER_UID, ((Order) objectInfo.get("object")).getUid());
+                    cv.put(DbHelper.COLUMN_SUM_CREDIT, (Double) objectInfo.get("sum_credit"));
+                    db.insert(DbHelper.TABLE_OBJECTS_TABLE, null, cv);
+                    sumDoc += sumObject;
                 }
 
                 cv.clear();
@@ -79,9 +77,8 @@ public class DbAsyncSaveDoc extends AsyncTask<HashMap<String, Map>, Boolean, Boo
                 cv.put(DbHelper.COLUMN_DATE, mainInfo.get("date"));
                 cv.put(DbHelper.COLUMN_COMPANY_UID, mainInfo.get("company_uid"));
                 cv.put(DbHelper.COLUMN_PARTNER_UID, mainInfo.get("partner_uid"));
-                cv.put(DbHelper.COLUMN_WAREHOUSE_UID, mainInfo.get("warehouse_uid"));
-                cv.put(DbHelper.COLUMN_SUM, sumOrder);
-                db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+                cv.put(DbHelper.COLUMN_SUM, sumDoc);
+                db.insertWithOnConflict(DbHelper.TABLE_CASH_RECEIPTS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
 
                 undoPressed = false;
                 publishProgress(true);

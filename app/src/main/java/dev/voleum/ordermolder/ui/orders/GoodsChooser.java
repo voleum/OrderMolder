@@ -39,7 +39,7 @@ public class GoodsChooser extends AppCompatActivity {
         GoodsChooserRecyclerViewAdapter adapter = new GoodsChooserRecyclerViewAdapter(goods);
         adapter.setOnEntryClickListener((v, position) -> {
             Good chosenGood = goods.get(position);
-            setResult(OrderActivity.RESULT_OK, new Intent()
+            setResult(RESULT_OK, new Intent()
                     .putExtra("good", chosenGood)
                     .putExtra("quantity", 1.0)
                     .putExtra("price", 1.0)
