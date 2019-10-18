@@ -2,18 +2,18 @@ package dev.voleum.ordermolder.Object;
 
 public class Good extends Catalog {
 
-    private Unit unit;
+    private String unitUid;
 
-    public Good(String uid, String name, Unit unit) {
+    public Good(String uid, String name, String unitUid) {
         super(uid, name);
-        this.unit = unit;
+        this.unitUid = unitUid;
     }
 
-    public Unit getUnit() {
-        return unit;
+    public String getUnitUid() {
+        return unitUid;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
+    public void setUnitUid(String unitUid) {
+        this.unitUid = unitUid;
     }
 }

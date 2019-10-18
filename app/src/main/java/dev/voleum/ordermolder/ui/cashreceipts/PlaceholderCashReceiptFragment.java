@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.ui.orders;
+package dev.voleum.ordermolder.ui.cashreceipts;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,50 +28,48 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.HashMap;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
+import dev.voleum.ordermolder.Adapter.ObjectsCashReceiptRecyclerViewAdapter;
 import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.Fragment.SelectDateFragment;
 import dev.voleum.ordermolder.Fragment.SelectTimeFragment;
+import dev.voleum.ordermolder.Object.CashReceipt;
 import dev.voleum.ordermolder.Object.Company;
-import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.Object.Partner;
-import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.ui.general.PageViewModel;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlaceholderFragment extends Fragment {
+public class PlaceholderCashReceiptFragment extends Fragment {
 
-    private static final int GOOD_CHOOSE_REQUEST = 0;
+    private static final int OBJECT_CHOOSE_REQUEST = 0;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private PageViewModel pageViewModel;
 
-    private RecyclerView recyclerGoods;
-    private HashMap<Integer, HashMap<String, Object>> goods;
+    private RecyclerView recyclerObjects;
+    private HashMap<Integer, HashMap<String, Object>> objects;
 
     private Company[] companies;
     private Partner[] partners;
-    private Warehouse[] warehouses;
 
-    private GoodsOrderRecyclerViewAdapter adapter;
+    private ObjectsCashReceiptRecyclerViewAdapter adapter;
     private ArrayAdapter<Company> adapterCompany;
     private ArrayAdapter<Partner> adapterPartners;
-    private ArrayAdapter<Warehouse> adapterWarehouses;
 
     private HashMap<String, Integer> hashCompanies;
     private HashMap<String, Integer> hashPartners;
-    private HashMap<String, Integer> hashWarehouses;
 
     private Spinner spinnerCompanies;
     private Spinner spinnerPartners;
-    private Spinner spinnerWarehouses;
 
-    static PlaceholderFragment newInstance(int index) {
-        PlaceholderFragment fragment = new PlaceholderFragment();
+    public static PlaceholderCashReceiptFragment newInstance(int index) {
+        PlaceholderCashReceiptFragment fragment = new PlaceholderCashReceiptFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
@@ -99,15 +97,14 @@ public class PlaceholderFragment extends Fragment {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         View root = null;
-        Order orderObj =((OrderActivity) getActivity()).getOrderObj();
+        CashReceipt cashReceiptObj =((CashReceiptActivity) getActivity()).getCashReceiptObj();
         switch (index) {
             case 1:
-                root = inflater.inflate(R.layout.fragment_order_main, container, false);
-                TextView tvDate = root.findViewById(R.id.order_tv_date);
-                TextView tvTime = root.findViewById(R.id.order_tv_time);
-                spinnerPartners = root.findViewById(R.id.order_spinner_partners);
-                spinnerCompanies = root.findViewById(R.id.order_spinner_companies);
-                spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
+                root = inflater.inflate(R.layout.fragment_cash_receipt_main, container, false);
+                TextView tvDate = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_date);
+                TextView tvTime = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_time);
+                spinnerPartners = root.findViewById(R.id.cash_receipt_spinner_partners);
+                spinnerCompanies = root.findViewById(R.id.cash_receipt_spinner_companies);
                 initializeData(root);
                 tvDate.setOnClickListener(v -> {
                     DialogFragment datePickerFragment = new SelectDateFragment(tvDate.getText().toString().substring(0, 10));
@@ -119,34 +116,33 @@ public class PlaceholderFragment extends Fragment {
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
-                if (orderObj == null) {
+                if (cashReceiptObj == null) {
                     tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
                     tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
                 } else {
-                    TextView tvSum = root.findViewById(R.id.order_tv_sum);
-                    tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
-                    tvTime.setText(orderObj.getDate().substring(11, 19));
-                    tvSum.setText(String.valueOf(orderObj.getSum()));
-                    spinnerCompanies.setSelection(hashCompanies.get(orderObj.getCompanyUid()));
-                    spinnerPartners.setSelection(hashPartners.get(orderObj.getPartnerUid()));
-                    spinnerWarehouses.setSelection(hashWarehouses.get(orderObj.getWarehouseUid()));
+                    TextView tvSum = root.findViewById(R.id.cash_receipt_tv_sum);
+                    tvDate.setText(cashReceiptObj.getDate().substring(0, 10).replace("-", "."));
+                    tvTime.setText(cashReceiptObj.getDate().substring(11, 19));
+                    tvSum.setText(String.valueOf(cashReceiptObj.getSum()));
+                    spinnerCompanies.setSelection(hashCompanies.get(cashReceiptObj.getCompanyUid()));
+                    spinnerPartners.setSelection(hashPartners.get(cashReceiptObj.getPartnerUid()));
                 }
                 break;
             case 2:
-                root = inflater.inflate(R.layout.fragment_goods_list, container, false);
-                goods = new HashMap<>();
-                if (orderObj != null) {
-                    fillGoodList(orderObj.getUid());
+                root = inflater.inflate(R.layout.fragment_tabdoc_list, container, false);
+                objects = new HashMap<>();
+                if (cashReceiptObj != null) {
+                    fillObjectList(cashReceiptObj.getUid());
                 }
-                recyclerGoods = root.findViewById(R.id.recycler_goods);
-                recyclerGoods.setHasFixedSize(true);
-                recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new GoodsOrderRecyclerViewAdapter(goods);
-                recyclerGoods.setAdapter(adapter);
+                recyclerObjects = root.findViewById(R.id.recycler_tabdoc);
+                recyclerObjects.setHasFixedSize(true);
+                recyclerObjects.setLayoutManager(new LinearLayoutManager(getContext()));
+                adapter = new ObjectsCashReceiptRecyclerViewAdapter(objects);
+                recyclerObjects.setAdapter(adapter);
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
-                        (view) -> startActivityForResult(new Intent(getActivity(), GoodsChooser.class), GOOD_CHOOSE_REQUEST)
+                        (view) -> startActivityForResult(new Intent(getActivity(), ObjectsChooser.class), OBJECT_CHOOSE_REQUEST)
                 );
                 break;
         }
@@ -159,20 +155,17 @@ public class PlaceholderFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == GOOD_CHOOSE_REQUEST) {
-            if (resultCode == OrderActivity.RESULT_OK) {
+        if (requestCode == OBJECT_CHOOSE_REQUEST) {
+            if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    // TODO: if the good already in list - increase the quantity
-                    Good chosenGood = (Good) data.getSerializableExtra("good");
-                    double quantity = data.getDoubleExtra("quantity", 1.0);
-                    double price = data.getDoubleExtra("price", 1.0);
-                    int position = goods.size();
+                    // TODO: if the object already in list - ignore
+                    Order chosenOrder = (Order) data.getSerializableExtra("object");
+                    double sum = data.getDoubleExtra("sum_credit", 1.0);
+                    int position = objects.size();
                     HashMap<String, Object> values = new HashMap<>();
-                    values.put("good", chosenGood);
-                    values.put("quantity", quantity);
-                    values.put("price", price);
-                    values.put("sum", quantity * price);
-                    goods.put(position, values);
+                    values.put("object", chosenOrder);
+                    values.put("sum_credit", sum);
+                    objects.put(position, values);
                     adapter.notifyItemInserted(position + 1);
                 }
             }
@@ -234,59 +227,42 @@ public class PlaceholderFragment extends Fragment {
         }
         // endregion
 
-        // region Warehouses
-        c = db.query(DbHelper.TABLE_WAREHOUSES, null, null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            warehouses = new Warehouse[c.getCount()];
-            hashWarehouses = new HashMap<>();
-            int i = 0;
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                warehouses[i] = new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex));
-                hashWarehouses.put(warehouses[i].getUid(), i);
-                i++;
-            } while (c.moveToNext());
-
-            adapterWarehouses = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, warehouses);
-            adapterWarehouses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerWarehouses.setAdapter(adapterWarehouses);
-        }
-        // endregion
-
         c.close();
         dbHelper.close();
     }
 
-    private void fillGoodList(String uid) {
+    private void fillObjectList(String uid) {
         // TODO: AsyncTask
         DbHelper dbHelper = DbHelper.getInstance(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] selectionArgs = { uid };
         String sql = "SELECT *"
-                + " FROM " + DbHelper.TABLE_GOODS_TABLE
-                + " LEFT JOIN " + DbHelper.TABLE_GOODS
-                + " ON " + DbHelper.COLUMN_GOOD_UID + " = " + DbHelper.COLUMN_UID
-                + " WHERE " + DbHelper.COLUMN_ORDER_UID + " = ?"
+                + " FROM " + DbHelper.TABLE_OBJECTS_TABLE
+                + " LEFT JOIN " + DbHelper.TABLE_ORDERS
+                + " ON " + DbHelper.COLUMN_ORDER_UID + " = " + DbHelper.COLUMN_UID
+                + " WHERE " + DbHelper.COLUMN_CASH_RECEIPT_UID + " = ?"
                 + " ORDER BY " + DbHelper.COLUMN_POSITION;
         Cursor c = db.rawQuery(sql, selectionArgs);
         int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
         int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-        int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-        int unitClIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
-        int quantutyClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
-        int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
+        int dateClIndex = c.getColumnIndex(DbHelper.COLUMN_DATE);
+        int companyClIndex = c.getColumnIndex(DbHelper.COLUMN_COMPANY_UID);
+        int partnerClIndex = c.getColumnIndex(DbHelper.COLUMN_PARTNER_UID);
+        int warehouseClIndex = c.getColumnIndex(DbHelper.COLUMN_WAREHOUSE_UID);
+        int sumCreditClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM_CREDIT);
         int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
         if (c.moveToFirst()) {
-            HashMap<String, Object> goodUidHash = new HashMap<>();
+            HashMap<String, Object> objectUidHash = new HashMap<>();
            do {
-               goodUidHash.clear();
-               goodUidHash.put("good", new Good(c.getString(uidClIndex), c.getString(nameClIndex), null));
-               goodUidHash.put("quantity", c.getDouble(quantutyClIndex));
-               goodUidHash.put("price", c.getDouble(priceClIndex));
-               goodUidHash.put("sum", c.getDouble(sumClIndex));
-               goods.put(c.getInt(positionClIndex), goodUidHash);
+               objectUidHash.clear();
+               objectUidHash.put("object", new Order(c.getString(uidClIndex),
+                       c.getString(dateClIndex),
+                       c.getString(companyClIndex),
+                       c.getString(partnerClIndex),
+                       c.getString(warehouseClIndex),
+                       c.getDouble(sumCreditClIndex)));
+               objectUidHash.put("sum_credit", c.getDouble(sumClIndex));
+               objects.put(c.getInt(positionClIndex), objectUidHash);
            } while (c.moveToNext());
         }
         c.close();

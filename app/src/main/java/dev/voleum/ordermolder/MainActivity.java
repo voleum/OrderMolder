@@ -5,20 +5,20 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import dev.voleum.ordermolder.Fragment.FragmentDocuments;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import dev.voleum.ordermolder.Database.DbAsyncTestData;
+import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.Fragment.FragmentCatalogs;
+import dev.voleum.ordermolder.Fragment.FragmentDocuments;
 import dev.voleum.ordermolder.Fragment.FragmentMain;
 import dev.voleum.ordermolder.Fragment.FragmentReports;
-import dev.voleum.ordermolder.Database.DbAsyncTask;
-import dev.voleum.ordermolder.Database.DbHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -124,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
     // TODO: Delete this method & button
     public void onClick(View v) {
-        DbAsyncTask dbAsyncTask = new DbAsyncTask();
-        dbAsyncTask.execute(DbHelper.getInstance(getApplicationContext()));
+        DbAsyncTestData dbAsyncTestData = new DbAsyncTestData();
+        dbAsyncTestData.execute(DbHelper.getInstance(getApplicationContext()));
     }
 
     public static Context getAppContext() {

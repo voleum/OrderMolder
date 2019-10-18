@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 
 import java.util.UUID;
 
-public class DbAsyncTask extends AsyncTask<DbHelper, Void, Void> {
+public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Void> {
     @Override
     protected Void doInBackground(DbHelper... dbHelpers) {
         DbHelper dbHelper = dbHelpers[0];
@@ -21,6 +21,8 @@ public class DbAsyncTask extends AsyncTask<DbHelper, Void, Void> {
         db.delete(DbHelper.TABLE_GOODS_GROUPS, null, null);
         db.delete(DbHelper.TABLE_ORDERS, null, null);
         db.delete(DbHelper.TABLE_GOODS_TABLE, null, null);
+        db.delete(DbHelper.TABLE_CASH_RECEIPTS, null, null);
+        db.delete(DbHelper.TABLE_OBJECTS_TABLE, null, null);
         ContentValues cv = new ContentValues();
         for (int i = 1; i <= 3; i++) {
             cv.clear();
@@ -42,6 +44,7 @@ public class DbAsyncTask extends AsyncTask<DbHelper, Void, Void> {
             cv.put(DbHelper.COLUMN_UID, unitUid);
             cv.put(DbHelper.COLUMN_CODE, 737);
             cv.put(DbHelper.COLUMN_NAME, "шт");
+            cv.put(DbHelper.COLUMN_FULL_NAME, "Штука");
             db.insert(DbHelper.TABLE_UNITS, null, cv);
         }
         for (int i = 1; i <= 5; i++) {

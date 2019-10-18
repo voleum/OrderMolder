@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.ui.orders;
+package dev.voleum.ordermolder.ui.cashreceipts;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,19 +25,19 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import dev.voleum.ordermolder.Database.DbAsyncSaveOrder;
-import dev.voleum.ordermolder.Object.Order;
+import dev.voleum.ordermolder.Database.DbAsyncSaveCashReceipt;
+import dev.voleum.ordermolder.Object.CashReceipt;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
 
-public class OrderActivity extends AppCompatActivity {
+public class CashReceiptActivity extends AppCompatActivity {
 
     protected ViewPager viewPager;
     protected FloatingActionButton fab;
     protected SectionsPagerAdapter sectionsPagerAdapter;
 
-    private Order orderObj;
+    private CashReceipt cashReceiptObj;
 
     private boolean isCreating;
 
@@ -48,7 +48,7 @@ public class OrderActivity extends AppCompatActivity {
         sectionsPagerAdapter = new SectionsPagerAdapter(
                 this,
                 getSupportFragmentManager(),
-                SectionsPagerAdapter.TYPE_ORDER);
+                SectionsPagerAdapter.TYPE_CASH_RECEIPT);
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
@@ -77,7 +77,7 @@ public class OrderActivity extends AppCompatActivity {
                     View focusedView = getCurrentFocus();
                     if (focusedView != null) focusedView.clearFocus();
                     double sum = sectionsPagerAdapter.getSum();
-                    ((TextView) findViewById(R.id.order_tv_sum)).setText(String.valueOf(sum));
+                    ((TextView) findViewById(R.id.cash_receipt_tv_sum)).setText(String.valueOf(sum));
                     InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
 
@@ -92,11 +92,11 @@ public class OrderActivity extends AppCompatActivity {
 
         if (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true)) {
             isCreating = true;
-            setTitle(R.string.title_new_order);
+            setTitle(R.string.title_new_cash_receipt);
         } else {
             isCreating = false;
-            orderObj = (Order) getIntent().getSerializableExtra("doc");
-            String title = orderObj.getDate().substring(0, 19).replace("-", ".");
+            cashReceiptObj = (CashReceipt) getIntent().getSerializableExtra(DocListActivity.DOC);
+            String title = cashReceiptObj.getDate().substring(0, 19).replace("-", ".");
             setTitle(title);
         }
     }
@@ -108,7 +108,7 @@ public class OrderActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     if (saveDoc()) {
                         Intent intent = new Intent();
-                        intent.putExtra("doc", orderObj);
+                        intent.putExtra(DocListActivity.DOC, cashReceiptObj);
                         int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                         setResult(result, intent);
                         finish();
@@ -154,37 +154,36 @@ public class OrderActivity extends AppCompatActivity {
         return true;
     }
 
-    protected Order getOrderObj() {
-        return orderObj;
+    protected CashReceipt getCashReceiptObj() {
+        return cashReceiptObj;
     }
 
     private boolean saveDoc() {
-        HashMap<Integer, HashMap<String, Object>> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
-        if (goodsInfo.isEmpty()) {
-            Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT)
+        HashMap<Integer, HashMap<String, Object>> objectsInfo = sectionsPagerAdapter.getObjectsInfo();
+        if (objectsInfo.isEmpty()) {
+            Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT)
                     .setGestureInsetBottomIgnored(true)
                     .show();
             return false;
         }
-        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getOrderMainInfo();
+        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getCashReceiptMainInfo();
 
-        if (orderObj == null) {
-            orderObj = new Order();
-            orderObj.setUid(UUID.randomUUID().toString());
+        if (cashReceiptObj == null) {
+            cashReceiptObj = new CashReceipt();
+            cashReceiptObj.setUid(UUID.randomUUID().toString());
         }
-        orderObj.setDate((String) mainInfo.get("date"));
-        orderObj.setCompanyUid((String) mainInfo.get("company_uid"));
-        orderObj.setPartnerUid((String) mainInfo.get("partner_uid"));
-        orderObj.setWarehouseUid((String) mainInfo.get("warehouse_uid"));
-        orderObj.setSum((Double) mainInfo.get("sum"));
+        cashReceiptObj.setDate((String) mainInfo.get("date"));
+        cashReceiptObj.setCompanyUid((String) mainInfo.get("company_uid"));
+        cashReceiptObj.setPartnerUid((String) mainInfo.get("partner_uid"));
+        cashReceiptObj.setSum((Double) mainInfo.get("sum"));
 
-        mainInfo.put("uid", orderObj.getUid());
+        mainInfo.put("uid", cashReceiptObj.getUid());
 
-        HashMap<String, Map> orderInfo = new HashMap<>();
-        orderInfo.put("main_info", mainInfo);
-        orderInfo.put("goods_info", goodsInfo);
-        DbAsyncSaveOrder dbAsyncSaveOrder = new DbAsyncSaveOrder(this);
-        dbAsyncSaveOrder.execute(orderInfo);
+        HashMap<String, Map> docInfo = new HashMap<>();
+        docInfo.put("main_info", mainInfo);
+        docInfo.put("objects_info", objectsInfo);
+        DbAsyncSaveCashReceipt dbAsyncSaveCashReceipt = new DbAsyncSaveCashReceipt(this);
+        dbAsyncSaveCashReceipt.execute(docInfo);
 
         return true;
     }
