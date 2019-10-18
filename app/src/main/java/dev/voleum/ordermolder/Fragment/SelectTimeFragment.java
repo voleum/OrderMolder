@@ -46,7 +46,7 @@ public class SelectTimeFragment extends DialogFragment implements TimePickerDial
         String h = hourOfDay < 10 ? "0" + hourOfDay : String.valueOf(hourOfDay);
         String m = minute < 10 ? "0" + minute : String.valueOf(minute);
         String newTime = h + ":" + m + ":00";
-        ((TextView) getTargetFragment().getActivity().findViewById(R.id.order_tv_time)).setText(newTime);
+        ((TextView) getTargetFragment().getActivity().findViewById(R.id.tv_time)).setText(newTime);
     }
 
     private void setCurrentTime() {

@@ -2,18 +2,28 @@ package dev.voleum.ordermolder.Object;
 
 public class Unit extends Catalog {
 
-    private String shortName;
+    private int code;
+    private String fullName;
 
-    protected Unit(String code, String name, String shortName) {
-        super(code, name);
-        this.shortName = shortName;
+    public Unit(String uid, int code, String name, String fullName) {
+        super(uid, name);
+        this.code = code;
+        this.fullName = fullName;
     }
 
-    public String getShortName() {
-        return shortName;
+    public int getCode() {
+        return code;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

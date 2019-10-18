@@ -37,6 +37,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="invisible"
-        app:layout_behavior="dev.voleum.ordermolder.HidingFloatingActionButtonBehavior"
+        app:layout_behavior="dev.voleum.ordermolder.ui.general.HidingFloatingActionButtonBehavior"
         app:srcCompat="@drawable/icons8_plus_math" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
