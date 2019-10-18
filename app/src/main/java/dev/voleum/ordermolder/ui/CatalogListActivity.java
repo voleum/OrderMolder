@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.ui.orders;
+package dev.voleum.ordermolder.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,19 +13,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.GoodsChooserRecyclerViewAdapter;
+import dev.voleum.ordermolder.Adapter.CatalogListRecyclerViewAdapter;
 import dev.voleum.ordermolder.Database.DbHelper;
+import dev.voleum.ordermolder.Object.Catalog;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.R;
 
-public class GoodsChooser extends AppCompatActivity {
+public class CatalogListActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    private ArrayList<Good> goods;
+    private ArrayList<Catalog> catalogs;
+
+    private int docType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        docType = getIntent().getIntExtra(CatalogActivity.DOC_TYPE, CatalogActivity.TYPE_UNKNOWN);
+
         setContentView(R.layout.activity_chooser);
         setTitle(R.string.catalog_good_plural);
         recyclerView = findViewById(R.id.recycler_tabdoc);
@@ -35,47 +41,79 @@ public class GoodsChooser extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        goods = getGoodList();
-        GoodsChooserRecyclerViewAdapter adapter = new GoodsChooserRecyclerViewAdapter(goods);
+        catalogs = getCatalogsList();
+        CatalogListRecyclerViewAdapter adapter = new CatalogListRecyclerViewAdapter(catalogs);
         adapter.setOnEntryClickListener((v, position) -> {
-            Good chosenGood = goods.get(position);
+            Catalog chosenCatalog = catalogs.get(position);
             setResult(RESULT_OK, new Intent()
-                    .putExtra("good", chosenGood)
-                    .putExtra("quantity", 1.0)
-                    .putExtra("price", 1.0)
-                    .putExtra("sum", 1.0));
+                    .putExtra("catalog", chosenCatalog));
             finish();
         });
         recyclerView.setAdapter(adapter);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
-    private ArrayList<Good> getGoodList() {
+    private ArrayList<Catalog> getCatalogsList() {
         // TODO: AsyncTask
         DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c = db.query(DbHelper.TABLE_GOODS,
+
+        String table;
+
+        switch (docType) {
+            case CatalogActivity.TYPE_COMPANY:
+                table = DbHelper.TABLE_COMPANIES;
+                break;
+            case CatalogActivity.TYPE_PARTNER:
+                table = DbHelper.TABLE_PARTNERS;
+                break;
+            case CatalogActivity.TYPE_GOOD:
+                table = DbHelper.TABLE_GOODS;
+                break;
+            case CatalogActivity.TYPE_UNIT:
+                table = DbHelper.TABLE_UNITS;
+                break;
+            default:
+                table = "";
+        }
+
+        Cursor c = db.query(table,
                 null,
                 null,
                 null,
                 null,
                 null,
                 null);
-        goods = new ArrayList<>();
+        catalogs = new ArrayList<>();
 
         if (c.moveToFirst()) {
+            // TODO: Finish it
             int uidIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int nameIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            int unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT);
+            int unitIndex;
+            if (docType == CatalogActivity.TYPE_GOOD) unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT);
             do {
-                goods.add(new Good(c.getString(uidIndex), c.getString(nameIndex), null));
+                switch (docType) {
+                    case CatalogActivity.TYPE_COMPANY:
+
+                        break;
+                    case CatalogActivity.TYPE_PARTNER:
+
+                        break;
+                    case CatalogActivity.TYPE_GOOD:
+                        catalogs.add(new Good(c.getString(uidIndex), c.getString(nameIndex), null));
+                        break;
+                    case CatalogActivity.TYPE_UNIT:
+
+                        break;
+                }
             } while (c.moveToNext());
         }
 
         c.close();
         db.close();
 
-        return goods;
+        return catalogs;
     }
 
     @Override

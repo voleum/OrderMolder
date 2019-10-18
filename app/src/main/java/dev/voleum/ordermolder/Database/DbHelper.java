@@ -55,7 +55,6 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_UNIT_UID = "unit_uid";
     public static final String COLUMN_COMPANY_UID = "company_uid";
     public static final String COLUMN_PARTNER_UID = "partner_uid";
-    public static final String COLUMN_OBJECT_UID = "object_uid";
     public static final String COLUMN_WAREHOUSE_UID = "warehouse_uid";
     public static final String COLUMN_GOOD_UID = "good_uid";
     // endregion

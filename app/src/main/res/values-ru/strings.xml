@@ -47,6 +47,7 @@
     </string-array>
 
     <string-array name="reports">
+        <item>Прайс-лист</item>
         <item>Долги</item>
         <item>Остатки</item>
     </string-array>

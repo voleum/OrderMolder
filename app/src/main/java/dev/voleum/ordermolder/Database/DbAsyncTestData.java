@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 
 import java.util.UUID;
 
-public class DbAsyncTask extends AsyncTask<DbHelper, Void, Void> {
+public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Void> {
     @Override
     protected Void doInBackground(DbHelper... dbHelpers) {
         DbHelper dbHelper = dbHelpers[0];

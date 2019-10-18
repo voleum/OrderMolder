@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import dev.voleum.ordermolder.Database.DbAsyncTask;
+import dev.voleum.ordermolder.Database.DbAsyncTestData;
 import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.Fragment.FragmentCatalogs;
 import dev.voleum.ordermolder.Fragment.FragmentDocuments;
@@ -124,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
     // TODO: Delete this method & button
     public void onClick(View v) {
-        DbAsyncTask dbAsyncTask = new DbAsyncTask();
-        dbAsyncTask.execute(DbHelper.getInstance(getApplicationContext()));
+        DbAsyncTestData dbAsyncTestData = new DbAsyncTestData();
+        dbAsyncTestData.execute(DbHelper.getInstance(getApplicationContext()));
     }
 
     public static Context getAppContext() {
