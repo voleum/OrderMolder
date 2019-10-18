@@ -37,7 +37,7 @@ import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.ui.orders.PageViewModel;
+import dev.voleum.ordermolder.ui.general.PageViewModel;
 
 import static android.app.Activity.RESULT_OK;
 

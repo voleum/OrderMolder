@@ -24,6 +24,9 @@
         <activity
             android:name=".ui.general.DocListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.CatalogActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.orders.GoodsChooser" />
         <activity android:name=".ui.cashreceipts.ObjectsChooser" />
         <activity

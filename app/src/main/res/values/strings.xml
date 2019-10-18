@@ -70,7 +70,7 @@
 
     <string-array name="documents">
         <item>Orders</item>
-        <item>Cash Receipts</item>
+        <item>Cash receipts</item>
     </string-array>
 
     <string-array name="catalogs">
@@ -81,6 +81,7 @@
     </string-array>
 
     <string-array name="reports">
+        <item>Price</item>
         <item>Debts</item>
         <item>Stock</item>
     </string-array>

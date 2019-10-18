@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.ui.orders;
+package dev.voleum.ordermolder.ui.general;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;

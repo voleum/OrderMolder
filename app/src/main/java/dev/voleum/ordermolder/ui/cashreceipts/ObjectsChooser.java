@@ -26,7 +26,7 @@ public class ObjectsChooser extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods_chooser);
+        setContentView(R.layout.activity_chooser);
         setTitle(R.string.document_order_plural);
         recyclerView = findViewById(R.id.recycler_tabdoc);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
