@@ -6,11 +6,21 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/button12"
+        android:id="@+id/button_create_test_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClick"
-        android:text="TEST NEW DATA"
+        android:text="CREATE TEST DATA"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_exchange" />
+
+    <Button
+        android:id="@+id/button_exchange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/button_exchange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

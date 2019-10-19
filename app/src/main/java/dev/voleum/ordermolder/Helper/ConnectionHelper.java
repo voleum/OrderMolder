@@ -8,6 +8,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
 
 import dev.voleum.ordermolder.MainActivity;
 
@@ -30,6 +31,8 @@ public class ConnectionHelper {
 
         try {
 
+            XmlHelper xmlHelper = new XmlHelper();
+
             // region Connect
             ftp.connect(hostname, port);
             if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
@@ -46,7 +49,7 @@ public class ConnectionHelper {
                     Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
                     return false;
                 }
-                boolean parsed = XmlHelper.parseXml(input);
+                boolean parsed = xmlHelper.parseXml(input);
                 ftp.completePendingCommand();
                 if (parsed) ftp.deleteFile(FILE_NAME_INPUT);
             }
@@ -58,17 +61,16 @@ public class ConnectionHelper {
                     Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
                     return false;
                 }
-                XmlHelper.serializeXml(output);
+                xmlHelper.serializeXml(output);
                 ftp.completePendingCommand();
             }
             // endregion
 
             return true;
 
-            // FIXME: отлавливать как IOException или в отдельном блоке?
-//        } catch (SocketException e) {
-//            e.printStackTrace();
-//            return false;
+        } catch (SocketException e) {
+            e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;

@@ -15,12 +15,18 @@ import dev.voleum.ordermolder.MainActivity;
 
 public class XmlHelper {
 
-    private static final String ENCODING_UTF8 = "utf-8";
+    private final String ENCODING_UTF8 = "utf-8";
 
-    public static boolean parseXml(InputStream input) {
+    private final String TAG_DOCUMENT = "Document";
+    private final String TAG_ORDER = "Order";
+    private final String TAG_CASH_RECEIPT = "CashReceipt";
+
+    public XmlHelper() {
+    }
+
+    public boolean parseXml(InputStream input) {
 
         try {
-
             XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
             xppf.setNamespaceAware(true);
             XmlPullParser xpp = xppf.newPullParser();
@@ -40,9 +46,7 @@ public class XmlHelper {
                         Log.d(MainActivity.LOG_TAG, "Not used type: " + xpp.getEventType()); // FIXME: может их как-то обработать?
                 }
             }
-
             return true;
-
         } catch (XmlPullParserException e) {
             e.printStackTrace();
             return false;
@@ -56,21 +60,38 @@ public class XmlHelper {
 
     }
 
-    public static void serializeXml(OutputStream output) {
+    public void serializeXml(OutputStream output) {
 
         try {
-
             XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
             xppf.setNamespaceAware(true);
             XmlSerializer xs = xppf.newSerializer();
             xs.setOutput(output, ENCODING_UTF8);
 
+            // TODO: finish code for creating xml (namespace == null)
             xs.startDocument(ENCODING_UTF8, null);
-            // TODO: add code for creating xml (namespace == null)
+
+            // region <Document>
+            xs.startTag(null, TAG_DOCUMENT);
+
+            // region <Order>
+            xs.startTag(null, TAG_ORDER);
+
+            xs.endTag(null, TAG_ORDER);
+            // endregion <Order>
+
+            // region <CashReceipt>
+            xs.startTag(null, TAG_CASH_RECEIPT);
+
+            xs.endTag(null, TAG_CASH_RECEIPT);
+            // endregion <CashReceipt>
+
+            xs.endTag(null, TAG_DOCUMENT);
+            // endregion <Document>
+
             xs.endDocument();
 
             xs.flush();
-
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {
