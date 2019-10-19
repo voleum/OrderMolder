@@ -26,13 +26,9 @@ public class ConnectionHelper {
     // endregion
 
     public boolean exchange() {
-
         FTPClient ftp = new FTPClient();
 
         try {
-
-            XmlHelper xmlHelper = new XmlHelper();
-
             // region Connect
             ftp.connect(hostname, port);
             if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
@@ -42,6 +38,8 @@ public class ConnectionHelper {
             if (usePassiveMode) ftp.enterLocalPassiveMode();
             ftp.login(username, password);
             // endregion
+
+            XmlHelper xmlHelper = new XmlHelper();
 
             // region Input
             try (InputStream input = ftp.retrieveFileStream(FILE_NAME_INPUT)) {

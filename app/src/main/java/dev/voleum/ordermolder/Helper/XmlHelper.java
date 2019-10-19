@@ -39,7 +39,7 @@ public class XmlHelper {
     private final String ATTRIBUTE_QUANTITY = "Quantity";
     private final String ATTRIBUTE_PRICE = "Price";
 
-    private final String NAMESPACE = "main_namespace";
+    private final String NAMESPACE = null;
 
     public XmlHelper() {
     }
@@ -173,7 +173,7 @@ public class XmlHelper {
 
                     if (tablesObjectsCursor.moveToFirst()) {
                         int positionIndex = tablesObjectsCursor.getColumnIndex(DbHelper.COLUMN_POSITION);
-                        int orderUidIndex = tablesObjectsCursor.getColumnIndex(DbHelper.COLUMN_GOOD_UID);
+                        int orderUidIndex = tablesObjectsCursor.getColumnIndex(DbHelper.COLUMN_ORDER_UID);
                         int sumCreditIndex = tablesObjectsCursor.getColumnIndex(DbHelper.COLUMN_SUM_CREDIT);
                         do {
                             xs.startTag(NAMESPACE, TAG_ROW);

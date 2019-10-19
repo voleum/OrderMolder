@@ -19,7 +19,7 @@ import dev.voleum.ordermolder.Fragment.FragmentCatalogs;
 import dev.voleum.ordermolder.Fragment.FragmentDocuments;
 import dev.voleum.ordermolder.Fragment.FragmentMain;
 import dev.voleum.ordermolder.Fragment.FragmentReports;
-import dev.voleum.ordermolder.Helper.ConnectionHelper;
+import dev.voleum.ordermolder.Helper.ExchangeAsyncTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -130,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
                 dbAsyncTestData.execute(DbHelper.getInstance(getApplicationContext()));
                 break;
             case R.id.button_exchange:
-                ConnectionHelper connection = new ConnectionHelper();
-                connection.exchange();
+                ExchangeAsyncTask exchangeAsyncTask = new ExchangeAsyncTask();
+                exchangeAsyncTask.execute();
                 break;
         }
     }
