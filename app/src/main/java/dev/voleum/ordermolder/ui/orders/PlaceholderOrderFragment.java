@@ -274,6 +274,7 @@ public class PlaceholderOrderFragment extends Fragment {
         Cursor c = db.rawQuery(sql, selectionArgs);
         int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
         int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+        int groupClIndex = c.getColumnIndex(DbHelper.COLUMN_GROUP_UID);
         int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
         int unitClIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
         int quantityClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
@@ -283,7 +284,10 @@ public class PlaceholderOrderFragment extends Fragment {
             HashMap<String, Object> goodUidHash = new HashMap<>();
            do {
                goodUidHash.clear();
-               goodUidHash.put("good", new Good(c.getString(uidClIndex), c.getString(nameClIndex), null));
+               goodUidHash.put("good", new Good(c.getString(uidClIndex),
+                       c.getString(groupClIndex),
+                       c.getString(nameClIndex),
+                       c.getString(unitClIndex)));
                goodUidHash.put("quantity", c.getDouble(quantityClIndex));
                goodUidHash.put("price", c.getDouble(priceClIndex));
                goodUidHash.put("sum", c.getDouble(sumClIndex));

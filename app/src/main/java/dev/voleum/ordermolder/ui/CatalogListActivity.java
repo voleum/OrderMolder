@@ -100,12 +100,16 @@ public class CatalogListActivity extends AppCompatActivity {
         if (c.moveToFirst()) {
             int uidIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int nameIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+            int groupIndex = -1;
             int tinIndex = -1;
             int unitIndex = -1;
             int codeIndex = -1;
             int fullNameIndex = -1;
             if (catType == CatalogActivity.TYPE_COMPANY || catType == CatalogActivity.TYPE_PARTNER) tinIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            if (catType == CatalogActivity.TYPE_GOOD) unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
+            if (catType == CatalogActivity.TYPE_GOOD) {
+                groupIndex = c.getColumnIndex(DbHelper.COLUMN_GROUP_UID);
+                unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
+            }
             if (catType == CatalogActivity.TYPE_UNIT) {
                 codeIndex = c.getColumnIndex(DbHelper.COLUMN_CODE);
                 fullNameIndex = c.getColumnIndex(DbHelper.COLUMN_FULL_NAME);
@@ -124,6 +128,7 @@ public class CatalogListActivity extends AppCompatActivity {
                         break;
                     case CatalogActivity.TYPE_GOOD:
                         catalogs.add(new Good(c.getString(uidIndex),
+                                c.getString(groupIndex),
                                 c.getString(nameIndex),
                                 c.getString(unitIndex)));
                         break;

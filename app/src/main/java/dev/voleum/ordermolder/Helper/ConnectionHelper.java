@@ -43,13 +43,15 @@ public class ConnectionHelper {
 
             // region Input
             try (InputStream input = ftp.retrieveFileStream(FILE_NAME_INPUT)) {
-                if (input == null) {
-                    Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
-                    return false;
+//                if (input == null) {
+//                    Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
+//                    return false;
+//                }
+                if (input != null) {
+                    boolean parsed = xmlHelper.parseXml(input);
+                    ftp.completePendingCommand();
+                    if (parsed) ftp.deleteFile(FILE_NAME_INPUT);
                 }
-                boolean parsed = xmlHelper.parseXml(input);
-                ftp.completePendingCommand();
-                if (parsed) ftp.deleteFile(FILE_NAME_INPUT);
             }
             // endregion
 
