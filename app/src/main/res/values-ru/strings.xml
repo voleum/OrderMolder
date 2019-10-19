@@ -78,5 +78,6 @@
     <string name="title_activity_units">Единицы измерения</string>
     <string name="title_activity_unknown_cat">Неизвестные справочники</string>
     <string name="button_exchange">Обмен данными</string>
+    <string name="snackbar_successful">Успешно!</string>
 
 </resources>

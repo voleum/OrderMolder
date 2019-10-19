@@ -1,14 +1,26 @@
 package dev.voleum.ordermolder.Helper;
 
 import android.os.AsyncTask;
-import android.widget.Toast;
+import android.view.View;
 
-import dev.voleum.ordermolder.MainActivity;
+import com.google.android.material.snackbar.Snackbar;
+
+import dev.voleum.ordermolder.R;
 
 public class ExchangeAsyncTask extends AsyncTask<Void, Void, Boolean> {
+
+    private View v;
+
+    public ExchangeAsyncTask(View v) {
+        this.v = v;
+    }
+
     @Override
     protected void onPostExecute(Boolean successful) {
-        if (successful) Toast.makeText(MainActivity.getAppContext(), "Successful!", Toast.LENGTH_SHORT);
+        if (successful) {
+            Snackbar.make(v, R.string.snackbar_successful, Snackbar.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.getAppContext(), R.string.snackbar_successful, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

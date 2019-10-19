@@ -71,6 +71,7 @@
     <string name="snackbar_empty_goods_list">Goods list is empty!</string>
     <string name="snackbar_empty_objects_list">Objects list is empty!</string>
     <string name="snackbar_unknown_doc_type">Unknown document type</string>
+    <string name="snackbar_successful">Successful!</string>
 
     <string name="menu_save">Save</string>
 

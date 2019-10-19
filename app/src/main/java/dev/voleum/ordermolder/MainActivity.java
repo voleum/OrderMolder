@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 dbAsyncTestData.execute(DbHelper.getInstance(getApplicationContext()));
                 break;
             case R.id.button_exchange:
-                ExchangeAsyncTask exchangeAsyncTask = new ExchangeAsyncTask();
+                ExchangeAsyncTask exchangeAsyncTask = new ExchangeAsyncTask(findViewById(R.id.frameLayoutFragment));
                 exchangeAsyncTask.execute();
                 break;
         }
