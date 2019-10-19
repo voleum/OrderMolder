@@ -61,6 +61,7 @@
     <string name="cash_receipt_tab_main">Main</string>
     <string name="cash_receipt_tab_objects">Objects</string>
 
+    <string name="button_exchange">Exchange</string>
     <string name="document_date">Date</string>
 
     <string name="snackbar_doc_created">Document created</string>

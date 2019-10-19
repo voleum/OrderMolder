@@ -77,5 +77,6 @@
     <string name="title_activity_partners">Партнёры</string>
     <string name="title_activity_units">Единицы измерения</string>
     <string name="title_activity_unknown_cat">Неизвестные справочники</string>
+    <string name="button_exchange">Обмен данными</string>
 
 </resources>
