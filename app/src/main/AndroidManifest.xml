@@ -25,10 +25,10 @@
             android:name=".ui.general.DocListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.CatalogActivity"
+            android:name=".ui.catalogs.CatalogActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.CatalogListActivity"
+            android:name=".ui.catalogs.CatalogListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.orders.GoodsChooser"
