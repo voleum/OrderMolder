@@ -123,20 +123,20 @@ public class PlaceholderOrderFragment extends Fragment {
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
-                tvSum.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        orderObj.setSum(Double.parseDouble(s.toString()));
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-                });
+//                tvSum.addTextChangedListener(new TextWatcher() {
+//                    @Override
+//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                    }
+//
+//                    @Override
+//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                        orderObj.setSum(Double.parseDouble(s.toString()));
+//                    }
+//
+//                    @Override
+//                    public void afterTextChanged(Editable s) {
+//                    }
+//                });
                 if (orderObj == null) {
                     tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
                     tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
@@ -190,6 +190,7 @@ public class PlaceholderOrderFragment extends Fragment {
                     values.put("price", price);
                     values.put("sum", quantity * price);
                     goods.put(position, values);
+                    ((TextView) getActivity().findViewById(R.id.order_tv_sum)).setText(String.valueOf(getSum()));
                     adapter.notifyItemInserted(position + 1);
                 }
             }

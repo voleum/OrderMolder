@@ -40,6 +40,7 @@ public class OrderActivity extends AppCompatActivity {
     private Order orderObj;
 
     private boolean isCreating;
+    private boolean createdWithoutClosing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class OrderActivity extends AppCompatActivity {
             String title = orderObj.getDate().substring(0, 19).replace("-", ".");
             setTitle(title);
         }
+        createdWithoutClosing = false;
     }
 
     @Override
@@ -114,6 +116,11 @@ public class OrderActivity extends AppCompatActivity {
                     }
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
+                    if (createdWithoutClosing) {
+                        Intent intent = new Intent();
+                        intent.putExtra("doc", orderObj);
+                        setResult(DocListActivity.RESULT_CREATED, intent);
+                    }
                     finish();
                     break;
                 default:
@@ -146,6 +153,7 @@ public class OrderActivity extends AppCompatActivity {
                 break;
             case R.id.doc_save:
                 saveDoc();
+                if (isCreating) createdWithoutClosing = true;
                 break;
             default:
                 break;
