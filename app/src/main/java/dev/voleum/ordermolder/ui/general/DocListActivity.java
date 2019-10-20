@@ -87,10 +87,10 @@ public class DocListActivity extends AppCompatActivity {
 
         docType = (DocumentTypes) getIntent().getSerializableExtra(DOC_TYPE);
         setContentView(R.layout.activity_doc_list);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.doc_list_toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerDocs = findViewById(R.id.recycler_docs);
+        recyclerDocs = findViewById(R.id.recycler_objs);
         recyclerDocs.setHasFixedSize(true);
         recyclerDocs.setLayoutManager(new LinearLayoutManager(this));
         fillDocList();
