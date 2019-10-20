@@ -37,7 +37,7 @@ public class CatalogActivity extends AppCompatActivity {
         catType = (CatalogTypes) getIntent().getSerializableExtra(CAT_TYPE);
         catalog = (Catalog) getIntent().getSerializableExtra(CAT);
 
-        Toolbar toolbar = findViewById(R.id.catalog_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
@@ -46,7 +46,7 @@ public class CatalogActivity extends AppCompatActivity {
         Constraints.LayoutParams nameLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         nameLayoutParams.startToStart = R.id.catalog_constraint;
         nameLayoutParams.setMargins(16, 16, 16, 16);
-        nameLayoutParams.topToBottom = R.id.catalog_toolbar;
+        nameLayoutParams.topToBottom = R.id.toolbar;
 
         TextView tvName = new TextView(this);
         tvName.setLayoutParams(nameLayoutParams);
