@@ -70,7 +70,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Companies
         db.execSQL("create table "
                 + TABLE_COMPANIES + "("
-                + COLUMN_UID + " text, "
+                + COLUMN_UID + " text UNIQUE, "
                 + COLUMN_TIN + " text, "
                 + COLUMN_NAME + " text"
                 + ")");
@@ -79,7 +79,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Partners
         db.execSQL("create table "
                 + TABLE_PARTNERS + "("
-                + COLUMN_UID + " text, "
+                + COLUMN_UID + " text UNIQUE, "
                 + COLUMN_TIN + " text, "
                 + COLUMN_NAME + " text"
                 + ")");
@@ -88,7 +88,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Units
         db.execSQL("create table "
                 + TABLE_UNITS + "("
-                + COLUMN_UID + " text, "
+                + COLUMN_UID + " text UNIQUE, "
                 + COLUMN_CODE + " integer, "
                 + COLUMN_NAME + " text, "
                 + COLUMN_FULL_NAME + " text"
@@ -98,7 +98,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Goods groups
         db.execSQL("create table "
                 + TABLE_GOODS_GROUPS + "("
-                + COLUMN_UID + " text, "
+                + COLUMN_UID + " text UNIQUE, "
                 + COLUMN_NAME + " text "
                 + ")");
         // endregion
@@ -106,7 +106,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Goods
         db.execSQL("create table "
                 + TABLE_GOODS + "("
-                + COLUMN_UID + " text, "
+                + COLUMN_UID + " text UNIQUE, "
                 + COLUMN_NAME + " text, "
                 + COLUMN_GROUP_UID + " text, "
                 + COLUMN_UNIT_UID + " text"
@@ -116,7 +116,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Warehouses
         db.execSQL("create table "
                 + TABLE_WAREHOUSES + "("
-                + COLUMN_UID + " text, "
+                + COLUMN_UID + " text UNIQUE, "
                 + COLUMN_NAME + " text "
                 + ")");
         // endregion
@@ -136,7 +136,7 @@ public class DbHelper extends SQLiteOpenHelper {
         // region Cash receipts
         db.execSQL("create table "
                 + TABLE_CASH_RECEIPTS + "("
-                + COLUMN_UID + " text, "
+                + COLUMN_UID + " text UNIQUE, "
                 + COLUMN_DATE + " real, "
                 + COLUMN_COMPANY_UID + " text, "
                 + COLUMN_PARTNER_UID + " text, "

@@ -19,7 +19,7 @@ public class TableObjects extends Table {
     @Override
     public void save(SQLiteDatabase db) {
         ContentValues cv = new ContentValues();
-        cv.put(DbHelper.COLUMN_UID, uid);
+        cv.put(DbHelper.COLUMN_CASH_RECEIPT_UID, uid);
         cv.put(DbHelper.COLUMN_POSITION, position);
         cv.put(DbHelper.COLUMN_ORDER_UID, objectUid);
         cv.put(DbHelper.COLUMN_SUM_CREDIT, sum);

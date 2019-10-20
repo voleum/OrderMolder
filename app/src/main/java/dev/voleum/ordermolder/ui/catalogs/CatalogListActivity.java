@@ -16,11 +16,13 @@ import java.util.Objects;
 
 import dev.voleum.ordermolder.Adapter.CatalogListRecyclerViewAdapter;
 import dev.voleum.ordermolder.Database.DbHelper;
+import dev.voleum.ordermolder.Enums.CatalogTypes;
 import dev.voleum.ordermolder.Object.Catalog;
 import dev.voleum.ordermolder.Object.Company;
 import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.Object.Unit;
+import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
 
 public class CatalogListActivity extends AppCompatActivity {
@@ -28,14 +30,14 @@ public class CatalogListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     private ArrayList<Catalog> catalogs;
 
-    private int catType;
+    private CatalogTypes catType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cat_list);
 
-        catType = getIntent().getIntExtra(CatalogActivity.CAT_TYPE, CatalogActivity.TYPE_UNKNOWN);
+        catType = (CatalogTypes) getIntent().getSerializableExtra(CatalogActivity.CAT_TYPE);
 
         CatalogListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
             Catalog clickedCat = catalogs.get(position);
@@ -72,16 +74,19 @@ public class CatalogListActivity extends AppCompatActivity {
         String table;
 
         switch (catType) {
-            case CatalogActivity.TYPE_COMPANY:
+            case COMPANY:
                 table = DbHelper.TABLE_COMPANIES;
                 break;
-            case CatalogActivity.TYPE_PARTNER:
+            case PARTNER:
                 table = DbHelper.TABLE_PARTNERS;
                 break;
-            case CatalogActivity.TYPE_GOOD:
+            case WAREHOUSE:
+                table = DbHelper.TABLE_WAREHOUSES;
+                break;
+            case GOOD:
                 table = DbHelper.TABLE_GOODS;
                 break;
-            case CatalogActivity.TYPE_UNIT:
+            case UNIT:
                 table = DbHelper.TABLE_UNITS;
                 break;
             default:
@@ -105,34 +110,38 @@ public class CatalogListActivity extends AppCompatActivity {
             int unitIndex = -1;
             int codeIndex = -1;
             int fullNameIndex = -1;
-            if (catType == CatalogActivity.TYPE_COMPANY || catType == CatalogActivity.TYPE_PARTNER) tinIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            if (catType == CatalogActivity.TYPE_GOOD) {
+            if (catType == CatalogTypes.COMPANY || catType == CatalogTypes.PARTNER) tinIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+            if (catType == CatalogTypes.GOOD) {
                 groupIndex = c.getColumnIndex(DbHelper.COLUMN_GROUP_UID);
                 unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
             }
-            if (catType == CatalogActivity.TYPE_UNIT) {
+            if (catType == CatalogTypes.UNIT) {
                 codeIndex = c.getColumnIndex(DbHelper.COLUMN_CODE);
                 fullNameIndex = c.getColumnIndex(DbHelper.COLUMN_FULL_NAME);
             }
             do {
                 switch (catType) {
-                    case CatalogActivity.TYPE_COMPANY:
+                    case COMPANY:
                         catalogs.add(new Company(c.getString(uidIndex),
                                 c.getString(nameIndex),
                                 c.getString(tinIndex)));
                         break;
-                    case CatalogActivity.TYPE_PARTNER:
+                    case PARTNER:
                         catalogs.add(new Partner(c.getString(uidIndex),
                                 c.getString(nameIndex),
                                 c.getString(tinIndex)));
                         break;
-                    case CatalogActivity.TYPE_GOOD:
+                    case GOOD:
                         catalogs.add(new Good(c.getString(uidIndex),
                                 c.getString(groupIndex),
                                 c.getString(nameIndex),
                                 c.getString(unitIndex)));
                         break;
-                    case CatalogActivity.TYPE_UNIT:
+                    case WAREHOUSE:
+                        catalogs.add(new Warehouse(c.getString(uidIndex),
+                                c.getString(nameIndex)));
+                        break;
+                    case UNIT:
                         catalogs.add(new Unit(c.getString(uidIndex),
                                 c.getInt(codeIndex),
                                 c.getString(nameIndex),
@@ -156,16 +165,19 @@ public class CatalogListActivity extends AppCompatActivity {
 
     private void setTitleDependOnType() {
         switch (catType) {
-            case CatalogActivity.TYPE_COMPANY:
+            case COMPANY:
                 setTitle(R.string.title_activity_companies);
                 break;
-            case CatalogActivity.TYPE_PARTNER:
+            case PARTNER:
                 setTitle(R.string.title_activity_partners);
                 break;
-            case CatalogActivity.TYPE_GOOD:
+            case GOOD:
                 setTitle(R.string.title_activity_goods);
                 break;
-            case CatalogActivity.TYPE_UNIT:
+            case WAREHOUSE:
+                setTitle(R.string.title_activity_warehouses);
+                break;
+            case UNIT:
                 setTitle(R.string.title_activity_units);
                 break;
         }
