@@ -23,7 +23,7 @@ public class TableGoods extends Table {
     @Override
     public void save(SQLiteDatabase db) {
         ContentValues cv = new ContentValues();
-        cv.put(DbHelper.COLUMN_UID, uid);
+        cv.put(DbHelper.COLUMN_ORDER_UID, uid);
         cv.put(DbHelper.COLUMN_POSITION, position);
         cv.put(DbHelper.COLUMN_GOOD_UID, goodUid);
         cv.put(DbHelper.COLUMN_QUANTITY, quantity);

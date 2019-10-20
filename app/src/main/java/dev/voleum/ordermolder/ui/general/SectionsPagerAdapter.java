@@ -47,10 +47,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         this.typeDoc = typeDoc;
         switch (typeDoc) {
             case TYPE_ORDER:
-                TAB_TITLES = new int[]{R.string.order_tab_main, R.string.order_tab_goods};
+                TAB_TITLES = new int[]{R.string.tab_main, R.string.tab_order_goods};
                 break;
             case TYPE_CASH_RECEIPT:
-                TAB_TITLES = new int[]{R.string.cash_receipt_tab_main, R.string.cash_receipt_tab_objects};
+                TAB_TITLES = new int[]{R.string.tab_main, R.string.tab_cash_receipt_objects};
         }
     }
 

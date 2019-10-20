@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import dev.voleum.ordermolder.Database.DbHelper;
 import dev.voleum.ordermolder.Database.DbPreparerData;
+import dev.voleum.ordermolder.Database.GroupSaver;
 import dev.voleum.ordermolder.MainActivity;
 import dev.voleum.ordermolder.Object.CashReceipt;
 import dev.voleum.ordermolder.Object.Company;
@@ -23,9 +24,11 @@ import dev.voleum.ordermolder.Object.Group;
 import dev.voleum.ordermolder.Object.Obj;
 import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.Object.Partner;
+import dev.voleum.ordermolder.Object.Table;
 import dev.voleum.ordermolder.Object.TableGoods;
 import dev.voleum.ordermolder.Object.TableObjects;
 import dev.voleum.ordermolder.Object.Unit;
+import dev.voleum.ordermolder.Object.Warehouse;
 
 public class XmlHelper {
 
@@ -40,6 +43,7 @@ public class XmlHelper {
     private final String TAG_PARTNER = "Partner";
     private final String TAG_GOOD_GROUP = "GoodGroup";
     private final String TAG_GOOD = "Good";
+    private final String TAG_WAREHOUSE = "Warehouse";
     private final String TAG_UNIT = "Unit";
     private final String TAG_ORDER = "Order";
     private final String TAG_CASH_RECEIPT = "CashReceipt";
@@ -73,8 +77,12 @@ public class XmlHelper {
             xpp.setInput(input, ENCODING_UTF8);
 
             ArrayList<Obj> arrayListObj = new ArrayList<>();
-            String currentType = UNKNOWN;
+            ArrayList<Table> arrayListTable = new ArrayList<>();
+            String currentTypoObj = UNKNOWN;
+            String currentTypeElem = UNKNOWN;
             String currentUid = "";
+
+            GroupSaver groupSaver;
 
             while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
                 switch (xpp.getEventType()) {
@@ -83,107 +91,107 @@ public class XmlHelper {
                         break;
 
                     case XmlPullParser.START_TAG:
-                        if (xpp.getDepth() == 2) {
-                            currentType = xpp.getName();
-                        } else {
-                            switch (xpp.getName()) {
-                                case TAG_ITEM:
-                                    switch (currentType) {
-                                        case TAG_COMPANY:
-                                            arrayListObj.add(new Company(xpp.getAttributeValue(null, ATTRIBUTE_UID),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_NAME),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_TIN)));
-                                            break;
-                                        case TAG_PARTNER:
-                                            arrayListObj.add(new Partner(xpp.getAttributeValue(null, ATTRIBUTE_UID),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_NAME),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_TIN)));
-                                            break;
-                                        case TAG_GOOD_GROUP:
-                                            arrayListObj.add(new Group(xpp.getAttributeValue(null, ATTRIBUTE_UID),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_NAME)));
-                                            break;
-                                        case TAG_GOOD:
-                                            arrayListObj.add(new Good(xpp.getAttributeValue(null, ATTRIBUTE_UID),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_GROUP),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_NAME),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_UNIT)));
-                                            break;
-                                        case TAG_UNIT:
-                                            arrayListObj.add(new Unit(xpp.getAttributeValue(null, ATTRIBUTE_UID),
-                                                    Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_CODE)),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_NAME),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_FULL_NAME)));
-                                            break;
-                                        case TAG_ORDER:
-                                            currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
-                                            arrayListObj.add(new Order(currentUid,
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_DATE),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_WAREHOUSE),
-                                                    Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
-                                            break;
-                                        case TAG_CASH_RECEIPT:
-                                            currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
-                                            arrayListObj.add(new CashReceipt(currentUid,
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_DATE),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
-                                                    Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
-                                            break;
-                                        default:
-                                            continue;
-                                    }
-                                    break;
-                                case TAG_ROW:
-                                    switch (currentType) {
-                                        case TAG_ORDER:
-                                            arrayListObj.add(new TableGoods(currentUid,
-                                                    Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_POSITION)),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_GOOD),
-                                                    Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_QUANTITY)),
-                                                    Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_PRICE)),
-                                                    Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
-                                            break;
-                                        case TAG_CASH_RECEIPT:
-                                            arrayListObj.add(new TableObjects(currentUid,
-                                                    Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_POSITION)),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_ORDER),
-                                                    Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
-                                            break;
-                                        default:
-                                            continue;
-                                    }
-                                    break;
-                            }
+                        switch (xpp.getDepth()) {
+                            case 1:
+                                currentTypoObj = xpp.getName();
+                                break;
+                            case 2:
+                                currentTypeElem = xpp.getName();
+                                break;
+                            default:
+                                switch (xpp.getName()) {
+                                    case TAG_ITEM:
+                                        switch (currentTypeElem) {
+                                            case TAG_COMPANY:
+                                                arrayListObj.add(new Company(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_NAME),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_TIN)));
+                                                break;
+                                            case TAG_PARTNER:
+                                                arrayListObj.add(new Partner(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_NAME),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_TIN)));
+                                                break;
+                                            case TAG_GOOD_GROUP:
+                                                arrayListObj.add(new Group(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_NAME)));
+                                                break;
+                                            case TAG_GOOD:
+                                                arrayListObj.add(new Good(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_GROUP),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_NAME),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_UNIT)));
+                                                break;
+                                            case TAG_WAREHOUSE:
+                                                arrayListObj.add(new Warehouse(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_NAME)));
+                                                break;
+                                            case TAG_UNIT:
+                                                arrayListObj.add(new Unit(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                                        Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_CODE)),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_NAME),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_FULL_NAME)));
+                                                break;
+                                            case TAG_ORDER:
+                                                currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
+                                                arrayListObj.add(new Order(currentUid,
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_DATE),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_WAREHOUSE),
+                                                        Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
+                                                break;
+                                            case TAG_CASH_RECEIPT:
+                                                currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
+                                                arrayListObj.add(new CashReceipt(currentUid,
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_DATE),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
+                                                        Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
+                                                break;
+                                            default:
+                                                continue;
+                                        }
+                                        break;
+                                    case TAG_ROW:
+                                        switch (currentTypeElem) {
+                                            case TAG_ORDER:
+                                                arrayListTable.add(new TableGoods(currentUid,
+                                                        Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_POSITION)),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_GOOD),
+                                                        Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_QUANTITY)),
+                                                        Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_PRICE)),
+                                                        Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
+                                                break;
+                                            case TAG_CASH_RECEIPT:
+                                                arrayListTable.add(new TableObjects(currentUid,
+                                                        Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_POSITION)),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_ORDER),
+                                                        Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM_CREDIT))));
+                                                break;
+                                            default:
+                                                continue;
+                                        }
+                                        break;
+                                }
                         }
                         break;
 
                     case XmlPullParser.END_TAG:
-                        switch (xpp.getName()) {
-                            case TAG_COMPANY:
-                                break;
-                            case TAG_PARTNER:
-                                break;
-                            case TAG_GOOD_GROUP:
-                                break;
-                            case TAG_GOOD:
-                                break;
-                            case TAG_UNIT:
-                                break;
-                            case TAG_ORDER:
-                                break;
-                            case TAG_CASH_RECEIPT:
-                                break;
-                            case TAG_ITEM:
-                                break;
-                            case TAG_ROW:
-                                break;
-                            default:
-                                continue;
+                        if (xpp.getDepth() == 2) {
+                            switch (currentTypoObj) {
+                                case TAG_DOCUMENT:
+                                    groupSaver = new GroupSaver(arrayListTable);
+                                    groupSaver.save();
+                                    arrayListTable.clear();
+                                case TAG_CATALOG:
+                                    groupSaver = new GroupSaver(arrayListObj);
+                                    groupSaver.save();
+                                    arrayListObj.clear();
+                                    break;
+                            }
+                            break;
                         }
-                        break;
 
                     case XmlPullParser.TEXT:
                         break;
@@ -191,9 +199,13 @@ public class XmlHelper {
                     default:
                         Log.d(MainActivity.LOG_TAG, "Not used type: " + xpp.getEventType()); // FIXME: может их как-то обработать?
                 }
+                xpp.next();
             }
             return true;
         } catch (XmlPullParserException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         } finally {

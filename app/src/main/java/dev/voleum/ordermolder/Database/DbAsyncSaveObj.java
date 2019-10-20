@@ -2,8 +2,10 @@ package dev.voleum.ordermolder.Database;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import dev.voleum.ordermolder.Object.Obj;
 
@@ -23,20 +25,8 @@ public class DbAsyncSaveObj extends AsyncTask<Obj, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Obj... objs) {
-        DbHelper dbHelper = DbHelper.getInstance(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            for (Obj obj: objs
-                 ) {
-                obj.save(db);
-            }
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            db.close();
-        }
+        GroupSaver groupSaver = new GroupSaver(new ArrayList<>(Arrays.asList(objs)));
+        groupSaver.save();
         return null;
     }
 }

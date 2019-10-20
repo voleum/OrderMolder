@@ -18,7 +18,6 @@ public class FragmentMain extends androidx.fragment.app.Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        Log.d(MainActivity.LOG_TAG, "onAttach");
     }
 
     @Override
