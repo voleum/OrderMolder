@@ -92,8 +92,8 @@
     <string-array name="catalogs">
         <item>Companies</item>
         <item>Partners</item>
-        <item>Goods</item>
         <item>Warehouses</item>
+        <item>Goods</item>
         <item>Units</item>
     </string-array>
 
