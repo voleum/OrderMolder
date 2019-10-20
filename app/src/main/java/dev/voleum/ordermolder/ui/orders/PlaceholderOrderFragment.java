@@ -7,6 +7,8 @@ import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,12 +102,13 @@ public class PlaceholderOrderFragment extends Fragment {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         View root = null;
-        Order orderObj =((OrderActivity) getActivity()).getOrderObj();
+        Order orderObj = ((OrderActivity) getActivity()).getOrderObj();
         switch (index) {
             case 1:
                 root = inflater.inflate(R.layout.fragment_order_main, container, false);
                 TextView tvDate = root.findViewById(R.id.tv_date);
                 TextView tvTime = root.findViewById(R.id.tv_time);
+                TextView tvSum = root.findViewById(R.id.order_tv_sum);
                 spinnerPartners = root.findViewById(R.id.order_spinner_partners);
                 spinnerCompanies = root.findViewById(R.id.order_spinner_companies);
                 spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
@@ -120,11 +123,24 @@ public class PlaceholderOrderFragment extends Fragment {
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
+                tvSum.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        orderObj.setSum(Double.parseDouble(s.toString()));
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
                 if (orderObj == null) {
                     tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
                     tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
                 } else {
-                    TextView tvSum = root.findViewById(R.id.order_tv_sum);
                     tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
                     tvTime.setText(orderObj.getDate().substring(11, 19));
                     tvSum.setText(String.valueOf(orderObj.getSum()));
@@ -274,16 +290,20 @@ public class PlaceholderOrderFragment extends Fragment {
         Cursor c = db.rawQuery(sql, selectionArgs);
         int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
         int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+        int groupClIndex = c.getColumnIndex(DbHelper.COLUMN_GROUP_UID);
         int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
         int unitClIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
         int quantityClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
         int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
         int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
         if (c.moveToFirst()) {
-            HashMap<String, Object> goodUidHash = new HashMap<>();
+            HashMap<String, Object> goodUidHash;
            do {
-               goodUidHash.clear();
-               goodUidHash.put("good", new Good(c.getString(uidClIndex), c.getString(nameClIndex), null));
+               goodUidHash = new HashMap<>();
+               goodUidHash.put("good", new Good(c.getString(uidClIndex),
+                       c.getString(groupClIndex),
+                       c.getString(nameClIndex),
+                       c.getString(unitClIndex)));
                goodUidHash.put("quantity", c.getDouble(quantityClIndex));
                goodUidHash.put("price", c.getDouble(priceClIndex));
                goodUidHash.put("sum", c.getDouble(sumClIndex));

@@ -252,9 +252,9 @@ public class PlaceholderCashReceiptFragment extends Fragment {
         int sumCreditClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM_CREDIT);
         int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
         if (c.moveToFirst()) {
-            HashMap<String, Object> objectUidHash = new HashMap<>();
+            HashMap<String, Object> objectUidHash;
            do {
-               objectUidHash.clear();
+               objectUidHash = new HashMap<>();
                objectUidHash.put("object", new Order(c.getString(uidClIndex),
                        c.getString(dateClIndex),
                        c.getString(companyClIndex),

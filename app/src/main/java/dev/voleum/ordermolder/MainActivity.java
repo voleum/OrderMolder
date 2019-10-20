@@ -19,6 +19,7 @@ import dev.voleum.ordermolder.Fragment.FragmentCatalogs;
 import dev.voleum.ordermolder.Fragment.FragmentDocuments;
 import dev.voleum.ordermolder.Fragment.FragmentMain;
 import dev.voleum.ordermolder.Fragment.FragmentReports;
+import dev.voleum.ordermolder.Helper.ExchangeAsyncTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -122,10 +123,17 @@ public class MainActivity extends AppCompatActivity {
         this.checkedMenuItem = checkedMenuItem;
     }
 
-    // TODO: Delete this method & button
     public void onClick(View v) {
-        DbAsyncTestData dbAsyncTestData = new DbAsyncTestData();
-        dbAsyncTestData.execute(DbHelper.getInstance(getApplicationContext()));
+        switch (v.getId()) {
+            case R.id.button_create_test_data:
+                DbAsyncTestData dbAsyncTestData = new DbAsyncTestData();
+                dbAsyncTestData.execute(DbHelper.getInstance(getApplicationContext()));
+                break;
+            case R.id.button_exchange:
+                ExchangeAsyncTask exchangeAsyncTask = new ExchangeAsyncTask(findViewById(R.id.frameLayoutFragment));
+                exchangeAsyncTask.execute();
+                break;
+        }
     }
 
     public static Context getAppContext() {

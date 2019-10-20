@@ -1,5 +1,7 @@
 package dev.voleum.ordermolder.Object;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import java.io.Serializable;
 
 public abstract class Obj implements Serializable {
@@ -21,4 +23,6 @@ public abstract class Obj implements Serializable {
     public void setUid(String uid) {
         this.uid = uid;
     }
+
+    public abstract void save(SQLiteDatabase db);
 }

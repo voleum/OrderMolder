@@ -80,7 +80,6 @@ public class OrderActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.order_tv_sum)).setText(String.valueOf(sum));
                     InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-
                 }
             }
 
