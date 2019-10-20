@@ -9,7 +9,7 @@
     tools:showIn="@layout/activity_doc_list">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_docs"
+        android:id="@+id/recycler_objs"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

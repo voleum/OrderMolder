@@ -40,6 +40,7 @@ public class CashReceiptActivity extends AppCompatActivity {
     private CashReceipt cashReceiptObj;
 
     private boolean isCreating;
+    private boolean createdWithoutClosing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,7 @@ public class CashReceiptActivity extends AppCompatActivity {
             String title = cashReceiptObj.getDate().substring(0, 19).replace("-", ".");
             setTitle(title);
         }
+        createdWithoutClosing = false;
     }
 
     @Override
@@ -115,6 +117,11 @@ public class CashReceiptActivity extends AppCompatActivity {
                     }
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
+                    if (createdWithoutClosing) {
+                        Intent intent = new Intent();
+                        intent.putExtra("doc", cashReceiptObj);
+                        setResult(DocListActivity.RESULT_CREATED, intent);
+                    }
                     finish();
                     break;
                 default:
@@ -146,6 +153,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
+                if (isCreating) createdWithoutClosing = true;
                 saveDoc();
                 break;
             default:

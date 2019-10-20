@@ -18,15 +18,25 @@
     <string name="snackbar_empty_objects_list">Список объектов расчётов пуст!</string>
     <string name="snackbar_unknown_doc_type">Неизвестный тип документа</string>
     <string name="snackbar_successful">Успешно!</string>
+    <string name="snackbar_unsuccessful">Что-то пошло не так!</string>
 
     <!--  BUTTONS  -->
     <string name="button_exchange">Обмен данными</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_interface">Интерфейс</string>
+    <string name="settings_item_theme">Тема</string>
+    <string name="settings_item_port">Порт</string>
+    <string name="settings_item_username">Имя пользователя</string>
+    <string name="settings_item_password">Пароль</string>
+    <string name="settings_item_passive">Пассивный режим</string>
 
     <!--  TITLES  -->
     <string name="title_main">Главная</string>
     <string name="title_documents">Документы</string>
     <string name="title_catalogs">Справочники</string>
     <string name="title_reports">Отчёты</string>
+    <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_orders">Заказы</string>
     <string name="title_activity_cash_receipts">Приходные кассовые ордера</string>
     <string name="title_activity_companies">Организации</string>
@@ -77,6 +87,13 @@
     <string name="object_full_name">Полное наименование</string>
     <string name="object_sum">Сумма</string>
     <string name="object_tin">ИНН</string>
+
+    <string-array name="settings_theme_entries">
+        <item>Светлая</item>
+        <item>Тёмная</item>
+        <item>Системные настройки</item>
+        <item>Настройки энергосбережения</item>
+    </string-array>
 
     <string-array name="documents">
         <item>Заказы</item>

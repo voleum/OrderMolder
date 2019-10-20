@@ -47,7 +47,7 @@ public class CatalogListActivity extends AppCompatActivity {
             startActivity(intentOut);
         };
 
-        recyclerView = findViewById(R.id.recycler_cats);
+        recyclerView = findViewById(R.id.recycler_objs);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //            recyclerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 //        }

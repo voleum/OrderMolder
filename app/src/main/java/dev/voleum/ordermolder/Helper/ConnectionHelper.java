@@ -1,5 +1,7 @@
 package dev.voleum.ordermolder.Helper;
 
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.util.Log;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -11,20 +13,23 @@ import java.io.OutputStream;
 import java.net.SocketException;
 
 import dev.voleum.ordermolder.MainActivity;
+import dev.voleum.ordermolder.R;
 
 public class ConnectionHelper {
 
-    private final String FILE_NAME_INPUT = "From1C.xml";
-    private final String FILE_NAME_OUTPUT = "To1C.xml";
+    private Resources resources = MainActivity.getRess();
+    private SharedPreferences sharedPreferences = MainActivity.getPref();
 
-    // region // TODO: take arguments from settings
-    private String hostname = "ftp.kutuzov-it-ru.1gb.ru";
-    private int port = 21;
-    private boolean usePassiveMode = true;
-    private String username = "w_kutuzov-it-ru_61baf58a";
-    private String password = "71ea541e3jkl";
-    // endregion
+    private String FILE_NAME_INPUT = resources.getString(R.string.file_name_from);
+    private String FILE_NAME_OUTPUT = resources.getString(R.string.file_name_to);
 
+    private String hostname = sharedPreferences.getString("url", "");
+    private int port = Integer.parseInt(sharedPreferences.getString("port", resources.getString(R.string.default_port)));
+    private boolean usePassiveMode = sharedPreferences.getBoolean("passive", true);
+    private String username = sharedPreferences.getString("username", "");
+    private String password = sharedPreferences.getString("password", "");
+
+    // TODO: Separate connection, download and upload
     public boolean exchange() {
         FTPClient ftp = new FTPClient();
 
@@ -43,10 +48,6 @@ public class ConnectionHelper {
 
             // region Input
             try (InputStream input = ftp.retrieveFileStream(FILE_NAME_INPUT)) {
-//                if (input == null) {
-//                    Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
-//                    return false;
-//                }
                 if (input != null) {
                     boolean parsed = xmlHelper.parseXml(input);
                     ftp.completePendingCommand();
@@ -67,7 +68,6 @@ public class ConnectionHelper {
             // endregion
 
             return true;
-
         } catch (SocketException e) {
             e.printStackTrace();
             return false;
