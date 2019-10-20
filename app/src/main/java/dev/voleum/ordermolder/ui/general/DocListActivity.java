@@ -19,6 +19,7 @@ import java.util.Objects;
 
 import dev.voleum.ordermolder.Adapter.DocListRecyclerViewAdapter;
 import dev.voleum.ordermolder.Database.DbHelper;
+import dev.voleum.ordermolder.Enums.DocumentTypes;
 import dev.voleum.ordermolder.Object.CashReceipt;
 import dev.voleum.ordermolder.Object.Document;
 import dev.voleum.ordermolder.Object.Order;
@@ -26,14 +27,14 @@ import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.ui.cashreceipts.CashReceiptActivity;
 import dev.voleum.ordermolder.ui.orders.OrderActivity;
 
+import static dev.voleum.ordermolder.Enums.DocumentTypes.ORDER;
+
 public class DocListActivity extends AppCompatActivity {
 
     public final static String IS_CREATING = "is_creating";
     public final static String DOC_ACTIVITY = "doc_activity";
     public final static String DOC = "doc";
     public final static String DOC_TYPE = "doc_type";
-    public final static String TYPE_ORDER = "order";
-    public final static String TYPE_CASH_RECEIPT = "cash_receipt";
 
     public final static int REQUEST_CODE = 0;
     public final static int RESULT_SAVED = 2;
@@ -42,7 +43,7 @@ public class DocListActivity extends AppCompatActivity {
     private RecyclerView recyclerDocs;
     private ArrayList<Document> arrayDocs;
     private DocListRecyclerViewAdapter adapter;
-    private String docType;
+    private DocumentTypes docType;
 
     FloatingActionButton fab;
 
@@ -54,10 +55,10 @@ public class DocListActivity extends AppCompatActivity {
             Document clickedDoc = arrayDocs.get(position);
             Intent intentOut;
             switch (docType) {
-                case TYPE_ORDER:
+                case ORDER:
                     intentOut = new Intent(DocListActivity.this, OrderActivity.class);
                     break;
-                case TYPE_CASH_RECEIPT:
+                case CASH_RECEIPT:
                     intentOut = new Intent(DocListActivity.this, CashReceiptActivity.class);
                     break;
                 default:
@@ -71,10 +72,10 @@ public class DocListActivity extends AppCompatActivity {
         View.OnClickListener fabClickListener = v -> {
             Intent intentOut;
             switch (docType) {
-                case TYPE_ORDER:
+                case ORDER:
                     intentOut = new Intent(DocListActivity.this, OrderActivity.class);
                     break;
-                case TYPE_CASH_RECEIPT:
+                case CASH_RECEIPT:
                     intentOut = new Intent(DocListActivity.this, CashReceiptActivity.class);
                     break;
                 default:
@@ -84,7 +85,7 @@ public class DocListActivity extends AppCompatActivity {
             startActivityForResult(intentOut, REQUEST_CODE);
         };
 
-        docType = getIntent().getStringExtra(DOC_TYPE);
+        docType = (DocumentTypes) getIntent().getSerializableExtra(DOC_TYPE);
         setContentView(R.layout.activity_doc_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,10 +103,10 @@ public class DocListActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         switch (docType) {
-            case TYPE_ORDER:
+            case ORDER:
                 setTitle(R.string.title_activity_orders);
                 break;
-            case TYPE_CASH_RECEIPT:
+            case CASH_RECEIPT:
                 setTitle(R.string.title_activity_cash_receipts);
                 break;
             default:
@@ -148,10 +149,10 @@ public class DocListActivity extends AppCompatActivity {
         String table;
 
         switch (docType) {
-            case TYPE_ORDER:
+            case ORDER:
                 table = DbHelper.TABLE_ORDERS;
                 break;
-            case TYPE_CASH_RECEIPT:
+            case CASH_RECEIPT:
                 table = DbHelper.TABLE_CASH_RECEIPTS;
                 break;
             default:
@@ -172,12 +173,12 @@ public class DocListActivity extends AppCompatActivity {
             int companyIndex = c.getColumnIndex((DbHelper.COLUMN_COMPANY_UID));
             int partnerIndex = c.getColumnIndex((DbHelper.COLUMN_PARTNER_UID));
             int warehouseIndex = -1;
-            if (docType.equals(TYPE_ORDER)) {
+            if (docType == ORDER) {
                 warehouseIndex = c.getColumnIndex((DbHelper.COLUMN_WAREHOUSE_UID));
             }
             int sumIndex = c.getColumnIndex((DbHelper.COLUMN_SUM));
             switch (docType) {
-                case TYPE_ORDER:
+                case ORDER:
                     do {
                         arrayDocs.add(new Order(c.getString(uidIndex),
                                 c.getString(dateIndex),
@@ -187,7 +188,7 @@ public class DocListActivity extends AppCompatActivity {
                                 c.getDouble(sumIndex)));
                     } while (c.moveToNext());
                     break;
-                case TYPE_CASH_RECEIPT:
+                case CASH_RECEIPT:
                     do {
                         arrayDocs.add(new CashReceipt(c.getString(uidIndex),
                                 c.getString(dateIndex),
