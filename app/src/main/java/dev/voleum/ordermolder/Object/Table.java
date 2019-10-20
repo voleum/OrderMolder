@@ -2,7 +2,7 @@ package dev.voleum.ordermolder.Object;
 
 public abstract class Table extends Obj {
 
-    private int position;
+    protected int position;
 
     public Table(String uid, int position) {
         super(uid);
