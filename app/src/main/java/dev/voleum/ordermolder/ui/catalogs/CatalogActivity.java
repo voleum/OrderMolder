@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.ui;
+package dev.voleum.ordermolder.ui.catalogs;
 
 import android.os.Bundle;
 import android.view.View;

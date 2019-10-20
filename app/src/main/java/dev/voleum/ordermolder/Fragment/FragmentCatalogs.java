@@ -14,8 +14,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import dev.voleum.ordermolder.MainActivity;
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.ui.CatalogActivity;
-import dev.voleum.ordermolder.ui.CatalogListActivity;
+import dev.voleum.ordermolder.ui.catalogs.CatalogActivity;
+import dev.voleum.ordermolder.ui.catalogs.CatalogListActivity;
 
 public class FragmentCatalogs extends androidx.fragment.app.ListFragment {
 

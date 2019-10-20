@@ -5,12 +5,22 @@ package dev.voleum.ordermolder.Database;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import java.util.UUID;
 
-public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Void> {
+import dev.voleum.ordermolder.MainActivity;
+import dev.voleum.ordermolder.R;
+
+public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Boolean> {
+
     @Override
-    protected Void doInBackground(DbHelper... dbHelpers) {
+    protected void onPostExecute(Boolean aBoolean) {
+        Toast.makeText(MainActivity.getAppContext(), R.string.snackbar_successful, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected Boolean doInBackground(DbHelper... dbHelpers) {
         DbHelper dbHelper = dbHelpers[0];
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(DbHelper.TABLE_COMPANIES, null, null);
