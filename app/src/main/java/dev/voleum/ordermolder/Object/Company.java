@@ -1,5 +1,6 @@
 package dev.voleum.ordermolder.Object;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -16,6 +17,15 @@ public class Company extends EconomicEntity {
     public Company(String tin) {
         DbAsyncGetData dbAsyncGetData = new DbAsyncGetData();
         dbAsyncGetData.execute(tin);
+    }
+
+    @Override
+    public void save(SQLiteDatabase db) {
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.COLUMN_UID, uid);
+        cv.put(DbHelper.COLUMN_NAME, name);
+        cv.put(DbHelper.COLUMN_TIN, tin);
+        db.insertWithOnConflict(DbHelper.TABLE_COMPANIES, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     private class DbAsyncGetData extends AsyncTask<String, Void, Void> {

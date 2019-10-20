@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
+import dev.voleum.ordermolder.Enums.DocumentTypes;
 import dev.voleum.ordermolder.MainActivity;
 import dev.voleum.ordermolder.Object.CashReceipt;
 import dev.voleum.ordermolder.Object.Order;
@@ -38,11 +39,11 @@ public class FragmentDocuments extends androidx.fragment.app.ListFragment {
         Intent intent = new Intent(getActivity(), DocListActivity.class);
         switch (position) {
             case 0:
-                intent.putExtra(DocListActivity.DOC_TYPE, DocListActivity.TYPE_ORDER);
+                intent.putExtra(DocListActivity.DOC_TYPE, DocumentTypes.ORDER);
                 intent.putExtra(DocListActivity.DOC_ACTIVITY, Order.class);
                 break;
             case 1:
-                intent.putExtra(DocListActivity.DOC_TYPE, DocListActivity.TYPE_CASH_RECEIPT);
+                intent.putExtra(DocListActivity.DOC_TYPE, DocumentTypes.CASH_RECEIPT);
                 intent.putExtra(DocListActivity.DOC_ACTIVITY, CashReceipt.class);
                 break;
             default:

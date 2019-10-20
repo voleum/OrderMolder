@@ -8,6 +8,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
 
 import dev.voleum.ordermolder.MainActivity;
 
@@ -25,11 +26,9 @@ public class ConnectionHelper {
     // endregion
 
     public boolean exchange() {
-
         FTPClient ftp = new FTPClient();
 
         try {
-
             // region Connect
             ftp.connect(hostname, port);
             if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
@@ -40,15 +39,19 @@ public class ConnectionHelper {
             ftp.login(username, password);
             // endregion
 
+            XmlHelper xmlHelper = new XmlHelper();
+
             // region Input
             try (InputStream input = ftp.retrieveFileStream(FILE_NAME_INPUT)) {
-                if (input == null) {
-                    Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
-                    return false;
+//                if (input == null) {
+//                    Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
+//                    return false;
+//                }
+                if (input != null) {
+                    boolean parsed = xmlHelper.parseXml(input);
+                    ftp.completePendingCommand();
+                    if (parsed) ftp.deleteFile(FILE_NAME_INPUT);
                 }
-                boolean parsed = XmlHelper.parseXml(input);
-                ftp.completePendingCommand();
-                if (parsed) ftp.deleteFile(FILE_NAME_INPUT);
             }
             // endregion
 
@@ -58,17 +61,16 @@ public class ConnectionHelper {
                     Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
                     return false;
                 }
-                XmlHelper.serializeXml(output);
+                xmlHelper.serializeXml(output);
                 ftp.completePendingCommand();
             }
             // endregion
 
             return true;
 
-            // FIXME: отлавливать как IOException или в отдельном блоке?
-//        } catch (SocketException e) {
-//            e.printStackTrace();
-//            return false;
+        } catch (SocketException e) {
+            e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;

@@ -1,77 +1,88 @@
 <resources>
-
     <string name="app_name" translatable="false">Order Molder</string>
 
+    <!--  DIALOGS  -->
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_save_doc">Save document?</string>
 
+    <!--  MENU ITEMS  -->
+    <string name="menu_save">Save</string>
+
+    <!--  SNACKBAR  -->
+    <string name="snackbar_action_undo">Undo</string>
+    <string name="snackbar_doc_created">Document created</string>
+    <string name="snackbar_doc_saved">Document saved</string>
+    <string name="snackbar_doc_deleted">Document deleted</string>
+    <string name="snackbar_empty_goods_list">Goods list is empty!</string>
+    <string name="snackbar_empty_objects_list">Objects list is empty!</string>
+    <string name="snackbar_unknown_doc_type">Unknown document type</string>
+    <string name="snackbar_successful">Successful!</string>
+
+    <!--  BUTTONS  -->
+    <string name="button_exchange">Exchange</string>
+
+    <!--  SIGNS  -->
+    <string name="sign_plus" translatable="false">+</string>
+    <string name="sign_minus" translatable="false">-</string>
+    <string name="sign_currency_ruble" translatable="false">₽</string>
+
+    <!--  TITLES  -->
     <string name="title_main">Main</string>
     <string name="title_documents">Documents</string>
     <string name="title_catalogs">Catalogs</string>
     <string name="title_reports">Reports</string>
+    <string name="title_activity_orders">Orders</string>
+    <string name="title_activity_cash_receipts">Cash receipts</string>
+    <string name="title_activity_companies">Companies</string>
+    <string name="title_activity_partners">Partners</string>
+    <string name="title_activity_warehouses">Warehouses</string>
+    <string name="title_activity_goods">Goods</string>
+    <string name="title_activity_units">Units</string>
+    <string name="title_activity_unknown_doc">Unknown documents</string>
+    <string name="title_activity_unknown_cat">Unknown catalog</string>
+    <string name="title_new_order">New order</string>
+    <string name="title_new_cash_receipt">New cash receipt</string>
 
-    <string name="catalogs">Catalogs</string>
-    <string name="documents">Documents</string>
-    <string name="reports">Reports</string>
+    <!--  TABS  -->
+    <string name="tab_main">Main</string>
+    <string name="tab_order_goods">Goods</string>
+    <string name="tab_cash_receipt_objects">Objects</string>
 
+    <!--  CATALOGS  -->
     <string name="catalog_company_singular">Company</string>
     <string name="catalog_company_plural">Companies</string>
     <string name="catalog_partner_singular">Partner</string>
     <string name="catalog_partner_plural">Partners</string>
+    <string name="catalog_warehouse_singular">Warehouse</string>
+    <string name="catalog_warehouse_plural">Warehouses</string>
     <string name="catalog_good_singular">Good</string>
     <string name="catalog_good_plural">Goods</string>
     <string name="catalog_unit_singular">Unit</string>
     <string name="catalog_unit_plural">Units</string>
-    <string name="catalog_warehouse_singular">Warehouse</string>
-    <string name="catalog_warehouse_plural">Warehouses</string>
 
+    <!--  DOCUMENTS  -->
     <string name="document_order_singular">Order</string>
     <string name="document_order_plural">Orders</string>
     <string name="document_cash_receipt_singular">Cash receipt</string>
     <string name="document_cash_receipt_plural">Cash receipts</string>
 
+    <!--  REPORTS  -->
+    <string name="report_price_singular">Price</string>
+    <string name="report_price_plurallar">Prices</string>
     <string name="report_debt_singular">Debt</string>
     <string name="report_debt_plural">Debts</string>
     <string name="report_stock_singular">Stock</string>
     <string name="report_stock_plural">Stock</string>
 
+    <!--  OBJECTS FIELDS  -->
     <string name="object_number">Number</string>
     <string name="object_date">Date</string>
     <string name="object_name">Name</string>
-    <string name="object_short_name">Short name</string>
+    <string name="object_full_name">Full name</string>
     <string name="object_sum">Sum</string>
     <string name="object_tin">TIN</string>
-
-    <string name="title_activity_orders">Orders</string>
-    <string name="title_activity_cash_receipts">Cash receipts</string>
-    <string name="title_activity_companies">Companies</string>
-    <string name="title_activity_partners">Partners</string>
-    <string name="title_activity_goods">Goods</string>
-    <string name="title_activity_units">Units</string>
-    <string name="title_activity_unknown_doc">Unknown documents</string>
-    <string name="title_activity_unknown_cat">Unknown catalog</string>
-
-    <string name="title_new_order">New order</string>
-    <string name="title_new_cash_receipt">New cash receipt</string>
-
-    <string name="order_tab_main">Main</string>
-    <string name="order_tab_goods">Goods</string>
-    <string name="cash_receipt_tab_main">Main</string>
-    <string name="cash_receipt_tab_objects">Objects</string>
-
-    <string name="document_date">Date</string>
-
-    <string name="snackbar_doc_created">Document created</string>
-    <string name="snackbar_doc_saved">Document saved</string>
-    <string name="snackbar_doc_deleted">Document deleted</string>
-    <string name="snackbar_action_undo">Undo</string>
-    <string name="snackbar_empty_goods_list">Goods list is empty!</string>
-    <string name="snackbar_empty_objects_list">Objects list is empty!</string>
-    <string name="snackbar_unknown_doc_type">Unknown document type</string>
-
-    <string name="menu_save">Save</string>
 
     <string-array name="documents">
         <item>Orders</item>
@@ -82,6 +93,7 @@
         <item>Companies</item>
         <item>Partners</item>
         <item>Goods</item>
+        <item>Warehouses</item>
         <item>Units</item>
     </string-array>
 
@@ -90,9 +102,4 @@
         <item>Debts</item>
         <item>Stock</item>
     </string-array>
-
-    <string name="sign_plus" translatable="false">+</string>
-    <string name="sign_minus" translatable="false">-</string>
-    <string name="sign_currency_ruble" translatable="false">₽</string>
-
 </resources>

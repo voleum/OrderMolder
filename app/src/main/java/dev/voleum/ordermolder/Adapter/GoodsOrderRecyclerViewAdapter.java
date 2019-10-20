@@ -1,6 +1,7 @@
 package dev.voleum.ordermolder.Adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         this.goods = goods;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -33,6 +36,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         return new GoodViewHolder(v);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         HashMap<String, Object> goodData = goods.get(position);
@@ -57,11 +61,12 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         double sum = 0.0;
         for (int i = 0; i < goods.size(); i++) {
             HashMap<String, Object> good = goods.get(i);
-            sum += (Double) good.get("sum");
+            sum += (double) good.getOrDefault("sum", 0.0);
         }
         return sum;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public class GoodViewHolder extends RecyclerView.ViewHolder {
         public TextView goodName;
         public EditText goodQuantity;
@@ -86,8 +91,6 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                 HashMap<String, Object> goodInfo = goods.get(position);
                 double quantity = 0;
                 double price = 0;
-                View root = v.getRootView();
-                TextView tvSum = root.findViewById(R.id.order_tv_sum);
                 switch (v.getId()) {
                     case R.id.good_quantity:
                         try {
@@ -96,12 +99,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                             quantity = 0;
                         }
                         goodInfo.put("quantity", quantity);
-                        EditText etPrice = root.findViewById(R.id.good_price);
-                        try {
-                            price = Double.parseDouble((etPrice.getText().toString()));
-                        } catch (NumberFormatException e) {
-                            price = 0;
-                        }
+                        price = (double) goodInfo.getOrDefault("price", 0.0);
                         break;
                     case R.id.good_price:
                         try {
@@ -110,16 +108,13 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                             price = 0;
                         }
                         goodInfo.put("price", price);
-                        EditText etQuantity = root.findViewById(R.id.good_quantity);
-                        try {
-                            quantity = Double.parseDouble((etQuantity.getText().toString()));
-                        } catch (NumberFormatException e) {
-                            quantity = 0;
-                        }
+                        quantity = (double) goodInfo.getOrDefault("quantity", 0.0);
                         break;
                 }
                 double sum = quantity * price;
                 goodInfo.put("sum", sum);
+                View root = v.getRootView();
+                TextView tvSum = root.findViewById(R.id.order_tv_sum);
                 tvSum.setText(String.valueOf(getSum()));
             }
         };

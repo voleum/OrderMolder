@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.ui;
+package dev.voleum.ordermolder.ui.catalogs;
 
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.Constraints;
 
 import java.util.Objects;
 
+import dev.voleum.ordermolder.Enums.CatalogTypes;
 import dev.voleum.ordermolder.Object.Catalog;
 import dev.voleum.ordermolder.Object.EconomicEntity;
 import dev.voleum.ordermolder.Object.Good;
@@ -23,13 +24,8 @@ public class CatalogActivity extends AppCompatActivity {
 
     public static final String CAT = "cat";
     public static final String CAT_TYPE = "cat_type";
-    public static final int TYPE_UNKNOWN = -1;
-    public static final int TYPE_COMPANY = 0;
-    public static final int TYPE_PARTNER = 1;
-    public static final int TYPE_GOOD = 2;
-    public static final int TYPE_UNIT = 3;
 
-    private int catType;
+    private CatalogTypes catType;
 
     Catalog catalog;
 
@@ -38,7 +34,7 @@ public class CatalogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cat);
 
-        catType = getIntent().getIntExtra(CAT_TYPE, TYPE_UNKNOWN);
+        catType = (CatalogTypes) getIntent().getSerializableExtra(CAT_TYPE);
         catalog = (Catalog) getIntent().getSerializableExtra(CAT);
 
         Toolbar toolbar = findViewById(R.id.catalog_toolbar);
@@ -59,8 +55,8 @@ public class CatalogActivity extends AppCompatActivity {
         layout.addView(tvName);
 
         switch (catType) {
-            case TYPE_COMPANY:
-            case TYPE_PARTNER:
+            case COMPANY:
+            case PARTNER:
                 Constraints.LayoutParams tinLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 tinLayoutParams.startToStart = R.id.catalog_constraint;
                 tinLayoutParams.setMargins(16, 16, 16, 16);
@@ -72,21 +68,21 @@ public class CatalogActivity extends AppCompatActivity {
                 tvTin.setText(((EconomicEntity) catalog).getTin());
                 layout.addView(tvTin);
                 break;
-            case TYPE_GOOD:
-//                Constraints.LayoutParams groupLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                groupLayoutParams.startToStart = R.id.catalog_constraint;
-//                groupLayoutParams.setMargins(16, 16, 16, 16);
-//                groupLayoutParams.topToBottom = tvName.getId();
-//
-//                TextView tvGroup = new TextView(this);
-//                tvGroup.setLayoutParams(groupLayoutParams);
-//                tvGroup.setId(View.generateViewId());
-//                layout.addView(tvGroup);
+            case GOOD:
+                Constraints.LayoutParams groupLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                groupLayoutParams.startToStart = R.id.catalog_constraint;
+                groupLayoutParams.setMargins(16, 16, 16, 16);
+                groupLayoutParams.topToBottom = tvName.getId();
+
+                TextView tvGroup = new TextView(this);
+                tvGroup.setLayoutParams(groupLayoutParams);
+                tvGroup.setId(View.generateViewId());
+                layout.addView(tvGroup);
 
                 Constraints.LayoutParams unitLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 unitLayoutParams.startToStart = R.id.catalog_constraint;
                 unitLayoutParams.setMargins(16, 16, 16, 16);
-                unitLayoutParams.topToBottom = tvName.getId();
+                unitLayoutParams.topToBottom = tvGroup.getId();
 
                 TextView tvUnit = new TextView(this);
                 tvUnit.setLayoutParams(unitLayoutParams);
@@ -94,7 +90,9 @@ public class CatalogActivity extends AppCompatActivity {
                 tvUnit.setText(((Good) catalog).getUnitUid());
                 layout.addView(tvUnit);
                 break;
-            case TYPE_UNIT:
+            case WAREHOUSE:
+                break;
+            case UNIT:
                 Constraints.LayoutParams codeLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 codeLayoutParams.startToStart = R.id.catalog_constraint;
                 codeLayoutParams.setMargins(16, 16, 16, 16);
