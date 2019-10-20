@@ -17,16 +17,14 @@ public class ExchangeAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean successful) {
-        if (successful) {
-            Snackbar.make(v, R.string.snackbar_successful, Snackbar.LENGTH_SHORT).show();
-//            Toast.makeText(MainActivity.getAppContext(), R.string.snackbar_successful, Toast.LENGTH_SHORT).show();
-        }
+        int textRes = successful ? R.string.snackbar_successful : R.string.snackbar_unsuccessful;
+        Snackbar.make(v, textRes, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     protected Boolean doInBackground(Void... voids) {
         ConnectionHelper connection = new ConnectionHelper();
-        connection.exchange();
-        return true;
+        if (connection.exchange()) return true;
+        return false;
     }
 }

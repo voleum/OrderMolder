@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file_name_to" translatable="false">To1C.xml</string>
+    <string name="file_name_from" translatable="false">From1C.xml</string>
+    <string name="default_port" translatable="false">21</string>
+</resources>

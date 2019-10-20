@@ -1,15 +1,21 @@
 package dev.voleum.ordermolder;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -33,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static Context appContext = null;
     private static Resources resources = null;
+    private static SharedPreferences sharedPref = null;
 
     private int checkedMenuItem = MENU_ITEM_MAIN;
 
@@ -43,28 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentTransaction fragmentTransaction;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = (item) -> {
-                switch (item.getItemId()) {
-                    case R.id.navigation_main:
-                        if (fragmentMain == null) fragmentMain = new FragmentMain();
-                        afterNavigationSelectedItem(R.string.title_main, fragmentMain, MENU_ITEM_MAIN);
-                        return true;
-                    case R.id.navigation_documents:
-                        if (fragmentDocuments == null) fragmentDocuments = new FragmentDocuments();
-                        afterNavigationSelectedItem(R.string.title_documents, fragmentDocuments, MENU_ITEM_DOCUMENTS);
-                        return true;
-                    case R.id.navigation_catalogs:
-                        if (fragmentCatalogs == null) fragmentCatalogs = new FragmentCatalogs();
-                        afterNavigationSelectedItem(R.string.title_catalogs, fragmentCatalogs, MENU_ITEM_CATALOGS);
-                        return true;
-                    case R.id.navigation_reports:
-                        if (fragmentReports == null) fragmentReports = new FragmentReports();
-                        afterNavigationSelectedItem(R.string.title_reports, fragmentReports, MENU_ITEM_REPORTS);
-                        return true;
-                }
-                return false;
-            };
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +59,32 @@ public class MainActivity extends AppCompatActivity {
 
         appContext = getApplicationContext();
         resources = getResources();
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        mOnNavigationItemSelectedListener = item -> {
+            switch (item.getItemId()) {
+                case R.id.navigation_main:
+                    if (fragmentMain == null) fragmentMain = new FragmentMain();
+                    afterNavigationSelectedItem(R.string.title_main, fragmentMain, MENU_ITEM_MAIN);
+                    return true;
+                case R.id.navigation_documents:
+                    if (fragmentDocuments == null) fragmentDocuments = new FragmentDocuments();
+                    afterNavigationSelectedItem(R.string.title_documents, fragmentDocuments, MENU_ITEM_DOCUMENTS);
+                    return true;
+                case R.id.navigation_catalogs:
+                    if (fragmentCatalogs == null) fragmentCatalogs = new FragmentCatalogs();
+                    afterNavigationSelectedItem(R.string.title_catalogs, fragmentCatalogs, MENU_ITEM_CATALOGS);
+                    return true;
+                case R.id.navigation_reports:
+                    if (fragmentReports == null) fragmentReports = new FragmentReports();
+                    afterNavigationSelectedItem(R.string.title_reports, fragmentReports, MENU_ITEM_REPORTS);
+                    return true;
+            }
+            return false;
+        };
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -104,9 +116,22 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.add(R.id.frameLayoutFragment, fragmentReports);
                 break;
         }
-
         fragmentTransaction.commit();
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.general_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -144,4 +169,7 @@ public class MainActivity extends AppCompatActivity {
         return resources;
     }
 
+    public static SharedPreferences getPref() {
+        return sharedPref;
+    }
 }
