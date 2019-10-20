@@ -86,8 +86,8 @@
     <string-array name="catalogs">
         <item>Организации</item>
         <item>Партнёры</item>
-        <item>Товары</item>
         <item>Склады</item>
+        <item>Товары</item>
         <item>Единицы измерения</item>
     </string-array>
 
