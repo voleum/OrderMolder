@@ -87,30 +87,4 @@
     <string name="object_full_name">Полное наименование</string>
     <string name="object_sum">Сумма</string>
     <string name="object_tin">ИНН</string>
-
-    <string-array name="settings_theme_entries">
-        <item>Светлая</item>
-        <item>Тёмная</item>
-        <item>Системные настройки</item>
-        <item>Настройки энергосбережения</item>
-    </string-array>
-
-    <string-array name="documents">
-        <item>Заказы</item>
-        <item>Приходные кассовые ордера</item>
-    </string-array>
-
-    <string-array name="catalogs">
-        <item>Организации</item>
-        <item>Партнёры</item>
-        <item>Склады</item>
-        <item>Товары</item>
-        <item>Единицы измерения</item>
-    </string-array>
-
-    <string-array name="reports">
-        <item>Прайс-лист</item>
-        <item>Долги</item>
-        <item>Остатки</item>
-    </string-array>
 </resources>

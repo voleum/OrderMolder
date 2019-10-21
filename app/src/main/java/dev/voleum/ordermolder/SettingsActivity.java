@@ -1,11 +1,15 @@
 package dev.voleum.ordermolder;
 
 import android.os.Bundle;
+import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.Preference;
+
+import com.takisoft.preferencex.EditTextPreference;
+import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -25,10 +29,20 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
         @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
+            EditTextPreference passwordPreference = findPreference("password");
+            passwordPreference.setOnPreferenceChangeListener(this);
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            EditText edit = ((EditTextPreference) preference).getEditText();
+            String pref = edit.getTransformationMethod().getTransformation(newValue.toString(), edit).toString();
+            preference.setSummary(pref);
+            return true;
         }
     }
 

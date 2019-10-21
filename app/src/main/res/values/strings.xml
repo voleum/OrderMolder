@@ -95,37 +95,4 @@
     <string name="object_full_name">Full name</string>
     <string name="object_sum">Sum</string>
     <string name="object_tin">TIN</string>
-
-    <string-array name="documents">
-        <item>Orders</item>
-        <item>Cash receipts</item>
-    </string-array>
-
-    <string-array name="catalogs">
-        <item>Companies</item>
-        <item>Partners</item>
-        <item>Warehouses</item>
-        <item>Goods</item>
-        <item>Units</item>
-    </string-array>
-
-    <string-array name="reports">
-        <item>Price</item>
-        <item>Debts</item>
-        <item>Stock</item>
-    </string-array>
-
-    <!--  SETTINGS ARRAYS  -->
-    <string-array name="settings_theme_entries">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>System default</item>
-        <item>Set by Battery Saver</item>
-    </string-array>
-    <string-array name="settings_theme_values">
-        <item>light</item>
-        <item>dark</item>
-        <item>system_default</item>
-        <item>set_by_battery_saver</item>
-    </string-array>
 </resources>
