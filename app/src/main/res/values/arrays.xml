@@ -27,9 +27,9 @@
     </string-array>
 
     <string-array name="settings_theme_values">
-        <item>light</item>
-        <item>dark</item>
-        <item>system_default</item>
-        <item>set_by_battery_saver</item>
+        <item>1</item>
+        <item>2</item>
+        <item>-1</item>
+        <item>3</item>
     </string-array>
 </resources>
