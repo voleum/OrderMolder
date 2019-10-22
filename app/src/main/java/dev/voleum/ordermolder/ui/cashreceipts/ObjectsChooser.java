@@ -46,7 +46,7 @@ public class ObjectsChooser extends AppCompatActivity {
             finish();
         });
         recyclerView.setAdapter(adapter);
-        Toolbar toolbar = findViewById(R.id.chooser_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }

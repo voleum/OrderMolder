@@ -68,19 +68,19 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_main:
                     if (fragmentMain == null) fragmentMain = new FragmentMain();
-                    afterNavigationSelectedItem(R.string.title_main, fragmentMain, MENU_ITEM_MAIN);
+                    onNavigationSelectedItem(R.string.title_main, fragmentMain, MENU_ITEM_MAIN);
                     return true;
                 case R.id.navigation_documents:
                     if (fragmentDocuments == null) fragmentDocuments = new FragmentDocuments();
-                    afterNavigationSelectedItem(R.string.title_documents, fragmentDocuments, MENU_ITEM_DOCUMENTS);
+                    onNavigationSelectedItem(R.string.title_documents, fragmentDocuments, MENU_ITEM_DOCUMENTS);
                     return true;
                 case R.id.navigation_catalogs:
                     if (fragmentCatalogs == null) fragmentCatalogs = new FragmentCatalogs();
-                    afterNavigationSelectedItem(R.string.title_catalogs, fragmentCatalogs, MENU_ITEM_CATALOGS);
+                    onNavigationSelectedItem(R.string.title_catalogs, fragmentCatalogs, MENU_ITEM_CATALOGS);
                     return true;
                 case R.id.navigation_reports:
                     if (fragmentReports == null) fragmentReports = new FragmentReports();
-                    afterNavigationSelectedItem(R.string.title_reports, fragmentReports, MENU_ITEM_REPORTS);
+                    onNavigationSelectedItem(R.string.title_reports, fragmentReports, MENU_ITEM_REPORTS);
                     return true;
             }
             return false;
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt(CHECKED_MENU_ITEM, checkedMenuItem);
     }
 
-    private void afterNavigationSelectedItem(@StringRes int title, Fragment fragment, int checkedMenuItem) {
+    private void onNavigationSelectedItem(@StringRes int title, Fragment fragment, int checkedMenuItem) {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frameLayoutFragment, fragment);
         fragmentTransaction.commit();

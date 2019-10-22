@@ -15,12 +15,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar">
-        <item name="android:background">@color/colorPrimary</item>
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
+
+    <style name="AppTheme.ToolbarOverLay.Surface" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="Preference_TextAppearanceMaterialSubhead" parent="Preference_TextAppearanceMaterialSubhead" />
-
+    <style name="Preference_TextAppearanceMaterialSubhead" />
 </resources>
