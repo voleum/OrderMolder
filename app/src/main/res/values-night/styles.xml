@@ -8,6 +8,7 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="tabStyle">@style/Widget.OrderMolder.TabLayout</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -19,4 +20,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
 
+    <style name="Widget.OrderMolder.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:backgroundTint">@android:color/transparent</item>
+    </style>
 </resources>
