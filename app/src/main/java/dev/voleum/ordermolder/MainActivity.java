@@ -12,6 +12,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         appContext = getApplicationContext();
         resources = getResources();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        AppCompatDelegate.setDefaultNightMode(Integer.parseInt(sharedPref.getString("theme", "-1")));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
