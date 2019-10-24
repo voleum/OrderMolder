@@ -8,7 +8,7 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
-<!--        <item name="materialButtonStyle">@style/Widget.OrderMolder.MyButton</item>-->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.PrimarySurface</item>
     </style>
 
@@ -25,7 +25,15 @@
 
     <style name="Preference_TextAppearanceMaterialSubhead" />
 
-<!--    <style name="Widget.OrderMolder.MyButton" parent="Widget.MaterialComponents.Button">-->
-<!--        <item name="backgroundTint">@color/colorPrimaryVariant</item>-->
-<!--    </style>-->
+    <style name="Widget.OrderMolder.TextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">@dimen/rounded_textview_text_size</item>
+    </style>
+
+    <style name="Widget.OrderMolder.TextView.Padding">
+        <item name="android:padding">@dimen/rounded_textview_padding</item>
+    </style>
+
+    <style name="Widget.OrderMolder.TextView.Padding.RoundedColored">
+        <item name="android:background">@drawable/shape_rounded_textview</item>
+    </style>
 </resources>

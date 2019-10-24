@@ -84,7 +84,10 @@
     <string name="object_number">Номер</string>
     <string name="object_date">Дата</string>
     <string name="object_name">Наименование</string>
+    <string name="object_group">Группа</string>
+    <string name="object_code">Код</string>
     <string name="object_full_name">Полное наименование</string>
     <string name="object_sum">Сумма</string>
     <string name="object_tin">ИНН</string>
+    <string name="object_unit">Единица измерения</string>
 </resources>

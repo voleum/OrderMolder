@@ -3,6 +3,6 @@
     <string-array name="settings_theme_entries">
         <item>Светлая</item>
         <item>Тёмная</item>
-        <item>Настройки энергосбережения</item>
+        <item>Системные настройки</item>
     </string-array>
 </resources>

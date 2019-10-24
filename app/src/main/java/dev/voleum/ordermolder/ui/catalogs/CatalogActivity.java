@@ -1,6 +1,7 @@
 package dev.voleum.ordermolder.ui.catalogs;
 
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -43,77 +44,147 @@ public class CatalogActivity extends AppCompatActivity {
 
         ConstraintLayout layout = findViewById(R.id.catalog_constraint);
 
-        Constraints.LayoutParams nameLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        nameLayoutParams.startToStart = R.id.catalog_constraint;
-        nameLayoutParams.setMargins(16, 16, 16, 16);
-        nameLayoutParams.topToBottom = R.id.toolbar;
+        ContextThemeWrapper contextThemeWrapperLabels = new ContextThemeWrapper(this, R.style.Widget_OrderMolder_TextView_Padding);
+        ContextThemeWrapper contextThemeWrapperValues = new ContextThemeWrapper(this, R.style.Widget_OrderMolder_TextView_Padding_RoundedColored);
+        int tvMargin = getResources().getDimensionPixelSize(R.dimen.rounded_textview_margin);
 
-        TextView tvName = new TextView(this);
-        tvName.setLayoutParams(nameLayoutParams);
-        tvName.setId(View.generateViewId());
-        tvName.setText(catalog.getName());
-        layout.addView(tvName);
+        Constraints.LayoutParams nameLabelLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        nameLabelLayoutParams.startToStart = R.id.catalog_constraint;
+        nameLabelLayoutParams.topToTop = R.id.catalog_constraint;
+        nameLabelLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
+
+        TextView tvNameLabel = new TextView(contextThemeWrapperLabels);
+        tvNameLabel.setLayoutParams(nameLabelLayoutParams);
+        tvNameLabel.setId(View.generateViewId());
+        tvNameLabel.setText(R.string.object_name);
+        layout.addView(tvNameLabel);
+
+        Constraints.LayoutParams nameValueLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        nameValueLayoutParams.startToEnd = tvNameLabel.getId();
+        nameValueLayoutParams.topToTop = R.id.catalog_constraint;
+        nameValueLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
+
+        TextView tvNameValue = new TextView(contextThemeWrapperValues);
+        tvNameValue.setLayoutParams(nameValueLayoutParams);
+        tvNameValue.setId(View.generateViewId());
+        tvNameValue.setText(catalog.getName());
+        layout.addView(tvNameValue);
 
         switch (catType) {
             case COMPANY:
             case PARTNER:
-                Constraints.LayoutParams tinLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                tinLayoutParams.startToStart = R.id.catalog_constraint;
-                tinLayoutParams.setMargins(16, 16, 16, 16);
-                tinLayoutParams.topToBottom = tvName.getId();
+                Constraints.LayoutParams tinLabelLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                tinLabelLayoutParams.startToStart = R.id.catalog_constraint;
+                tinLabelLayoutParams.topToBottom = tvNameLabel.getId();
+                tinLabelLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
 
-                TextView tvTin = new TextView(this);
-                tvTin.setLayoutParams(tinLayoutParams);
-                tvTin.setId(View.generateViewId());
-                tvTin.setText(((EconomicEntity) catalog).getTin());
-                layout.addView(tvTin);
+                TextView tvTinLabel = new TextView(contextThemeWrapperLabels);
+                tvTinLabel.setLayoutParams(tinLabelLayoutParams);
+                tvTinLabel.setId(View.generateViewId());
+                tvTinLabel.setText(R.string.object_tin);
+                layout.addView(tvTinLabel);
+
+                Constraints.LayoutParams tinValueLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                tinValueLayoutParams.startToEnd = tvTinLabel.getId();
+                tinValueLayoutParams.topToBottom = tvNameValue.getId();
+                tinValueLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
+
+                TextView tvTinValue = new TextView(contextThemeWrapperValues);
+                tvTinValue.setLayoutParams(tinValueLayoutParams);
+                tvTinValue.setId(View.generateViewId());
+                tvTinValue.setText(((EconomicEntity) catalog).getTin());
+                layout.addView(tvTinValue);
                 break;
             case GOOD:
-                Constraints.LayoutParams groupLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                groupLayoutParams.startToStart = R.id.catalog_constraint;
-                groupLayoutParams.setMargins(16, 16, 16, 16);
-                groupLayoutParams.topToBottom = tvName.getId();
+                Constraints.LayoutParams groupLabelLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                groupLabelLayoutParams.startToStart = R.id.catalog_constraint;
+                groupLabelLayoutParams.topToBottom = tvNameLabel.getId();
+                groupLabelLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
 
-                TextView tvGroup = new TextView(this);
-                tvGroup.setLayoutParams(groupLayoutParams);
-                tvGroup.setId(View.generateViewId());
-                layout.addView(tvGroup);
+                TextView tvGroupLabel = new TextView(contextThemeWrapperLabels);
+                tvGroupLabel.setLayoutParams(groupLabelLayoutParams);
+                tvGroupLabel.setId(View.generateViewId());
+                tvGroupLabel.setText(R.string.object_group);
+                layout.addView(tvGroupLabel);
 
-                Constraints.LayoutParams unitLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                unitLayoutParams.startToStart = R.id.catalog_constraint;
-                unitLayoutParams.setMargins(16, 16, 16, 16);
-                unitLayoutParams.topToBottom = tvGroup.getId();
+                Constraints.LayoutParams groupValueLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                groupValueLayoutParams.startToEnd = tvGroupLabel.getId();
+                groupValueLayoutParams.topToBottom = tvNameValue.getId();
+                groupValueLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
 
-                TextView tvUnit = new TextView(this);
-                tvUnit.setLayoutParams(unitLayoutParams);
-                tvUnit.setId(View.generateViewId());
-                tvUnit.setText(((Good) catalog).getUnitUid());
-                layout.addView(tvUnit);
+                TextView tvGroupValue = new TextView(contextThemeWrapperValues);
+                tvGroupValue.setLayoutParams(groupValueLayoutParams);
+                tvGroupValue.setId(View.generateViewId());
+                layout.addView(tvGroupValue);
+
+                Constraints.LayoutParams unitLabelLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                unitLabelLayoutParams.startToStart = R.id.catalog_constraint;
+                unitLabelLayoutParams.topToBottom = tvGroupLabel.getId();
+                unitLabelLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
+
+                TextView tvUnitLabel = new TextView(contextThemeWrapperLabels);
+                tvUnitLabel.setLayoutParams(unitLabelLayoutParams);
+                tvUnitLabel.setId(View.generateViewId());
+                tvUnitLabel.setText(R.string.object_unit);
+                layout.addView(tvUnitLabel);
+
+                Constraints.LayoutParams unitLayoutValueParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                unitLayoutValueParams.startToEnd = tvUnitLabel.getId();
+                unitLayoutValueParams.topToBottom = tvGroupValue.getId();
+                unitLayoutValueParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
+
+                TextView tvUnitValue = new TextView(contextThemeWrapperValues);
+                tvUnitValue.setLayoutParams(unitLayoutValueParams);
+                tvUnitValue.setId(View.generateViewId());
+                tvUnitValue.setText(((Good) catalog).getUnitUid());
+                layout.addView(tvUnitValue);
                 break;
             case WAREHOUSE:
                 break;
             case UNIT:
-                Constraints.LayoutParams codeLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                codeLayoutParams.startToStart = R.id.catalog_constraint;
-                codeLayoutParams.setMargins(16, 16, 16, 16);
-                codeLayoutParams.topToBottom = tvName.getId();
+                Constraints.LayoutParams codeLabelLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                codeLabelLayoutParams.startToStart = R.id.catalog_constraint;
+                codeLabelLayoutParams.topToBottom = tvNameLabel.getId();
+                codeLabelLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
 
-                TextView tvCode = new TextView(this);
-                tvCode.setLayoutParams(codeLayoutParams);
-                tvCode.setId(View.generateViewId());
-                tvCode.setText(String.valueOf(((Unit) catalog).getCode()));
-                layout.addView(tvCode);
+                TextView tvCodeLabel = new TextView(contextThemeWrapperLabels);
+                tvCodeLabel.setLayoutParams(codeLabelLayoutParams);
+                tvCodeLabel.setId(View.generateViewId());
+                tvCodeLabel.setText(R.string.object_code);
+                layout.addView(tvCodeLabel);
 
-                Constraints.LayoutParams fullNameLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                fullNameLayoutParams.startToStart = R.id.catalog_constraint;
-                fullNameLayoutParams.setMargins(16, 16, 16, 16);
-                fullNameLayoutParams.topToBottom = tvCode.getId();
+                Constraints.LayoutParams codeValueLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                codeValueLayoutParams.startToEnd = tvCodeLabel.getId();
+                codeValueLayoutParams.topToBottom = tvNameValue.getId();
+                codeValueLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
 
-                TextView tvFullName = new TextView(this);
-                tvFullName.setLayoutParams(fullNameLayoutParams);
-                tvFullName.setId(View.generateViewId());
-                tvFullName.setText(((Unit) catalog).getFullName());
-                layout.addView(tvFullName);
+                TextView tvCodeValue = new TextView(contextThemeWrapperValues);
+                tvCodeValue.setLayoutParams(codeValueLayoutParams);
+                tvCodeValue.setId(View.generateViewId());
+                tvCodeValue.setText(String.valueOf(((Unit) catalog).getCode()));
+                layout.addView(tvCodeValue);
+
+                Constraints.LayoutParams fullNameLabelLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                fullNameLabelLayoutParams.startToStart = R.id.catalog_constraint;
+                fullNameLabelLayoutParams.topToBottom = tvCodeLabel.getId();
+                fullNameLabelLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
+
+                TextView tvFullNameLabel = new TextView(contextThemeWrapperLabels);
+                tvFullNameLabel.setLayoutParams(fullNameLabelLayoutParams);
+                tvFullNameLabel.setId(View.generateViewId());
+                tvFullNameLabel.setText(R.string.object_full_name);
+                layout.addView(tvFullNameLabel);
+
+                Constraints.LayoutParams fullNameValueLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                fullNameValueLayoutParams.startToEnd = tvFullNameLabel.getId();
+                fullNameValueLayoutParams.topToBottom = tvCodeValue.getId();
+                fullNameValueLayoutParams.setMargins(tvMargin, tvMargin, tvMargin, tvMargin);
+
+                TextView tvFullNameValue = new TextView(contextThemeWrapperValues);
+                tvFullNameValue.setLayoutParams(fullNameValueLayoutParams);
+                tvFullNameValue.setId(View.generateViewId());
+                tvFullNameValue.setText(((Unit) catalog).getFullName());
+                layout.addView(tvFullNameValue);
                 break;
         }
     }

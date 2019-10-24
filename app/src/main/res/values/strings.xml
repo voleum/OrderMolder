@@ -92,7 +92,10 @@
     <string name="object_number">Number</string>
     <string name="object_date">Date</string>
     <string name="object_name">Name</string>
+    <string name="object_group">Group</string>
+    <string name="object_code">Code</string>
     <string name="object_full_name">Full name</string>
     <string name="object_sum">Sum</string>
     <string name="object_tin">TIN</string>
+    <string name="object_unit">Unit</string>
 </resources>

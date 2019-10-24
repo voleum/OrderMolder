@@ -8,4 +8,19 @@
     <dimen name="preference_seekbar_padding_start">8dp</dimen>
     <dimen name="preference_seekbar_padding_end">8dp</dimen>
     <dimen name="preference_seekbar_value_width">16dp</dimen>
+
+    <!-- View paddings -->
+    <dimen name="rounded_textview_padding">16dp</dimen>
+
+    <!-- View margins -->
+    <dimen name="rounded_textview_margin">16dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="rounded_textview_text_size">16sp</dimen>
+
+    <!-- Lines width -->
+    <dimen name="rounded_textview_stroke_width">2dp</dimen>
+
+    <!-- Shapes radius -->
+    <dimen name="rounded_textview_corner_radius">100dp</dimen>
 </resources>
