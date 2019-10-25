@@ -115,6 +115,7 @@ public class CatalogActivity extends AppCompatActivity {
                 TextView tvGroupValue = new TextView(contextThemeWrapperValues);
                 tvGroupValue.setLayoutParams(groupValueLayoutParams);
                 tvGroupValue.setId(View.generateViewId());
+                tvGroupValue.setText(((Good) catalog).getGroupUid());
                 layout.addView(tvGroupValue);
 
                 Constraints.LayoutParams unitLabelLayoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

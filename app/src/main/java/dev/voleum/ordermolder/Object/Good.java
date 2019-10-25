@@ -26,6 +26,14 @@ public class Good extends Catalog {
         db.insertWithOnConflict(DbHelper.TABLE_GOODS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    public String getGroupUid() {
+        return groupUid;
+    }
+
+    public void setGroupUid(String groupUid) {
+        this.groupUid = groupUid;
+    }
+
     public String getUnitUid() {
         return unitUid;
     }

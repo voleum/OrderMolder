@@ -54,32 +54,6 @@
     <string name="tab_order_goods">Товары</string>
     <string name="tab_cash_receipt_objects">Объекты расчётов</string>
 
-    <!--  CATALOGS  -->
-    <string name="catalog_company_singular">Организация</string>
-    <string name="catalog_company_plural">Организации</string>
-    <string name="catalog_partner_singular">Партнёр</string>
-    <string name="catalog_partner_plural">Партнёры</string>
-    <string name="catalog_warehouse_singular">Склад</string>
-    <string name="catalog_warehouse_plural">Склады</string>
-    <string name="catalog_good_singular">Товар</string>
-    <string name="catalog_good_plural">Товары</string>
-    <string name="catalog_unit_singular">Единица измерения</string>
-    <string name="catalog_unit_plural">Единицы измерения</string>
-
-    <!--  DOCUMENTS  -->
-    <string name="document_order_singular">Заказ</string>
-    <string name="document_order_plural">Заказы</string>
-    <string name="document_cash_receipt_singular">Приходный кассовый ордер</string>
-    <string name="document_cash_receipt_plural">Приходные кассовые ордера</string>
-
-    <!--  REPORTS  -->
-    <string name="report_price_singular">Прайс-лист</string>
-    <string name="report_price_plurallar">Прайс-листы</string>
-    <string name="report_debt_singular">Долг</string>
-    <string name="report_debt_plural">Долги</string>
-    <string name="report_stock_singular">Остаток</string>
-    <string name="report_stock_plural">Остатки</string>
-
     <!--  OBJECTS FIELDS  -->
     <string name="object_number">Номер</string>
     <string name="object_date">Дата</string>
