@@ -28,7 +28,7 @@ public class GoodsChooser extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chooser);
-        setTitle(R.string.catalog_good_plural);
+        setTitle(R.string.title_catalogs);
         recyclerView = findViewById(R.id.recycler_tabdoc);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //            recyclerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -48,7 +48,7 @@ public class GoodsChooser extends AppCompatActivity {
             finish();
         });
         recyclerView.setAdapter(adapter);
-        Toolbar toolbar = findViewById(R.id.chooser_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }

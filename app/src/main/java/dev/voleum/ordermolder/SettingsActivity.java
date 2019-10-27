@@ -5,7 +5,9 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
 import com.takisoft.preferencex.EditTextPreference;
@@ -35,13 +37,24 @@ public class SettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             EditTextPreference passwordPreference = findPreference("password");
             passwordPreference.setOnPreferenceChangeListener(this);
+            ListPreference themePreference = findPreference("theme");
+            themePreference.setOnPreferenceChangeListener(this);
         }
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            EditText edit = ((EditTextPreference) preference).getEditText();
-            String pref = edit.getTransformationMethod().getTransformation(newValue.toString(), edit).toString();
-            preference.setSummary(pref);
+            switch (preference.getKey()) {
+                case "password":
+                    EditText edit = ((EditTextPreference) preference).getEditText();
+                    String pref = edit.getTransformationMethod().getTransformation(newValue.toString(), edit).toString();
+                    preference.setSummary(pref);
+                    break;
+                case "theme":
+                    AppCompatDelegate.setDefaultNightMode(Integer.parseInt((String) newValue));
+                    break;
+                default:
+                    return false;
+            }
             return true;
         }
     }

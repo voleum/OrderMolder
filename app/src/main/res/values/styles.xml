@@ -1,13 +1,15 @@
 <resources>
-
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    <!-- TODO: make NavBar transparent for Q -->
-<!--        <item name="android:navigationBarColor">@android:color/transparent</item>-->
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.PrimarySurface</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -15,10 +17,23 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.ToolbarOverLay.Surface" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface" />
 
-    <style name="Preference_TextAppearanceMaterialSubhead" parent="Preference_TextAppearanceMaterialSubhead" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
+    <style name="Preference_TextAppearanceMaterialSubhead" />
+
+    <style name="Widget.OrderMolder.TextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">@dimen/rounded_textview_text_size</item>
+    </style>
+
+    <style name="Widget.OrderMolder.TextView.Padding">
+        <item name="android:padding">@dimen/rounded_textview_padding</item>
+    </style>
+
+    <style name="Widget.OrderMolder.TextView.Padding.RoundedColored">
+        <item name="android:background">@drawable/shape_rounded_textview</item>
+    </style>
 </resources>
