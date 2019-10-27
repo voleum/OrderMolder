@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/recycler_chooser"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_chooser_name"
+        style="@style/Widget.OrderMolder.TextView.Padding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tool:text="Good name" />
+
+    <TextView
+        android:id="@+id/tv_chooser_price"
+        style="@style/Widget.OrderMolder.TextView.Padding.RoundedColored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tool:text="100.00" />
+
+    <TextView
+        android:id="@+id/tv_chooser_sign"
+        style="@style/Widget.OrderMolder.TextView.Padding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_currency_ruble" />
+
+</LinearLayout>
