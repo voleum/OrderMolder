@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -68,6 +69,8 @@ public class PlaceholderCashReceiptFragment extends Fragment {
     private Spinner spinnerCompanies;
     private Spinner spinnerPartners;
 
+    private AdapterView.OnItemSelectedListener onItemSelectedListener;
+
     public static PlaceholderCashReceiptFragment newInstance(int index) {
         PlaceholderCashReceiptFragment fragment = new PlaceholderCashReceiptFragment();
         Bundle bundle = new Bundle();
@@ -100,6 +103,25 @@ public class PlaceholderCashReceiptFragment extends Fragment {
         CashReceipt cashReceiptObj =((CashReceiptActivity) getActivity()).getCashReceiptObj();
         switch (index) {
             case 1:
+                onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        switch (parent.getId()) {
+                            case R.id.cash_receipt_spinner_companies:
+                                ((CashReceiptActivity) getActivity()).setCompanyUid(companies[position].getUid());
+                                break;
+                            case R.id.cash_receipt_spinner_partners:
+                                ((CashReceiptActivity) getActivity()).setPartnerUid(partners[position].getUid());
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                };
+
                 root = inflater.inflate(R.layout.fragment_cash_receipt_main, container, false);
                 TextView tvDate = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_date);
                 TextView tvTime = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_time);
@@ -127,6 +149,8 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                     spinnerCompanies.setSelection(hashCompanies.get(cashReceiptObj.getCompanyUid()));
                     spinnerPartners.setSelection(hashPartners.get(cashReceiptObj.getPartnerUid()));
                 }
+                spinnerPartners.setOnItemSelectedListener(onItemSelectedListener);
+                spinnerCompanies.setOnItemSelectedListener(onItemSelectedListener);
                 break;
             case 2:
                 root = inflater.inflate(R.layout.fragment_tabdoc_list, container, false);
@@ -141,8 +165,12 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 recyclerObjects.setAdapter(adapter);
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
-                fab.setOnClickListener(
-                        (view) -> startActivityForResult(new Intent(getActivity(), ObjectsChooser.class), OBJECT_CHOOSE_REQUEST)
+                fab.setOnClickListener((view) -> {
+                    Intent intentOut = new Intent(getActivity(), ObjectsChooser.class);
+                    intentOut.putExtra(DbHelper.COLUMN_COMPANY_UID, ((CashReceiptActivity) getActivity()).getCompanyUid());
+                    intentOut.putExtra(DbHelper.COLUMN_PARTNER_UID, ((CashReceiptActivity) getActivity()).getPartnerUid());
+                    startActivityForResult(intentOut, OBJECT_CHOOSE_REQUEST);
+                        }
                 );
                 break;
         }
