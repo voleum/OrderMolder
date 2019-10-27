@@ -33,12 +33,13 @@ public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Boolean> {
         db.delete(DbHelper.TABLE_GOODS_TABLE, null, null);
         db.delete(DbHelper.TABLE_CASH_RECEIPTS, null, null);
         db.delete(DbHelper.TABLE_OBJECTS_TABLE, null, null);
+        db.delete(DbHelper.TABLE_PRICE_LIST, null, null);
         ContentValues cv = new ContentValues();
         for (int i = 0; i < 3; i++) {
             cv.clear();
             cv.put(DbHelper.COLUMN_UID, getNewUid());
             cv.put(DbHelper.COLUMN_TIN, "00000" + (i+1));
-            cv.put(DbHelper.COLUMN_NAME, "Company " + i);
+            cv.put(DbHelper.COLUMN_NAME, "Company " + (i+1));
             db.insert(DbHelper.TABLE_COMPANIES, null, cv);
         }
         for (int i = 0; i < 10; i++) {
@@ -64,7 +65,7 @@ public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Boolean> {
         for (int i = 0; i < 5; i++) {
             cv.clear();
             cv.put(DbHelper.COLUMN_UID, groupUids[i]);
-            cv.put(DbHelper.COLUMN_NAME, "Group " + i);
+            cv.put(DbHelper.COLUMN_NAME, "Group " + (i+1));
             db.insert(DbHelper.TABLE_GOODS_GROUPS, null, cv);
         }
         for (int i = 0; i < 20; i++) {
