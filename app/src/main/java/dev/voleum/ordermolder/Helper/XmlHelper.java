@@ -24,6 +24,7 @@ import dev.voleum.ordermolder.Object.Group;
 import dev.voleum.ordermolder.Object.Obj;
 import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.Object.Partner;
+import dev.voleum.ordermolder.Object.Price;
 import dev.voleum.ordermolder.Object.Table;
 import dev.voleum.ordermolder.Object.TableGoods;
 import dev.voleum.ordermolder.Object.TableObjects;
@@ -38,6 +39,7 @@ public class XmlHelper {
 
     private final String TAG_CATALOG = "Catalog";
     private final String TAG_DOCUMENT = "Document";
+    private final String TAG_REPORT = "Report";
     private final String TAG_ITEM = "Item";
     private final String TAG_COMPANY = "Company";
     private final String TAG_PARTNER = "Partner";
@@ -47,6 +49,7 @@ public class XmlHelper {
     private final String TAG_UNIT = "Unit";
     private final String TAG_ORDER = "Order";
     private final String TAG_CASH_RECEIPT = "CashReceipt";
+    private final String TAG_PRICE_LIST = "PriceList";
     private final String TAG_ROW = "Row";
 
     private final String ATTRIBUTE_UID = "UID";
@@ -149,6 +152,10 @@ public class XmlHelper {
                                                         xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
                                                         Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
                                                 break;
+                                            case TAG_PRICE_LIST:
+                                                arrayListObj.add(new Price(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                                        Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_PRICE))));
+                                                break;
                                             default:
                                                 continue;
                                         }
@@ -185,6 +192,7 @@ public class XmlHelper {
                                     groupSaver.save();
                                     arrayListTable.clear();
                                 case TAG_CATALOG:
+                                case TAG_REPORT:
                                     groupSaver = new GroupSaver(arrayListObj);
                                     groupSaver.save();
                                     arrayListObj.clear();
