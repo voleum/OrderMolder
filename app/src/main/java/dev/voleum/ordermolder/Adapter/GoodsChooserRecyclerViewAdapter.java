@@ -9,33 +9,38 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dev.voleum.ordermolder.Object.Good;
+import dev.voleum.ordermolder.R;
 
 public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Good> goods;
+    private ArrayList<HashMap<String, Object>> goods;
     private OnEntryClickListener onEntryClickListener;
 
     public interface OnEntryClickListener {
         void onEntryClick(View v, int position);
     }
 
-    public GoodsChooserRecyclerViewAdapter(ArrayList<Good> goods) {
+    public GoodsChooserRecyclerViewAdapter(ArrayList<HashMap<String, Object>> goods) {
         this.goods = goods;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chooser_good_holder, parent, false);
         return new GoodViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Good good = goods.get(position);
-        ((GoodViewHolder) holder).textView.setText(good.toString());
+        HashMap<String, Object> binded = goods.get(position);
+        Good good = (Good) binded.get("good");
+        double price = (Double) binded.get("price");
+        ((GoodViewHolder) holder).tvName.setText(good.toString());
+        ((GoodViewHolder) holder).tvPrice.setText(String.valueOf(price));
     }
 
     @Override
@@ -48,11 +53,13 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView textView;
+        public TextView tvName;
+        public TextView tvPrice;
         public GoodViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            textView = (TextView) view;
+            tvName = view.findViewById(R.id.tv_chooser_name);
+            tvPrice = view.findViewById(R.id.tv_chooser_price);
         }
 
         @Override

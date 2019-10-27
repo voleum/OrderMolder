@@ -17,7 +17,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar.Primary" />
 
     <style name="AppTheme.ToolbarOverLay.Surface" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface" />
 

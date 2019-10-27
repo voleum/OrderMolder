@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.Adapter.GoodsChooserRecyclerViewAdapter;
@@ -22,7 +23,7 @@ import dev.voleum.ordermolder.R;
 public class GoodsChooser extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    private ArrayList<Good> goods;
+    private ArrayList<HashMap<String, Object>> goods;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,12 +40,13 @@ public class GoodsChooser extends AppCompatActivity {
         goods = getGoodList();
         GoodsChooserRecyclerViewAdapter adapter = new GoodsChooserRecyclerViewAdapter(goods);
         adapter.setOnEntryClickListener((v, position) -> {
-            Good chosenGood = goods.get(position);
+            HashMap<String, Object> chosen = goods.get(position);
+            double price = (double) chosen.get("price");
             setResult(RESULT_OK, new Intent()
-                    .putExtra("good", chosenGood)
+                    .putExtra("good", (Good) chosen.get("good"))
                     .putExtra("quantity", 1.0)
-                    .putExtra("price", 1.0)
-                    .putExtra("sum", 1.0));
+                    .putExtra("price", price)
+                    .putExtra("sum", price));
             finish();
         });
         recyclerView.setAdapter(adapter);
@@ -53,29 +55,35 @@ public class GoodsChooser extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
-    private ArrayList<Good> getGoodList() {
+    private ArrayList<HashMap<String, Object>> getGoodList() {
         // TODO: AsyncTask
         DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c = db.query(DbHelper.TABLE_GOODS,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+        Cursor c = db.rawQuery("SELECT " + DbHelper.COLUMN_UID + ", " +
+                DbHelper.COLUMN_GROUP_UID + ", " +
+                DbHelper.COLUMN_NAME + ", " +
+                DbHelper.COLUMN_UNIT_UID + ", " +
+                DbHelper.COLUMN_PRICE +
+                " FROM " + DbHelper.TABLE_GOODS +
+                " LEFT JOIN " + DbHelper.TABLE_PRICE_LIST +
+                " ON " + DbHelper.COLUMN_UID + " = " + DbHelper.COLUMN_GOOD_UID, null);
         goods = new ArrayList<>();
+        HashMap<String, Object> values;
 
         if (c.moveToFirst()) {
             int uidIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int groupIndex = c.getColumnIndex(DbHelper.COLUMN_GROUP_UID);
             int nameIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             int unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
+            int priceIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
             do {
-                goods.add(new Good(c.getString(uidIndex),
+                values = new HashMap<>();
+                values.put("good", new Good(c.getString(uidIndex),
                         c.getString(groupIndex),
                         c.getString(nameIndex),
                         c.getString(unitIndex)));
+                values.put("price", c.getDouble(priceIndex));
+                goods.add(values);
             } while (c.moveToNext());
         }
 
