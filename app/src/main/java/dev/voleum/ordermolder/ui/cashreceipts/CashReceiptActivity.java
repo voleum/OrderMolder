@@ -38,6 +38,8 @@ public class CashReceiptActivity extends AppCompatActivity {
     protected SectionsPagerAdapter sectionsPagerAdapter;
 
     private CashReceipt cashReceiptObj;
+    private String companyUid;
+    private String partnerUid;
 
     private boolean isCreating;
     private boolean createdWithoutClosing;
@@ -164,6 +166,22 @@ public class CashReceiptActivity extends AppCompatActivity {
 
     protected CashReceipt getCashReceiptObj() {
         return cashReceiptObj;
+    }
+
+    public String getCompanyUid() {
+        return companyUid;
+    }
+
+    public void setCompanyUid(String companyUid) {
+        this.companyUid = companyUid;
+    }
+
+    public String getPartnerUid() {
+        return partnerUid;
+    }
+
+    public void setPartnerUid(String partnerUid) {
+        this.partnerUid = partnerUid;
     }
 
     private boolean saveDoc() {

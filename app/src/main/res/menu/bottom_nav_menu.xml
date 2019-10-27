@@ -8,17 +8,17 @@
 
     <item
         android:id="@+id/navigation_documents"
-        android:icon="@drawable/icons8_document"
+        android:icon="@drawable/ic_description_black_24dp"
         android:title="@string/title_documents" />
 
     <item
         android:id="@+id/navigation_catalogs"
-        android:icon="@drawable/ic_book_24px"
+        android:icon="@drawable/ic_book_black_24dp"
         android:title="@string/title_catalogs" />
 
     <item
         android:id="@+id/navigation_reports"
-        android:icon="@drawable/ic_assessment_24px"
+        android:icon="@drawable/ic_pie_chart_black_24dp"
         android:title="@string/title_reports" />
 
 </menu>

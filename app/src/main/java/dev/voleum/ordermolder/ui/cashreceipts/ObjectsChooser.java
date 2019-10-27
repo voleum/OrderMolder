@@ -24,10 +24,15 @@ public class ObjectsChooser extends AppCompatActivity {
     RecyclerView recyclerView;
     private ArrayList<Order> objects;
 
+    private String companyUid;
+    private String partnerUid;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chooser);
+        companyUid = getIntent().getStringExtra(DbHelper.COLUMN_COMPANY_UID);
+        partnerUid = getIntent().getStringExtra(DbHelper.COLUMN_PARTNER_UID);
         setTitle(R.string.title_activity_orders);
         recyclerView = findViewById(R.id.recycler_tabdoc);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -55,13 +60,12 @@ public class ObjectsChooser extends AppCompatActivity {
         // TODO: AsyncTask
         DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c = db.query(DbHelper.TABLE_ORDERS,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+        String[] selectionArgs = { companyUid, partnerUid };
+        Cursor c = db.rawQuery("SELECT *" +
+                " FROM " + DbHelper.TABLE_ORDERS +
+                " WHERE " + DbHelper.COLUMN_COMPANY_UID + " = ?" +
+                " AND " + DbHelper.COLUMN_PARTNER_UID + " = ?",
+                selectionArgs);
         objects = new ArrayList<>();
 
         if (c.moveToFirst()) {
