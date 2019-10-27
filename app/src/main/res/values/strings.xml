@@ -62,37 +62,14 @@
     <string name="tab_order_goods">Goods</string>
     <string name="tab_cash_receipt_objects">Objects</string>
 
-    <!--  CATALOGS  -->
-    <string name="catalog_company_singular">Company</string>
-    <string name="catalog_company_plural">Companies</string>
-    <string name="catalog_partner_singular">Partner</string>
-    <string name="catalog_partner_plural">Partners</string>
-    <string name="catalog_warehouse_singular">Warehouse</string>
-    <string name="catalog_warehouse_plural">Warehouses</string>
-    <string name="catalog_good_singular">Good</string>
-    <string name="catalog_good_plural">Goods</string>
-    <string name="catalog_unit_singular">Unit</string>
-    <string name="catalog_unit_plural">Units</string>
-
-    <!--  DOCUMENTS  -->
-    <string name="document_order_singular">Order</string>
-    <string name="document_order_plural">Orders</string>
-    <string name="document_cash_receipt_singular">Cash receipt</string>
-    <string name="document_cash_receipt_plural">Cash receipts</string>
-
-    <!--  REPORTS  -->
-    <string name="report_price_singular">Price</string>
-    <string name="report_price_plurallar">Prices</string>
-    <string name="report_debt_singular">Debt</string>
-    <string name="report_debt_plural">Debts</string>
-    <string name="report_stock_singular">Stock</string>
-    <string name="report_stock_plural">Stock</string>
-
     <!--  OBJECTS FIELDS  -->
     <string name="object_number">Number</string>
     <string name="object_date">Date</string>
     <string name="object_name">Name</string>
+    <string name="object_group">Group</string>
+    <string name="object_code">Code</string>
     <string name="object_full_name">Full name</string>
     <string name="object_sum">Sum</string>
     <string name="object_tin">TIN</string>
+    <string name="object_unit">Unit</string>
 </resources>

@@ -18,11 +18,10 @@
         <item>Долги</item>
         <item>Остатки</item>
     </string-array>
-
+    
     <string-array name="settings_theme_entries">
         <item>Светлая</item>
         <item>Тёмная</item>
-        <item>Системные настройки</item>
         <item>Настройки энергосбережения</item>
     </string-array>
 </resources>

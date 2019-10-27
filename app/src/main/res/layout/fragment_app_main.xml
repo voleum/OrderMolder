@@ -7,22 +7,28 @@
 
     <Button
         android:id="@+id/button_create_test_data"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="146dp"
+        android:layout_height="146dp"
+        android:layout_margin="16dp"
         android:onClick="onClick"
         android:text="CREATE TEST DATA"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_exchange" />
+        android:height="48dp"
+        android:width="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/button_exchange"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_exchange"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="146dp"
+        android:layout_height="146dp"
         android:onClick="onClick"
         android:text="@string/button_exchange"
+        android:layout_margin="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/button_create_test_data"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

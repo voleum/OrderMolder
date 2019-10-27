@@ -24,7 +24,10 @@ public abstract class Document extends Obj {
     @NonNull
     @Override
     public String toString() {
-        return date + " / " + uid;
+        String dateStr = date
+                .substring(0, 10)
+                .replace("-", ".");
+        return "Date: " + dateStr + " / Sum: " + sum;
     }
 
     public String getDate() {

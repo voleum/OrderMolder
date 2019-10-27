@@ -34,22 +34,22 @@ public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Boolean> {
         db.delete(DbHelper.TABLE_CASH_RECEIPTS, null, null);
         db.delete(DbHelper.TABLE_OBJECTS_TABLE, null, null);
         ContentValues cv = new ContentValues();
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 0; i < 3; i++) {
             cv.clear();
             cv.put(DbHelper.COLUMN_UID, getNewUid());
-            cv.put(DbHelper.COLUMN_TIN, "00000" + i);
+            cv.put(DbHelper.COLUMN_TIN, "00000" + (i+1));
             cv.put(DbHelper.COLUMN_NAME, "Company " + i);
             db.insert(DbHelper.TABLE_COMPANIES, null, cv);
         }
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 0; i < 10; i++) {
             cv.clear();
             cv.put(DbHelper.COLUMN_UID, getNewUid());
-            cv.put(DbHelper.COLUMN_TIN, "00000" + i);
-            cv.put(DbHelper.COLUMN_NAME, "Partner " + i);
+            cv.put(DbHelper.COLUMN_TIN, "00000" + (i+1));
+            cv.put(DbHelper.COLUMN_NAME, "Partner " + (i+1));
             db.insert(DbHelper.TABLE_PARTNERS, null, cv);
         }
         String unitUid = getNewUid();
-        for (int i = 1; i <= 1; i++) {
+        for (int i = 0; i < 1; i++) {
             cv.clear();
             cv.put(DbHelper.COLUMN_UID, unitUid);
             cv.put(DbHelper.COLUMN_CODE, 737);
@@ -57,21 +57,25 @@ public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Boolean> {
             cv.put(DbHelper.COLUMN_FULL_NAME, "Штука");
             db.insert(DbHelper.TABLE_UNITS, null, cv);
         }
-        for (int i = 1; i <= 5; i++) {
+        String[] groupUids = new String[5];
+        for (int i = 0; i < groupUids.length; i++) {
+            groupUids[i] = getNewUid();
+        }
+        for (int i = 0; i < 5; i++) {
             cv.clear();
-            cv.put(DbHelper.COLUMN_UID, getNewUid());
+            cv.put(DbHelper.COLUMN_UID, groupUids[i]);
             cv.put(DbHelper.COLUMN_NAME, "Group " + i);
             db.insert(DbHelper.TABLE_GOODS_GROUPS, null, cv);
         }
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 0; i < 20; i++) {
             cv.clear();
             cv.put(DbHelper.COLUMN_UID, getNewUid());
-            cv.put(DbHelper.COLUMN_NAME, "Good " + i);
-            cv.put(DbHelper.COLUMN_GROUP_UID, "UT-00000" + i%5);
+            cv.put(DbHelper.COLUMN_NAME, "Good " + (i+1));
+            cv.put(DbHelper.COLUMN_GROUP_UID, groupUids[(i+1)%5]);
             cv.put(DbHelper.COLUMN_UNIT_UID, unitUid);
             db.insert(DbHelper.TABLE_GOODS, null, cv);
         }
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 0; i < 2; i++) {
             cv.clear();
             cv.put(DbHelper.COLUMN_UID, getNewUid());
             cv.put(DbHelper.COLUMN_NAME, "Warehouse " + i);

@@ -61,7 +61,7 @@ public class CatalogListActivity extends AppCompatActivity {
 
         setTitleDependOnType();
 
-        Toolbar toolbar = findViewById(R.id.catalog_list_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
