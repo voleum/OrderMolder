@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.GoodsChooserRecyclerViewAdapter;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Object.Good;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.adapters.GoodsChooserRecyclerViewAdapter;
+import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.objects.Good;
 
 public class GoodsChooser extends AppCompatActivity {
 
@@ -31,9 +31,6 @@ public class GoodsChooser extends AppCompatActivity {
         setContentView(R.layout.activity_chooser);
         setTitle(R.string.title_catalogs);
         recyclerView = findViewById(R.id.recycler_tabdoc);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//            recyclerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//        }
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);

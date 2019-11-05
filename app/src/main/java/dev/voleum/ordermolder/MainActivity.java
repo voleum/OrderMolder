@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,13 +21,13 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import dev.voleum.ordermolder.Database.DbAsyncTestData;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Fragment.FragmentCatalogs;
-import dev.voleum.ordermolder.Fragment.FragmentDocuments;
-import dev.voleum.ordermolder.Fragment.FragmentMain;
-import dev.voleum.ordermolder.Fragment.FragmentReports;
-import dev.voleum.ordermolder.Helper.ExchangeAsyncTask;
+import dev.voleum.ordermolder.database.DbAsyncTestData;
+import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.fragments.FragmentCatalogs;
+import dev.voleum.ordermolder.fragments.FragmentDocuments;
+import dev.voleum.ordermolder.fragments.FragmentMain;
+import dev.voleum.ordermolder.fragments.FragmentReports;
+import dev.voleum.ordermolder.helpers.ExchangeAsyncTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
         appContext = getApplicationContext();
         resources = getResources();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPref.getBoolean("first_launch", true)) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) editor.putString("theme", "-1");
+            else editor.putString("theme", "3");
+            editor.putString("port", "21");
+            editor.putBoolean("first_launch", false);
+            editor.apply();
+        }
 
         AppCompatDelegate.setDefaultNightMode(Integer.parseInt(sharedPref.getString("theme", "-1")));
 

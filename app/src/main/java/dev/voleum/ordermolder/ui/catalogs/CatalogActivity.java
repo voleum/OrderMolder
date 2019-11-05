@@ -14,12 +14,12 @@ import androidx.constraintlayout.widget.Constraints;
 
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Enums.CatalogTypes;
-import dev.voleum.ordermolder.Object.Catalog;
-import dev.voleum.ordermolder.Object.EconomicEntity;
-import dev.voleum.ordermolder.Object.Good;
-import dev.voleum.ordermolder.Object.Unit;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.enums.CatalogTypes;
+import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.objects.EconomicEntity;
+import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.objects.Unit;
 
 public class CatalogActivity extends AppCompatActivity {
 

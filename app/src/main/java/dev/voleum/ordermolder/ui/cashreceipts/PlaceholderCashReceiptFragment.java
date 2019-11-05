@@ -1,5 +1,6 @@
 package dev.voleum.ordermolder.ui.cashreceipts;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,15 +30,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.HashMap;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.ObjectsCashReceiptRecyclerViewAdapter;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Fragment.SelectDateFragment;
-import dev.voleum.ordermolder.Fragment.SelectTimeFragment;
-import dev.voleum.ordermolder.Object.CashReceipt;
-import dev.voleum.ordermolder.Object.Company;
-import dev.voleum.ordermolder.Object.Order;
-import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.adapters.ObjectsCashReceiptRecyclerViewAdapter;
+import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.fragments.SelectDateFragment;
+import dev.voleum.ordermolder.fragments.SelectTimeFragment;
+import dev.voleum.ordermolder.objects.CashReceipt;
+import dev.voleum.ordermolder.objects.Company;
+import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.ui.general.PageViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -100,7 +101,12 @@ public class PlaceholderCashReceiptFragment extends Fragment {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         View root = null;
-        CashReceipt cashReceiptObj =((CashReceiptActivity) getActivity()).getCashReceiptObj();
+        CashReceipt cashReceiptObj = null;
+        try {
+            cashReceiptObj = ((CashReceiptActivity) getActivity()).getCashReceiptObj();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         switch (index) {
             case 1:
                 onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
@@ -108,10 +114,18 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         switch (parent.getId()) {
                             case R.id.cash_receipt_spinner_companies:
-                                ((CashReceiptActivity) getActivity()).setCompanyUid(companies[position].getUid());
+                                try {
+                                    ((CashReceiptActivity) getActivity()).setCompanyUid(companies[position].getUid());
+                                } catch (NullPointerException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.cash_receipt_spinner_partners:
-                                ((CashReceiptActivity) getActivity()).setPartnerUid(partners[position].getUid());
+                                try {
+                                    ((CashReceiptActivity) getActivity()).setPartnerUid(partners[position].getUid());
+                                } catch (NullPointerException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                         }
                     }
@@ -123,11 +137,11 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 };
 
                 root = inflater.inflate(R.layout.fragment_cash_receipt_main, container, false);
-                TextView tvDate = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_date);
-                TextView tvTime = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_time);
+                @SuppressLint("CutPasteId") TextView tvDate = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_date);
+                @SuppressLint("CutPasteId") TextView tvTime = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_time);
                 spinnerPartners = root.findViewById(R.id.cash_receipt_spinner_partners);
                 spinnerCompanies = root.findViewById(R.id.cash_receipt_spinner_companies);
-                initializeData(root);
+                initData(root);
                 tvDate.setOnClickListener(v -> {
                     DialogFragment datePickerFragment = new SelectDateFragment(tvDate.getText().toString().substring(0, 10));
                     datePickerFragment.setTargetFragment(this, 0);
@@ -146,8 +160,12 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                     tvDate.setText(cashReceiptObj.getDate().substring(0, 10).replace("-", "."));
                     tvTime.setText(cashReceiptObj.getDate().substring(11, 19));
                     tvSum.setText(String.valueOf(cashReceiptObj.getSum()));
-                    spinnerCompanies.setSelection(hashCompanies.get(cashReceiptObj.getCompanyUid()));
-                    spinnerPartners.setSelection(hashPartners.get(cashReceiptObj.getPartnerUid()));
+                    try {
+                        spinnerCompanies.setSelection(hashCompanies.get(cashReceiptObj.getCompanyUid()));
+                        spinnerPartners.setSelection(hashPartners.get(cashReceiptObj.getPartnerUid()));
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
                 spinnerPartners.setOnItemSelectedListener(onItemSelectedListener);
                 spinnerCompanies.setOnItemSelectedListener(onItemSelectedListener);
@@ -175,9 +193,9 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 break;
         }
 
-        pageViewModel.getText().observe(this, s -> {
+//        pageViewModel.getText().observe(this, s -> {
 //                textView.setText(s);
-        });
+//        });
         return root;
     }
 
@@ -205,7 +223,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
         return adapter.getSum();
     }
 
-    private void initializeData(View root) {
+    private void initData(View root) {
         // TODO: AsyncTask
         DbHelper dbHelper = DbHelper.getInstance(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -249,7 +267,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 i++;
             } while (c.moveToNext());
 
-            adapterPartners = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, partners);
+            adapterPartners = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, partners);
             adapterPartners.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerPartners.setAdapter(adapterPartners);
         }

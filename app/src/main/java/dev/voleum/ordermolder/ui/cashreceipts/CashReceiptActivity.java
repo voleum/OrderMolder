@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import dev.voleum.ordermolder.Database.DbAsyncSaveCashReceipt;
-import dev.voleum.ordermolder.Object.CashReceipt;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.database.DbAsyncSaveCashReceipt;
+import dev.voleum.ordermolder.objects.CashReceipt;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
 
@@ -57,9 +57,6 @@ public class CashReceiptActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         fab = findViewById(R.id.fab);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//            fab.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//        }
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -81,8 +78,12 @@ public class CashReceiptActivity extends AppCompatActivity {
                     if (focusedView != null) focusedView.clearFocus();
                     double sum = sectionsPagerAdapter.getSum();
                     ((TextView) findViewById(R.id.cash_receipt_tv_sum)).setText(String.valueOf(sum));
-                    InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+                    try {
+                        InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
 
                 }
             }
@@ -99,8 +100,12 @@ public class CashReceiptActivity extends AppCompatActivity {
         } else {
             isCreating = false;
             cashReceiptObj = (CashReceipt) getIntent().getSerializableExtra(DocListActivity.DOC);
-            String title = cashReceiptObj.getDate().substring(0, 19).replace("-", ".");
-            setTitle(title);
+            try {
+                String title = cashReceiptObj.getDate().substring(0, 19).replace("-", ".");
+                setTitle(title);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
         createdWithoutClosing = false;
     }
@@ -148,8 +153,12 @@ public class CashReceiptActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         View focusedView = getCurrentFocus();
         if (focusedView != null) focusedView.clearFocus();
-        InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+        try {
+            InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
@@ -185,12 +194,17 @@ public class CashReceiptActivity extends AppCompatActivity {
     }
 
     private boolean saveDoc() {
-        HashMap<Integer, HashMap<String, Object>> objectsInfo = sectionsPagerAdapter.getObjectsInfo();
-        if (objectsInfo.isEmpty()) {
-            Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT)
-                    .setGestureInsetBottomIgnored(true)
-                    .show();
-            return false;
+        HashMap<Integer, HashMap<String, Object>> objectsInfo = null;
+        try {
+            objectsInfo = sectionsPagerAdapter.getObjectsInfo();
+            if (objectsInfo.isEmpty()) {
+                Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT)
+                        .setGestureInsetBottomIgnored(true)
+                        .show();
+                return false;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
         HashMap<String, Object> mainInfo = sectionsPagerAdapter.getCashReceiptMainInfo();
 
@@ -198,10 +212,14 @@ public class CashReceiptActivity extends AppCompatActivity {
             cashReceiptObj = new CashReceipt();
             cashReceiptObj.setUid(UUID.randomUUID().toString());
         }
-        cashReceiptObj.setDate((String) mainInfo.get("date"));
-        cashReceiptObj.setCompanyUid((String) mainInfo.get("company_uid"));
-        cashReceiptObj.setPartnerUid((String) mainInfo.get("partner_uid"));
-        cashReceiptObj.setSum((Double) mainInfo.get("sum"));
+        try {
+            cashReceiptObj.setDate((String) mainInfo.get("date"));
+            cashReceiptObj.setCompanyUid((String) mainInfo.get("company_uid"));
+            cashReceiptObj.setPartnerUid((String) mainInfo.get("partner_uid"));
+            cashReceiptObj.setSum((Double) mainInfo.get("sum"));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         mainInfo.put("uid", cashReceiptObj.getUid());
 

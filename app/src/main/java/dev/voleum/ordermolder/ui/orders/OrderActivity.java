@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import dev.voleum.ordermolder.Database.DbAsyncSaveOrder;
-import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.database.DbAsyncSaveOrder;
+import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
 
@@ -55,9 +55,6 @@ public class OrderActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         fab = findViewById(R.id.fab);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//            fab.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//        }
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -79,8 +76,12 @@ public class OrderActivity extends AppCompatActivity {
                     if (focusedView != null) focusedView.clearFocus();
                     double sum = sectionsPagerAdapter.getSum();
                     ((TextView) findViewById(R.id.order_tv_sum)).setText(String.valueOf(sum));
-                    InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+                    try {
+                        InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -96,8 +97,12 @@ public class OrderActivity extends AppCompatActivity {
         } else {
             isCreating = false;
             orderObj = (Order) getIntent().getSerializableExtra("doc");
-            String title = orderObj.getDate().substring(0, 19).replace("-", ".");
-            setTitle(title);
+            try {
+                String title = orderObj.getDate().substring(0, 19).replace("-", ".");
+                setTitle(title);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
         createdWithoutClosing = false;
     }
@@ -145,8 +150,12 @@ public class OrderActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         View focusedView = getCurrentFocus();
         if (focusedView != null) focusedView.clearFocus();
-        InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+        try {
+            InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
@@ -166,12 +175,17 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private boolean saveDoc() {
-        HashMap<Integer, HashMap<String, Object>> goodsInfo = sectionsPagerAdapter.getGoodsInfo();
-        if (goodsInfo.isEmpty()) {
-            Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT)
-                    .setGestureInsetBottomIgnored(true)
-                    .show();
-            return false;
+        HashMap<Integer, HashMap<String, Object>> goodsInfo = null;
+        try {
+            goodsInfo = sectionsPagerAdapter.getGoodsInfo();
+            if (goodsInfo.isEmpty()) {
+                Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT)
+                        .setGestureInsetBottomIgnored(true)
+                        .show();
+                return false;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
         HashMap<String, Object> mainInfo = sectionsPagerAdapter.getOrderMainInfo();
 
@@ -179,11 +193,15 @@ public class OrderActivity extends AppCompatActivity {
             orderObj = new Order();
             orderObj.setUid(UUID.randomUUID().toString());
         }
-        orderObj.setDate((String) mainInfo.get("date"));
-        orderObj.setCompanyUid((String) mainInfo.get("company_uid"));
-        orderObj.setPartnerUid((String) mainInfo.get("partner_uid"));
-        orderObj.setWarehouseUid((String) mainInfo.get("warehouse_uid"));
-        orderObj.setSum((Double) mainInfo.get("sum"));
+        try {
+            orderObj.setDate((String) mainInfo.get("date"));
+            orderObj.setCompanyUid((String) mainInfo.get("company_uid"));
+            orderObj.setPartnerUid((String) mainInfo.get("partner_uid"));
+            orderObj.setWarehouseUid((String) mainInfo.get("warehouse_uid"));
+            orderObj.setSum((Double) mainInfo.get("sum"));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         mainInfo.put("uid", orderObj.getUid());
 
