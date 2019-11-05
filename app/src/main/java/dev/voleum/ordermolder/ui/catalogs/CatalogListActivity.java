@@ -14,15 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.CatalogListRecyclerViewAdapter;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Enums.CatalogTypes;
-import dev.voleum.ordermolder.Object.Catalog;
-import dev.voleum.ordermolder.Object.Company;
-import dev.voleum.ordermolder.Object.Good;
-import dev.voleum.ordermolder.Object.Partner;
-import dev.voleum.ordermolder.Object.Unit;
-import dev.voleum.ordermolder.Object.Warehouse;
+import dev.voleum.ordermolder.adapters.CatalogListRecyclerViewAdapter;
+import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.enums.CatalogTypes;
+import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.objects.Company;
+import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.objects.Partner;
+import dev.voleum.ordermolder.objects.Unit;
+import dev.voleum.ordermolder.objects.Warehouse;
 import dev.voleum.ordermolder.R;
 
 public class CatalogListActivity extends AppCompatActivity {

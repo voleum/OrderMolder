@@ -11,6 +11,7 @@
     <string name="menu_save">Save</string>
 
     <!--  SNACKBAR  -->
+    <string name="snackbar_soon">Coming soon&#8230;</string>
     <string name="snackbar_action_undo">Undo</string>
     <string name="snackbar_doc_created">Document created</string>
     <string name="snackbar_doc_saved">Document saved</string>

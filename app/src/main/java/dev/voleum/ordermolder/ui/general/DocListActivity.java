@@ -17,17 +17,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.DocListRecyclerViewAdapter;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Enums.DocumentTypes;
-import dev.voleum.ordermolder.Object.CashReceipt;
-import dev.voleum.ordermolder.Object.Document;
-import dev.voleum.ordermolder.Object.Order;
+import dev.voleum.ordermolder.adapters.DocListRecyclerViewAdapter;
+import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.enums.DocumentTypes;
+import dev.voleum.ordermolder.objects.CashReceipt;
+import dev.voleum.ordermolder.objects.Document;
+import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.ui.cashreceipts.CashReceiptActivity;
 import dev.voleum.ordermolder.ui.orders.OrderActivity;
 
-import static dev.voleum.ordermolder.Enums.DocumentTypes.ORDER;
+import static dev.voleum.ordermolder.enums.DocumentTypes.ORDER;
 
 public class DocListActivity extends AppCompatActivity {
 
@@ -121,13 +121,21 @@ public class DocListActivity extends AppCompatActivity {
         int position;
         switch (resultCode) {
             case RESULT_SAVED:
-                position = arrayDocs.indexOf(data.getSerializableExtra(DOC));
-                adapter.notifyItemChanged(position + 1);
+                try {
+                    position = arrayDocs.indexOf(data.getSerializableExtra(DOC));
+                    adapter.notifyItemChanged(position + 1);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
                 break;
             case RESULT_CREATED:
                 position = arrayDocs.size();
-                arrayDocs.add(position, (Order) data.getSerializableExtra(DOC));
-                adapter.notifyItemInserted(position + 1);
+                try {
+                    arrayDocs.add(position, (Document) data.getSerializableExtra(DOC));
+                    adapter.notifyItemInserted(position + 1);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }

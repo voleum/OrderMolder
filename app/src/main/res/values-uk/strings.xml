@@ -10,6 +10,7 @@
     <string name="menu_save">Сохранить</string>
 
     <!--  SNACKBAR  -->
+    <string name="snackbar_soon">Скоро&#8230;</string>
     <string name="snackbar_action_undo">Отменить</string>
     <string name="snackbar_doc_created">Документ создан</string>
     <string name="snackbar_doc_saved">Документ сохранён</string>

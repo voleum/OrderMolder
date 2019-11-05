@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.ObjectsChooserRecyclerViewAdapter;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Object.Order;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.adapters.ObjectsChooserRecyclerViewAdapter;
+import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.objects.Order;
 
 public class ObjectsChooser extends AppCompatActivity {
 
@@ -35,9 +35,6 @@ public class ObjectsChooser extends AppCompatActivity {
         partnerUid = getIntent().getStringExtra(DbHelper.COLUMN_PARTNER_UID);
         setTitle(R.string.title_activity_orders);
         recyclerView = findViewById(R.id.recycler_tabdoc);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//            recyclerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//        }
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);

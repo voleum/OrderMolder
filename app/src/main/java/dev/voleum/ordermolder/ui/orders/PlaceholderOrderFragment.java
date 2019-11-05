@@ -7,8 +7,6 @@ import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,16 +28,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.HashMap;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Fragment.SelectDateFragment;
-import dev.voleum.ordermolder.Fragment.SelectTimeFragment;
-import dev.voleum.ordermolder.Object.Company;
-import dev.voleum.ordermolder.Object.Good;
-import dev.voleum.ordermolder.Object.Order;
-import dev.voleum.ordermolder.Object.Partner;
-import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
+import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.fragments.SelectDateFragment;
+import dev.voleum.ordermolder.fragments.SelectTimeFragment;
+import dev.voleum.ordermolder.objects.Company;
+import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.objects.Partner;
+import dev.voleum.ordermolder.objects.Warehouse;
 import dev.voleum.ordermolder.ui.general.PageViewModel;
 
 /**
@@ -102,7 +100,12 @@ public class PlaceholderOrderFragment extends Fragment {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         View root = null;
-        Order orderObj = ((OrderActivity) getActivity()).getOrderObj();
+        Order orderObj = null;
+        try {
+            orderObj = ((OrderActivity) getActivity()).getOrderObj();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         switch (index) {
             case 1:
                 root = inflater.inflate(R.layout.fragment_order_main, container, false);
@@ -112,7 +115,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 spinnerPartners = root.findViewById(R.id.order_spinner_partners);
                 spinnerCompanies = root.findViewById(R.id.order_spinner_companies);
                 spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
-                initializeData(root);
+                initData(root);
                 tvDate.setOnClickListener(v -> {
                     DialogFragment datePickerFragment = new SelectDateFragment(tvDate.getText().toString().substring(0, 10));
                     datePickerFragment.setTargetFragment(this, 0);
@@ -123,20 +126,6 @@ public class PlaceholderOrderFragment extends Fragment {
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
-//                tvSum.addTextChangedListener(new TextWatcher() {
-//                    @Override
-//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                    }
-//
-//                    @Override
-//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                        orderObj.setSum(Double.parseDouble(s.toString()));
-//                    }
-//
-//                    @Override
-//                    public void afterTextChanged(Editable s) {
-//                    }
-//                });
                 if (orderObj == null) {
                     tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
                     tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
@@ -144,9 +133,13 @@ public class PlaceholderOrderFragment extends Fragment {
                     tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
                     tvTime.setText(orderObj.getDate().substring(11, 19));
                     tvSum.setText(String.valueOf(orderObj.getSum()));
-                    spinnerCompanies.setSelection(hashCompanies.get(orderObj.getCompanyUid()));
-                    spinnerPartners.setSelection(hashPartners.get(orderObj.getPartnerUid()));
-                    spinnerWarehouses.setSelection(hashWarehouses.get(orderObj.getWarehouseUid()));
+                    try {
+                        spinnerCompanies.setSelection(hashCompanies.get(orderObj.getCompanyUid()));
+                        spinnerPartners.setSelection(hashPartners.get(orderObj.getPartnerUid()));
+                        spinnerWarehouses.setSelection(hashWarehouses.get(orderObj.getWarehouseUid()));
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
             case 2:
@@ -168,9 +161,9 @@ public class PlaceholderOrderFragment extends Fragment {
                 break;
         }
 
-        pageViewModel.getText().observe(this, s -> {
+//        pageViewModel.getText().observe(this, s -> {
 //                textView.setText(s);
-        });
+//        });
         return root;
     }
 
@@ -190,7 +183,11 @@ public class PlaceholderOrderFragment extends Fragment {
                     values.put("price", price);
                     values.put("sum", quantity * price);
                     goods.put(position, values);
-                    ((TextView) getActivity().findViewById(R.id.order_tv_sum)).setText(String.valueOf(getSum()));
+                    try {
+                        ((TextView) getActivity().findViewById(R.id.order_tv_sum)).setText(String.valueOf(getSum()));
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                     adapter.notifyItemInserted(position + 1);
                 }
             }
@@ -202,7 +199,7 @@ public class PlaceholderOrderFragment extends Fragment {
         return adapter.getSum();
     }
 
-    private void initializeData(View root) {
+    private void initData(View root) {
         // TODO: AsyncTask
         DbHelper dbHelper = DbHelper.getInstance(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -246,7 +243,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 i++;
             } while (c.moveToNext());
 
-            adapterPartners = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, partners);
+            adapterPartners = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, partners);
             adapterPartners.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerPartners.setAdapter(adapterPartners);
         }
@@ -267,7 +264,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 i++;
             } while (c.moveToNext());
 
-            adapterWarehouses = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, warehouses);
+            adapterWarehouses = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, warehouses);
             adapterWarehouses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerWarehouses.setAdapter(adapterWarehouses);
         }
