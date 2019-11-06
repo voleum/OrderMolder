@@ -11,6 +11,7 @@
 
     <!-- View paddings -->
     <dimen name="rounded_textview_padding">16dp</dimen>
+    <dimen name="rounded_spinner_padding">16dp</dimen>
 
     <!-- View margins -->
     <dimen name="rounded_textview_margin">16dp</dimen>

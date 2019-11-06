@@ -77,7 +77,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                     View focusedView = getCurrentFocus();
                     if (focusedView != null) focusedView.clearFocus();
                     double sum = sectionsPagerAdapter.getSum();
-                    ((TextView) findViewById(R.id.cash_receipt_tv_sum)).setText(String.valueOf(sum));
+                    ((TextView) findViewById(R.id.tv_sum)).setText(String.valueOf(sum));
                     try {
                         InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
@@ -164,8 +164,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
-                if (isCreating) createdWithoutClosing = true;
-                saveDoc();
+                if (saveDoc() && isCreating) createdWithoutClosing = true;
                 break;
             default:
                 break;

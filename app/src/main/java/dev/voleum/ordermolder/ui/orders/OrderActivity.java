@@ -75,7 +75,7 @@ public class OrderActivity extends AppCompatActivity {
                     View focusedView = getCurrentFocus();
                     if (focusedView != null) focusedView.clearFocus();
                     double sum = sectionsPagerAdapter.getSum();
-                    ((TextView) findViewById(R.id.order_tv_sum)).setText(String.valueOf(sum));
+                    ((TextView) findViewById(R.id.tv_sum)).setText(String.valueOf(sum));
                     try {
                         InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
@@ -161,8 +161,7 @@ public class OrderActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
-                saveDoc();
-                if (isCreating) createdWithoutClosing = true;
+                if (saveDoc() && isCreating) createdWithoutClosing = true;
                 break;
             default:
                 break;

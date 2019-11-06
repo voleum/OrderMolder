@@ -111,10 +111,10 @@ public class PlaceholderOrderFragment extends Fragment {
                 root = inflater.inflate(R.layout.fragment_order_main, container, false);
                 TextView tvDate = root.findViewById(R.id.tv_date);
                 TextView tvTime = root.findViewById(R.id.tv_time);
-                TextView tvSum = root.findViewById(R.id.order_tv_sum);
-                spinnerPartners = root.findViewById(R.id.order_spinner_partners);
-                spinnerCompanies = root.findViewById(R.id.order_spinner_companies);
-                spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
+                TextView tvSum = root.findViewById(R.id.tv_sum);
+                spinnerPartners = root.findViewById(R.id.spinner_partners);
+                spinnerCompanies = root.findViewById(R.id.spinner_companies);
+                spinnerWarehouses = root.findViewById(R.id.spinner_warehouses);
                 initData(root);
                 tvDate.setOnClickListener(v -> {
                     DialogFragment datePickerFragment = new SelectDateFragment(tvDate.getText().toString().substring(0, 10));
@@ -129,6 +129,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 if (orderObj == null) {
                     tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
                     tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
+                    tvSum.setText("0.0");
                 } else {
                     tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
                     tvTime.setText(orderObj.getDate().substring(11, 19));
@@ -184,7 +185,7 @@ public class PlaceholderOrderFragment extends Fragment {
                     values.put("sum", quantity * price);
                     goods.put(position, values);
                     try {
-                        ((TextView) getActivity().findViewById(R.id.order_tv_sum)).setText(String.valueOf(getSum()));
+                        ((TextView) getActivity().findViewById(R.id.tv_sum)).setText(String.valueOf(getSum()));
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }

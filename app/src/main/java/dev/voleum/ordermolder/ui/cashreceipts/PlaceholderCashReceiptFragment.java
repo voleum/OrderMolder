@@ -113,14 +113,14 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         switch (parent.getId()) {
-                            case R.id.cash_receipt_spinner_companies:
+                            case R.id.spinner_companies:
                                 try {
                                     ((CashReceiptActivity) getActivity()).setCompanyUid(companies[position].getUid());
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
                                 break;
-                            case R.id.cash_receipt_spinner_partners:
+                            case R.id.spinner_partners:
                                 try {
                                     ((CashReceiptActivity) getActivity()).setPartnerUid(partners[position].getUid());
                                 } catch (NullPointerException e) {
@@ -137,10 +137,11 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 };
 
                 root = inflater.inflate(R.layout.fragment_cash_receipt_main, container, false);
-                @SuppressLint("CutPasteId") TextView tvDate = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_date);
-                @SuppressLint("CutPasteId") TextView tvTime = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_time);
-                spinnerPartners = root.findViewById(R.id.cash_receipt_spinner_partners);
-                spinnerCompanies = root.findViewById(R.id.cash_receipt_spinner_companies);
+                @SuppressLint("CutPasteId") TextView tvDate = root.findViewById(R.id.tv_date);
+                @SuppressLint("CutPasteId") TextView tvTime = root.findViewById(R.id.tv_time);
+                TextView tvSum = root.findViewById(R.id.tv_sum);
+                spinnerPartners = root.findViewById(R.id.spinner_partners);
+                spinnerCompanies = root.findViewById(R.id.spinner_companies);
                 initData(root);
                 tvDate.setOnClickListener(v -> {
                     DialogFragment datePickerFragment = new SelectDateFragment(tvDate.getText().toString().substring(0, 10));
@@ -155,8 +156,8 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 if (cashReceiptObj == null) {
                     tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
                     tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
+                    tvSum.setText("0.0");
                 } else {
-                    TextView tvSum = root.findViewById(R.id.cash_receipt_tv_sum);
                     tvDate.setText(cashReceiptObj.getDate().substring(0, 10).replace("-", "."));
                     tvTime.setText(cashReceiptObj.getDate().substring(11, 19));
                     tvSum.setText(String.valueOf(cashReceiptObj.getSum()));

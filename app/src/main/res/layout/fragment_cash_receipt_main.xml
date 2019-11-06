@@ -20,46 +20,28 @@
 
             <include
                 android:id="@+id/cash_receipt_date_time"
-                layout="@layout/date_time" />
+                layout="@layout/field_date_time" />
 
-            <Spinner
-                android:id="@+id/cash_receipt_spinner_companies"
-                android:layout_width="wrap_content"
+            <include
+                android:id="@+id/cash_receipt_companies"
+                layout="@layout/field_company"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cash_receipt_date_time" />
 
-            <Spinner
-                android:id="@+id/cash_receipt_spinner_partners"
-                android:layout_width="wrap_content"
+            <include
+                android:id="@+id/cash_receipt_partners"
+                layout="@layout/field_partner"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cash_receipt_spinner_companies" />
+                app:layout_constraintTop_toBottomOf="@id/cash_receipt_companies" />
 
-            <TextView
-                android:id="@+id/cash_receipt_tv_sum"
-                android:layout_width="wrap_content"
+            <include
+                android:id="@+id/cash_receipt_sum"
+                layout="@layout/field_sum"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cash_receipt_spinner_partners"
-                tools:text="1000" />
-
-            <TextView
-                android:id="@+id/order_tv_ruble"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/sign_currency_ruble"
-                app:layout_constraintStart_toEndOf="@id/cash_receipt_tv_sum"
-                app:layout_constraintTop_toBottomOf="@id/cash_receipt_spinner_partners" />
+                app:layout_constraintTop_toBottomOf="@id/cash_receipt_partners" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

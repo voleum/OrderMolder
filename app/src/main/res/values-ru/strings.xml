@@ -65,4 +65,7 @@
     <string name="object_sum">Сумма</string>
     <string name="object_tin">ИНН</string>
     <string name="object_unit">Единица измерения</string>
+    <string name="object_company">Организация</string>
+    <string name="object_partner">Партнёр</string>
+    <string name="object_warehouse">Склад</string>
 </resources>

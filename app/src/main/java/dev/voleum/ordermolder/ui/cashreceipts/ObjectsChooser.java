@@ -44,7 +44,7 @@ public class ObjectsChooser extends AppCompatActivity {
             Order chosenObject = objects.get(position);
             setResult(RESULT_OK, new Intent()
                     .putExtra("object", chosenObject)
-                    .putExtra("sum_credit", 1.0));
+                    .putExtra("sum_credit", chosenObject.getSum()));
             finish();
         });
         recyclerView.setAdapter(adapter);

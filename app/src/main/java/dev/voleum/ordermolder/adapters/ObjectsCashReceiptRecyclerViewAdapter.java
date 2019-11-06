@@ -92,7 +92,7 @@ public class ObjectsCashReceiptRecyclerViewAdapter extends RecyclerView.Adapter 
                 HashMap<String, Object> objectInfo = objects.get(position);
                 double objectSum;
                 View root = v.getRootView();
-                TextView tvSum = root.findViewById(R.id.cash_receipt_tv_sum);
+                TextView tvSum = root.findViewById(R.id.tv_sum);
                 if (v.getId() == R.id.object_sum) {
                         try {
                             objectSum = Double.parseDouble(((EditText) v).getText().toString());

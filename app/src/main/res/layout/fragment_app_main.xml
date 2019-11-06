@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/button_create_test_data"
         android:layout_width="146dp"
         android:layout_height="146dp"
         android:layout_margin="16dp"
+        android:width="48dp"
+        android:height="48dp"
         android:onClick="onClick"
         android:text="CREATE TEST DATA"
-        android:height="48dp"
-        android:width="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/button_exchange"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,12 +23,12 @@
         android:id="@+id/button_exchange"
         android:layout_width="146dp"
         android:layout_height="146dp"
+        android:layout_margin="16dp"
         android:onClick="onClick"
         android:text="@string/button_exchange"
-        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/button_create_test_data"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
