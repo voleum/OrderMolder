@@ -73,4 +73,7 @@
     <string name="object_sum">Sum</string>
     <string name="object_tin">TIN</string>
     <string name="object_unit">Unit</string>
+    <string name="object_company">Company</string>
+    <string name="object_partner">Partner</string>
+    <string name="object_warehouse">Warehouse</string>
 </resources>

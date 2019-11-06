@@ -9,11 +9,11 @@
         android:id="@+id/good_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_gravity="start|center_vertical"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_gravity="start|center_vertical"
         android:layout_weight="50"
+        android:textSize="20sp"
         tools:text="Good name" />
 
     <Button
@@ -34,9 +34,9 @@
         android:layout_marginEnd="8dp"
         android:layout_weight="10"
         android:autofillHints=""
+        android:imeOptions="actionDone"
         android:inputType="number"
         android:textAlignment="center"
-        android:imeOptions="actionDone"
         tools:text="10" />
 
     <Button
@@ -53,17 +53,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:imeOptions="actionDone"
         android:inputType="number"
         android:textAlignment="center"
-        android:imeOptions="actionDone"
-        tools:text="1000"/>
+        tools:text="1000" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="@string/sign_currency_ruble"
         android:layout_gravity="center_vertical"
-        android:layout_weight="10"/>
+        android:layout_weight="10"
+        android:text="@string/sign_currency_ruble"
+        android:textSize="20sp" />
 
 </LinearLayout>

@@ -36,4 +36,13 @@
     <style name="Widget.OrderMolder.TextView.Padding.RoundedColored">
         <item name="android:background">@drawable/shape_rounded_textview</item>
     </style>
+
+    <style name="Widget.OrderMolder.Spinner" parent="Widget.AppCompat.TextView.SpinnerItem" />
+    <style name="Widget.OrderMolder.Spinner.RoundedColored">
+        <item name="android:padding">@dimen/rounded_spinner_padding</item>
+        <item name="android:background">@drawable/shape_rounded_spinner</item>
+        <item name="android:textAppearance">@style/TextAppearance.OrderMolder.Widget.TextView.SpinnerItem</item>
+    </style>
+
+    <style name="TextAppearance.OrderMolder.Widget.TextView.SpinnerItem" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem" />
 </resources>

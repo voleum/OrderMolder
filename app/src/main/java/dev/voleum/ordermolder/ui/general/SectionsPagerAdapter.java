@@ -114,11 +114,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         String warehouseUid = null;
         double sum = 0.0;
         try {
-            companyUid = ((Company) ((Spinner) activity.findViewById(R.id.order_spinner_companies)).getSelectedItem()).getUid();
-            partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.order_spinner_partners)).getSelectedItem()).getUid();
-            warehouseUid = ((Warehouse) ((Spinner) activity.findViewById(R.id.order_spinner_warehouses)).getSelectedItem()).getUid();
+            companyUid = ((Company) ((Spinner) activity.findViewById(R.id.spinner_companies)).getSelectedItem()).getUid();
+            partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.spinner_partners)).getSelectedItem()).getUid();
+            warehouseUid = ((Warehouse) ((Spinner) activity.findViewById(R.id.spinner_warehouses)).getSelectedItem()).getUid();
             try {
-                sum = Double.parseDouble(((TextView) activity.findViewById(R.id.order_tv_sum)).getText().toString());
+                sum = Double.parseDouble(((TextView) activity.findViewById(R.id.tv_sum)).getText().toString());
             } catch (NumberFormatException e) {
                 sum = 0.0;
             }
@@ -149,10 +149,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         double sum = 0;
         try {
             activity = fragmentMain.getActivity();
-            companyUid = ((Company) ((Spinner) activity.findViewById(R.id.cash_receipt_spinner_companies)).getSelectedItem()).getUid();
-            partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.cash_receipt_spinner_partners)).getSelectedItem()).getUid();
+            companyUid = ((Company) ((Spinner) activity.findViewById(R.id.spinner_companies)).getSelectedItem()).getUid();
+            partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.spinner_partners)).getSelectedItem()).getUid();
             try {
-                sum = Double.parseDouble(((TextView) activity.findViewById(R.id.cash_receipt_tv_sum)).getText().toString());
+                sum = Double.parseDouble(((TextView) activity.findViewById(R.id.tv_sum)).getText().toString());
             } catch (NumberFormatException e) {
                 sum = 0.0;
             }

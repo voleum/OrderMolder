@@ -100,14 +100,14 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
             if (!hasFocus) {
                 int position = getAdapterPosition();
                 HashMap<String, Object> goodInfo = goods.get(position);
-                double quantity = 0;
-                double price = 0;
+                double quantity = 0.0;
+                double price = 0.0;
                 switch (v.getId()) {
                     case R.id.good_quantity:
                         try {
                             quantity = Double.parseDouble(((EditText) v).getText().toString());
                         } catch (NumberFormatException e) {
-                            quantity = 0;
+                            quantity = 0.0;
                         }
                         try {
                             goodInfo.put("quantity", quantity);
@@ -120,7 +120,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                         try {
                             price = Double.parseDouble(((EditText) v).getText().toString());
                         } catch (NumberFormatException e) {
-                            price = 0;
+                            price = 0.0;
                         }
                         try {
                             goodInfo.put("price", price);
@@ -137,7 +137,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                     e.printStackTrace();
                 }
                 View root = v.getRootView();
-                TextView tvSum = root.findViewById(R.id.order_tv_sum);
+                TextView tvSum = root.findViewById(R.id.tv_sum);
                 tvSum.setText(String.valueOf(getSum()));
             }
         };
@@ -158,12 +158,13 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         }
 
         private void onButtonClick(View v) {
-            // TODO: put quantity into goods HashMap
-            int currentQuantity;
+            int position = getAdapterPosition();
+            HashMap<String, Object> goodInfo = goods.get(position);
+            double currentQuantity;
             try {
-                currentQuantity = Integer.parseInt(goodQuantity.getText().toString());
+                currentQuantity = Double.parseDouble(goodQuantity.getText().toString());
             } catch (NumberFormatException e) {
-                currentQuantity = 0;
+                currentQuantity = 0.0;
             }
             String newQuantity;
             switch (v.getId()) {
@@ -173,9 +174,20 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                     break;
                 case R.id.good_minus:
                     if (currentQuantity > 1) newQuantity = String.valueOf(--currentQuantity);
-                    else newQuantity = String.valueOf(1);
+                    else newQuantity = String.valueOf(1.0);
                     goodQuantity.setText(newQuantity);
                     break;
+            }
+            try {
+                double currentPrice = (double) goodInfo.get("price");
+                double sum = currentQuantity * currentPrice;
+                goodInfo.put("quantity", currentQuantity);
+                goodInfo.put("sum", sum);
+                View root = v.getRootView();
+                TextView tvSum = root.findViewById(R.id.tv_sum);
+                tvSum.setText(String.valueOf(getSum()));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
