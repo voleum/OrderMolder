@@ -40,7 +40,7 @@ public class OrderActivity extends AppCompatActivity {
     private Order orderObj;
 
     private boolean isCreating;
-    private boolean createdWithoutClosing;
+    private boolean savedWithoutClosing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class OrderActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        createdWithoutClosing = false;
+        savedWithoutClosing = false;
     }
 
     @Override
@@ -121,10 +121,14 @@ public class OrderActivity extends AppCompatActivity {
                     }
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
-                    if (createdWithoutClosing) {
+                    if (savedWithoutClosing) {
                         Intent intent = new Intent();
                         intent.putExtra("doc", orderObj);
-                        setResult(DocListActivity.RESULT_CREATED, intent);
+                        if (isCreating) {
+                            setResult(DocListActivity.RESULT_CREATED, intent);
+                        } else {
+                            setResult(DocListActivity.RESULT_SAVED, intent);
+                        }
                     }
                     finish();
                     break;
@@ -161,7 +165,7 @@ public class OrderActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
-                if (saveDoc() && isCreating) createdWithoutClosing = true;
+                if (saveDoc()) savedWithoutClosing = true;
                 break;
             default:
                 break;

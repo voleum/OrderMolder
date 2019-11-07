@@ -25,4 +25,5 @@
 
     <!-- Shapes radius -->
     <dimen name="rounded_textview_corner_radius">100dp</dimen>
+    <dimen name="rounded_button_corner_radius">100dp</dimen>
 </resources>
