@@ -9,6 +9,7 @@ import androidx.databinding.Bindable;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.TableGoods;
@@ -17,6 +18,7 @@ public class OrderViewModel extends BaseObservable {
 
     private Order order;
     private List<TableGoods> tableGoods;
+    private GoodsOrderRecyclerViewAdapter adapter;
     private String date;
     private String time;
     private double sum;
@@ -28,6 +30,7 @@ public class OrderViewModel extends BaseObservable {
         this.sum = order.getSum();
         this.tableGoods = new ArrayList<>();
         fillGoodList(order.getUid());
+//        this.adapter = new GoodsOrderRecyclerViewAdapter();
     }
 
     @Bindable
@@ -41,18 +44,28 @@ public class OrderViewModel extends BaseObservable {
     }
 
     @Bindable
-    public String getDate() {
-        return date;
-    }
-
-    @Bindable
-    public String getTime() {
-        return time;
+    public GoodsOrderRecyclerViewAdapter getAdapter() {
+        return adapter;
     }
 
     @Bindable
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Bindable
+    public String getDate() {
+        return date;
+    }
+
+    @Bindable
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    @Bindable
+    public String getTime() {
+        return time;
     }
 
     @Bindable

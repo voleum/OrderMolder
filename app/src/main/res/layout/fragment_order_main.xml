@@ -5,7 +5,6 @@
     tools:context=".ui.orders.PlaceholderOrderFragment">
 
     <data>
-
         <variable
             name="viewModel"
             type="dev.voleum.ordermolder.viewmodels.OrderViewModel" />
@@ -23,8 +22,8 @@
             <include
                 android:id="@+id/order_date_time"
                 layout="@layout/field_date_time"
-                app:date="@{viewModel.date}"
-                app:time="@{viewModel.time}" />
+                app:date="@={viewModel.date}"
+                app:time="@={viewModel.time}"/>
 
             <include
                 android:id="@+id/order_companies"
