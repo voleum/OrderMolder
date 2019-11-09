@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -22,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,6 +30,7 @@ import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.database.DbAsyncSaveOrder;
 import dev.voleum.ordermolder.databinding.ActivityDocBinding;
 import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.objects.TableGoods;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
@@ -77,11 +78,15 @@ public class OrderActivity extends AppCompatActivity {
                 this,
                 getSupportFragmentManager(),
                 SectionsPagerAdapter.TYPE_ORDER);
+
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
+
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
         fab = findViewById(R.id.fab);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -99,16 +104,14 @@ public class OrderActivity extends AppCompatActivity {
                 }
                 else {
                     fab.hide();
-                    View focusedView = getCurrentFocus();
-                    if (focusedView != null) focusedView.clearFocus();
-                    double sum = sectionsPagerAdapter.getSum();
-                    ((TextView) findViewById(R.id.tv_sum)).setText(String.valueOf(sum));
-                    try {
-                        InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
+//                    View focusedView = getCurrentFocus();
+//                    if (focusedView != null) focusedView.clearFocus();
+//                    try {
+//                        InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+//                    } catch (NullPointerException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             }
 
@@ -194,7 +197,7 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private boolean saveDoc() {
-        HashMap<Integer, HashMap<String, Object>> goodsInfo = null;
+        List<TableGoods> goodsInfo = null;
         try {
             goodsInfo = sectionsPagerAdapter.getGoodsInfo();
             if (goodsInfo.isEmpty()) {
@@ -226,7 +229,7 @@ public class OrderActivity extends AppCompatActivity {
 
         HashMap<String, Map> orderInfo = new HashMap<>();
         orderInfo.put("main_info", mainInfo);
-        orderInfo.put("goods_info", goodsInfo);
+//        orderInfo.put("goods_info", goodsInfo);
         DbAsyncSaveOrder dbAsyncSaveOrder = new DbAsyncSaveOrder();
         dbAsyncSaveOrder.execute(orderInfo);
 

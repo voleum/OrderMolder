@@ -76,8 +76,8 @@ public class CashReceiptActivity extends AppCompatActivity {
                     fab.hide();
                     View focusedView = getCurrentFocus();
                     if (focusedView != null) focusedView.clearFocus();
-                    double sum = sectionsPagerAdapter.getSum();
-                    ((TextView) findViewById(R.id.tv_sum)).setText(String.valueOf(sum));
+//                    double sum = sectionsPagerAdapter.getSum();
+//                    ((TextView) findViewById(R.id.tv_sum)).setText(String.valueOf(sum));
                     try {
                         InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);

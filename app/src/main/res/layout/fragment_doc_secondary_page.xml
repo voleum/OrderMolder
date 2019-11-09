@@ -13,15 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            layout="@layout/fragment_tabdoc_list"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:viewModel="@{viewModel}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_tabdoc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:data="@{viewModel.tableGoods}"
+            app:adapter="@{viewModel.adapter}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
