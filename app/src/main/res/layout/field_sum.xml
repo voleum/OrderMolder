@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/tv_sum_label"
-        style="@style/Widget.OrderMolder.TextView.Padding"
+        style="@style/Widget.OrderMolder.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/tv_sum"
-        style="@style/Widget.OrderMolder.TextView.Padding.RoundedColored"
+        style="@style/Widget.OrderMolder.TextView.RoundedColored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/tv_ruble"
-        style="@style/Widget.OrderMolder.TextView.Padding"
+        style="@style/Widget.OrderMolder.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

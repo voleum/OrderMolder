@@ -27,13 +27,11 @@
 
     <style name="Widget.OrderMolder.TextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:textSize">@dimen/rounded_textview_text_size</item>
-    </style>
-
-    <style name="Widget.OrderMolder.TextView.Padding">
         <item name="android:padding">@dimen/rounded_textview_padding</item>
+        <item name="android:layout_margin">@dimen/rounded_textview_margin</item>
     </style>
 
-    <style name="Widget.OrderMolder.TextView.Padding.RoundedColored">
+    <style name="Widget.OrderMolder.TextView.RoundedColored">
         <item name="android:background">@drawable/shape_rounded_textview</item>
     </style>
 
