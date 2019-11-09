@@ -16,37 +16,32 @@ import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.objects.Order;
 
 public class DbAsyncSaveCashReceipt extends AsyncTask<HashMap<String, Map>, Boolean, Boolean> {
-
-    @SuppressLint("StaticFieldLeak")
-    private Context context;
-
 //    private boolean undoPressed;
     private String title;
 
-    public DbAsyncSaveCashReceipt(Context context) {
+    public DbAsyncSaveCashReceipt() {
         super();
-        this.context = context;
     }
 
     @Override
     protected void onPostExecute(Boolean saved) {
         super.onPostExecute(saved);
-        if (!saved) ((Activity) context).setTitle(title);
+//        if (!saved) ((Activity) context).setTitle(title);
     }
 
     @Override
     protected void onProgressUpdate(Boolean... values) {
         super.onProgressUpdate(values);
-        Snackbar.make(((Activity) context).findViewById(R.id.view_pager), R.string.snackbar_doc_saved, Snackbar.LENGTH_LONG)
-                .setGestureInsetBottomIgnored(true)
-//                .setAction(R.string.snackbar_action_undo, v -> undoPressed = true)
-                .show();
+//        Snackbar.make(((Activity) context).findViewById(R.id.view_pager), R.string.snackbar_doc_saved, Snackbar.LENGTH_LONG)
+//                .setGestureInsetBottomIgnored(true)
+////                .setAction(R.string.snackbar_action_undo, v -> undoPressed = true)
+//                .show();
     }
 
     @SafeVarargs
     @Override
     protected final Boolean doInBackground(HashMap<String, Map>... docs) {
-        DbHelper dbHelper = DbHelper.getInstance(context);
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {

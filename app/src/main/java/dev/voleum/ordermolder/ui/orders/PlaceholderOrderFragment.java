@@ -38,7 +38,7 @@ import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.objects.Warehouse;
-import dev.voleum.ordermolder.ui.general.PageViewModel;
+import dev.voleum.ordermolder.viewmodels.PageViewModel;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -202,7 +202,7 @@ public class PlaceholderOrderFragment extends Fragment {
 
     private void initData(View root) {
         // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
 
@@ -277,7 +277,7 @@ public class PlaceholderOrderFragment extends Fragment {
 
     private void fillGoodList(String uid) {
         // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] selectionArgs = { uid };
         String sql = "SELECT *"

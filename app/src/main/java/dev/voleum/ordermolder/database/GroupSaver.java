@@ -16,7 +16,7 @@ public class GroupSaver {
     }
 
     public void save() {
-        DbHelper dbHelper = DbHelper.getInstance(MainActivity.getAppContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {

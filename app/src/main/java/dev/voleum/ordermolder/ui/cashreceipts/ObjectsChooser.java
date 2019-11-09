@@ -55,7 +55,7 @@ public class ObjectsChooser extends AppCompatActivity {
 
     private ArrayList<Order> getObjectList() {
         // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] selectionArgs = { companyUid, partnerUid };
         Cursor c = db.rawQuery("SELECT *" +

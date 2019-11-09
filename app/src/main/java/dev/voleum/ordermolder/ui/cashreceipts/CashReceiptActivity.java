@@ -228,7 +228,7 @@ public class CashReceiptActivity extends AppCompatActivity {
         HashMap<String, Map> docInfo = new HashMap<>();
         docInfo.put("main_info", mainInfo);
         docInfo.put("objects_info", objectsInfo);
-        DbAsyncSaveCashReceipt dbAsyncSaveCashReceipt = new DbAsyncSaveCashReceipt(this);
+        DbAsyncSaveCashReceipt dbAsyncSaveCashReceipt = new DbAsyncSaveCashReceipt();
         dbAsyncSaveCashReceipt.execute(docInfo);
 
         return true;

@@ -9,14 +9,14 @@ import android.widget.Toast;
 
 import java.util.UUID;
 
-import dev.voleum.ordermolder.MainActivity;
+import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 
 public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean aBoolean) {
-        Toast.makeText(MainActivity.getAppContext(), R.string.snackbar_successful, Toast.LENGTH_SHORT).show();
+        Toast.makeText(OrderMolder.getContext(), R.string.snackbar_successful, Toast.LENGTH_SHORT).show();
     }
 
     @Override

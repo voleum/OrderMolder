@@ -1,10 +1,11 @@
 package dev.voleum.ordermolder.database;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import dev.voleum.ordermolder.OrderMolder;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -56,8 +57,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_GOOD_UID = "good_uid";
     // endregion
 
-    private DbHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    private DbHelper( @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+        super(OrderMolder.getContext(), name, factory, version);
         if (instance != null) throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
     }
 
@@ -201,10 +202,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
     }
 
-    public static DbHelper getInstance(Context context) {
+    public static DbHelper getInstance() {
         if (instance == null) {
             synchronized (DbHelper.class) {
-                instance = new DbHelper(context.getApplicationContext(), DB_NAME, null, DB_VERSION);
+                instance = new DbHelper(DB_NAME, null, DB_VERSION);
             }
         }
         return instance;

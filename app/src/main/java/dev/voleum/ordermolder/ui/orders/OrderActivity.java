@@ -211,7 +211,7 @@ public class OrderActivity extends AppCompatActivity {
         HashMap<String, Map> orderInfo = new HashMap<>();
         orderInfo.put("main_info", mainInfo);
         orderInfo.put("goods_info", goodsInfo);
-        DbAsyncSaveOrder dbAsyncSaveOrder = new DbAsyncSaveOrder(this);
+        DbAsyncSaveOrder dbAsyncSaveOrder = new DbAsyncSaveOrder();
         dbAsyncSaveOrder.execute(orderInfo);
 
         return true;
