@@ -113,11 +113,9 @@ public class PlaceholderOrderFragment extends Fragment {
                 orderViewModel = ((OrderActivity) getActivity()).getOrderViewModel();
                 FragmentOrderMainBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_order_main, null, false);
                 binding.setViewModel(orderViewModel);
-//                root = inflater.inflate(R.layout.fragment_order_main, container, false);
                 root = binding.getRoot();
                 TextView tvDate = root.findViewById(R.id.tv_date);
                 TextView tvTime = root.findViewById(R.id.tv_time);
-                TextView tvSum = root.findViewById(R.id.tv_sum);
                 spinnerPartners = root.findViewById(R.id.spinner_partners);
                 spinnerCompanies = root.findViewById(R.id.spinner_companies);
                 spinnerWarehouses = root.findViewById(R.id.spinner_warehouses);
@@ -132,22 +130,6 @@ public class PlaceholderOrderFragment extends Fragment {
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
-//                if (orderObj == null) {
-//                    tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
-//                    tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
-//                    tvSum.setText("0.0");
-//                } else {
-//                    tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
-//                    tvTime.setText(orderObj.getDate().substring(11, 19));
-//                    tvSum.setText(String.valueOf(orderObj.getSum()));
-//                    try {
-//                        spinnerCompanies.setSelection(hashCompanies.get(orderObj.getCompanyUid()));
-//                        spinnerPartners.setSelection(hashPartners.get(orderObj.getPartnerUid()));
-//                        spinnerWarehouses.setSelection(hashWarehouses.get(orderObj.getWarehouseUid()));
-//                    } catch (NullPointerException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
                 break;
             case 2:
                 root = inflater.inflate(R.layout.fragment_tabdoc_list, container, false);
