@@ -4,7 +4,10 @@
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View" />
+        <import type="dev.voleum.ordermolder.objects.EconomicEntity" />
+        <import type="dev.voleum.ordermolder.objects.Good" />
+        <import type="dev.voleum.ordermolder.objects.Unit" />
         <variable
             name="viewModel"
             type="dev.voleum.ordermolder.viewmodels.CatalogViewModel" />
@@ -60,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/object_tin"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.EconomicEntity ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof EconomicEntity ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_name_label" />
 
@@ -69,7 +72,7 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.EconomicEntity ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof EconomicEntity ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toEndOf="@id/catalog_tin_label"
                     app:layout_constraintTop_toBottomOf="@id/catalog_name"
                     bind:text="@{viewModel.tin}" />
@@ -81,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/object_group"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.Good ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof Good ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_name_label" />
 
@@ -90,7 +93,7 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.Good ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof Good ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toEndOf="@id/catalog_group_label"
                     app:layout_constraintTop_toBottomOf="@id/catalog_name"
                     bind:text="@{viewModel.group}" />
@@ -101,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/object_unit"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.Good ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof Good ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_group_label" />
 
@@ -110,7 +113,7 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.Good ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof Good ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toEndOf="@id/catalog_group_label"
                     app:layout_constraintTop_toBottomOf="@id/catalog_group"
                     bind:text="@{viewModel.unit}" />
@@ -122,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/object_full_name"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.Unit ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof Unit ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_name_label" />
 
@@ -131,7 +134,7 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.Unit ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof Unit ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toEndOf="@id/catalog_full_name_label"
                     app:layout_constraintTop_toBottomOf="@id/catalog_name"
                     bind:text="@{viewModel.fullName}" />
@@ -142,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/object_code"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.Unit ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof Unit ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_full_name_label" />
 
@@ -151,7 +154,7 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.catalog instanceof dev.voleum.ordermolder.objects.Unit ? 0x00000000 : 0x00000008}"
+                    android:visibility="@{viewModel.catalog instanceof Unit ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toEndOf="@id/catalog_code_label"
                     app:layout_constraintTop_toBottomOf="@id/catalog_full_name"
                     bind:text="@{viewModel.code}" />

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dev.voleum.ordermolder.database.DbHelper;
@@ -16,9 +17,16 @@ public class OrderViewModel extends BaseObservable {
 
     private Order order;
     private List<TableGoods> tableGoods;
+    private String date;
+    private String time;
+    private double sum;
 
     public OrderViewModel(Order order) {
         this.order = order;
+        this.date = order.getDate().substring(0, 10).replace("-", ".");
+        this.time = order.getDate().substring(11, 19);
+        this.sum = order.getSum();
+        this.tableGoods = new ArrayList<>();
         fillGoodList(order.getUid());
     }
 
@@ -30,6 +38,26 @@ public class OrderViewModel extends BaseObservable {
     @Bindable
     public List<TableGoods> getTableGoods() {
         return tableGoods;
+    }
+
+    @Bindable
+    public String getDate() {
+        return date;
+    }
+
+    @Bindable
+    public String getTime() {
+        return time;
+    }
+
+    @Bindable
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    @Bindable
+    public String getSum() {
+        return String.valueOf(sum);
     }
 
     private void fillGoodList(String uid) {

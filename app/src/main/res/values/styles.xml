@@ -29,6 +29,8 @@
         <item name="android:textSize">@dimen/rounded_textview_text_size</item>
         <item name="android:padding">@dimen/rounded_textview_padding</item>
         <item name="android:layout_margin">@dimen/rounded_textview_margin</item>
+<!--        API >=26-->
+<!--        <item name="android:layout_marginHorizontal">@dimen/rounded_textview_margin</item>-->
     </style>
 
     <style name="Widget.OrderMolder.TextView.RoundedColored">

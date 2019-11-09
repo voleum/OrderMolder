@@ -14,7 +14,7 @@
     <dimen name="rounded_spinner_padding">16dp</dimen>
 
     <!-- View margins -->
-    <dimen name="rounded_textview_margin">16dp</dimen>
+    <dimen name="rounded_textview_margin">8dp</dimen>
     <dimen name="recycler_chooser">8dp</dimen>
 
     <!-- Text sizes -->
