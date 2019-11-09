@@ -39,7 +39,7 @@ import dev.voleum.ordermolder.objects.CashReceipt;
 import dev.voleum.ordermolder.objects.Company;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.Partner;
-import dev.voleum.ordermolder.ui.general.PageViewModel;
+import dev.voleum.ordermolder.viewmodels.PageViewModel;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -226,7 +226,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
 
     private void initData(View root) {
         // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
 
@@ -280,7 +280,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
 
     private void fillObjectList(String uid) {
         // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] selectionArgs = { uid };
         String sql = "SELECT *"

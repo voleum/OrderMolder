@@ -32,7 +32,7 @@ public class Company extends EconomicEntity {
         @Override
         protected Void doInBackground(String... uids) {
             if (uids.length > 0) {
-                DbHelper dbHelper = DbHelper.getInstance(MainActivity.getAppContext());
+                DbHelper dbHelper = DbHelper.getInstance();
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 String selection = DbHelper.COLUMN_TIN + " = ?";
                 Cursor c = db.query(DbHelper.TABLE_COMPANIES,

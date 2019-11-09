@@ -151,7 +151,7 @@ public class DocListActivity extends AppCompatActivity {
         arrayDocs = new ArrayList<>();
 
         // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String table;

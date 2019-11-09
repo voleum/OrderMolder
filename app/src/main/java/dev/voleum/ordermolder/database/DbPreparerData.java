@@ -11,7 +11,7 @@ public class DbPreparerData {
     }
 
     public Cursor prepareDoc(String table) {
-        DbHelper dbHelper = DbHelper.getInstance(MainActivity.getAppContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         return db.query(table,
                 null,
@@ -23,7 +23,7 @@ public class DbPreparerData {
     }
 
     public Cursor prepareTable(String table, String ownerSelection, String ownerUid) {
-        DbHelper dbHelper = DbHelper.getInstance(MainActivity.getAppContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String selection = ownerSelection + " = ?";
         String[] selectionArgs = { ownerUid };

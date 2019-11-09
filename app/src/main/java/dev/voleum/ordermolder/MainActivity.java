@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int MENU_ITEM_CATALOGS = 2;
     public static final int MENU_ITEM_REPORTS = 3;
 
-    private static Context appContext = null;
     private static Resources resources = null;
     private static SharedPreferences sharedPref = null;
 
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        appContext = getApplicationContext();
         resources = getResources();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -165,17 +163,13 @@ public class MainActivity extends AppCompatActivity {
         switch (v.getId()) {
             case R.id.button_create_test_data:
                 DbAsyncTestData dbAsyncTestData = new DbAsyncTestData();
-                dbAsyncTestData.execute(DbHelper.getInstance(getApplicationContext()));
+                dbAsyncTestData.execute(DbHelper.getInstance());
                 break;
             case R.id.button_exchange:
                 ExchangeAsyncTask exchangeAsyncTask = new ExchangeAsyncTask(findViewById(R.id.frameLayoutFragment));
                 exchangeAsyncTask.execute();
                 break;
         }
-    }
-
-    public static Context getAppContext() {
-        return appContext;
     }
 
     public static Resources getRess() {

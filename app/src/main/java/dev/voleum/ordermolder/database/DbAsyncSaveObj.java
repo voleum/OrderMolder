@@ -11,11 +11,7 @@ import dev.voleum.ordermolder.objects.Obj;
 
 public class DbAsyncSaveObj extends AsyncTask<Obj, Void, Boolean> {
 
-    @SuppressLint("StaticFieldLeak")
-    private Context context;
-
-    public DbAsyncSaveObj(Context context) {
-        this.context = context;
+    public DbAsyncSaveObj() {
     }
 
     @Override

@@ -65,7 +65,7 @@ public class CatalogListActivity extends AppCompatActivity {
 
     private ArrayList<Catalog> getCatalogsList() {
         // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String table;
