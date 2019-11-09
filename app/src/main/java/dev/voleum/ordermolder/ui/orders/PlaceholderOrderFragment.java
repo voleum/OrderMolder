@@ -18,7 +18,6 @@ import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,18 +27,16 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.databinding.FragmentDocSecondaryPageBinding;
 import dev.voleum.ordermolder.databinding.FragmentOrderMainBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
 import dev.voleum.ordermolder.fragments.SelectTimeFragment;
 import dev.voleum.ordermolder.objects.Company;
 import dev.voleum.ordermolder.objects.Good;
-import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.objects.Warehouse;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
-import dev.voleum.ordermolder.viewmodels.PageViewModel;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -50,17 +47,14 @@ public class PlaceholderOrderFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    private PageViewModel pageViewModel;
     private OrderViewModel orderViewModel;
 
     private RecyclerView recyclerGoods;
-    private HashMap<Integer, HashMap<String, Object>> goods;
 
     private Company[] companies;
     private Partner[] partners;
     private Warehouse[] warehouses;
 
-    private GoodsOrderRecyclerViewAdapter adapter;
     private ArrayAdapter<Company> adapterCompany;
     private ArrayAdapter<Partner> adapterPartners;
     private ArrayAdapter<Warehouse> adapterWarehouses;
@@ -84,12 +78,6 @@ public class PlaceholderOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-        pageViewModel.setIndex(index);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -102,12 +90,6 @@ public class PlaceholderOrderFragment extends Fragment {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         View root = null;
-        Order orderObj = null;
-        try {
-            orderObj = ((OrderActivity) getActivity()).getOrderObj();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
         switch (index) {
             case 1:
                 orderViewModel = ((OrderActivity) getActivity()).getOrderViewModel();
@@ -132,16 +114,13 @@ public class PlaceholderOrderFragment extends Fragment {
                 });
                 break;
             case 2:
-                root = inflater.inflate(R.layout.fragment_tabdoc_list, container, false);
-                goods = new HashMap<>();
-                if (orderObj != null) {
-                    fillGoodList(orderObj.getUid());
-                }
+                orderViewModel = ((OrderActivity) getActivity()).getOrderViewModel();
+                FragmentDocSecondaryPageBinding bindingRecycler = DataBindingUtil.inflate(inflater, R.layout.fragment_doc_secondary_page, null, false);
+                bindingRecycler.setViewModel(orderViewModel);
+                root = bindingRecycler.getRoot();
                 recyclerGoods = root.findViewById(R.id.recycler_tabdoc);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new GoodsOrderRecyclerViewAdapter(goods);
-                recyclerGoods.setAdapter(adapter);
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
@@ -149,10 +128,6 @@ public class PlaceholderOrderFragment extends Fragment {
                 );
                 break;
         }
-
-//        pageViewModel.getText().observe(this, s -> {
-//                textView.setText(s);
-//        });
         return root;
     }
 
@@ -161,36 +136,18 @@ public class PlaceholderOrderFragment extends Fragment {
         if (requestCode == GOOD_CHOOSE_REQUEST) {
             if (resultCode == OrderActivity.RESULT_OK) {
                 if (data != null) {
-                    // TODO: if the good already in list - increase the quantity
-                    Good chosenGood = (Good) data.getSerializableExtra("good");
-                    double quantity = data.getDoubleExtra("quantity", 1.0);
-                    double price = data.getDoubleExtra("price", 1.0);
-                    int position = goods.size();
-                    HashMap<String, Object> values = new HashMap<>();
-                    values.put("good", chosenGood);
-                    values.put("quantity", quantity);
-                    values.put("price", price);
-                    values.put("sum", quantity * price);
-                    goods.put(position, values);
-                    try {
-                        ((TextView) getActivity().findViewById(R.id.tv_sum)).setText(String.valueOf(getSum()));
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                    adapter.notifyItemInserted(position + 1);
+                    orderViewModel.onAddGood((Good) data.getSerializableExtra("good"),
+                            data.getDoubleExtra("quantity", 1.0),
+                            data.getDoubleExtra("price", 1.0));
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void onDateChanged(String date) {
-
-    }
-
-    public double getSum() {
-        return adapter.getSum();
-    }
+//    public double getSum() {
+//        return adapter.getSum();
+//    }
 
     private void initData(View root) {
         // TODO: AsyncTask
@@ -267,41 +224,35 @@ public class PlaceholderOrderFragment extends Fragment {
         dbHelper.close();
     }
 
-    private void fillGoodList(String uid) {
-        // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] selectionArgs = { uid };
-        String sql = "SELECT *"
-                + " FROM " + DbHelper.TABLE_GOODS_TABLE
-                + " LEFT JOIN " + DbHelper.TABLE_GOODS
-                + " ON " + DbHelper.COLUMN_GOOD_UID + " = " + DbHelper.COLUMN_UID
-                + " WHERE " + DbHelper.COLUMN_ORDER_UID + " = ?"
-                + " ORDER BY " + DbHelper.COLUMN_POSITION;
-        Cursor c = db.rawQuery(sql, selectionArgs);
-        int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
-        int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-        int groupClIndex = c.getColumnIndex(DbHelper.COLUMN_GROUP_UID);
-        int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-        int unitClIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
-        int quantityClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
-        int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
-        int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
-        if (c.moveToFirst()) {
-            HashMap<String, Object> goodUidHash;
-           do {
-               goodUidHash = new HashMap<>();
-               goodUidHash.put("good", new Good(c.getString(uidClIndex),
-                       c.getString(groupClIndex),
-                       c.getString(nameClIndex),
-                       c.getString(unitClIndex)));
-               goodUidHash.put("quantity", c.getDouble(quantityClIndex));
-               goodUidHash.put("price", c.getDouble(priceClIndex));
-               goodUidHash.put("sum", c.getDouble(sumClIndex));
-               goods.put(c.getInt(positionClIndex), goodUidHash);
-           } while (c.moveToNext());
-        }
-        c.close();
-        db.close();
-    }
+//    private void fillGoodList(String uid) {
+//        // TODO: AsyncTask
+//        DbHelper dbHelper = DbHelper.getInstance();
+//        SQLiteDatabase db = dbHelper.getReadableDatabase();
+//        String[] selectionArgs = { uid };
+//        String sql = "SELECT *"
+//                + " FROM " + DbHelper.TABLE_GOODS_TABLE
+//                + " LEFT JOIN " + DbHelper.TABLE_GOODS
+//                + " ON " + DbHelper.COLUMN_GOOD_UID + " = " + DbHelper.COLUMN_UID
+//                + " WHERE " + DbHelper.COLUMN_ORDER_UID + " = ?"
+//                + " ORDER BY " + DbHelper.COLUMN_POSITION;
+//        Cursor c = db.rawQuery(sql, selectionArgs);
+//        int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
+//        int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+//        int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+//        int quantityClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
+//        int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
+//        int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
+//        if (c.moveToFirst()) {
+//            do {
+//                goods.add(new TableGoods(c.getString(uidClIndex),
+//                        c.getInt(positionClIndex),
+//                        c.getString(nameClIndex),
+//                        c.getDouble(quantityClIndex),
+//                        c.getDouble(priceClIndex),
+//                        c.getDouble(sumClIndex)));
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        db.close();
+//    }
 }

@@ -15,16 +15,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
+import java.util.List;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.objects.TableGoods;
 
 public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private HashMap<Integer, HashMap<String, Object>> goods;
+    private List<TableGoods> goods;
 
-    public GoodsOrderRecyclerViewAdapter(HashMap<Integer, HashMap<String, Object>> goods) {
+    public GoodsOrderRecyclerViewAdapter(List<TableGoods> goods) {
         this.goods = goods;
     }
 
@@ -39,12 +39,11 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        HashMap<String, Object> goodData = goods.get(position);
+        TableGoods row = goods.get(position);
         try {
-            Good good = (Good) goodData.get("good");
-            double quantity = (double) goodData.get("quantity");
-            double price = (double) goodData.get("price");
-            ((GoodViewHolder) holder).goodName.setText(good.toString());
+            double quantity = row.getQuantity();
+            double price = row.getPrice();
+            ((GoodViewHolder) holder).goodName.setText(row.getGoodUid());
             ((GoodViewHolder) holder).goodQuantity.setText(String.valueOf(quantity));
             ((GoodViewHolder) holder).goodPrice.setText(String.valueOf(price));
         } catch (NullPointerException e) {
@@ -57,16 +56,21 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         return goods.size();
     }
 
-    public HashMap<Integer, HashMap<String, Object>> getGoods() {
+    public void setData(List<TableGoods> tableGoods) {
+        this.goods = tableGoods;
+        notifyDataSetChanged();
+    }
+
+    public List<TableGoods> getGoods() {
         return goods;
     }
 
     public double getSum() {
         double sum = 0.0;
         for (int i = 0; i < goods.size(); i++) {
-            HashMap<String, Object> good = goods.get(i);
+            TableGoods row = goods.get(i);
             try {
-                sum += (double) good.get("sum");
+                sum += row.getSum();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -99,7 +103,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         View.OnFocusChangeListener onFocusChangeListener = (v, hasFocus) -> {
             if (!hasFocus) {
                 int position = getAdapterPosition();
-                HashMap<String, Object> goodInfo = goods.get(position);
+                TableGoods row = goods.get(position);
                 double quantity = 0.0;
                 double price = 0.0;
                 switch (v.getId()) {
@@ -110,11 +114,11 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                             quantity = 0.0;
                         }
                         try {
-                            goodInfo.put("quantity", quantity);
+                            row.setQuantity(quantity);
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
-                        price = (double) goodInfo.get("price");
+                        price = row.getPrice();
                         break;
                     case R.id.good_price:
                         try {
@@ -123,16 +127,16 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                             price = 0.0;
                         }
                         try {
-                            goodInfo.put("price", price);
+                            row.setPrice(price);
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
-                        quantity = (double) goodInfo.get("quantity");
+                        quantity = row.getQuantity();
                         break;
                 }
                 double sum = quantity * price;
                 try {
-                    goodInfo.put("sum", sum);
+                    row.setSum(sum);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -151,15 +155,15 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
             btnMinus = view.findViewById(R.id.good_minus);
             btnPlus.setOnClickListener(this::onButtonClick);
             btnMinus.setOnClickListener(this::onButtonClick);
-            goodQuantity.setOnFocusChangeListener(onFocusChangeListener);
+//            goodQuantity.setOnFocusChangeListener(onFocusChangeListener);
             goodQuantity.setOnEditorActionListener(onEditorActionListener);
-            goodPrice.setOnFocusChangeListener(onFocusChangeListener);
+//            goodPrice.setOnFocusChangeListener(onFocusChangeListener);
             goodPrice.setOnEditorActionListener(onEditorActionListener);
         }
 
         private void onButtonClick(View v) {
             int position = getAdapterPosition();
-            HashMap<String, Object> goodInfo = goods.get(position);
+            TableGoods row = goods.get(position);
             double currentQuantity;
             try {
                 currentQuantity = Double.parseDouble(goodQuantity.getText().toString());
@@ -179,10 +183,10 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                     break;
             }
             try {
-                double currentPrice = (double) goodInfo.get("price");
+                double currentPrice = row.getPrice();
                 double sum = currentQuantity * currentPrice;
-                goodInfo.put("quantity", currentQuantity);
-                goodInfo.put("sum", sum);
+                row.setQuantity(currentQuantity);
+                row.setSum(sum);
                 View root = v.getRootView();
                 TextView tvSum = root.findViewById(R.id.tv_sum);
                 tvSum.setText(String.valueOf(getSum()));

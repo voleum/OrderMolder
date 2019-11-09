@@ -5,12 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.BindingAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.TableGoods;
 
@@ -30,7 +33,7 @@ public class OrderViewModel extends BaseObservable {
         this.sum = order.getSum();
         this.tableGoods = new ArrayList<>();
         fillGoodList(order.getUid());
-//        this.adapter = new GoodsOrderRecyclerViewAdapter();
+        this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods);
     }
 
     @Bindable
@@ -39,8 +42,18 @@ public class OrderViewModel extends BaseObservable {
     }
 
     @Bindable
+    public void setTableGoods(List<TableGoods> tableGoods) {
+        this.tableGoods = tableGoods;
+    }
+
+    @Bindable
     public List<TableGoods> getTableGoods() {
         return tableGoods;
+    }
+
+    @Bindable
+    public void setAdapter(GoodsOrderRecyclerViewAdapter adapter) {
+        this.adapter = adapter;
     }
 
     @Bindable
@@ -68,9 +81,41 @@ public class OrderViewModel extends BaseObservable {
         return time;
     }
 
+//    @Bindable
+//    public void setSum(String sum) {
+//        this.sum = Double.parseDouble(sum);
+//    }
+
     @Bindable
     public String getSum() {
         return String.valueOf(sum);
+    }
+
+    @BindingAdapter("android:data")
+    public static void setData(RecyclerView recyclerView, List<TableGoods> tableGoods) {
+        if (recyclerView.getAdapter() instanceof GoodsOrderRecyclerViewAdapter) {
+            ((GoodsOrderRecyclerViewAdapter) recyclerView.getAdapter()).setData(tableGoods);
+        }
+    }
+
+    private void countSum() {
+        sum = 0.0;
+        for (TableGoods row : tableGoods
+        ) {
+            sum += row.getSum();
+        }
+//        setSum(String.valueOf(sum));
+    }
+
+    public void onAddGood(Good good, double quantity, double price) {
+        tableGoods.add(new TableGoods(order.getUid(),
+                tableGoods.size(),
+                good.getUid(),
+                quantity,
+                price,
+                quantity * price));
+        adapter.notifyItemInserted(tableGoods.size());
+        countSum();
     }
 
     private void fillGoodList(String uid) {
@@ -87,23 +132,12 @@ public class OrderViewModel extends BaseObservable {
         Cursor c = db.rawQuery(sql, selectionArgs);
         int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
         int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-//        int groupClIndex = c.getColumnIndex(DbHelper.COLUMN_GROUP_UID);
         int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-//        int unitClIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
         int quantityClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
         int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
         int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
         if (c.moveToFirst()) {
-//            HashMap<String, Object> goodUidHash;
             do {
-//                goodUidHash = new HashMap<>();
-//                goodUidHash.put("good", new Good(c.getString(uidClIndex),
-//                        c.getString(groupClIndex),
-//                        c.getString(nameClIndex),
-//                        c.getString(unitClIndex)));
-//                goodUidHash.put("quantity", c.getDouble(quantityClIndex));
-//                goodUidHash.put("price", c.getDouble(priceClIndex));
-//                goodUidHash.put("sum", c.getDouble(sumClIndex));
                 tableGoods.add(new TableGoods(c.getString(uidClIndex),
                         c.getInt(positionClIndex),
                         c.getString(nameClIndex),
