@@ -5,7 +5,7 @@
 
     <TextView
         android:id="@+id/tv_partner_label"
-        style="@style/Widget.OrderMolder.TextView.Padding"
+        style="@style/Widget.OrderMolder.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
