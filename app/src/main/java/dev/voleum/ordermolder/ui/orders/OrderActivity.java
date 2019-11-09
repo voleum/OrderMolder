@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,11 +28,15 @@ import java.util.UUID;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.database.DbAsyncSaveOrder;
+import dev.voleum.ordermolder.databinding.ActivityDocBinding;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
+import dev.voleum.ordermolder.viewmodels.OrderViewModel;
 
 public class OrderActivity extends AppCompatActivity {
+
+    private OrderViewModel orderViewModel;
 
     protected ViewPager viewPager;
     protected FloatingActionButton fab;
@@ -46,6 +51,28 @@ public class OrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc);
+
+        if (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true)) {
+            isCreating = true;
+            setTitle(R.string.title_new_order);
+            orderObj = new Order();
+        } else {
+            isCreating = false;
+            orderObj = (Order) getIntent().getSerializableExtra("doc");
+            try {
+                String title = orderObj.getDate().substring(0, 19).replace("-", ".");
+                setTitle(title);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+        savedWithoutClosing = false;
+
+        orderViewModel = new OrderViewModel(orderObj);
+        ActivityDocBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_doc);
+        binding.setViewModel(orderViewModel);
+        binding.executePendingBindings();
+
         sectionsPagerAdapter = new SectionsPagerAdapter(
                 this,
                 getSupportFragmentManager(),
@@ -90,21 +117,6 @@ public class OrderActivity extends AppCompatActivity {
 
             }
         });
-
-        if (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true)) {
-            isCreating = true;
-            setTitle(R.string.title_new_order);
-        } else {
-            isCreating = false;
-            orderObj = (Order) getIntent().getSerializableExtra("doc");
-            try {
-                String title = orderObj.getDate().substring(0, 19).replace("-", ".");
-                setTitle(title);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-        savedWithoutClosing = false;
     }
 
     @Override
@@ -171,6 +183,10 @@ public class OrderActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    public OrderViewModel getOrderViewModel() {
+        return orderViewModel;
     }
 
     protected Order getOrderObj() {

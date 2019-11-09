@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_sum_label"
-        style="@style/Widget.OrderMolder.TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/object_sum" />
+    <data>
+        <variable
+            name="sum"
+            type="String" />
+    </data>
 
-    <TextView
-        android:id="@+id/tv_sum"
-        style="@style/Widget.OrderMolder.TextView.RoundedColored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        tools:text="1000" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_ruble"
-        style="@style/Widget.OrderMolder.TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/sign_currency_ruble" />
+        <TextView
+            android:id="@+id/tv_sum_label"
+            style="@style/Widget.OrderMolder.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/object_sum" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_sum"
+            style="@style/Widget.OrderMolder.TextView.RoundedColored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{sum}"
+            tools:text="1000" />
+
+        <TextView
+            android:id="@+id/tv_ruble"
+            style="@style/Widget.OrderMolder.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_currency_ruble" />
+    </LinearLayout>
+</layout>

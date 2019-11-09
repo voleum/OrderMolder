@@ -3,8 +3,6 @@ package dev.voleum.ordermolder.ui.orders;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -31,6 +30,7 @@ import java.util.Objects;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.databinding.FragmentOrderMainBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
 import dev.voleum.ordermolder.fragments.SelectTimeFragment;
 import dev.voleum.ordermolder.objects.Company;
@@ -38,6 +38,7 @@ import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.objects.Warehouse;
+import dev.voleum.ordermolder.viewmodels.OrderViewModel;
 import dev.voleum.ordermolder.viewmodels.PageViewModel;
 
 /**
@@ -50,6 +51,7 @@ public class PlaceholderOrderFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private PageViewModel pageViewModel;
+    private OrderViewModel orderViewModel;
 
     private RecyclerView recyclerGoods;
     private HashMap<Integer, HashMap<String, Object>> goods;
@@ -108,7 +110,11 @@ public class PlaceholderOrderFragment extends Fragment {
         }
         switch (index) {
             case 1:
-                root = inflater.inflate(R.layout.fragment_order_main, container, false);
+                orderViewModel = ((OrderActivity) getActivity()).getOrderViewModel();
+                FragmentOrderMainBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_order_main, null, false);
+                binding.setViewModel(orderViewModel);
+//                root = inflater.inflate(R.layout.fragment_order_main, container, false);
+                root = binding.getRoot();
                 TextView tvDate = root.findViewById(R.id.tv_date);
                 TextView tvTime = root.findViewById(R.id.tv_time);
                 TextView tvSum = root.findViewById(R.id.tv_sum);
@@ -117,31 +123,31 @@ public class PlaceholderOrderFragment extends Fragment {
                 spinnerWarehouses = root.findViewById(R.id.spinner_warehouses);
                 initData(root);
                 tvDate.setOnClickListener(v -> {
-                    DialogFragment datePickerFragment = new SelectDateFragment(tvDate.getText().toString().substring(0, 10));
+                    DialogFragment datePickerFragment = new SelectDateFragment(orderViewModel.getDate());
                     datePickerFragment.setTargetFragment(this, 0);
                     datePickerFragment.show(getParentFragmentManager(), "DatePicker");
                 });
                 tvTime.setOnClickListener(v -> {
-                    DialogFragment timePickerFragment = new SelectTimeFragment(tvTime.getText().toString().substring(0, 5));
+                    DialogFragment timePickerFragment = new SelectTimeFragment(orderViewModel.getTime());
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
-                if (orderObj == null) {
-                    tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
-                    tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
-                    tvSum.setText("0.0");
-                } else {
-                    tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
-                    tvTime.setText(orderObj.getDate().substring(11, 19));
-                    tvSum.setText(String.valueOf(orderObj.getSum()));
-                    try {
-                        spinnerCompanies.setSelection(hashCompanies.get(orderObj.getCompanyUid()));
-                        spinnerPartners.setSelection(hashPartners.get(orderObj.getPartnerUid()));
-                        spinnerWarehouses.setSelection(hashWarehouses.get(orderObj.getWarehouseUid()));
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                if (orderObj == null) {
+//                    tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
+//                    tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
+//                    tvSum.setText("0.0");
+//                } else {
+//                    tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
+//                    tvTime.setText(orderObj.getDate().substring(11, 19));
+//                    tvSum.setText(String.valueOf(orderObj.getSum()));
+//                    try {
+//                        spinnerCompanies.setSelection(hashCompanies.get(orderObj.getCompanyUid()));
+//                        spinnerPartners.setSelection(hashPartners.get(orderObj.getPartnerUid()));
+//                        spinnerWarehouses.setSelection(hashWarehouses.get(orderObj.getWarehouseUid()));
+//                    } catch (NullPointerException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
                 break;
             case 2:
                 root = inflater.inflate(R.layout.fragment_tabdoc_list, container, false);
@@ -194,6 +200,10 @@ public class PlaceholderOrderFragment extends Fragment {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void onDateChanged(String date) {
+
     }
 
     public double getSum() {
