@@ -75,6 +75,7 @@ public class ObjectsChooser extends AppCompatActivity {
             do {
                 objects.add(new Order(c.getString(uidIndex),
                         c.getString(dateIndex),
+                        c.getString(dateIndex), //FIXME: TIME!!!
                         c.getString(companyIndex),
                         c.getString(partnerIndex),
                         c.getString(warehouseIndex),

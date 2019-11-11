@@ -122,6 +122,18 @@ public class PlaceholderOrderFragment extends Fragment {
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
 
+                orderViewModel.getAdapter().setOnEntryClickListener((v, position) -> {
+                    switch (v.getId()) {
+                        case R.id.good_plus:
+                            orderViewModel.increaseQuantityInRow(position);
+                            break;
+                        case R.id.good_minus:
+                            orderViewModel.decreaseQuantityInRow(position);
+                            break;
+                    }
+                    orderViewModel.countSum();
+                });
+
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
                         (view) -> startActivityForResult(new Intent(getActivity(), GoodsChooser.class), GOOD_CHOOSE_REQUEST)
@@ -144,10 +156,6 @@ public class PlaceholderOrderFragment extends Fragment {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-//    public double getSum() {
-//        return adapter.getSum();
-//    }
 
     private void initData(View root) {
         // TODO: AsyncTask
@@ -223,36 +231,4 @@ public class PlaceholderOrderFragment extends Fragment {
         c.close();
         dbHelper.close();
     }
-
-//    private void fillGoodList(String uid) {
-//        // TODO: AsyncTask
-//        DbHelper dbHelper = DbHelper.getInstance();
-//        SQLiteDatabase db = dbHelper.getReadableDatabase();
-//        String[] selectionArgs = { uid };
-//        String sql = "SELECT *"
-//                + " FROM " + DbHelper.TABLE_GOODS_TABLE
-//                + " LEFT JOIN " + DbHelper.TABLE_GOODS
-//                + " ON " + DbHelper.COLUMN_GOOD_UID + " = " + DbHelper.COLUMN_UID
-//                + " WHERE " + DbHelper.COLUMN_ORDER_UID + " = ?"
-//                + " ORDER BY " + DbHelper.COLUMN_POSITION;
-//        Cursor c = db.rawQuery(sql, selectionArgs);
-//        int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
-//        int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-//        int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-//        int quantityClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
-//        int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
-//        int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
-//        if (c.moveToFirst()) {
-//            do {
-//                goods.add(new TableGoods(c.getString(uidClIndex),
-//                        c.getInt(positionClIndex),
-//                        c.getString(nameClIndex),
-//                        c.getDouble(quantityClIndex),
-//                        c.getDouble(priceClIndex),
-//                        c.getDouble(sumClIndex)));
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        db.close();
-//    }
 }

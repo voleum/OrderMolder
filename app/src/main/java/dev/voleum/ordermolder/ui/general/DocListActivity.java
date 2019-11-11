@@ -65,7 +65,7 @@ public class DocListActivity extends AppCompatActivity {
                     intentOut = null;
             }
             intentOut.putExtra(IS_CREATING, false);
-            intentOut.putExtra(DOC, clickedDoc);
+            intentOut.putExtra(DOC, clickedDoc.getUid());
             startActivityForResult(intentOut, REQUEST_CODE);
         };
 
@@ -123,7 +123,7 @@ public class DocListActivity extends AppCompatActivity {
             case RESULT_SAVED:
                 try {
                     position = arrayDocs.indexOf(data.getSerializableExtra(DOC));
-                    adapter.notifyItemChanged(position + 1);
+                    adapter.notifyItemChanged(position);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -190,6 +190,7 @@ public class DocListActivity extends AppCompatActivity {
                     do {
                         arrayDocs.add(new Order(c.getString(uidIndex),
                                 c.getString(dateIndex),
+                                c.getString(dateIndex), //FIXME: TIME!!!
                                 c.getString(companyIndex),
                                 c.getString(partnerIndex),
                                 c.getString(warehouseIndex),
@@ -200,6 +201,7 @@ public class DocListActivity extends AppCompatActivity {
                     do {
                         arrayDocs.add(new CashReceipt(c.getString(uidIndex),
                                 c.getString(dateIndex),
+                                c.getString(dateIndex), //FIXME: TIME!!!
                                 c.getString(companyIndex),
                                 c.getString(partnerIndex),
                                 c.getDouble(sumIndex)));

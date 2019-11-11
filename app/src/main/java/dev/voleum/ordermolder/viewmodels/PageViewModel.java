@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel;
 public class PageViewModel extends ViewModel {
 
     private MutableLiveData<Integer> mIndex = new MutableLiveData<>();
-    private LiveData<String> mText = Transformations.map(mIndex, input -> String.valueOf(input));
+    private LiveData<String> mText = Transformations.map(mIndex, String::valueOf);
 
     public void setIndex(int index) {
         mIndex.setValue(index);
