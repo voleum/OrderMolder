@@ -63,4 +63,18 @@ public class TableGoods extends Table {
     public void setSum(double sum) {
         this.sum = sum;
     }
+
+    private void countSum() {
+        sum = quantity * price;
+    }
+
+    public void increaseQuantity() {
+        quantity++;
+        countSum();
+    }
+
+    public void decreaseQuantity() {
+        quantity--;
+        countSum();
+    }
 }

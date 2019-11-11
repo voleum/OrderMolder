@@ -23,6 +23,11 @@ import dev.voleum.ordermolder.objects.TableGoods;
 public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private List<TableGoods> goods;
+    private GoodsOrderRecyclerViewAdapter.OnEntryClickListener onEntryClickListener;
+
+    public interface OnEntryClickListener {
+        void onEntryClick(View v, int position);
+    }
 
     public GoodsOrderRecyclerViewAdapter(List<TableGoods> goods) {
         this.goods = goods;
@@ -56,6 +61,10 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         return goods.size();
     }
 
+    public void setOnEntryClickListener(GoodsOrderRecyclerViewAdapter.OnEntryClickListener onEntryClickListener) {
+        this.onEntryClickListener = onEntryClickListener;
+    }
+
     public void setData(List<TableGoods> tableGoods) {
         this.goods = tableGoods;
         notifyDataSetChanged();
@@ -79,7 +88,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public class GoodViewHolder extends RecyclerView.ViewHolder {
+    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView goodName;
         EditText goodQuantity;
         EditText goodPrice;
@@ -100,51 +109,40 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
             return false;
         };
 
-        View.OnFocusChangeListener onFocusChangeListener = (v, hasFocus) -> {
-            if (!hasFocus) {
-                int position = getAdapterPosition();
-                TableGoods row = goods.get(position);
-                double quantity = 0.0;
-                double price = 0.0;
-                switch (v.getId()) {
-                    case R.id.good_quantity:
-                        try {
-                            quantity = Double.parseDouble(((EditText) v).getText().toString());
-                        } catch (NumberFormatException e) {
-                            quantity = 0.0;
-                        }
-                        try {
-                            row.setQuantity(quantity);
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                        price = row.getPrice();
-                        break;
-                    case R.id.good_price:
-                        try {
-                            price = Double.parseDouble(((EditText) v).getText().toString());
-                        } catch (NumberFormatException e) {
-                            price = 0.0;
-                        }
-                        try {
-                            row.setPrice(price);
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                        quantity = row.getQuantity();
-                        break;
-                }
-                double sum = quantity * price;
-                try {
-                    row.setSum(sum);
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-                View root = v.getRootView();
-                TextView tvSum = root.findViewById(R.id.tv_sum);
-                tvSum.setText(String.valueOf(getSum()));
+        @Override
+        public void onClick(View v) {
+//            int position = getAdapterPosition();
+//            TableGoods row = goods.get(position);
+//            double currentQuantity;
+//            try {
+//                currentQuantity = Double.parseDouble(goodQuantity.getText().toString());
+//            } catch (NumberFormatException e) {
+//                currentQuantity = 0.0;
+//            }
+//            String newQuantity;
+//            switch (v.getId()) {
+//                case R.id.good_plus:
+//                    newQuantity = String.valueOf(++currentQuantity);
+//                    goodQuantity.setText(newQuantity);
+//                    break;
+//                case R.id.good_minus:
+//                    if (currentQuantity > 1) newQuantity = String.valueOf(--currentQuantity);
+//                    else newQuantity = String.valueOf(1.0);
+//                    goodQuantity.setText(newQuantity);
+//                    break;
+//            }
+//            try {
+//                double currentPrice = row.getPrice();
+//                double sum = currentQuantity * currentPrice;
+//                row.setQuantity(currentQuantity);
+//                row.setSum(sum);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+            if (onEntryClickListener != null) {
+                onEntryClickListener.onEntryClick(v, getLayoutPosition());
             }
-        };
+        }
 
         GoodViewHolder(View view) {
             super(view);
@@ -153,11 +151,9 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
             goodPrice = view.findViewById(R.id.good_price);
             btnPlus = view.findViewById(R.id.good_plus);
             btnMinus = view.findViewById(R.id.good_minus);
-            btnPlus.setOnClickListener(this::onButtonClick);
-            btnMinus.setOnClickListener(this::onButtonClick);
-//            goodQuantity.setOnFocusChangeListener(onFocusChangeListener);
+            btnPlus.setOnClickListener(this::onClick);
+            btnMinus.setOnClickListener(this::onClick);
             goodQuantity.setOnEditorActionListener(onEditorActionListener);
-//            goodPrice.setOnFocusChangeListener(onFocusChangeListener);
             goodPrice.setOnEditorActionListener(onEditorActionListener);
         }
 
@@ -187,9 +183,6 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
                 double sum = currentQuantity * currentPrice;
                 row.setQuantity(currentQuantity);
                 row.setSum(sum);
-                View root = v.getRootView();
-                TextView tvSum = root.findViewById(R.id.tv_sum);
-                tvSum.setText(String.valueOf(getSum()));
             } catch (Exception e) {
                 e.printStackTrace();
             }

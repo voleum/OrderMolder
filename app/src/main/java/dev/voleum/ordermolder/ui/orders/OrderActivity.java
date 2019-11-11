@@ -17,20 +17,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.database.DbAsyncSaveOrder;
 import dev.voleum.ordermolder.databinding.ActivityDocBinding;
-import dev.voleum.ordermolder.objects.Order;
-import dev.voleum.ordermolder.objects.TableGoods;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
@@ -43,33 +35,40 @@ public class OrderActivity extends AppCompatActivity {
     protected FloatingActionButton fab;
     protected SectionsPagerAdapter sectionsPagerAdapter;
 
-    private Order orderObj;
-
     private boolean isCreating;
     private boolean savedWithoutClosing;
+
+    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if (position == 1) {
+                fab.show();
+            }
+            else {
+                fab.hide();
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc);
 
-        if (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true)) {
-            isCreating = true;
-            setTitle(R.string.title_new_order);
-            orderObj = new Order();
-        } else {
-            isCreating = false;
-            orderObj = (Order) getIntent().getSerializableExtra("doc");
-            try {
-                String title = orderObj.getDate().substring(0, 19).replace("-", ".");
-                setTitle(title);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
+        isCreating = (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true));
         savedWithoutClosing = false;
 
-        orderViewModel = new OrderViewModel(orderObj);
+        orderViewModel = new OrderViewModel(getIntent().getStringExtra(DocListActivity.DOC));
         ActivityDocBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_doc);
         binding.setViewModel(orderViewModel);
         binding.executePendingBindings();
@@ -91,35 +90,7 @@ public class OrderActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (position == 1) {
-                    fab.show();
-                }
-                else {
-                    fab.hide();
-//                    View focusedView = getCurrentFocus();
-//                    if (focusedView != null) focusedView.clearFocus();
-//                    try {
-//                        InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-//                    } catch (NullPointerException e) {
-//                        e.printStackTrace();
-//                    }
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        viewPager.addOnPageChangeListener(onPageChangeListener);
     }
 
     @Override
@@ -127,9 +98,9 @@ public class OrderActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    if (saveDoc()) {
+                    if (orderViewModel.saveOrder()) {
                         Intent intent = new Intent();
-                        intent.putExtra("doc", orderObj);
+                        intent.putExtra("doc", orderViewModel.getOrder());
                         int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                         setResult(result, intent);
                         finish();
@@ -138,12 +109,8 @@ public class OrderActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_NEGATIVE:
                     if (savedWithoutClosing) {
                         Intent intent = new Intent();
-                        intent.putExtra("doc", orderObj);
-                        if (isCreating) {
-                            setResult(DocListActivity.RESULT_CREATED, intent);
-                        } else {
-                            setResult(DocListActivity.RESULT_SAVED, intent);
-                        }
+                        intent.putExtra("doc", orderViewModel.getOrder());
+                        setResult(isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED, intent);
                     }
                     finish();
                     break;
@@ -180,7 +147,7 @@ public class OrderActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
-                if (saveDoc()) savedWithoutClosing = true;
+                if (orderViewModel.saveOrder()) savedWithoutClosing = true;
                 break;
             default:
                 break;
@@ -190,49 +157,5 @@ public class OrderActivity extends AppCompatActivity {
 
     public OrderViewModel getOrderViewModel() {
         return orderViewModel;
-    }
-
-    protected Order getOrderObj() {
-        return orderObj;
-    }
-
-    private boolean saveDoc() {
-        List<TableGoods> goodsInfo = null;
-        try {
-            goodsInfo = sectionsPagerAdapter.getGoodsInfo();
-            if (goodsInfo.isEmpty()) {
-                Snackbar.make(findViewById(R.id.view_pager), R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT)
-                        .setGestureInsetBottomIgnored(true)
-                        .show();
-                return false;
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        HashMap<String, Object> mainInfo = sectionsPagerAdapter.getOrderMainInfo();
-
-        if (orderObj == null) {
-            orderObj = new Order();
-            orderObj.setUid(UUID.randomUUID().toString());
-        }
-        try {
-            orderObj.setDate((String) mainInfo.get("date"));
-            orderObj.setCompanyUid((String) mainInfo.get("company_uid"));
-            orderObj.setPartnerUid((String) mainInfo.get("partner_uid"));
-            orderObj.setWarehouseUid((String) mainInfo.get("warehouse_uid"));
-            orderObj.setSum((Double) mainInfo.get("sum"));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-        mainInfo.put("uid", orderObj.getUid());
-
-        HashMap<String, Map> orderInfo = new HashMap<>();
-        orderInfo.put("main_info", mainInfo);
-//        orderInfo.put("goods_info", goodsInfo);
-        DbAsyncSaveOrder dbAsyncSaveOrder = new DbAsyncSaveOrder();
-        dbAsyncSaveOrder.execute(orderInfo);
-
-        return true;
     }
 }

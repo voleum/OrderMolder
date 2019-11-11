@@ -1,18 +1,12 @@
 package dev.voleum.ordermolder.database;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.objects.Order;
 
 public class DbAsyncSaveCashReceipt extends AsyncTask<HashMap<String, Map>, Boolean, Boolean> {

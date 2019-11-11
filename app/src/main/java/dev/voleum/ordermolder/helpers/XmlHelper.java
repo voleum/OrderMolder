@@ -139,6 +139,7 @@ class XmlHelper {
                                                 currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
                                                 arrayListObj.add(new Order(currentUid,
                                                         xpp.getAttributeValue(null, ATTRIBUTE_DATE),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_DATE), //FIXME: TIME!!!
                                                         xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
                                                         xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
                                                         xpp.getAttributeValue(null, ATTRIBUTE_WAREHOUSE),
@@ -148,6 +149,7 @@ class XmlHelper {
                                                 currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
                                                 arrayListObj.add(new CashReceipt(currentUid,
                                                         xpp.getAttributeValue(null, ATTRIBUTE_DATE),
+                                                        xpp.getAttributeValue(null, ATTRIBUTE_DATE), //FIXME: TIME!!!
                                                         xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
                                                         xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
                                                         Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));

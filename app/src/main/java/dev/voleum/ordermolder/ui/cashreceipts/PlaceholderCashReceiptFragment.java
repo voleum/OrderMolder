@@ -304,6 +304,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                objectUidHash = new HashMap<>();
                objectUidHash.put("object", new Order(c.getString(uidClIndex),
                        c.getString(dateClIndex),
+                       c.getString(dateClIndex), //FIXME: TIME!!!
                        c.getString(companyClIndex),
                        c.getString(partnerClIndex),
                        c.getString(warehouseClIndex),

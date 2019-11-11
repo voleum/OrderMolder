@@ -22,15 +22,9 @@ public class OrderViewModel extends BaseObservable {
     private Order order;
     private List<TableGoods> tableGoods;
     private GoodsOrderRecyclerViewAdapter adapter;
-    private String date;
-    private String time;
-    private double sum;
 
-    public OrderViewModel(Order order) {
-        this.order = order;
-        this.date = order.getDate().substring(0, 10).replace("-", ".");
-        this.time = order.getDate().substring(11, 19);
-        this.sum = order.getSum();
+    public OrderViewModel(String orderUid) {
+        getOrderFromDb(orderUid);
         this.tableGoods = new ArrayList<>();
         fillGoodList(order.getUid());
         this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods);
@@ -62,33 +56,33 @@ public class OrderViewModel extends BaseObservable {
     }
 
     @Bindable
+    public String getTitle() {
+        return order.toString();
+    }
+
+    @Bindable
     public void setDate(String date) {
-        this.date = date;
+        order.setDate(date);
     }
 
     @Bindable
     public String getDate() {
-        return date;
+        return order.getDate();
     }
 
     @Bindable
     public void setTime(String time) {
-        this.time = time;
+        order.setTime(time);
     }
 
     @Bindable
     public String getTime() {
-        return time;
+        return order.getTime();
     }
-
-//    @Bindable
-//    public void setSum(String sum) {
-//        this.sum = Double.parseDouble(sum);
-//    }
 
     @Bindable
     public String getSum() {
-        return String.valueOf(sum);
+        return String.valueOf(order.getSum());
     }
 
     @BindingAdapter("android:data")
@@ -98,13 +92,22 @@ public class OrderViewModel extends BaseObservable {
         }
     }
 
-    private void countSum() {
-        sum = 0.0;
+    public void increaseQuantityInRow(int position) {
+        tableGoods.get(position).increaseQuantity();
+    }
+
+    public void decreaseQuantityInRow(int position) {
+        tableGoods.get(position).decreaseQuantity();
+    }
+
+    public void countSum() {
+        double sum = 0.0;
         for (TableGoods row : tableGoods
         ) {
             sum += row.getSum();
         }
-//        setSum(String.valueOf(sum));
+        order.setSum(sum);
+        notifyChange();
     }
 
     public void onAddGood(Good good, double quantity, double price) {
@@ -116,6 +119,37 @@ public class OrderViewModel extends BaseObservable {
                 quantity * price));
         adapter.notifyItemInserted(tableGoods.size());
         countSum();
+    }
+
+    private void getOrderFromDb(String uid) {
+        DbHelper dbHelper = DbHelper.getInstance();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selection = DbHelper.COLUMN_UID + " = ?";
+        String[] selectionArgs = { uid };
+        Cursor c = db.query(DbHelper.TABLE_ORDERS,
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null);
+        int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+        int dateClIndex = c.getColumnIndex(DbHelper.COLUMN_DATE);
+        int companyClIndex = c.getColumnIndex(DbHelper.COLUMN_COMPANY_UID);
+        int partnerClIndex = c.getColumnIndex(DbHelper.COLUMN_PARTNER_UID);
+        int warehouseClIndex = c.getColumnIndex(DbHelper.COLUMN_WAREHOUSE_UID);
+        int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
+        if (c.moveToFirst()) {
+            order = new Order(c.getString(uidClIndex),
+                    c.getString(dateClIndex),
+                    c.getString(dateClIndex), //FIXME: TIME!!!
+                    c.getString(companyClIndex),
+                    c.getString(partnerClIndex),
+                    c.getString(warehouseClIndex),
+                    c.getDouble(sumClIndex));
+        }
+        c.close();
+        db.close();
     }
 
     private void fillGoodList(String uid) {
@@ -148,5 +182,25 @@ public class OrderViewModel extends BaseObservable {
         }
         c.close();
         db.close();
+    }
+
+    public boolean saveOrder() {
+        DbHelper dbHelper = DbHelper.getInstance();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            order.save(db);
+            for (TableGoods row : tableGoods
+            ) {
+                row.save(db);
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            return false;
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+        return true;
     }
 }
