@@ -8,7 +8,6 @@ import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
@@ -23,10 +22,9 @@ public class OrderViewModel extends BaseObservable {
     private List<TableGoods> tableGoods;
     private GoodsOrderRecyclerViewAdapter adapter;
 
-    public OrderViewModel(String orderUid) {
-        getOrderFromDb(orderUid);
-        this.tableGoods = new ArrayList<>();
-        fillGoodList(order.getUid());
+    public OrderViewModel(String uid) {
+        order = new Order(uid);
+        this.tableGoods = order.getTableGoods();
         this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods);
     }
 
@@ -121,79 +119,12 @@ public class OrderViewModel extends BaseObservable {
         countSum();
     }
 
-    private void getOrderFromDb(String uid) {
-        DbHelper dbHelper = DbHelper.getInstance();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String selection = DbHelper.COLUMN_UID + " = ?";
-        String[] selectionArgs = { uid };
-        Cursor c = db.query(DbHelper.TABLE_ORDERS,
-                null,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null);
-        int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-        int dateClIndex = c.getColumnIndex(DbHelper.COLUMN_DATE);
-        int companyClIndex = c.getColumnIndex(DbHelper.COLUMN_COMPANY_UID);
-        int partnerClIndex = c.getColumnIndex(DbHelper.COLUMN_PARTNER_UID);
-        int warehouseClIndex = c.getColumnIndex(DbHelper.COLUMN_WAREHOUSE_UID);
-        int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
-        if (c.moveToFirst()) {
-            order = new Order(c.getString(uidClIndex),
-                    c.getString(dateClIndex),
-                    c.getString(dateClIndex), //FIXME: TIME!!!
-                    c.getString(companyClIndex),
-                    c.getString(partnerClIndex),
-                    c.getString(warehouseClIndex),
-                    c.getDouble(sumClIndex));
-        }
-        c.close();
-        db.close();
-    }
-
-    private void fillGoodList(String uid) {
-        // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] selectionArgs = { uid };
-        String sql = "SELECT *"
-                + " FROM " + DbHelper.TABLE_GOODS_TABLE
-                + " LEFT JOIN " + DbHelper.TABLE_GOODS
-                + " ON " + DbHelper.COLUMN_GOOD_UID + " = " + DbHelper.COLUMN_UID
-                + " WHERE " + DbHelper.COLUMN_ORDER_UID + " = ?"
-                + " ORDER BY " + DbHelper.COLUMN_POSITION;
-        Cursor c = db.rawQuery(sql, selectionArgs);
-        int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
-        int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-        int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-        int quantityClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
-        int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
-        int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
-        if (c.moveToFirst()) {
-            do {
-                tableGoods.add(new TableGoods(c.getString(uidClIndex),
-                        c.getInt(positionClIndex),
-                        c.getString(nameClIndex),
-                        c.getDouble(quantityClIndex),
-                        c.getDouble(priceClIndex),
-                        c.getDouble(sumClIndex)));
-            } while (c.moveToNext());
-        }
-        c.close();
-        db.close();
-    }
-
     public boolean saveOrder() {
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {
             order.save(db);
-            for (TableGoods row : tableGoods
-            ) {
-                row.save(db);
-            }
             db.setTransactionSuccessful();
         } catch (Exception e) {
             return false;
