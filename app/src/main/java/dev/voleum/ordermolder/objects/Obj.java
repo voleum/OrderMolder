@@ -24,5 +24,5 @@ public abstract class Obj implements Serializable {
         this.uid = uid;
     }
 
-    public abstract void save(SQLiteDatabase db);
+    public abstract boolean save(SQLiteDatabase db);
 }

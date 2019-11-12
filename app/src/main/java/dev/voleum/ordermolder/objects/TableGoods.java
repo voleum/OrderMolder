@@ -8,6 +8,7 @@ import dev.voleum.ordermolder.database.DbHelper;
 public class TableGoods extends Table {
 
     private String goodUid;
+    private String goodName;
     private double quantity;
     private double price;
     private double sum;
@@ -15,13 +16,23 @@ public class TableGoods extends Table {
     public TableGoods(String uid, int position, String goodUid, double quantity, double price, double sum) {
         super(uid, position);
         this.goodUid = goodUid;
+        this.goodName = goodUid;
+        this.quantity = quantity;
+        this.price = price;
+        this.sum = sum;
+    }
+
+    public TableGoods(String uid, int position, String goodUid, String goodName, double quantity, double price, double sum) {
+        super(uid, position);
+        this.goodUid = goodUid;
+        this.goodName = goodName;
         this.quantity = quantity;
         this.price = price;
         this.sum = sum;
     }
 
     @Override
-    public void save(SQLiteDatabase db) {
+    public boolean save(SQLiteDatabase db) {
         ContentValues cv = new ContentValues();
         cv.put(DbHelper.COLUMN_ORDER_UID, uid);
         cv.put(DbHelper.COLUMN_POSITION, position);
@@ -30,14 +41,15 @@ public class TableGoods extends Table {
         cv.put(DbHelper.COLUMN_PRICE, price);
         cv.put(DbHelper.COLUMN_SUM, sum);
         db.insertWithOnConflict(DbHelper.TABLE_GOODS_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
     }
 
     public String getGoodUid() {
         return goodUid;
     }
 
-    public void setGoodUid(String goodUid) {
-        this.goodUid = goodUid;
+    public String getGoodNane() {
+        return goodName;
     }
 
     public double getQuantity() {

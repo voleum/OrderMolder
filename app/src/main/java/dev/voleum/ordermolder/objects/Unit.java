@@ -17,13 +17,14 @@ public class Unit extends Catalog {
     }
 
     @Override
-    public void save(SQLiteDatabase db) {
+    public boolean save(SQLiteDatabase db) {
         ContentValues cv = new ContentValues();
         cv.put(DbHelper.COLUMN_UID, uid);
         cv.put(DbHelper.COLUMN_CODE, code);
         cv.put(DbHelper.COLUMN_NAME, name);
         cv.put(DbHelper.COLUMN_FULL_NAME, fullName);
         db.insertWithOnConflict(DbHelper.TABLE_UNITS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
     }
 
     public int getCode() {

@@ -1,8 +1,9 @@
 package dev.voleum.ordermolder.viewmodels;
 
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
@@ -21,6 +22,13 @@ public class OrderViewModel extends BaseObservable {
     private Order order;
     private List<TableGoods> tableGoods;
     private GoodsOrderRecyclerViewAdapter adapter;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public OrderViewModel() {
+        order = new Order();
+        this.tableGoods = order.getTableGoods();
+        adapter = new GoodsOrderRecyclerViewAdapter(tableGoods);
+    }
 
     public OrderViewModel(String uid) {
         order = new Order(uid);
@@ -112,6 +120,7 @@ public class OrderViewModel extends BaseObservable {
         tableGoods.add(new TableGoods(order.getUid(),
                 tableGoods.size(),
                 good.getUid(),
+                good.getName(),
                 quantity,
                 price,
                 quantity * price));
