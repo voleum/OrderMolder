@@ -37,39 +37,39 @@ class XmlHelper {
 
     private final String UNKNOWN = "Unknown";
 
-    private final String TAG_CATALOG = "Catalog";
-    private final String TAG_DOCUMENT = "Document";
-    private final String TAG_REPORT = "Report";
-    private final String TAG_ITEM = "Item";
-    private final String TAG_COMPANY = "Company";
-    private final String TAG_PARTNER = "Partner";
-    private final String TAG_GOOD_GROUP = "GoodGroup";
-    private final String TAG_GOOD = "Good";
-    private final String TAG_WAREHOUSE = "Warehouse";
-    private final String TAG_UNIT = "Unit";
-    private final String TAG_ORDER = "Order";
     private final String TAG_CASH_RECEIPT = "CashReceipt";
+    private final String TAG_CATALOG = "Catalog";
+    private final String TAG_COMPANY = "Company";
+    private final String TAG_DOCUMENT = "Document";
+    private final String TAG_GOOD = "Good";
+    private final String TAG_GOOD_GROUP = "GoodGroup";
+    private final String TAG_ITEM = "Item";
+    private final String TAG_ORDER = "Order";
+    private final String TAG_PARTNER = "Partner";
     private final String TAG_PRICE_LIST = "PriceList";
+    private final String TAG_REPORT = "Report";
     private final String TAG_ROW = "Row";
+    private final String TAG_UNIT = "Unit";
+    private final String TAG_WAREHOUSE = "Warehouse";
 
-    private final String ATTRIBUTE_UID = "UID";
-    private final String ATTRIBUTE_NAME = "Name";
-    private final String ATTRIBUTE_DATE = "Date";
+    private final String ATTRIBUTE_CODE = "Code";
     private final String ATTRIBUTE_COMPANY = "Company";
-    private final String ATTRIBUTE_PARTNER = "Partner";
-    private final String ATTRIBUTE_WAREHOUSE = "Warehouse";
+    private final String ATTRIBUTE_DATE = "Date";
+    private final String ATTRIBUTE_FULL_NAME = "FullName";
+    private final String ATTRIBUTE_GOOD = "Good";
+    private final String ATTRIBUTE_GROUP = "Group";
+    private final String ATTRIBUTE_NAME = "Name";
     private final String ATTRIBUTE_ORDER = "Order";
+    private final String ATTRIBUTE_PARTNER = "Partner";
+    private final String ATTRIBUTE_POSITION = "Position";
+    private final String ATTRIBUTE_PRICE = "Price";
+    private final String ATTRIBUTE_QUANTITY = "Quantity";
     private final String ATTRIBUTE_SUM = "Sum";
     private final String ATTRIBUTE_SUM_CREDIT = "SumCredit";
-    private final String ATTRIBUTE_POSITION = "Position";
-    private final String ATTRIBUTE_GOOD = "Good";
-    private final String ATTRIBUTE_QUANTITY = "Quantity";
-    private final String ATTRIBUTE_PRICE = "Price";
     private final String ATTRIBUTE_TIN = "TIN";
-    private final String ATTRIBUTE_GROUP = "Group";
+    private final String ATTRIBUTE_UID = "UID";
     private final String ATTRIBUTE_UNIT = "Unit";
-    private final String ATTRIBUTE_CODE = "Code";
-    private final String ATTRIBUTE_FULL_NAME = "FullName";
+    private final String ATTRIBUTE_WAREHOUSE = "Warehouse";
 
     boolean parseXml(InputStream input) {
 
@@ -139,7 +139,6 @@ class XmlHelper {
                                                 currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
                                                 arrayListObj.add(new Order(currentUid, //TODO: add rows to order
                                                         xpp.getAttributeValue(null, ATTRIBUTE_DATE),
-                                                        xpp.getAttributeValue(null, ATTRIBUTE_DATE), //FIXME: TIME!!!
                                                         xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
                                                         xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
                                                         xpp.getAttributeValue(null, ATTRIBUTE_WAREHOUSE),
@@ -149,7 +148,6 @@ class XmlHelper {
                                                 currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
                                                 arrayListObj.add(new CashReceipt(currentUid,
                                                         xpp.getAttributeValue(null, ATTRIBUTE_DATE),
-                                                        xpp.getAttributeValue(null, ATTRIBUTE_DATE), //FIXME: TIME!!!
                                                         xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
                                                         xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
                                                         Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));

@@ -11,10 +11,11 @@ public class Warehouse extends Catalog {
     }
 
     @Override
-    public void save(SQLiteDatabase db) {
+    public boolean save(SQLiteDatabase db) {
         ContentValues cv = new ContentValues();
         cv.put(DbHelper.COLUMN_UID, uid);
         cv.put(DbHelper.COLUMN_NAME, name);
         db.insertWithOnConflict(DbHelper.TABLE_WAREHOUSES, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
     }
 }

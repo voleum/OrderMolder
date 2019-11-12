@@ -48,7 +48,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         try {
             double quantity = row.getQuantity();
             double price = row.getPrice();
-            ((GoodViewHolder) holder).goodName.setText(row.getGoodUid());
+            ((GoodViewHolder) holder).goodName.setText(row.getGoodNane());
             ((GoodViewHolder) holder).goodQuantity.setText(String.valueOf(quantity));
             ((GoodViewHolder) holder).goodPrice.setText(String.valueOf(price));
         } catch (NullPointerException e) {
@@ -109,6 +109,19 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
             return false;
         };
 
+        GoodViewHolder(View view) {
+            super(view);
+            goodName = view.findViewById(R.id.good_name);
+            goodQuantity = view.findViewById(R.id.good_quantity);
+            goodPrice = view.findViewById(R.id.good_price);
+            btnPlus = view.findViewById(R.id.good_plus);
+            btnMinus = view.findViewById(R.id.good_minus);
+            btnPlus.setOnClickListener(this::onClick);
+            btnMinus.setOnClickListener(this::onClick);
+            goodQuantity.setOnEditorActionListener(onEditorActionListener);
+            goodPrice.setOnEditorActionListener(onEditorActionListener);
+        }
+
         @Override
         public void onClick(View v) {
 //            int position = getAdapterPosition();
@@ -142,19 +155,6 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
             if (onEntryClickListener != null) {
                 onEntryClickListener.onEntryClick(v, getLayoutPosition());
             }
-        }
-
-        GoodViewHolder(View view) {
-            super(view);
-            goodName = view.findViewById(R.id.good_name);
-            goodQuantity = view.findViewById(R.id.good_quantity);
-            goodPrice = view.findViewById(R.id.good_price);
-            btnPlus = view.findViewById(R.id.good_plus);
-            btnMinus = view.findViewById(R.id.good_minus);
-            btnPlus.setOnClickListener(this::onClick);
-            btnMinus.setOnClickListener(this::onClick);
-            goodQuantity.setOnEditorActionListener(onEditorActionListener);
-            goodPrice.setOnEditorActionListener(onEditorActionListener);
         }
 
         private void onButtonClick(View v) {

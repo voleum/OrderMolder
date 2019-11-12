@@ -3,6 +3,7 @@ package dev.voleum.ordermolder.ui.orders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -60,6 +62,7 @@ public class OrderActivity extends AppCompatActivity {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +71,8 @@ public class OrderActivity extends AppCompatActivity {
         isCreating = (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true));
         savedWithoutClosing = false;
 
-        orderViewModel = new OrderViewModel(getIntent().getStringExtra(DocListActivity.DOC));
+        if (isCreating) orderViewModel = new OrderViewModel();
+        else orderViewModel = new OrderViewModel(getIntent().getStringExtra(DocListActivity.DOC));
         ActivityDocBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_doc);
         binding.setViewModel(orderViewModel);
         binding.executePendingBindings();

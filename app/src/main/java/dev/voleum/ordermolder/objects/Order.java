@@ -3,6 +3,9 @@ package dev.voleum.ordermolder.objects;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +17,26 @@ public class Order extends Document {
     private String warehouseUid;
     private List<TableGoods> tableGoods;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Order() {
-
+        setCurrentDate();
+        setCurrentTime();
+        tableGoods = new ArrayList<>();
     }
 
     public Order(String uid) {
         getOrderFromDb(uid);
+    }
+
+    public Order(String uid, String dateTime, String companyUid, String partnerUid, String warehouseUid, double sum) {
+        super(uid, dateTime, companyUid, partnerUid, sum);
+        this.warehouseUid = warehouseUid;
+    }
+
+    public Order(String uid, String dateTime, String companyUid, String partnerUid, String warehouseUid, double sum, List<TableGoods> tableGoods) {
+        super(uid, dateTime, companyUid, partnerUid, sum);
+        this.warehouseUid = warehouseUid;
+        this.tableGoods = tableGoods;
     }
 
     public Order(String uid, String date, String time, String companyUid, String partnerUid, String warehouseUid, double sum) {
@@ -34,23 +51,31 @@ public class Order extends Document {
     }
 
     @Override
-    public void save(SQLiteDatabase db) {
-        ContentValues cv = new ContentValues();
-        cv.put(DbHelper.COLUMN_UID, uid);
-        cv.put(DbHelper.COLUMN_DATE, dateTime);
-        cv.put(DbHelper.COLUMN_COMPANY_UID, companyUid);
-        cv.put(DbHelper.COLUMN_PARTNER_UID, partnerUid);
-        cv.put(DbHelper.COLUMN_WAREHOUSE_UID, warehouseUid);
-        cv.put(DbHelper.COLUMN_SUM, sum);
-        db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-        String whereClause = DbHelper.COLUMN_GOOD_UID + " = ?";
-        String[] whereArgs = { uid };
-        db.delete(DbHelper.TABLE_GOODS_TABLE,
-                whereClause,
-                whereArgs);
-        for (TableGoods tg : tableGoods
-             ) {
-            tg.save(db);
+    public boolean save(SQLiteDatabase db) {
+        try {
+            if (tableGoods == null) throw new Exception();
+            ContentValues cv = new ContentValues();
+            String dateDb = date.replace(".", "-") + " " + time + ".000";
+            cv.put(DbHelper.COLUMN_UID, uid);
+            cv.put(DbHelper.COLUMN_DATE, dateDb);
+            cv.put(DbHelper.COLUMN_COMPANY_UID, companyUid);
+            cv.put(DbHelper.COLUMN_PARTNER_UID, partnerUid);
+            cv.put(DbHelper.COLUMN_WAREHOUSE_UID, warehouseUid);
+            cv.put(DbHelper.COLUMN_SUM, sum);
+            db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+            String whereClause = DbHelper.COLUMN_GOOD_UID + " = ?";
+            String[] whereArgs = { uid };
+            db.delete(DbHelper.TABLE_GOODS_TABLE,
+                    whereClause,
+                    whereArgs);
+            for (TableGoods tg : tableGoods
+                 ) {
+                tg.save(db);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -112,7 +137,8 @@ public class Order extends Document {
         sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
         if (c.moveToFirst()) {
             uid = c.getString(uidClIndex);
-            dateTime = c.getString(dateClIndex);
+            date = c.getString(dateClIndex).substring(0, 10).replace("-", ".");
+            time = c.getString(dateClIndex).substring(11, 19);
             companyUid = c.getString(companyClIndex);
             partnerUid = c.getString(partnerClIndex);
             warehouseUid = c.getString(warehouseClIndex);

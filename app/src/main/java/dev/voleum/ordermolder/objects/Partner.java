@@ -20,12 +20,13 @@ public class Partner extends EconomicEntity {
     }
 
     @Override
-    public void save(SQLiteDatabase db) {
+    public boolean save(SQLiteDatabase db) {
         ContentValues cv = new ContentValues();
         cv.put(DbHelper.COLUMN_UID, uid);
         cv.put(DbHelper.COLUMN_NAME, name);
         cv.put(DbHelper.COLUMN_TIN, tin);
         db.insertWithOnConflict(DbHelper.TABLE_PARTNERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
     }
 
     private class DbAsyncGetData extends AsyncTask<String, Void, Void> {

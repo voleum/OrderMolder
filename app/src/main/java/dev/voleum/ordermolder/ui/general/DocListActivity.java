@@ -190,7 +190,6 @@ public class DocListActivity extends AppCompatActivity {
                     do {
                         arrayDocs.add(new Order(c.getString(uidIndex),
                                 c.getString(dateIndex),
-                                c.getString(dateIndex), //FIXME: TIME!!!
                                 c.getString(companyIndex),
                                 c.getString(partnerIndex),
                                 c.getString(warehouseIndex),
@@ -201,7 +200,6 @@ public class DocListActivity extends AppCompatActivity {
                     do {
                         arrayDocs.add(new CashReceipt(c.getString(uidIndex),
                                 c.getString(dateIndex),
-                                c.getString(dateIndex), //FIXME: TIME!!!
                                 c.getString(companyIndex),
                                 c.getString(partnerIndex),
                                 c.getDouble(sumIndex)));

@@ -17,13 +17,14 @@ public class Good extends Catalog {
     }
 
     @Override
-    public void save(SQLiteDatabase db) {
+    public boolean save(SQLiteDatabase db) {
         ContentValues cv = new ContentValues();
         cv.put(DbHelper.COLUMN_UID, uid);
         cv.put(DbHelper.COLUMN_GROUP_UID, groupUid);
         cv.put(DbHelper.COLUMN_NAME, name);
         cv.put(DbHelper.COLUMN_UNIT_UID, unitUid);
         db.insertWithOnConflict(DbHelper.TABLE_GOODS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
     }
 
     public String getGroupUid() {

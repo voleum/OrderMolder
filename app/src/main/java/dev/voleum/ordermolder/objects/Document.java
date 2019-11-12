@@ -1,10 +1,15 @@
 package dev.voleum.ordermolder.objects;
 
+import android.icu.util.Calendar;
+import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 public abstract class Document extends Obj {
 
-    protected String dateTime;
+    protected String date;
+    protected String time;
     protected String companyUid;
     protected String partnerUid;
     protected double sum;
@@ -13,9 +18,19 @@ public abstract class Document extends Obj {
 
     }
 
+    protected Document(String uid, String dateTime, String companyUid, String partnerUid, double sum) {
+        super(uid);
+        this.date = dateTime.substring(0, 10).replace("-", ".");
+        this.time = dateTime.substring(11, 19);
+        this.companyUid = companyUid;
+        this.partnerUid = partnerUid;
+        this.sum = sum;
+    }
+
     protected Document(String uid, String date, String time, String companyUid, String partnerUid, double sum) {
         super(uid);
-        this.dateTime = date.replace(".", "-") + time + ".000";
+        this.date = date;
+        this.time = time;
         this.companyUid = companyUid;
         this.partnerUid = partnerUid;
         this.sum = sum;
@@ -24,26 +39,23 @@ public abstract class Document extends Obj {
     @NonNull
     @Override
     public String toString() {
-        String dateStr = dateTime
-                .substring(0, 10)
-                .replace("-", ".");
-        return "Date: " + dateStr + " / Sum: " + sum;
+        return "Date: " + date + " " + time + " / Sum: " + sum;
     }
 
     public String getDate() {
-        return dateTime.substring(0, 10).replace("-", ".");
+        return date;
     }
 
     public void setDate(String date) {
-        this.dateTime = date.replace(".", "-") + this.dateTime.substring(11, 19);
+        this.date = date;
     }
 
     public String getTime() {
-        return dateTime.substring(11, 19);
+        return time;
     }
 
     public void setTime(String time) {
-        this.dateTime = this.dateTime.substring(0, 10) + time + ".000";
+        this.time = time;
     }
 
     public String getCompanyUid() {
@@ -68,5 +80,23 @@ public abstract class Document extends Obj {
 
     public void setSum(double sum) {
         this.sum = sum;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void setCurrentDate() {
+        final Calendar calendar = Calendar.getInstance();
+        int yy = calendar.get(Calendar.YEAR);
+        int mm = calendar.get(Calendar.MONTH);
+        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+        date = dd + "." + (mm + 1) + "." + yy;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void setCurrentTime() {
+        final Calendar calendar = Calendar.getInstance();
+        int hh = calendar.get(Calendar.HOUR_OF_DAY);
+        int mm = calendar.get(Calendar.MINUTE);
+        int ss = calendar.get(Calendar.SECOND);
+        time = hh + ":" + mm + ":" + ss;
     }
 }

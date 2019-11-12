@@ -17,13 +17,14 @@ public class TableObjects extends Table {
     }
 
     @Override
-    public void save(SQLiteDatabase db) {
+    public boolean save(SQLiteDatabase db) {
         ContentValues cv = new ContentValues();
         cv.put(DbHelper.COLUMN_CASH_RECEIPT_UID, uid);
         cv.put(DbHelper.COLUMN_POSITION, position);
         cv.put(DbHelper.COLUMN_ORDER_UID, objectUid);
         cv.put(DbHelper.COLUMN_SUM_CREDIT, sum);
         db.insertWithOnConflict(DbHelper.TABLE_OBJECTS_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
     }
 
     public String getObjectUid() {

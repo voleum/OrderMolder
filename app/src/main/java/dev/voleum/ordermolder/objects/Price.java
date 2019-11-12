@@ -15,11 +15,12 @@ public class Price extends Obj {
     }
 
     @Override
-    public void save(SQLiteDatabase db) {
+    public boolean save(SQLiteDatabase db) {
         ContentValues cv = new ContentValues();
         cv.put(DbHelper.COLUMN_GOOD_UID, uid);
         cv.put(DbHelper.COLUMN_PRICE, price);
         db.insertWithOnConflict(DbHelper.TABLE_PRICE_LIST, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
     }
 
     public double getPrice() {

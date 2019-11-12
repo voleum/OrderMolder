@@ -1,4 +1,3 @@
-// TODO: EDIT ALL THE CLASS!!!
 package dev.voleum.ordermolder.adapters;
 
 import android.content.Context;
