@@ -86,9 +86,9 @@ public abstract class Document extends Obj {
     public void setCurrentDate() {
         final Calendar calendar = Calendar.getInstance();
         int yy = calendar.get(Calendar.YEAR);
-        int mm = calendar.get(Calendar.MONTH);
+        int mm = calendar.get(Calendar.MONTH) + 1;
         int dd = calendar.get(Calendar.DAY_OF_MONTH);
-        date = dd + "." + (mm + 1) + "." + yy;
+        date = (dd < 10 ? "0" + dd : String.valueOf(dd)) + "." + (mm < 10 ? "0" + mm : String.valueOf(mm)) + "." + yy;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -97,6 +97,8 @@ public abstract class Document extends Obj {
         int hh = calendar.get(Calendar.HOUR_OF_DAY);
         int mm = calendar.get(Calendar.MINUTE);
         int ss = calendar.get(Calendar.SECOND);
-        time = hh + ":" + mm + ":" + ss;
+        time = (hh < 10 ? "0" + hh : String.valueOf(hh))
+                + ":" + (mm < 10 ? "0" + mm : String.valueOf(mm))
+                + ":" + (ss < 10 ? "0" + ss : String.valueOf(ss));
     }
 }

@@ -41,10 +41,10 @@ public class OrderViewModel extends BaseObservable {
         return order;
     }
 
-    @Bindable
-    public void setTableGoods(List<TableGoods> tableGoods) {
-        this.tableGoods = tableGoods;
-    }
+//    @Bindable
+//    public void setTableGoods(List<TableGoods> tableGoods) {
+//        this.tableGoods = tableGoods;
+//    }
 
     @Bindable
     public List<TableGoods> getTableGoods() {
@@ -98,13 +98,13 @@ public class OrderViewModel extends BaseObservable {
         }
     }
 
-    public void increaseQuantityInRow(int position) {
-        tableGoods.get(position).increaseQuantity();
-    }
-
-    public void decreaseQuantityInRow(int position) {
-        tableGoods.get(position).decreaseQuantity();
-    }
+//    public void increaseQuantityInRow(int position) {
+//        tableGoods.get(position).increaseQuantity();
+//    }
+//
+//    public void decreaseQuantityInRow(int position) {
+//        tableGoods.get(position).decreaseQuantity();
+//    }
 
     public void countSum() {
         double sum = 0.0;

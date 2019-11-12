@@ -181,8 +181,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public List<TableGoods> getGoodsInfo() {
-        RecyclerView rv = fragmentSecondary.getActivity().findViewById(R.id.recycler_tabdoc);
-        return ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
+//        RecyclerView rv = fragmentSecondary.getActivity().findViewById(R.id.recycler_tabdoc);
+//        return ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
+        return null; //FIXME: delete this
     }
 
     public HashMap<Integer, HashMap<String, Object>> getObjectsInfo() {
