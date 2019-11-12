@@ -123,14 +123,14 @@ public class PlaceholderOrderFragment extends Fragment {
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
 
                 orderViewModel.getAdapter().setOnEntryClickListener((v, position) -> {
-                    switch (v.getId()) {
-                        case R.id.good_plus:
-                            orderViewModel.increaseQuantityInRow(position);
-                            break;
-                        case R.id.good_minus:
-                            orderViewModel.decreaseQuantityInRow(position);
-                            break;
-                    }
+//                    switch (v.getId()) {
+//                        case R.id.good_plus:
+//                            orderViewModel.increaseQuantityInRow(position);
+//                            break;
+//                        case R.id.good_minus:
+//                            orderViewModel.decreaseQuantityInRow(position);
+//                            break;
+//                    }
                     orderViewModel.countSum();
                 });
 
