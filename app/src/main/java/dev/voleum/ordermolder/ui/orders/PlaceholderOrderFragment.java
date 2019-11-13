@@ -122,7 +122,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                orderViewModel.getAdapter().setOnEntryClickListener((v, position) -> {
+//                orderViewModel.getAdapter().setOnEntryClickListener((v, position) -> {
 //                    switch (v.getId()) {
 //                        case R.id.good_plus:
 //                            orderViewModel.increaseQuantityInRow(position);
@@ -131,8 +131,8 @@ public class PlaceholderOrderFragment extends Fragment {
 //                            orderViewModel.decreaseQuantityInRow(position);
 //                            break;
 //                    }
-                    orderViewModel.countSum();
-                });
+//                    orderViewModel.countSum();
+//                });
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
