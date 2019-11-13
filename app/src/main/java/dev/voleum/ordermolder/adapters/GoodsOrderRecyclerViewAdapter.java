@@ -2,7 +2,6 @@ package dev.voleum.ordermolder.adapters;
 
 import android.os.Build;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,19 +14,22 @@ import java.util.List;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.OrderGoodHolderBinding;
 import dev.voleum.ordermolder.objects.TableGoods;
-import dev.voleum.ordermolder.viewmodels.GoodsOrderListItemBinding;
+import dev.voleum.ordermolder.viewmodels.GoodsOrderListItemViewModel;
+import dev.voleum.ordermolder.viewmodels.OrderViewModel;
 
 public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private List<TableGoods> goods;
-    private GoodsOrderRecyclerViewAdapter.OnEntryClickListener onEntryClickListener;
+    private OrderViewModel orderViewModel;
+//    private GoodsOrderRecyclerViewAdapter.OnEntryClickListener onEntryClickListener;
 
-    public interface OnEntryClickListener {
-        void onEntryClick(View v, int position);
-    }
+//    public interface OnEntryClickListener {
+//        void onEntryClick(View v, int position);
+//    }
 
-    public GoodsOrderRecyclerViewAdapter(List<TableGoods> goods) {
+    public GoodsOrderRecyclerViewAdapter(List<TableGoods> goods, OrderViewModel orderViewModel) {
         this.goods = goods;
+        this.orderViewModel = orderViewModel;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -45,7 +47,7 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         TableGoods row = goods.get(position);
-        ((GoodViewHolder) holder).binding.setRow(new GoodsOrderListItemBinding(row));
+        ((GoodViewHolder) holder).binding.setRow(new GoodsOrderListItemViewModel(row, orderViewModel));
     }
 
     @Override
@@ -53,9 +55,9 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         return goods.size();
     }
 
-    public void setOnEntryClickListener(GoodsOrderRecyclerViewAdapter.OnEntryClickListener onEntryClickListener) {
-        this.onEntryClickListener = onEntryClickListener;
-    }
+//    public void setOnEntryClickListener(GoodsOrderRecyclerViewAdapter.OnEntryClickListener onEntryClickListener) {
+//        this.onEntryClickListener = onEntryClickListener;
+//    }
 
     public void setData(List<TableGoods> tableGoods) {
         this.goods = tableGoods;

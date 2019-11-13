@@ -8,12 +8,14 @@ import androidx.databinding.Bindable;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.objects.TableGoods;
 
-public class GoodsOrderListItemBinding extends BaseObservable implements View.OnClickListener {
+public class GoodsOrderListItemViewModel extends BaseObservable  implements View.OnClickListener {
 
     private TableGoods tableGoods;
+    private OrderViewModel orderViewModel;
 
-    public GoodsOrderListItemBinding(TableGoods tableGoods) {
+    public GoodsOrderListItemViewModel(TableGoods tableGoods, OrderViewModel orderViewModel) {
         this.tableGoods = tableGoods;
+        this.orderViewModel = orderViewModel;
     }
 
 //    @Bindable
@@ -30,6 +32,7 @@ public class GoodsOrderListItemBinding extends BaseObservable implements View.On
     public void setQuantity(String quantity) {
         tableGoods.setQuantity(Double.parseDouble(quantity));
         tableGoods.countSum();
+        orderViewModel.countSum();
     }
 
     @Bindable
@@ -41,6 +44,7 @@ public class GoodsOrderListItemBinding extends BaseObservable implements View.On
     public void setPrice(String price) {
         tableGoods.setPrice(Double.parseDouble(price));
         tableGoods.countSum();
+        orderViewModel.countSum();
     }
 
     @Bindable
@@ -64,5 +68,6 @@ public class GoodsOrderListItemBinding extends BaseObservable implements View.On
                 break;
         }
         notifyChange();
+        orderViewModel.countSum();
     }
 }

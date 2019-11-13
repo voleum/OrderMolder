@@ -27,13 +27,13 @@ public class OrderViewModel extends BaseObservable {
     public OrderViewModel() {
         order = new Order();
         this.tableGoods = order.getTableGoods();
-        adapter = new GoodsOrderRecyclerViewAdapter(tableGoods);
+        adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
     }
 
     public OrderViewModel(String uid) {
         order = new Order(uid);
         this.tableGoods = order.getTableGoods();
-        this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods);
+        this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
     }
 
     @Bindable
@@ -101,7 +101,7 @@ public class OrderViewModel extends BaseObservable {
 //    public void increaseQuantityInRow(int position) {
 //        tableGoods.get(position).increaseQuantity();
 //    }
-//
+
 //    public void decreaseQuantityInRow(int position) {
 //        tableGoods.get(position).decreaseQuantity();
 //    }
@@ -113,7 +113,7 @@ public class OrderViewModel extends BaseObservable {
             sum += row.getSum();
         }
         order.setSum(sum);
-        notifyChange();
+        notifyPropertyChanged(dev.voleum.ordermolder.BR.sum);
     }
 
     public void onAddGood(Good good, double quantity, double price) {
