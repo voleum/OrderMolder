@@ -137,7 +137,7 @@ class XmlHelper {
                                                 break;
                                             case TAG_ORDER:
                                                 currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
-                                                arrayListObj.add(new Order(currentUid, //TODO: add rows to order
+                                                arrayListObj.add(new Order(currentUid, // TODO: add rows to order
                                                         xpp.getAttributeValue(null, ATTRIBUTE_DATE),
                                                         xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
                                                         xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),

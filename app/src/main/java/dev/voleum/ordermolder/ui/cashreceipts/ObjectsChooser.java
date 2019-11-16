@@ -54,7 +54,7 @@ public class ObjectsChooser extends AppCompatActivity {
     }
 
     private ArrayList<Order> getObjectList() {
-        // TODO: AsyncTask
+        // TODO: Async
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] selectionArgs = { companyUid, partnerUid };
@@ -75,7 +75,6 @@ public class ObjectsChooser extends AppCompatActivity {
             do {
                 objects.add(new Order(c.getString(uidIndex),
                         c.getString(dateIndex),
-                        c.getString(dateIndex), //FIXME: TIME!!!
                         c.getString(companyIndex),
                         c.getString(partnerIndex),
                         c.getString(warehouseIndex),

@@ -17,13 +17,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.DocListRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.enums.DocumentTypes;
 import dev.voleum.ordermolder.objects.CashReceipt;
 import dev.voleum.ordermolder.objects.Document;
 import dev.voleum.ordermolder.objects.Order;
-import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.ui.cashreceipts.CashReceiptActivity;
 import dev.voleum.ordermolder.ui.orders.OrderActivity;
 
@@ -150,7 +150,7 @@ public class DocListActivity extends AppCompatActivity {
 
         arrayDocs = new ArrayList<>();
 
-        // TODO: AsyncTask
+        // TODO: Async
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 

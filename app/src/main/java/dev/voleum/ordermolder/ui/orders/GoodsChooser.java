@@ -53,7 +53,7 @@ public class GoodsChooser extends AppCompatActivity {
     }
 
     private ArrayList<HashMap<String, Object>> getGoodList() {
-        // TODO: AsyncTask
+        // TODO: Async
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT " + DbHelper.COLUMN_UID + ", " +

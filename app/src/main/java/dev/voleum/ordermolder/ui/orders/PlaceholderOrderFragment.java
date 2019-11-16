@@ -101,7 +101,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 spinnerPartners = root.findViewById(R.id.spinner_partners);
                 spinnerCompanies = root.findViewById(R.id.spinner_companies);
                 spinnerWarehouses = root.findViewById(R.id.spinner_warehouses);
-                initData(root);
+                initData();
                 tvDate.setOnClickListener(v -> {
                     DialogFragment datePickerFragment = new SelectDateFragment(orderViewModel.getDate());
                     datePickerFragment.setTargetFragment(this, 0);
@@ -121,18 +121,6 @@ public class PlaceholderOrderFragment extends Fragment {
                 recyclerGoods = root.findViewById(R.id.recycler_tabdoc);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
-
-//                orderViewModel.getAdapter().setOnEntryClickListener((v, position) -> {
-//                    switch (v.getId()) {
-//                        case R.id.good_plus:
-//                            orderViewModel.increaseQuantityInRow(position);
-//                            break;
-//                        case R.id.good_minus:
-//                            orderViewModel.decreaseQuantityInRow(position);
-//                            break;
-//                    }
-//                    orderViewModel.countSum();
-//                });
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
@@ -157,8 +145,8 @@ public class PlaceholderOrderFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initData(View root) {
-        // TODO: AsyncTask
+    private void initData() {
+        // TODO: Async
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
