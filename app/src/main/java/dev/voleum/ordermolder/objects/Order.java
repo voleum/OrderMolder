@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import dev.voleum.ordermolder.database.DbHelper;
 
@@ -54,6 +55,7 @@ public class Order extends Document {
     public boolean save(SQLiteDatabase db) {
         try {
             if (tableGoods == null) throw new Exception();
+            if (uid.isEmpty()) setUid(UUID.randomUUID().toString());
             ContentValues cv = new ContentValues();
             String dateDb = date.replace(".", "-") + " " + time + ".000";
             cv.put(DbHelper.COLUMN_UID, uid);

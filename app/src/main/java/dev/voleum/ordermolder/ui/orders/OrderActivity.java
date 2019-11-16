@@ -1,14 +1,11 @@
 package dev.voleum.ordermolder.ui.orders;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -19,9 +16,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.ActivityDocBinding;
@@ -92,7 +88,7 @@ public class OrderActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager.addOnPageChangeListener(onPageChangeListener);
     }
@@ -138,20 +134,19 @@ public class OrderActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        View focusedView = getCurrentFocus();
-        if (focusedView != null) focusedView.clearFocus();
-        try {
-            InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 break;
             case R.id.doc_save:
-                if (orderViewModel.saveOrder()) savedWithoutClosing = true;
+                if (orderViewModel.getTableGoods().isEmpty()) {
+                    Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
+                }
+                // TODO: Async
+                if (orderViewModel.saveOrder()) {
+                    savedWithoutClosing = true;
+                    Snackbar.make(fab, R.string.snackbar_doc_saved, Snackbar.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;

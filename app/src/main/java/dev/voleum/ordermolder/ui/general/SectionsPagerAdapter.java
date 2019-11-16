@@ -15,15 +15,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
-import java.util.List;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.adapters.ObjectsCashReceiptRecyclerViewAdapter;
 import dev.voleum.ordermolder.objects.Company;
 import dev.voleum.ordermolder.objects.Partner;
-import dev.voleum.ordermolder.objects.TableGoods;
-import dev.voleum.ordermolder.objects.Warehouse;
 import dev.voleum.ordermolder.ui.cashreceipts.PlaceholderCashReceiptFragment;
 import dev.voleum.ordermolder.ui.orders.PlaceholderOrderFragment;
 
@@ -96,52 +92,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return createdFragment;
     }
 
-//    public double getSum() {
-//        switch (typeDoc) {
-//            case TYPE_ORDER:
-//                return ((PlaceholderOrderFragment) fragmentSecondary).getSum();
-//            case TYPE_CASH_RECEIPT:
-//                return ((PlaceholderCashReceiptFragment) fragmentSecondary).getSum();
-//            default:
-//                return 0.0;
-//        }
-//    }
-
-    public HashMap<String, Object> getOrderMainInfo() {
-        HashMap<String, Object> info = new HashMap<>();
-
-        FragmentActivity activity = fragmentMain.getActivity();
-        String companyUid = null;
-        String partnerUid = null;
-        String warehouseUid = null;
-        double sum = 0.0;
-        try {
-            companyUid = ((Company) ((Spinner) activity.findViewById(R.id.spinner_companies)).getSelectedItem()).getUid();
-            partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.spinner_partners)).getSelectedItem()).getUid();
-            warehouseUid = ((Warehouse) ((Spinner) activity.findViewById(R.id.spinner_warehouses)).getSelectedItem()).getUid();
-            try {
-                sum = Double.parseDouble(((TextView) activity.findViewById(R.id.tv_sum)).getText().toString());
-            } catch (NumberFormatException e) {
-                sum = 0.0;
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-        String dateTime = (((TextView) activity.findViewById(R.id.tv_date)).getText().toString().replaceAll("\\.", "-"))
-                        .concat(" ")
-                        .concat(((TextView) activity.findViewById(R.id.tv_time)).getText().toString())
-                        .concat(".000");
-
-        info.put("date", dateTime);
-        info.put("company_uid", companyUid);
-        info.put("partner_uid", partnerUid);
-        info.put("warehouse_uid", warehouseUid);
-        info.put("sum", sum);
-
-        return info;
-    }
-
     public HashMap<String, Object> getCashReceiptMainInfo() {
         HashMap<String, Object> info = new HashMap<>();
 
@@ -178,12 +128,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         info.put("sum", sum);
 
         return info;
-    }
-
-    public List<TableGoods> getGoodsInfo() {
-//        RecyclerView rv = fragmentSecondary.getActivity().findViewById(R.id.recycler_tabdoc);
-//        return ((GoodsOrderRecyclerViewAdapter) rv.getAdapter()).getGoods();
-        return null; //FIXME: delete this
     }
 
     public HashMap<Integer, HashMap<String, Object>> getObjectsInfo() {
