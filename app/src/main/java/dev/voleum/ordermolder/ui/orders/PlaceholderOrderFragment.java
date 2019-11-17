@@ -22,12 +22,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.databinding.FragmentDocSecondaryPageBinding;
 import dev.voleum.ordermolder.databinding.FragmentOrderMainBinding;
+import dev.voleum.ordermolder.databinding.FragmentOrderSecondaryPageBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
 import dev.voleum.ordermolder.fragments.SelectTimeFragment;
 import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -86,10 +88,14 @@ public class PlaceholderOrderFragment extends Fragment {
                 break;
             case 2:
                 orderViewModel = ((OrderActivity) getActivity()).getOrderViewModel();
-                FragmentDocSecondaryPageBinding bindingRecycler = DataBindingUtil.inflate(inflater, R.layout.fragment_doc_secondary_page, null, false);
+                FragmentOrderSecondaryPageBinding bindingRecycler
+                        = DataBindingUtil.inflate(inflater,
+                            R.layout.fragment_order_secondary_page,
+                            null,
+                            false);
                 bindingRecycler.setViewModel(orderViewModel);
                 root = bindingRecycler.getRoot();
-                recyclerGoods = root.findViewById(R.id.recycler_tabdoc);
+                recyclerGoods = root.findViewById(R.id.recycler_tab_order);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -102,10 +108,11 @@ public class PlaceholderOrderFragment extends Fragment {
         return root;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == GOOD_CHOOSE_REQUEST) {
-            if (resultCode == OrderActivity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 if (data != null) {
                     orderViewModel.onAddGood((Good) data.getSerializableExtra("good"),
                             data.getDoubleExtra("quantity", 1.0),

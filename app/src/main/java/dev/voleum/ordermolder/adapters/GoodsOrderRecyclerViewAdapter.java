@@ -21,11 +21,6 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private List<TableGoods> goods;
     private OrderViewModel orderViewModel;
-//    private GoodsOrderRecyclerViewAdapter.OnEntryClickListener onEntryClickListener;
-
-//    public interface OnEntryClickListener {
-//        void onEntryClick(View v, int position);
-//    }
 
     public GoodsOrderRecyclerViewAdapter(List<TableGoods> goods, OrderViewModel orderViewModel) {
         this.goods = goods;
@@ -55,31 +50,10 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         return goods.size();
     }
 
-//    public void setOnEntryClickListener(GoodsOrderRecyclerViewAdapter.OnEntryClickListener onEntryClickListener) {
-//        this.onEntryClickListener = onEntryClickListener;
-//    }
-
     public void setData(List<TableGoods> tableGoods) {
         this.goods = tableGoods;
         notifyDataSetChanged();
     }
-
-//    public List<TableGoods> getGoods() {
-//        return goods;
-//    }
-
-//    public double getSum() {
-//        double sum = 0.0;
-//        for (int i = 0; i < goods.size(); i++) {
-//            TableGoods row = goods.get(i);
-//            try {
-//                sum += row.getSum();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return sum;
-//    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public class GoodViewHolder extends RecyclerView.ViewHolder {
