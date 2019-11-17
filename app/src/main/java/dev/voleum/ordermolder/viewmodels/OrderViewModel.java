@@ -57,15 +57,12 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.order_spinner_companies:
-                selectedItemCompany = position;
                 order.setCompanyUid((companies.get(position)).getUid());
                 break;
             case R.id.order_spinner_partners:
-                selectedItemPartner = position;
                 order.setPartnerUid((partners.get(position)).getUid());
                 break;
             case R.id.order_spinner_warehouses:
-                selectedItemWarehouse = position;
                 order.setWarehouseUid((warehouses.get(position)).getUid());
                 break;
         }
@@ -74,6 +71,36 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Bindable
+    public void setSelectedItemCompany(int position) {
+        selectedItemCompany = position;
+    }
+
+    @Bindable
+    public int getSelectedItemCompany() {
+        return selectedItemCompany;
+    }
+
+    @Bindable
+    public void setSelectedItemPartner(int position) {
+        selectedItemPartner = position;
+    }
+
+    @Bindable
+    public int getSelectedItemPartner() {
+        return selectedItemPartner;
+    }
+
+    @Bindable
+    public void setSelectedItemWarehouse(int position) {
+        selectedItemWarehouse = position;
+    }
+
+    @Bindable
+    public int getSelectedItemWarehouse() {
+        return selectedItemWarehouse;
     }
 
     @Bindable
@@ -169,34 +196,58 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
             int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
             int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             do {
-                companies.add(new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex)));
+                Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+                companies.add(company);
+                if (company.getUid().equals(order.getCompanyUid())) {
+                    selectedItemCompany = companies.indexOf(company);
+                }
             } while (c.moveToNext());
         }
         // endregion
 
         // region Partners
         partners = new ArrayList<>();
-        c = db.query(DbHelper.TABLE_PARTNERS, null, null, null, null, null, null, null);
+        c = db.query(DbHelper.TABLE_PARTNERS,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
 
         if (c.moveToFirst()) {
             int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
             int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             do {
-                partners.add(new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex)));
+                Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+                partners.add(partner);
+                if (partner.getUid().equals(order.getPartnerUid())) {
+                    selectedItemPartner = partners.indexOf(partner);
+                }
             } while (c.moveToNext());
         }
         // endregion
 
         // region Warehouses
         warehouses = new ArrayList<>();
-        c = db.query(DbHelper.TABLE_WAREHOUSES, null, null, null, null, null, null, null);
+        c = db.query(DbHelper.TABLE_WAREHOUSES,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
 
         if (c.moveToFirst()) {
             int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
             int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
             do {
-                warehouses.add(new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex)));
+                Warehouse warehouse = new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex));
+                warehouses.add(warehouse);
+                if (warehouse.getUid().equals(order.getWarehouseUid())) {
+                    selectedItemWarehouse = warehouses.indexOf(warehouse);
+                }
             } while (c.moveToNext());
         }
         // endregion
