@@ -1,44 +1,34 @@
 package dev.voleum.ordermolder.ui.cashreceipts;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.HashMap;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.ObjectsCashReceiptRecyclerViewAdapter;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Fragment.SelectDateFragment;
-import dev.voleum.ordermolder.Fragment.SelectTimeFragment;
-import dev.voleum.ordermolder.Object.CashReceipt;
-import dev.voleum.ordermolder.Object.Company;
-import dev.voleum.ordermolder.Object.Order;
-import dev.voleum.ordermolder.Object.Partner;
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.ui.general.PageViewModel;
+import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.databinding.FragmentCashReceiptMainBinding;
+import dev.voleum.ordermolder.databinding.FragmentCashReceiptSecondaryPageBinding;
+import dev.voleum.ordermolder.fragments.SelectDateFragment;
+import dev.voleum.ordermolder.fragments.SelectTimeFragment;
+import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.viewmodels.CashReceiptViewModel;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -51,25 +41,9 @@ public class PlaceholderCashReceiptFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    private PageViewModel pageViewModel;
+    private CashReceiptViewModel cashReceiptViewModel;
 
     private RecyclerView recyclerObjects;
-    private HashMap<Integer, HashMap<String, Object>> objects;
-
-    private Company[] companies;
-    private Partner[] partners;
-
-    private ObjectsCashReceiptRecyclerViewAdapter adapter;
-    private ArrayAdapter<Company> adapterCompany;
-    private ArrayAdapter<Partner> adapterPartners;
-
-    private HashMap<String, Integer> hashCompanies;
-    private HashMap<String, Integer> hashPartners;
-
-    private Spinner spinnerCompanies;
-    private Spinner spinnerPartners;
-
-    private AdapterView.OnItemSelectedListener onItemSelectedListener;
 
     public static PlaceholderCashReceiptFragment newInstance(int index) {
         PlaceholderCashReceiptFragment fragment = new PlaceholderCashReceiptFragment();
@@ -82,12 +56,6 @@ public class PlaceholderCashReceiptFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-        pageViewModel.setIndex(index);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -100,200 +68,62 @@ public class PlaceholderCashReceiptFragment extends Fragment {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         View root = null;
-        CashReceipt cashReceiptObj =((CashReceiptActivity) getActivity()).getCashReceiptObj();
         switch (index) {
             case 1:
-                onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        switch (parent.getId()) {
-                            case R.id.cash_receipt_spinner_companies:
-                                ((CashReceiptActivity) getActivity()).setCompanyUid(companies[position].getUid());
-                                break;
-                            case R.id.cash_receipt_spinner_partners:
-                                ((CashReceiptActivity) getActivity()).setPartnerUid(partners[position].getUid());
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                };
-
-                root = inflater.inflate(R.layout.fragment_cash_receipt_main, container, false);
-                TextView tvDate = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_date);
-                TextView tvTime = root.findViewById(R.id.cash_receipt_date_time).findViewById(R.id.tv_time);
-                spinnerPartners = root.findViewById(R.id.cash_receipt_spinner_partners);
-                spinnerCompanies = root.findViewById(R.id.cash_receipt_spinner_companies);
-                initializeData(root);
+                cashReceiptViewModel = ((CashReceiptActivity) getActivity()).getCashReceiptViewModel();
+                FragmentCashReceiptMainBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cash_receipt_main, null, false);
+                binding.setViewModel(cashReceiptViewModel);
+                root = binding.getRoot();
+                TextView tvDate = root.findViewById(R.id.tv_date);
+                TextView tvTime = root.findViewById(R.id.tv_time);
                 tvDate.setOnClickListener(v -> {
-                    DialogFragment datePickerFragment = new SelectDateFragment(tvDate.getText().toString().substring(0, 10));
+                    DialogFragment datePickerFragment = new SelectDateFragment(cashReceiptViewModel.getDate());
                     datePickerFragment.setTargetFragment(this, 0);
                     datePickerFragment.show(getParentFragmentManager(), "DatePicker");
                 });
                 tvTime.setOnClickListener(v -> {
-                    DialogFragment timePickerFragment = new SelectTimeFragment(tvTime.getText().toString().substring(0, 5));
+                    DialogFragment timePickerFragment = new SelectTimeFragment(cashReceiptViewModel.getTime());
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
-                if (cashReceiptObj == null) {
-                    tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
-                    tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
-                } else {
-                    TextView tvSum = root.findViewById(R.id.cash_receipt_tv_sum);
-                    tvDate.setText(cashReceiptObj.getDate().substring(0, 10).replace("-", "."));
-                    tvTime.setText(cashReceiptObj.getDate().substring(11, 19));
-                    tvSum.setText(String.valueOf(cashReceiptObj.getSum()));
-                    spinnerCompanies.setSelection(hashCompanies.get(cashReceiptObj.getCompanyUid()));
-                    spinnerPartners.setSelection(hashPartners.get(cashReceiptObj.getPartnerUid()));
-                }
-                spinnerPartners.setOnItemSelectedListener(onItemSelectedListener);
-                spinnerCompanies.setOnItemSelectedListener(onItemSelectedListener);
                 break;
             case 2:
-                root = inflater.inflate(R.layout.fragment_tabdoc_list, container, false);
-                objects = new HashMap<>();
-                if (cashReceiptObj != null) {
-                    fillObjectList(cashReceiptObj.getUid());
-                }
-                recyclerObjects = root.findViewById(R.id.recycler_tabdoc);
+                cashReceiptViewModel = ((CashReceiptActivity) getActivity()).getCashReceiptViewModel();
+                FragmentCashReceiptSecondaryPageBinding bindingRecycler
+                        = DataBindingUtil.inflate(inflater,
+                            R.layout.fragment_cash_receipt_secondary_page,
+                            null,
+                            false);
+                bindingRecycler.setViewModel(cashReceiptViewModel);
+                root = bindingRecycler.getRoot();
+                recyclerObjects = root.findViewById(R.id.recycler_tab_cash_receipt);
                 recyclerObjects.setHasFixedSize(true);
                 recyclerObjects.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new ObjectsCashReceiptRecyclerViewAdapter(objects);
-                recyclerObjects.setAdapter(adapter);
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener((view) -> {
                     Intent intentOut = new Intent(getActivity(), ObjectsChooser.class);
-                    intentOut.putExtra(DbHelper.COLUMN_COMPANY_UID, ((CashReceiptActivity) getActivity()).getCompanyUid());
-                    intentOut.putExtra(DbHelper.COLUMN_PARTNER_UID, ((CashReceiptActivity) getActivity()).getPartnerUid());
+                    intentOut.putExtra(DbHelper.COLUMN_COMPANY_UID, (cashReceiptViewModel.getCashReceipt().getCompanyUid()));
+                    intentOut.putExtra(DbHelper.COLUMN_PARTNER_UID, (cashReceiptViewModel.getCashReceipt().getPartnerUid()));
                     startActivityForResult(intentOut, OBJECT_CHOOSE_REQUEST);
                         }
                 );
                 break;
         }
-
-        pageViewModel.getText().observe(this, s -> {
-//                textView.setText(s);
-        });
         return root;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == OBJECT_CHOOSE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    // TODO: if the object already in list - ignore
-                    Order chosenOrder = (Order) data.getSerializableExtra("object");
-                    double sum = data.getDoubleExtra("sum_credit", 1.0);
-                    int position = objects.size();
-                    HashMap<String, Object> values = new HashMap<>();
-                    values.put("object", chosenOrder);
-                    values.put("sum_credit", sum);
-                    objects.put(position, values);
-                    adapter.notifyItemInserted(position + 1);
+                    cashReceiptViewModel.onAddObject((Order) data.getSerializableExtra("object"),
+                            data.getDoubleExtra("sum_credit", 0.0));
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public double getSum() {
-        return adapter.getSum();
-    }
-
-    private void initializeData(View root) {
-        // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c;
-
-        // region Companies
-        c = db.query(DbHelper.TABLE_COMPANIES, null, null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            companies = new Company[c.getCount()];
-            hashCompanies = new HashMap<>();
-            int i = 0;
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                companies[i] = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                hashCompanies.put(companies[i].getUid(), i);
-                i++;
-            } while (c.moveToNext());
-
-            adapterCompany = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, companies);
-            adapterCompany.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerCompanies.setAdapter(adapterCompany);
-        }
-        // endregion
-
-        // region Partners
-        c = db.query(DbHelper.TABLE_PARTNERS, null, null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            partners = new Partner[c.getCount()];
-            hashPartners = new HashMap<>();
-            int i = 0;
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                partners[i] = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                hashPartners.put(partners[i].getUid(), i);
-                i++;
-            } while (c.moveToNext());
-
-            adapterPartners = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, partners);
-            adapterPartners.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerPartners.setAdapter(adapterPartners);
-        }
-        // endregion
-
-        c.close();
-        dbHelper.close();
-    }
-
-    private void fillObjectList(String uid) {
-        // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] selectionArgs = { uid };
-        String sql = "SELECT *"
-                + " FROM " + DbHelper.TABLE_OBJECTS_TABLE
-                + " LEFT JOIN " + DbHelper.TABLE_ORDERS
-                + " ON " + DbHelper.COLUMN_ORDER_UID + " = " + DbHelper.COLUMN_UID
-                + " WHERE " + DbHelper.COLUMN_CASH_RECEIPT_UID + " = ?"
-                + " ORDER BY " + DbHelper.COLUMN_POSITION;
-        Cursor c = db.rawQuery(sql, selectionArgs);
-        int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
-        int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-        int dateClIndex = c.getColumnIndex(DbHelper.COLUMN_DATE);
-        int companyClIndex = c.getColumnIndex(DbHelper.COLUMN_COMPANY_UID);
-        int partnerClIndex = c.getColumnIndex(DbHelper.COLUMN_PARTNER_UID);
-        int warehouseClIndex = c.getColumnIndex(DbHelper.COLUMN_WAREHOUSE_UID);
-        int sumCreditClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM_CREDIT);
-        int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
-        if (c.moveToFirst()) {
-            HashMap<String, Object> objectUidHash;
-           do {
-               objectUidHash = new HashMap<>();
-               objectUidHash.put("object", new Order(c.getString(uidClIndex),
-                       c.getString(dateClIndex),
-                       c.getString(companyClIndex),
-                       c.getString(partnerClIndex),
-                       c.getString(warehouseClIndex),
-                       c.getDouble(sumCreditClIndex)));
-               objectUidHash.put("sum_credit", c.getDouble(sumClIndex));
-               objects.put(c.getInt(positionClIndex), objectUidHash);
-           } while (c.moveToNext());
-        }
-        c.close();
-        db.close();
     }
 }

@@ -1,7 +1,6 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
@@ -10,6 +9,7 @@
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.PrimarySurface</item>
+<!--        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.OrderMolder.SmallComponent</item>-->
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -27,13 +27,26 @@
 
     <style name="Widget.OrderMolder.TextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:textSize">@dimen/rounded_textview_text_size</item>
-    </style>
-
-    <style name="Widget.OrderMolder.TextView.Padding">
         <item name="android:padding">@dimen/rounded_textview_padding</item>
+        <item name="android:layout_margin">@dimen/rounded_textview_margin</item>
+<!--        API >=26-->
+<!--        <item name="android:layout_marginHorizontal">@dimen/rounded_textview_margin</item>-->
     </style>
 
-    <style name="Widget.OrderMolder.TextView.Padding.RoundedColored">
+    <style name="Widget.OrderMolder.TextView.RoundedColored">
         <item name="android:background">@drawable/shape_rounded_textview</item>
     </style>
+
+    <style name="ShapeAppearance.OrderMolder.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">@dimen/rounded_button_corner_radius</item>
+    </style>
+
+    <style name="Widget.OrderMolder.Spinner" parent="Widget.AppCompat.TextView.SpinnerItem" />
+    <style name="Widget.OrderMolder.Spinner.RoundedColored">
+        <item name="android:padding">@dimen/rounded_spinner_padding</item>
+        <item name="android:background">@drawable/shape_rounded_spinner</item>
+        <item name="android:textAppearance">@style/TextAppearance.OrderMolder.Widget.TextView.SpinnerItem</item>
+    </style>
+
+    <style name="TextAppearance.OrderMolder.Widget.TextView.SpinnerItem" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem" />
 </resources>

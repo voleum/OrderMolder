@@ -8,21 +8,21 @@
 
     <TextView
         android:id="@+id/tv_chooser_name"
-        style="@style/Widget.OrderMolder.TextView.Padding"
+        style="@style/Widget.OrderMolder.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tool:text="Good name" />
 
     <TextView
         android:id="@+id/tv_chooser_price"
-        style="@style/Widget.OrderMolder.TextView.Padding.RoundedColored"
+        style="@style/Widget.OrderMolder.TextView.RoundedColored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tool:text="100.00" />
 
     <TextView
         android:id="@+id/tv_chooser_sign"
-        style="@style/Widget.OrderMolder.TextView.Padding"
+        style="@style/Widget.OrderMolder.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sign_currency_ruble" />

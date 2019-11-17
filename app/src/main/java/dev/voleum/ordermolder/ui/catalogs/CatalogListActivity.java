@@ -14,16 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.CatalogListRecyclerViewAdapter;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Enums.CatalogTypes;
-import dev.voleum.ordermolder.Object.Catalog;
-import dev.voleum.ordermolder.Object.Company;
-import dev.voleum.ordermolder.Object.Good;
-import dev.voleum.ordermolder.Object.Partner;
-import dev.voleum.ordermolder.Object.Unit;
-import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.adapters.CatalogListRecyclerViewAdapter;
+import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.enums.CatalogTypes;
+import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.objects.Company;
+import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.objects.Partner;
+import dev.voleum.ordermolder.objects.Unit;
+import dev.voleum.ordermolder.objects.Warehouse;
 
 public class CatalogListActivity extends AppCompatActivity {
 
@@ -48,9 +48,6 @@ public class CatalogListActivity extends AppCompatActivity {
         };
 
         recyclerView = findViewById(R.id.recycler_objs);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//            recyclerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//        }
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -67,8 +64,8 @@ public class CatalogListActivity extends AppCompatActivity {
     }
 
     private ArrayList<Catalog> getCatalogsList() {
-        // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getApplicationContext());
+        // TODO: Async
+        DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String table;

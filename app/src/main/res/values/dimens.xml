@@ -11,9 +11,10 @@
 
     <!-- View paddings -->
     <dimen name="rounded_textview_padding">16dp</dimen>
+    <dimen name="rounded_spinner_padding">16dp</dimen>
 
     <!-- View margins -->
-    <dimen name="rounded_textview_margin">16dp</dimen>
+    <dimen name="rounded_textview_margin">4dp</dimen>
     <dimen name="recycler_chooser">8dp</dimen>
 
     <!-- Text sizes -->
@@ -24,4 +25,5 @@
 
     <!-- Shapes radius -->
     <dimen name="rounded_textview_corner_radius">100dp</dimen>
+    <dimen name="rounded_button_corner_radius">100dp</dimen>
 </resources>
