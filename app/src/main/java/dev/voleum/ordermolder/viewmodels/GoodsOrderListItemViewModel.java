@@ -18,11 +18,6 @@ public class GoodsOrderListItemViewModel extends BaseObservable  implements View
         this.orderViewModel = orderViewModel;
     }
 
-//    @Bindable
-//    public void setTableGoods(TableGoods tableGoods) {
-//        this.tableGoods = tableGoods;
-//    }
-
     @Bindable
     public String getGoodName() {
         return tableGoods.getGoodNane();

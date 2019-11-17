@@ -1,7 +1,11 @@
 package dev.voleum.ordermolder.viewmodels;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import androidx.annotation.RequiresApi;
 import androidx.databinding.BaseObservable;
@@ -9,42 +13,73 @@ import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.objects.Company;
 import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.objects.TableGoods;
+import dev.voleum.ordermolder.objects.Warehouse;
 
-public class OrderViewModel extends BaseObservable {
+public class OrderViewModel extends BaseObservable implements Spinner.OnItemSelectedListener {
 
     private Order order;
     private List<TableGoods> tableGoods;
     private GoodsOrderRecyclerViewAdapter adapter;
+    private List<Company> companies;
+    private List<Partner> partners;
+    private List<Warehouse> warehouses;
+    private int selectedItemCompany;
+    private int selectedItemPartner;
+    private int selectedItemWarehouse;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public OrderViewModel() {
         order = new Order();
         this.tableGoods = order.getTableGoods();
         adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
+        initSpinnersData();
     }
 
     public OrderViewModel(String uid) {
         order = new Order(uid);
         this.tableGoods = order.getTableGoods();
         this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
+        initSpinnersData();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.order_spinner_companies:
+                selectedItemCompany = position;
+                order.setCompanyUid((companies.get(position)).getUid());
+                break;
+            case R.id.order_spinner_partners:
+                selectedItemPartner = position;
+                order.setPartnerUid((partners.get(position)).getUid());
+                break;
+            case R.id.order_spinner_warehouses:
+                selectedItemWarehouse = position;
+                order.setWarehouseUid((warehouses.get(position)).getUid());
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     @Bindable
     public Order getOrder() {
         return order;
     }
-
-//    @Bindable
-//    public void setTableGoods(List<TableGoods> tableGoods) {
-//        this.tableGoods = tableGoods;
-//    }
 
     @Bindable
     public List<TableGoods> getTableGoods() {
@@ -91,6 +126,21 @@ public class OrderViewModel extends BaseObservable {
         return String.valueOf(order.getSum());
     }
 
+    @Bindable
+    public List<Company> getEntryCompanies() {
+        return companies;
+    }
+
+    @Bindable
+    public List<Partner> getEntryPartners() {
+        return partners;
+    }
+
+    @Bindable
+    public List<Warehouse> getEntryWarehouses() {
+        return warehouses;
+    }
+
     @BindingAdapter("android:data")
     public static void setData(RecyclerView recyclerView, List<TableGoods> tableGoods) {
         if (recyclerView.getAdapter() instanceof GoodsOrderRecyclerViewAdapter) {
@@ -98,13 +148,62 @@ public class OrderViewModel extends BaseObservable {
         }
     }
 
-//    public void increaseQuantityInRow(int position) {
-//        tableGoods.get(position).increaseQuantity();
-//    }
+    private void initSpinnersData() {
+        // TODO: Async
+        DbHelper dbHelper = DbHelper.getInstance();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c;
 
-//    public void decreaseQuantityInRow(int position) {
-//        tableGoods.get(position).decreaseQuantity();
-//    }
+        // region Companies
+        companies = new ArrayList<>();
+        c = db.query(DbHelper.TABLE_COMPANIES,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        if (c.moveToFirst()) {
+            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+            do {
+                companies.add(new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex)));
+            } while (c.moveToNext());
+        }
+        // endregion
+
+        // region Partners
+        partners = new ArrayList<>();
+        c = db.query(DbHelper.TABLE_PARTNERS, null, null, null, null, null, null, null);
+
+        if (c.moveToFirst()) {
+            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+            do {
+                partners.add(new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex)));
+            } while (c.moveToNext());
+        }
+        // endregion
+
+        // region Warehouses
+        warehouses = new ArrayList<>();
+        c = db.query(DbHelper.TABLE_WAREHOUSES, null, null, null, null, null, null, null);
+
+        if (c.moveToFirst()) {
+            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+            do {
+                warehouses.add(new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex)));
+            } while (c.moveToNext());
+        }
+        // endregion
+
+        c.close();
+        dbHelper.close();
+    }
 
     public void countSum() {
         double sum = 0.0;

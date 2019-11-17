@@ -1,15 +1,11 @@
 package dev.voleum.ordermolder.ui.orders;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,19 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.databinding.FragmentDocSecondaryPageBinding;
 import dev.voleum.ordermolder.databinding.FragmentOrderMainBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
 import dev.voleum.ordermolder.fragments.SelectTimeFragment;
-import dev.voleum.ordermolder.objects.Company;
 import dev.voleum.ordermolder.objects.Good;
-import dev.voleum.ordermolder.objects.Partner;
-import dev.voleum.ordermolder.objects.Warehouse;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
 
 /**
@@ -50,22 +41,6 @@ public class PlaceholderOrderFragment extends Fragment {
     private OrderViewModel orderViewModel;
 
     private RecyclerView recyclerGoods;
-
-    private Company[] companies;
-    private Partner[] partners;
-    private Warehouse[] warehouses;
-
-    private ArrayAdapter<Company> adapterCompany;
-    private ArrayAdapter<Partner> adapterPartners;
-    private ArrayAdapter<Warehouse> adapterWarehouses;
-
-    private HashMap<String, Integer> hashCompanies;
-    private HashMap<String, Integer> hashPartners;
-    private HashMap<String, Integer> hashWarehouses;
-
-    private Spinner spinnerCompanies;
-    private Spinner spinnerPartners;
-    private Spinner spinnerWarehouses;
 
     public static PlaceholderOrderFragment newInstance(int index) {
         PlaceholderOrderFragment fragment = new PlaceholderOrderFragment();
@@ -98,10 +73,6 @@ public class PlaceholderOrderFragment extends Fragment {
                 root = binding.getRoot();
                 TextView tvDate = root.findViewById(R.id.tv_date);
                 TextView tvTime = root.findViewById(R.id.tv_time);
-                spinnerPartners = root.findViewById(R.id.spinner_partners);
-                spinnerCompanies = root.findViewById(R.id.spinner_companies);
-                spinnerWarehouses = root.findViewById(R.id.spinner_warehouses);
-                initData();
                 tvDate.setOnClickListener(v -> {
                     DialogFragment datePickerFragment = new SelectDateFragment(orderViewModel.getDate());
                     datePickerFragment.setTargetFragment(this, 0);
@@ -143,80 +114,5 @@ public class PlaceholderOrderFragment extends Fragment {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void initData() {
-        // TODO: Async
-        DbHelper dbHelper = DbHelper.getInstance();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c;
-
-        // region Companies
-        c = db.query(DbHelper.TABLE_COMPANIES, null, null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            companies = new Company[c.getCount()];
-            hashCompanies = new HashMap<>();
-            int i = 0;
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                companies[i] = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                hashCompanies.put(companies[i].getUid(), i);
-                i++;
-            } while (c.moveToNext());
-
-            adapterCompany = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, companies);
-            adapterCompany.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerCompanies.setAdapter(adapterCompany);
-        }
-        // endregion
-
-        // region Partners
-        c = db.query(DbHelper.TABLE_PARTNERS, null, null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            partners = new Partner[c.getCount()];
-            hashPartners = new HashMap<>();
-            int i = 0;
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                partners[i] = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                hashPartners.put(partners[i].getUid(), i);
-                i++;
-            } while (c.moveToNext());
-
-            adapterPartners = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, partners);
-            adapterPartners.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerPartners.setAdapter(adapterPartners);
-        }
-        // endregion
-
-        // region Warehouses
-        c = db.query(DbHelper.TABLE_WAREHOUSES, null, null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            warehouses = new Warehouse[c.getCount()];
-            hashWarehouses = new HashMap<>();
-            int i = 0;
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                warehouses[i] = new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex));
-                hashWarehouses.put(warehouses[i].getUid(), i);
-                i++;
-            } while (c.moveToNext());
-
-            adapterWarehouses = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, warehouses);
-            adapterWarehouses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerWarehouses.setAdapter(adapterWarehouses);
-        }
-        // endregion
-
-        c.close();
-        dbHelper.close();
     }
 }

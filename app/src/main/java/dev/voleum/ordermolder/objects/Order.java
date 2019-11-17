@@ -23,6 +23,8 @@ public class Order extends Document {
         setCurrentDate();
         setCurrentTime();
         tableGoods = new ArrayList<>();
+        uid = companyUid = partnerUid = warehouseUid = "";
+        sum = 0;
     }
 
     public Order(String uid) {
@@ -54,12 +56,12 @@ public class Order extends Document {
     @Override
     public boolean save(SQLiteDatabase db) {
         try {
-            if (tableGoods == null) throw new Exception();
+            if (tableGoods.isEmpty()) return false;
             if (uid.isEmpty()) setUid(UUID.randomUUID().toString());
             ContentValues cv = new ContentValues();
-            String dateDb = date.replace(".", "-") + " " + time + ".000";
+            String dateTime = date.replace(".", "-") + " " + time + ".000";
             cv.put(DbHelper.COLUMN_UID, uid);
-            cv.put(DbHelper.COLUMN_DATE, dateDb);
+            cv.put(DbHelper.COLUMN_DATE, dateTime);
             cv.put(DbHelper.COLUMN_COMPANY_UID, companyUid);
             cv.put(DbHelper.COLUMN_PARTNER_UID, partnerUid);
             cv.put(DbHelper.COLUMN_WAREHOUSE_UID, warehouseUid);
@@ -72,6 +74,7 @@ public class Order extends Document {
                     whereArgs);
             for (TableGoods tg : tableGoods
                  ) {
+                tg.setUid(uid);
                 tg.save(db);
             }
             return true;
