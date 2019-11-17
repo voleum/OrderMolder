@@ -44,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:entries="@{viewModel.entryCompanies}"
+                    android:selectedItemPosition="@={viewModel.selectedItemCompany}"
                     android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}" />
 
             </LinearLayout>
@@ -66,6 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:entries="@{viewModel.entryPartners}"
+                    android:selectedItemPosition="@={viewModel.selectedItemPartner}"
                     android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}" />
 
             </LinearLayout>
@@ -88,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:entries="@{viewModel.entryWarehouses}"
+                    android:selectedItemPosition="@={viewModel.selectedItemWarehouse}"
                     android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}" />
 
             </LinearLayout>
