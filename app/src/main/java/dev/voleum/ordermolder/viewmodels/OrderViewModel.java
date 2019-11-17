@@ -278,12 +278,13 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
         countSum();
     }
 
+    // TODO: Async
     public boolean saveOrder() {
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {
-            order.save(db);
+            if (!order.save(db)) return false;
             db.setTransactionSuccessful();
         } catch (Exception e) {
             return false;
