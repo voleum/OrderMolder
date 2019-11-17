@@ -1,67 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".ui.orders.PlaceholderOrderFragment">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="dev.voleum.ordermolder.viewmodels.CashReceiptViewModel" />
+    </data>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="-322dp">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <include
                 android:id="@+id/cash_receipt_date_time"
-                layout="@layout/date_time" />
+                layout="@layout/field_date_time"
+                app:date="@={viewModel.date}"
+                app:time="@={viewModel.time}" />
 
-            <Spinner
-                android:id="@+id/cash_receipt_spinner_companies"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/Widget.OrderMolder.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/object_company" />
+
+                <Spinner
+                    android:id="@+id/cash_receipt_spinner_companies"
+                    style="@style/Widget.OrderMolder.Spinner.RoundedColored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:entries="@{viewModel.entryCompanies}"
+                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}"
+                    android:selectedItemPosition="@={viewModel.selectedItemCompany}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/Widget.OrderMolder.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/object_partner" />
+
+                <Spinner
+                    android:id="@+id/cash_receipt_spinner_partners"
+                    style="@style/Widget.OrderMolder.Spinner.RoundedColored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:entries="@{viewModel.entryPartners}"
+                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}"
+                    android:selectedItemPosition="@={viewModel.selectedItemPartner}" />
+
+            </LinearLayout>
+
+            <include
+                android:id="@+id/order_sum"
+                layout="@layout/field_sum"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cash_receipt_date_time" />
+                app:sum="@{viewModel.sum}" />
 
-            <Spinner
-                android:id="@+id/cash_receipt_spinner_partners"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cash_receipt_spinner_companies" />
-
-            <TextView
-                android:id="@+id/cash_receipt_tv_sum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cash_receipt_spinner_partners"
-                tools:text="1000" />
-
-            <TextView
-                android:id="@+id/order_tv_ruble"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/sign_currency_ruble"
-                app:layout_constraintStart_toEndOf="@id/cash_receipt_tv_sum"
-                app:layout_constraintTop_toBottomOf="@id/cash_receipt_spinner_partners" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,69 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/good_name"
-        android:layout_width="wrap_content"
+    <data>
+        <variable
+            name="row"
+            type="dev.voleum.ordermolder.viewmodels.GoodsOrderListItemViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_gravity="start|center_vertical"
-        android:layout_weight="50"
-        tools:text="Good name" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/good_minus"
-        style="@android:style/Widget.Material.Button.Borderless.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:text="@string/sign_minus" />
+        <TextView
+            android:id="@+id/good_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="50"
+            android:text="@{row.goodName}"
+            android:textSize="20sp"
+            tools:text="Good name" />
 
-    <EditText
-        android:id="@+id/good_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_weight="10"
-        android:autofillHints=""
-        android:inputType="number"
-        android:textAlignment="center"
-        android:imeOptions="actionDone"
-        tools:text="10" />
+        <Button
+            android:id="@+id/good_minus"
+            style="@android:style/Widget.Material.Button.Borderless.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:onClick="@{(v) -> row.onClick(v)}"
+            android:text="@string/sign_minus" />
 
-    <Button
-        android:id="@+id/good_plus"
-        style="@android:style/Widget.Material.Button.Borderless.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:text="@string/sign_plus" />
+        <EditText
+            android:id="@+id/good_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="10"
+            android:autofillHints=""
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:text="@={row.quantity}"
+            android:textAlignment="center"
+            tools:text="10" />
 
-    <EditText
-        android:id="@+id/good_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:imeOptions="actionDone"
-        tools:text="1000"/>
+        <Button
+            android:id="@+id/good_plus"
+            style="@android:style/Widget.Material.Button.Borderless.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:onClick="@{(v) -> row.onClick(v)}"
+            android:text="@string/sign_plus" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="@string/sign_currency_ruble"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="10"/>
+        <EditText
+            android:id="@+id/good_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:text="@={row.price}"
+            android:textAlignment="center"
+            tools:text="1000" />
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="10"
+            android:text="@string/sign_currency_ruble"
+            android:textSize="20sp" />
+    </LinearLayout>
+</layout>

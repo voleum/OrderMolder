@@ -1,46 +1,35 @@
 package dev.voleum.ordermolder.ui.orders;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.HashMap;
 import java.util.Objects;
 
-import dev.voleum.ordermolder.Adapter.GoodsOrderRecyclerViewAdapter;
-import dev.voleum.ordermolder.Database.DbHelper;
-import dev.voleum.ordermolder.Fragment.SelectDateFragment;
-import dev.voleum.ordermolder.Fragment.SelectTimeFragment;
-import dev.voleum.ordermolder.Object.Company;
-import dev.voleum.ordermolder.Object.Good;
-import dev.voleum.ordermolder.Object.Order;
-import dev.voleum.ordermolder.Object.Partner;
-import dev.voleum.ordermolder.Object.Warehouse;
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.ui.general.PageViewModel;
+import dev.voleum.ordermolder.databinding.FragmentOrderMainBinding;
+import dev.voleum.ordermolder.databinding.FragmentOrderSecondaryPageBinding;
+import dev.voleum.ordermolder.fragments.SelectDateFragment;
+import dev.voleum.ordermolder.fragments.SelectTimeFragment;
+import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.viewmodels.OrderViewModel;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -51,27 +40,9 @@ public class PlaceholderOrderFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    private PageViewModel pageViewModel;
+    private OrderViewModel orderViewModel;
 
     private RecyclerView recyclerGoods;
-    private HashMap<Integer, HashMap<String, Object>> goods;
-
-    private Company[] companies;
-    private Partner[] partners;
-    private Warehouse[] warehouses;
-
-    private GoodsOrderRecyclerViewAdapter adapter;
-    private ArrayAdapter<Company> adapterCompany;
-    private ArrayAdapter<Partner> adapterPartners;
-    private ArrayAdapter<Warehouse> adapterWarehouses;
-
-    private HashMap<String, Integer> hashCompanies;
-    private HashMap<String, Integer> hashPartners;
-    private HashMap<String, Integer> hashWarehouses;
-
-    private Spinner spinnerCompanies;
-    private Spinner spinnerPartners;
-    private Spinner spinnerWarehouses;
 
     public static PlaceholderOrderFragment newInstance(int index) {
         PlaceholderOrderFragment fragment = new PlaceholderOrderFragment();
@@ -84,12 +55,6 @@ public class PlaceholderOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-        pageViewModel.setIndex(index);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -102,64 +67,37 @@ public class PlaceholderOrderFragment extends Fragment {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         View root = null;
-        Order orderObj = ((OrderActivity) getActivity()).getOrderObj();
         switch (index) {
             case 1:
-                root = inflater.inflate(R.layout.fragment_order_main, container, false);
+                orderViewModel = ((OrderActivity) getActivity()).getOrderViewModel();
+                FragmentOrderMainBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_order_main, null, false);
+                binding.setViewModel(orderViewModel);
+                root = binding.getRoot();
                 TextView tvDate = root.findViewById(R.id.tv_date);
                 TextView tvTime = root.findViewById(R.id.tv_time);
-                TextView tvSum = root.findViewById(R.id.order_tv_sum);
-                spinnerPartners = root.findViewById(R.id.order_spinner_partners);
-                spinnerCompanies = root.findViewById(R.id.order_spinner_companies);
-                spinnerWarehouses = root.findViewById(R.id.order_spinner_warehouses);
-                initializeData(root);
                 tvDate.setOnClickListener(v -> {
-                    DialogFragment datePickerFragment = new SelectDateFragment(tvDate.getText().toString().substring(0, 10));
+                    DialogFragment datePickerFragment = new SelectDateFragment(orderViewModel.getDate());
                     datePickerFragment.setTargetFragment(this, 0);
                     datePickerFragment.show(getParentFragmentManager(), "DatePicker");
                 });
                 tvTime.setOnClickListener(v -> {
-                    DialogFragment timePickerFragment = new SelectTimeFragment(tvTime.getText().toString().substring(0, 5));
+                    DialogFragment timePickerFragment = new SelectTimeFragment(orderViewModel.getTime());
                     timePickerFragment.setTargetFragment(this, 0);
                     timePickerFragment.show(getParentFragmentManager(), "TimePicker");
                 });
-//                tvSum.addTextChangedListener(new TextWatcher() {
-//                    @Override
-//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                    }
-//
-//                    @Override
-//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                        orderObj.setSum(Double.parseDouble(s.toString()));
-//                    }
-//
-//                    @Override
-//                    public void afterTextChanged(Editable s) {
-//                    }
-//                });
-                if (orderObj == null) {
-                    tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance()));
-                    tvTime.setText(new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance()));
-                } else {
-                    tvDate.setText(orderObj.getDate().substring(0, 10).replace("-", "."));
-                    tvTime.setText(orderObj.getDate().substring(11, 19));
-                    tvSum.setText(String.valueOf(orderObj.getSum()));
-                    spinnerCompanies.setSelection(hashCompanies.get(orderObj.getCompanyUid()));
-                    spinnerPartners.setSelection(hashPartners.get(orderObj.getPartnerUid()));
-                    spinnerWarehouses.setSelection(hashWarehouses.get(orderObj.getWarehouseUid()));
-                }
                 break;
             case 2:
-                root = inflater.inflate(R.layout.fragment_tabdoc_list, container, false);
-                goods = new HashMap<>();
-                if (orderObj != null) {
-                    fillGoodList(orderObj.getUid());
-                }
-                recyclerGoods = root.findViewById(R.id.recycler_tabdoc);
+                orderViewModel = ((OrderActivity) getActivity()).getOrderViewModel();
+                FragmentOrderSecondaryPageBinding bindingRecycler
+                        = DataBindingUtil.inflate(inflater,
+                            R.layout.fragment_order_secondary_page,
+                            null,
+                            false);
+                bindingRecycler.setViewModel(orderViewModel);
+                root = bindingRecycler.getRoot();
+                recyclerGoods = root.findViewById(R.id.recycler_tab_order);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new GoodsOrderRecyclerViewAdapter(goods);
-                recyclerGoods.setAdapter(adapter);
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
@@ -167,151 +105,21 @@ public class PlaceholderOrderFragment extends Fragment {
                 );
                 break;
         }
-
-        pageViewModel.getText().observe(this, s -> {
-//                textView.setText(s);
-        });
         return root;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == GOOD_CHOOSE_REQUEST) {
-            if (resultCode == OrderActivity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    // TODO: if the good already in list - increase the quantity
-                    Good chosenGood = (Good) data.getSerializableExtra("good");
-                    double quantity = data.getDoubleExtra("quantity", 1.0);
-                    double price = data.getDoubleExtra("price", 1.0);
-                    int position = goods.size();
-                    HashMap<String, Object> values = new HashMap<>();
-                    values.put("good", chosenGood);
-                    values.put("quantity", quantity);
-                    values.put("price", price);
-                    values.put("sum", quantity * price);
-                    goods.put(position, values);
-                    ((TextView) getActivity().findViewById(R.id.order_tv_sum)).setText(String.valueOf(getSum()));
-                    adapter.notifyItemInserted(position + 1);
+                    orderViewModel.onAddGood((Good) data.getSerializableExtra("good"),
+                            data.getDoubleExtra("quantity", 1.0),
+                            data.getDoubleExtra("price", 1.0));
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public double getSum() {
-        return adapter.getSum();
-    }
-
-    private void initializeData(View root) {
-        // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c;
-
-        // region Companies
-        c = db.query(DbHelper.TABLE_COMPANIES, null, null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            companies = new Company[c.getCount()];
-            hashCompanies = new HashMap<>();
-            int i = 0;
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                companies[i] = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                hashCompanies.put(companies[i].getUid(), i);
-                i++;
-            } while (c.moveToNext());
-
-            adapterCompany = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, companies);
-            adapterCompany.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerCompanies.setAdapter(adapterCompany);
-        }
-        // endregion
-
-        // region Partners
-        c = db.query(DbHelper.TABLE_PARTNERS, null, null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            partners = new Partner[c.getCount()];
-            hashPartners = new HashMap<>();
-            int i = 0;
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                partners[i] = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                hashPartners.put(partners[i].getUid(), i);
-                i++;
-            } while (c.moveToNext());
-
-            adapterPartners = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, partners);
-            adapterPartners.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerPartners.setAdapter(adapterPartners);
-        }
-        // endregion
-
-        // region Warehouses
-        c = db.query(DbHelper.TABLE_WAREHOUSES, null, null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            warehouses = new Warehouse[c.getCount()];
-            hashWarehouses = new HashMap<>();
-            int i = 0;
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                warehouses[i] = new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex));
-                hashWarehouses.put(warehouses[i].getUid(), i);
-                i++;
-            } while (c.moveToNext());
-
-            adapterWarehouses = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, warehouses);
-            adapterWarehouses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerWarehouses.setAdapter(adapterWarehouses);
-        }
-        // endregion
-
-        c.close();
-        dbHelper.close();
-    }
-
-    private void fillGoodList(String uid) {
-        // TODO: AsyncTask
-        DbHelper dbHelper = DbHelper.getInstance(getContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] selectionArgs = { uid };
-        String sql = "SELECT *"
-                + " FROM " + DbHelper.TABLE_GOODS_TABLE
-                + " LEFT JOIN " + DbHelper.TABLE_GOODS
-                + " ON " + DbHelper.COLUMN_GOOD_UID + " = " + DbHelper.COLUMN_UID
-                + " WHERE " + DbHelper.COLUMN_ORDER_UID + " = ?"
-                + " ORDER BY " + DbHelper.COLUMN_POSITION;
-        Cursor c = db.rawQuery(sql, selectionArgs);
-        int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
-        int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-        int groupClIndex = c.getColumnIndex(DbHelper.COLUMN_GROUP_UID);
-        int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-        int unitClIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);
-        int quantityClIndex = c.getColumnIndex(DbHelper.COLUMN_QUANTITY);
-        int priceClIndex = c.getColumnIndex(DbHelper.COLUMN_PRICE);
-        int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
-        if (c.moveToFirst()) {
-            HashMap<String, Object> goodUidHash;
-           do {
-               goodUidHash = new HashMap<>();
-               goodUidHash.put("good", new Good(c.getString(uidClIndex),
-                       c.getString(groupClIndex),
-                       c.getString(nameClIndex),
-                       c.getString(unitClIndex)));
-               goodUidHash.put("quantity", c.getDouble(quantityClIndex));
-               goodUidHash.put("price", c.getDouble(priceClIndex));
-               goodUidHash.put("sum", c.getDouble(sumClIndex));
-               goods.put(c.getInt(positionClIndex), goodUidHash);
-           } while (c.moveToNext());
-        }
-        c.close();
-        db.close();
     }
 }

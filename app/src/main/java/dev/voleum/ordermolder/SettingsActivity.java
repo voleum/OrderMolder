@@ -36,9 +36,17 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             EditTextPreference passwordPreference = findPreference("password");
-            passwordPreference.setOnPreferenceChangeListener(this);
+            try {
+                passwordPreference.setOnPreferenceChangeListener(this);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
             ListPreference themePreference = findPreference("theme");
-            themePreference.setOnPreferenceChangeListener(this);
+            try {
+                themePreference.setOnPreferenceChangeListener(this);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

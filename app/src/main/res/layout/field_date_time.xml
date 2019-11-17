@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="date"
+            type="String" />
+        <variable
+            name="time"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_date_label"
+            style="@style/Widget.OrderMolder.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/object_date" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/Widget.OrderMolder.TextView.RoundedColored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@={date}"
+            tools:text="24.10.2019" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/Widget.OrderMolder.TextView.RoundedColored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@={time}"
+            tools:text="23:42" />
+
+    </LinearLayout>
+</layout>
