@@ -5,6 +5,7 @@
     tools:context=".ui.orders.PlaceholderOrderFragment">
 
     <data>
+
         <variable
             name="viewModel"
             type="dev.voleum.ordermolder.viewmodels.OrderViewModel" />
@@ -23,36 +24,80 @@
                 android:id="@+id/order_date_time"
                 layout="@layout/field_date_time"
                 app:date="@={viewModel.date}"
-                app:time="@={viewModel.time}"/>
+                app:time="@={viewModel.time}" />
 
-            <include
-                android:id="@+id/order_companies"
-                layout="@layout/field_company"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/order_date_time" />
+                android:layout_height="wrap_content">
 
-            <include
-                android:id="@+id/order_partners"
-                layout="@layout/field_partner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/order_companies" />
+                <TextView
+                    style="@style/Widget.OrderMolder.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/object_company" />
 
-            <include
-                android:id="@+id/order_warehouses"
-                layout="@layout/field_warehouse"
+                <Spinner
+                    android:id="@+id/order_spinner_companies"
+                    style="@style/Widget.OrderMolder.Spinner.RoundedColored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:entries="@{viewModel.entryCompanies}"
+                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/order_partners" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/Widget.OrderMolder.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/object_partner" />
+
+                <Spinner
+                    android:id="@+id/order_spinner_partners"
+                    style="@style/Widget.OrderMolder.Spinner.RoundedColored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:entries="@{viewModel.entryPartners}"
+                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/Widget.OrderMolder.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/object_warehouse" />
+
+                <Spinner
+                    android:id="@+id/order_spinner_warehouses"
+                    style="@style/Widget.OrderMolder.Spinner.RoundedColored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:entries="@{viewModel.entryWarehouses}"
+                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}" />
+
+            </LinearLayout>
 
             <include
                 android:id="@+id/order_sum"
                 layout="@layout/field_sum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/order_warehouses"
-                app:sum="@{viewModel.sum}"/>
+                app:sum="@{viewModel.sum}" />
 
         </LinearLayout>
     </ScrollView>
