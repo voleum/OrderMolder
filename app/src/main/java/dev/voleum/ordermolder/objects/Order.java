@@ -96,6 +96,7 @@ public class Order extends Document {
         return tableGoods;
     }
 
+    // TODO: Async
     private void getOrderFromDb(String uid) {
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -141,7 +142,7 @@ public class Order extends Document {
         int warehouseClIndex = c.getColumnIndex(DbHelper.COLUMN_WAREHOUSE_UID);
         sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
         if (c.moveToFirst()) {
-            uid = c.getString(uidClIndex);
+            this.uid = c.getString(uidClIndex);
             date = c.getString(dateClIndex).substring(0, 10).replace("-", ".");
             time = c.getString(dateClIndex).substring(11, 19);
             companyUid = c.getString(companyClIndex);
