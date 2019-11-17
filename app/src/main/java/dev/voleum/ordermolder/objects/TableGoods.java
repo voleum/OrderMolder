@@ -48,7 +48,7 @@ public class TableGoods extends Table {
         return goodUid;
     }
 
-    public String getGoodNane() {
+    public String getGoodName() {
         return goodName;
     }
 
@@ -86,7 +86,9 @@ public class TableGoods extends Table {
     }
 
     public void decreaseQuantity() {
-        quantity--;
-        countSum();
+        if (quantity >= 1) {
+            quantity--;
+            countSum();
+        }
     }
 }

@@ -8,11 +8,20 @@ import dev.voleum.ordermolder.database.DbHelper;
 public class TableObjects extends Table {
 
     private String objectUid;
+    private String objectName;
     private double sum;
 
     public TableObjects(String uid, int position, String objectUid, double sum) {
         super(uid, position);
         this.objectUid = objectUid;
+        this.objectName = objectUid;
+        this.sum = sum;
+    }
+
+    public TableObjects(String uid, int position, String objectUid, String objectName, double sum) {
+        super(uid, position);
+        this.objectUid = objectUid;
+        this.objectName = objectName;
         this.sum = sum;
     }
 
@@ -31,8 +40,8 @@ public class TableObjects extends Table {
         return objectUid;
     }
 
-    public void setObjectUid(String objectUid) {
-        this.objectUid = objectUid;
+    public String getObjectName() {
+        return objectName;
     }
 
     public double getSum() {

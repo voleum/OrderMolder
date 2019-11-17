@@ -1,25 +1,15 @@
 package dev.voleum.ordermolder.ui.general;
 
 import android.content.Context;
-import android.view.ViewGroup;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.HashMap;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.adapters.ObjectsCashReceiptRecyclerViewAdapter;
-import dev.voleum.ordermolder.objects.Company;
-import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.ui.cashreceipts.PlaceholderCashReceiptFragment;
 import dev.voleum.ordermolder.ui.orders.PlaceholderOrderFragment;
 
@@ -35,8 +25,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @StringRes
     private int[] TAB_TITLES;
     private final Context context;
-    private Fragment fragmentMain;
-    private Fragment fragmentSecondary;
+//    private Fragment fragmentMain;
+//    private Fragment fragmentSecondary;
     private int typeDoc;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm, int typeDoc) {
@@ -77,61 +67,18 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return TAB_TITLES.length;
     }
 
-    @NonNull
-    @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        Fragment createdFragment = (Fragment) super.instantiateItem(container, position);
-        switch (position) {
-            case 0:
-                fragmentMain = createdFragment;
-                break;
-            case 1:
-                fragmentSecondary = createdFragment;
-                break;
-        }
-        return createdFragment;
-    }
-
-    public HashMap<String, Object> getCashReceiptMainInfo() {
-        HashMap<String, Object> info = new HashMap<>();
-
-        FragmentActivity activity = null;
-        String companyUid = null;
-        String partnerUid = null;
-        double sum = 0;
-        try {
-            activity = fragmentMain.getActivity();
-            companyUid = ((Company) ((Spinner) activity.findViewById(R.id.spinner_companies)).getSelectedItem()).getUid();
-            partnerUid = ((Partner) ((Spinner) activity.findViewById(R.id.spinner_partners)).getSelectedItem()).getUid();
-            try {
-                sum = Double.parseDouble(((TextView) activity.findViewById(R.id.tv_sum)).getText().toString());
-            } catch (NumberFormatException e) {
-                sum = 0.0;
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-        String dateTime = null;
-        try {
-            dateTime = (((TextView) activity.findViewById(R.id.tv_date)).getText().toString().replaceAll("\\.", "-"))
-                    .concat(" ")
-                    .concat(((TextView) activity.findViewById(R.id.tv_time)).getText().toString())
-                    .concat(".000");
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-        info.put("date", dateTime);
-        info.put("company_uid", companyUid);
-        info.put("partner_uid", partnerUid);
-        info.put("sum", sum);
-
-        return info;
-    }
-
-    public HashMap<Integer, HashMap<String, Object>> getObjectsInfo() {
-        RecyclerView rv = fragmentSecondary.getActivity().findViewById(R.id.recycler_tabdoc);
-        return ((ObjectsCashReceiptRecyclerViewAdapter) rv.getAdapter()).getObjects();
-    }
+//    @NonNull
+//    @Override
+//    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+//        Fragment createdFragment = (Fragment) super.instantiateItem(container, position);
+//        switch (position) {
+//            case 0:
+//                fragmentMain = createdFragment;
+//                break;
+//            case 1:
+//                fragmentSecondary = createdFragment;
+//                break;
+//        }
+//        return createdFragment;
+//    }
 }

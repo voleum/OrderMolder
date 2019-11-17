@@ -20,43 +20,40 @@ import java.util.List;
 import java.util.Locale;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
+import dev.voleum.ordermolder.adapters.ObjectsCashReceiptRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.objects.CashReceipt;
 import dev.voleum.ordermolder.objects.Company;
-import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.Partner;
-import dev.voleum.ordermolder.objects.TableGoods;
-import dev.voleum.ordermolder.objects.Warehouse;
+import dev.voleum.ordermolder.objects.TableObjects;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
-public class OrderViewModel extends BaseObservable implements Spinner.OnItemSelectedListener {
+public class CashReceiptViewModel extends BaseObservable implements Spinner.OnItemSelectedListener {
 
     private DecimalFormat df;
 
-    private Order order;
-    private List<TableGoods> tableGoods;
-    private GoodsOrderRecyclerViewAdapter adapter;
+    private CashReceipt cashReceipt;
+    private List<TableObjects> tableObjects;
+    private ObjectsCashReceiptRecyclerViewAdapter adapter;
     private List<Company> companies;
     private List<Partner> partners;
-    private List<Warehouse> warehouses;
     private int selectedItemCompany;
     private int selectedItemPartner;
-    private int selectedItemWarehouse;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public OrderViewModel() {
-        order = new Order();
-        this.tableGoods = order.getTableGoods();
-        adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
+    public CashReceiptViewModel() {
+        cashReceipt = new CashReceipt();
+        this.tableObjects = cashReceipt.getTableObjects();
+        adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
         initSpinnersData();
         setDecimalFormat();
     }
 
-    public OrderViewModel(String uid) {
-        order = new Order(uid);
-        this.tableGoods = order.getTableGoods();
-        this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
+    public CashReceiptViewModel(String uid) {
+        cashReceipt = new CashReceipt(uid);
+        this.tableObjects = cashReceipt.getTableObjects();
+        this.adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
         initSpinnersData();
         setDecimalFormat();
     }
@@ -64,14 +61,11 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
-            case R.id.order_spinner_companies:
-                order.setCompanyUid((companies.get(position)).getUid());
+            case R.id.cash_receipt_spinner_companies:
+                cashReceipt.setCompanyUid((companies.get(position)).getUid());
                 break;
-            case R.id.order_spinner_partners:
-                order.setPartnerUid((partners.get(position)).getUid());
-                break;
-            case R.id.order_spinner_warehouses:
-                order.setWarehouseUid((warehouses.get(position)).getUid());
+            case R.id.cash_receipt_spinner_partners:
+                cashReceipt.setPartnerUid((partners.get(position)).getUid());
                 break;
         }
     }
@@ -102,63 +96,53 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
     }
 
     @Bindable
-    public void setSelectedItemWarehouse(int position) {
-        selectedItemWarehouse = position;
+    public CashReceipt getCashReceipt() {
+        return cashReceipt;
     }
 
     @Bindable
-    public int getSelectedItemWarehouse() {
-        return selectedItemWarehouse;
+    public List<TableObjects> getTableObjects() {
+        return tableObjects;
     }
 
     @Bindable
-    public Order getOrder() {
-        return order;
-    }
-
-    @Bindable
-    public List<TableGoods> getTableGoods() {
-        return tableGoods;
-    }
-
-    @Bindable
-    public void setAdapter(GoodsOrderRecyclerViewAdapter adapter) {
+    public void setAdapter(ObjectsCashReceiptRecyclerViewAdapter adapter) {
         this.adapter = adapter;
     }
 
     @Bindable
-    public GoodsOrderRecyclerViewAdapter getAdapter() {
+    public ObjectsCashReceiptRecyclerViewAdapter getAdapter() {
         return adapter;
     }
 
     @Bindable
     public String getTitle() {
-        return order.toString();
+        return cashReceipt.toString();
     }
 
     @Bindable
     public void setDate(String date) {
-        order.setDate(date);
+        cashReceipt.setDate(date);
     }
 
     @Bindable
     public String getDate() {
-        return order.getDate();
+        return cashReceipt.getDate();
     }
 
     @Bindable
     public void setTime(String time) {
-        order.setTime(time);
+        cashReceipt.setTime(time);
     }
 
     @Bindable
     public String getTime() {
-        return order.getTime();
+        return cashReceipt.getTime();
     }
 
     @Bindable
     public String getSum() {
-        return String.valueOf(df.format(order.getSum()));
+        return String.valueOf(df.format(cashReceipt.getSum()));
     }
 
     @Bindable
@@ -171,15 +155,10 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
         return partners;
     }
 
-    @Bindable
-    public List<Warehouse> getEntryWarehouses() {
-        return warehouses;
-    }
-
     @BindingAdapter("android:data")
-    public static void setData(RecyclerView recyclerView, List<TableGoods> tableGoods) {
-        if (recyclerView.getAdapter() instanceof GoodsOrderRecyclerViewAdapter) {
-            ((GoodsOrderRecyclerViewAdapter) recyclerView.getAdapter()).setData(tableGoods);
+    public static void setData(RecyclerView recyclerView, List<TableObjects> tableObjects) {
+        if (recyclerView.getAdapter() instanceof ObjectsCashReceiptRecyclerViewAdapter) {
+            ((ObjectsCashReceiptRecyclerViewAdapter) recyclerView.getAdapter()).setData(tableObjects);
         }
     }
 
@@ -206,7 +185,7 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
             do {
                 Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
                 companies.add(company);
-                if (company.getUid().equals(order.getCompanyUid())) {
+                if (company.getUid().equals(cashReceipt.getCompanyUid())) {
                     selectedItemCompany = companies.indexOf(company);
                 }
             } while (c.moveToNext());
@@ -230,31 +209,8 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
             do {
                 Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
                 partners.add(partner);
-                if (partner.getUid().equals(order.getPartnerUid())) {
+                if (partner.getUid().equals(cashReceipt.getPartnerUid())) {
                     selectedItemPartner = partners.indexOf(partner);
-                }
-            } while (c.moveToNext());
-        }
-        // endregion
-
-        // region Warehouses
-        warehouses = new ArrayList<>();
-        c = db.query(DbHelper.TABLE_WAREHOUSES,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        if (c.moveToFirst()) {
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                Warehouse warehouse = new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex));
-                warehouses.add(warehouse);
-                if (warehouse.getUid().equals(order.getWarehouseUid())) {
-                    selectedItemWarehouse = warehouses.indexOf(warehouse);
                 }
             } while (c.moveToNext());
         }
@@ -266,33 +222,31 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
 
     public void countSum() {
         double sum = 0.0;
-        for (TableGoods row : tableGoods
+        for (TableObjects row : tableObjects
         ) {
             sum += row.getSum();
         }
-        order.setSum(sum);
+        cashReceipt.setSum(sum);
         notifyPropertyChanged(dev.voleum.ordermolder.BR.sum);
     }
 
-    public void onAddGood(Good good, double quantity, double price) {
-        tableGoods.add(new TableGoods(order.getUid(),
-                tableGoods.size(),
-                good.getUid(),
-                good.getName(),
-                quantity,
-                price,
-                quantity * price));
-        adapter.notifyItemInserted(tableGoods.size());
+    public void onAddObject(Order order, Double sum) {
+        tableObjects.add(new TableObjects(cashReceipt.getUid(),
+                tableObjects.size(),
+                order.getUid(),
+                order.toString(),
+                sum));
+        adapter.notifyItemInserted(tableObjects.size());
         countSum();
     }
 
     // TODO: Async
-    public boolean saveOrder() {
+    public boolean saveCashReceipt() {
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {
-            if (!order.save(db)) return false;
+            if (!cashReceipt.save(db)) return false;
             db.setTransactionSuccessful();
         } catch (Exception e) {
             return false;

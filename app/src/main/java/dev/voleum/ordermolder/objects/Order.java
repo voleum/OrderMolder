@@ -28,7 +28,7 @@ public class Order extends Document {
     }
 
     public Order(String uid) {
-        getOrderFromDb(uid);
+        getDocFromDb(uid);
     }
 
     public Order(String uid, String dateTime, String companyUid, String partnerUid, String warehouseUid, double sum) {
@@ -53,51 +53,9 @@ public class Order extends Document {
         this.tableGoods = tableGoods;
     }
 
-    @Override
-    public boolean save(SQLiteDatabase db) {
-        try {
-            if (tableGoods.isEmpty()) return false;
-            if (uid.isEmpty()) setUid(UUID.randomUUID().toString());
-            ContentValues cv = new ContentValues();
-            String dateTime = date.replace(".", "-") + " " + time + ".000";
-            cv.put(DbHelper.COLUMN_UID, uid);
-            cv.put(DbHelper.COLUMN_DATE, dateTime);
-            cv.put(DbHelper.COLUMN_COMPANY_UID, companyUid);
-            cv.put(DbHelper.COLUMN_PARTNER_UID, partnerUid);
-            cv.put(DbHelper.COLUMN_WAREHOUSE_UID, warehouseUid);
-            cv.put(DbHelper.COLUMN_SUM, sum);
-            db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-            String whereClause = DbHelper.COLUMN_GOOD_UID + " = ?";
-            String[] whereArgs = { uid };
-            db.delete(DbHelper.TABLE_GOODS_TABLE,
-                    whereClause,
-                    whereArgs);
-            for (TableGoods tg : tableGoods
-                 ) {
-                tg.setUid(uid);
-                tg.save(db);
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public String getWarehouseUid() {
-        return warehouseUid;
-    }
-
-    public void setWarehouseUid(String warehouseUid) {
-        this.warehouseUid = warehouseUid;
-    }
-
-    public List<TableGoods> getTableGoods() {
-        return tableGoods;
-    }
-
     // TODO: Async
-    private void getOrderFromDb(String uid) {
+    @Override
+    protected void getDocFromDb(String uid) {
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -118,8 +76,9 @@ public class Order extends Document {
         if (c.moveToFirst()) {
             tableGoods = new ArrayList<>();
             do {
-                tableGoods.add(new TableGoods(c.getString(uidClIndex),
+                tableGoods.add(new TableGoods(uid,
                         c.getInt(positionClIndex),
+                        c.getString(uidClIndex),
                         c.getString(nameClIndex),
                         c.getDouble(quantityClIndex),
                         c.getDouble(priceClIndex),
@@ -153,5 +112,48 @@ public class Order extends Document {
 
         c.close();
         db.close();
+    }
+
+    @Override
+    public boolean save(SQLiteDatabase db) {
+        try {
+            if (tableGoods.isEmpty()) return false;
+            if (uid.isEmpty()) setUid(UUID.randomUUID().toString());
+            ContentValues cv = new ContentValues();
+            String dateTime = date.replace(".", "-") + " " + time + ".000";
+            cv.put(DbHelper.COLUMN_UID, uid);
+            cv.put(DbHelper.COLUMN_DATE, dateTime);
+            cv.put(DbHelper.COLUMN_COMPANY_UID, companyUid);
+            cv.put(DbHelper.COLUMN_PARTNER_UID, partnerUid);
+            cv.put(DbHelper.COLUMN_WAREHOUSE_UID, warehouseUid);
+            cv.put(DbHelper.COLUMN_SUM, sum);
+            db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+            String whereClause = DbHelper.COLUMN_GOOD_UID + " = ?";
+            String[] whereArgs = { uid };
+            db.delete(DbHelper.TABLE_GOODS_TABLE,
+                    whereClause,
+                    whereArgs);
+            for (TableGoods t : tableGoods
+                 ) {
+                t.setUid(uid);
+                t.save(db);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public String getWarehouseUid() {
+        return warehouseUid;
+    }
+
+    public void setWarehouseUid(String warehouseUid) {
+        this.warehouseUid = warehouseUid;
+    }
+
+    public List<TableGoods> getTableGoods() {
+        return tableGoods;
     }
 }

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 import dev.voleum.ordermolder.OrderMolder;
@@ -62,15 +63,19 @@ public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Boolean> {
         for (int i = 0; i < groupUids.length; i++) {
             groupUids[i] = getNewUid();
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < groupUids.length; i++) {
             cv.clear();
             cv.put(DbHelper.COLUMN_UID, groupUids[i]);
             cv.put(DbHelper.COLUMN_NAME, "Group " + (i+1));
             db.insert(DbHelper.TABLE_GOODS_GROUPS, null, cv);
         }
-        for (int i = 0; i < 20; i++) {
+        String[] goodUids = new String[20];
+        for (int i = 0; i < goodUids.length; i++) {
+            goodUids[i] = getNewUid();
+        }
+        for (int i = 0; i < goodUids.length; i++) {
             cv.clear();
-            cv.put(DbHelper.COLUMN_UID, getNewUid());
+            cv.put(DbHelper.COLUMN_UID, goodUids[i]);
             cv.put(DbHelper.COLUMN_NAME, "Good " + (i+1));
             cv.put(DbHelper.COLUMN_GROUP_UID, groupUids[(i+1)%5]);
             cv.put(DbHelper.COLUMN_UNIT_UID, unitUid);
@@ -81,6 +86,13 @@ public class DbAsyncTestData extends AsyncTask<DbHelper, Void, Boolean> {
             cv.put(DbHelper.COLUMN_UID, getNewUid());
             cv.put(DbHelper.COLUMN_NAME, "Warehouse " + (i+1));
             db.insert(DbHelper.TABLE_WAREHOUSES, null, cv);
+        }
+        DecimalFormat df = new DecimalFormat("#.##");
+        for (int i = 0; i < goodUids.length; i++) {
+            cv.clear();
+            cv.put(DbHelper.COLUMN_GOOD_UID, goodUids[i]);
+            cv.put(DbHelper.COLUMN_PRICE, Double.parseDouble(df.format(i % 2 == 0 ? i * 8.96 + 17.23 : i * 3.09 + 13.51).replace(",", ".")));
+            db.insert(DbHelper.TABLE_PRICE_LIST, null, cv);
         }
         dbHelper.close();
         return null;

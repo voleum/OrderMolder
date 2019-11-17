@@ -20,7 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.databinding.ActivityDocBinding;
+import dev.voleum.ordermolder.databinding.ActivityOrderBinding;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
@@ -62,14 +62,14 @@ public class OrderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_doc);
+        setContentView(R.layout.activity_order);
 
         isCreating = (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true));
         savedWithoutClosing = false;
 
         if (isCreating) orderViewModel = new OrderViewModel();
         else orderViewModel = new OrderViewModel(getIntent().getStringExtra(DocListActivity.DOC));
-        ActivityDocBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_doc);
+        ActivityOrderBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_order);
         binding.setViewModel(orderViewModel);
         binding.executePendingBindings();
 
@@ -100,7 +100,7 @@ public class OrderActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     if (orderViewModel.saveOrder()) {
                         Intent intent = new Intent();
-                        intent.putExtra("doc", orderViewModel.getOrder());
+                        intent.putExtra(DocListActivity.DOC, orderViewModel.getOrder());
                         int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                         setResult(result, intent);
                         finish();
@@ -109,7 +109,7 @@ public class OrderActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_NEGATIVE:
                     if (savedWithoutClosing) {
                         Intent intent = new Intent();
-                        intent.putExtra("doc", orderViewModel.getOrder());
+                        intent.putExtra(DocListActivity.DOC, orderViewModel.getOrder());
                         setResult(isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED, intent);
                     }
                     finish();

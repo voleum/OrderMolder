@@ -5,7 +5,6 @@
     tools:context=".ui.orders.PlaceholderOrderFragment">
 
     <data>
-
         <variable
             name="viewModel"
             type="dev.voleum.ordermolder.viewmodels.OrderViewModel" />
@@ -44,8 +43,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:entries="@{viewModel.entryCompanies}"
-                    android:selectedItemPosition="@={viewModel.selectedItemCompany}"
-                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}" />
+                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}"
+                    android:selectedItemPosition="@={viewModel.selectedItemCompany}" />
 
             </LinearLayout>
 
@@ -67,8 +66,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:entries="@{viewModel.entryPartners}"
-                    android:selectedItemPosition="@={viewModel.selectedItemPartner}"
-                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}" />
+                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}"
+                    android:selectedItemPosition="@={viewModel.selectedItemPartner}" />
 
             </LinearLayout>
 
@@ -90,8 +89,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:entries="@{viewModel.entryWarehouses}"
-                    android:selectedItemPosition="@={viewModel.selectedItemWarehouse}"
-                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}" />
+                    android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}"
+                    android:selectedItemPosition="@={viewModel.selectedItemWarehouse}" />
 
             </LinearLayout>
 
@@ -104,5 +103,4 @@
 
         </LinearLayout>
     </ScrollView>
-
 </layout>

@@ -7,11 +7,9 @@
 
     <Button
         android:id="@+id/button_create_test_data"
-        android:layout_width="146dp"
-        android:layout_height="146dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_margin="16dp"
-        android:width="48dp"
-        android:height="48dp"
         android:onClick="onClick"
         android:text="TEST DATA"
         app:icon="@drawable/ic_add_24dp"
@@ -22,8 +20,8 @@
 
     <Button
         android:id="@+id/button_exchange"
-        android:layout_width="146dp"
-        android:layout_height="146dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_margin="16dp"
         android:onClick="onClick"
         android:text="@string/button_exchange"
