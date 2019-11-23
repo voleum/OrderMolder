@@ -4,12 +4,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DecimalFormat;
 import android.icu.text.DecimalFormatSymbols;
-import android.os.Build;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import androidx.annotation.RequiresApi;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
@@ -27,8 +25,8 @@ import dev.voleum.ordermolder.objects.Company;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.objects.TableObjects;
+import io.reactivex.Completable;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 public class CashReceiptViewModel extends BaseObservable implements Spinner.OnItemSelectedListener {
 
     private DecimalFormat df;
@@ -41,7 +39,6 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
     private int selectedItemCompany;
     private int selectedItemPartner;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public CashReceiptViewModel() {
         cashReceipt = new CashReceipt();
         this.tableObjects = cashReceipt.getTableObjects();
@@ -240,21 +237,22 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
         countSum();
     }
 
-    // TODO: Async
-    public boolean saveCashReceipt() {
-        DbHelper dbHelper = DbHelper.getInstance();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            if (!cashReceipt.save(db)) return false;
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            return false;
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-        return true;
+    public Completable saveCashReceipt() {
+        return Completable.create(subscriber -> {
+            DbHelper dbHelper = DbHelper.getInstance();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.beginTransaction();
+            try {
+                if (!cashReceipt.save(db)) throw new Exception("Saving error!");
+                db.setTransactionSuccessful();
+            } catch (Exception e) {
+                subscriber.onError(e);
+            } finally {
+                db.endTransaction();
+                db.close();
+            }
+            subscriber.onComplete();
+        });
     }
 
     private void setDecimalFormat() {

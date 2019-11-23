@@ -1,11 +1,9 @@
 package dev.voleum.ordermolder.adapters;
 
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +25,6 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         this.orderViewModel = orderViewModel;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,7 +35,6 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         return new GoodViewHolder(binding);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         TableGoods row = goods.get(position);
@@ -55,7 +51,6 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public class GoodViewHolder extends RecyclerView.ViewHolder {
         OrderGoodHolderBinding binding;
 

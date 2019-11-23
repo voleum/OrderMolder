@@ -3,9 +3,6 @@ package dev.voleum.ordermolder.objects;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,6 @@ public class CashReceipt extends Document {
 
     private List<TableObjects> tableObjects;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public CashReceipt() {
         setCurrentDate();
         setCurrentTime();
@@ -109,7 +105,7 @@ public class CashReceipt extends Document {
             cv.put(DbHelper.COLUMN_PARTNER_UID, partnerUid);
             cv.put(DbHelper.COLUMN_SUM, sum);
             db.insertWithOnConflict(DbHelper.TABLE_CASH_RECEIPTS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-            String whereClause = DbHelper.COLUMN_ORDER_UID + " = ?";
+            String whereClause = DbHelper.COLUMN_CASH_RECEIPT_UID + " = ?";
             String[] whereArgs = { uid };
             db.delete(DbHelper.TABLE_OBJECTS_TABLE,
                     whereClause,

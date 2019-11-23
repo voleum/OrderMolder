@@ -4,12 +4,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DecimalFormat;
 import android.icu.text.DecimalFormatSymbols;
-import android.os.Build;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import androidx.annotation.RequiresApi;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
@@ -28,8 +26,8 @@ import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.objects.TableGoods;
 import dev.voleum.ordermolder.objects.Warehouse;
+import io.reactivex.Completable;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 public class OrderViewModel extends BaseObservable implements Spinner.OnItemSelectedListener {
 
     private DecimalFormat df;
@@ -44,7 +42,6 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
     private int selectedItemPartner;
     private int selectedItemWarehouse;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public OrderViewModel() {
         order = new Order();
         this.tableGoods = order.getTableGoods();
@@ -286,21 +283,22 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
         countSum();
     }
 
-    // TODO: Async
-    public boolean saveOrder() {
-        DbHelper dbHelper = DbHelper.getInstance();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            if (!order.save(db)) return false;
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            return false;
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-        return true;
+    public Completable saveOrder() {
+        return Completable.create(subscriber -> {
+            DbHelper dbHelper = DbHelper.getInstance();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.beginTransaction();
+            try {
+                if (!order.save(db)) throw new Exception("Saving error!");
+                db.setTransactionSuccessful();
+            } catch (Exception e) {
+                subscriber.onError(e);
+            } finally {
+                db.endTransaction();
+                db.close();
+            }
+            subscriber.onComplete();
+        });
     }
 
     private void setDecimalFormat() {

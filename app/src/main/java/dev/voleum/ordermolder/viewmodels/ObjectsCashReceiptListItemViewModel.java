@@ -2,9 +2,7 @@ package dev.voleum.ordermolder.viewmodels;
 
 import android.icu.text.DecimalFormat;
 import android.icu.text.DecimalFormatSymbols;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
@@ -12,7 +10,6 @@ import java.util.Locale;
 
 import dev.voleum.ordermolder.objects.TableObjects;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 public class ObjectsCashReceiptListItemViewModel extends BaseObservable {
 
     private DecimalFormat df;

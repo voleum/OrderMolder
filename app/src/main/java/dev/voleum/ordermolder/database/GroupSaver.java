@@ -4,9 +4,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
-import dev.voleum.ordermolder.MainActivity;
 import dev.voleum.ordermolder.objects.Obj;
 
+@Deprecated
 public class GroupSaver {
 
     private ArrayList<? extends Obj> arrayList;
