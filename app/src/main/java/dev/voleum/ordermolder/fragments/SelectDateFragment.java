@@ -6,14 +6,12 @@ import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
@@ -41,14 +39,12 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         return new DatePickerDialog(Objects.requireNonNull(getActivity()), this, yy, mm, dd);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar cal = new GregorianCalendar(year, month, dayOfMonth);

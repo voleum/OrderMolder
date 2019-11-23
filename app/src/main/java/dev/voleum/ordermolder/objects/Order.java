@@ -3,9 +3,6 @@ package dev.voleum.ordermolder.objects;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,6 @@ public class Order extends Document {
     private String warehouseUid;
     private List<TableGoods> tableGoods;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public Order() {
         setCurrentDate();
         setCurrentTime();
@@ -128,7 +124,7 @@ public class Order extends Document {
             cv.put(DbHelper.COLUMN_WAREHOUSE_UID, warehouseUid);
             cv.put(DbHelper.COLUMN_SUM, sum);
             db.insertWithOnConflict(DbHelper.TABLE_ORDERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-            String whereClause = DbHelper.COLUMN_GOOD_UID + " = ?";
+            String whereClause = DbHelper.COLUMN_ORDER_UID + " = ?";
             String[] whereArgs = { uid };
             db.delete(DbHelper.TABLE_GOODS_TABLE,
                     whereClause,

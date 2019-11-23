@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,14 +20,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
-import dev.voleum.ordermolder.database.DbAsyncTestData;
-import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.fragments.FragmentCatalogs;
 import dev.voleum.ordermolder.fragments.FragmentDocuments;
 import dev.voleum.ordermolder.fragments.FragmentMain;
 import dev.voleum.ordermolder.fragments.FragmentReports;
-import dev.voleum.ordermolder.helpers.ExchangeAsyncTask;
+import dev.voleum.ordermolder.helpers.Exchanger;
+import io.reactivex.CompletableObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentTransaction fragmentTransaction;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
+    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mOnNavigationItemSelectedListener = item -> {
+        onNavigationItemSelectedListener = item -> {
             switch (item.getItemId()) {
                 case R.id.navigation_main:
                     if (fragmentMain == null) fragmentMain = new FragmentMain();
@@ -97,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
         fragmentMain = new FragmentMain();
         fragmentDocuments = new FragmentDocuments();
@@ -161,12 +165,47 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_create_test_data:
-                DbAsyncTestData dbAsyncTestData = new DbAsyncTestData();
-                dbAsyncTestData.execute(DbHelper.getInstance());
+                TestDataCreator.createTestData()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new CompletableObserver() {
+                                       @Override
+                                       public void onSubscribe(Disposable d) {
+
+                                       }
+
+                                       @Override
+                                       public void onComplete() {
+                                           Snackbar.make(v, R.string.snackbar_successful, Snackbar.LENGTH_SHORT).show();
+                                       }
+
+                                       @Override
+                                       public void onError(Throwable e) {
+                                           if (e != null) Log.d(LOG_TAG, e.getMessage());
+                                       }
+                                   }
+                        );
                 break;
             case R.id.button_exchange:
-                ExchangeAsyncTask exchangeAsyncTask = new ExchangeAsyncTask(findViewById(R.id.frameLayoutFragment));
-                exchangeAsyncTask.execute();
+                Exchanger.exchange()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new CompletableObserver() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                Snackbar.make(v, R.string.snackbar_successful, Snackbar.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                if (e != null) Log.d(LOG_TAG, e.getMessage());
+                            }
+                        });
                 break;
         }
     }

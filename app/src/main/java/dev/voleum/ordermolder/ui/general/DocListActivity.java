@@ -98,7 +98,7 @@ public class DocListActivity extends AppCompatActivity {
         adapter.setOnEntryCLickListener(onEntryCLickListener);
         recyclerDocs.setAdapter(adapter);
 
-        fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.doc_list_fab);
         fab.setOnClickListener(fabClickListener);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
