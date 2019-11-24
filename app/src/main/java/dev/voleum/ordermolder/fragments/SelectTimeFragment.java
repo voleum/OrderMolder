@@ -3,14 +3,12 @@ package dev.voleum.ordermolder.fragments;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.icu.util.Calendar;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
@@ -36,7 +34,6 @@ public class SelectTimeFragment extends DialogFragment implements TimePickerDial
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

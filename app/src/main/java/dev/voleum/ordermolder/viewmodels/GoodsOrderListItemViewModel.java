@@ -2,10 +2,8 @@ package dev.voleum.ordermolder.viewmodels;
 
 import android.icu.text.DecimalFormat;
 import android.icu.text.DecimalFormatSymbols;
-import android.os.Build;
 import android.view.View;
 
-import androidx.annotation.RequiresApi;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
@@ -14,7 +12,6 @@ import java.util.Locale;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.objects.TableGoods;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 public class GoodsOrderListItemViewModel extends BaseObservable implements View.OnClickListener {
 
     private DecimalFormat df;

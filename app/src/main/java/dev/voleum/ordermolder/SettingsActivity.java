@@ -36,6 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             EditTextPreference passwordPreference = findPreference("password");
+            setPasswordSummary(passwordPreference, passwordPreference.getText());
             try {
                 passwordPreference.setOnPreferenceChangeListener(this);
             } catch (NullPointerException e) {
@@ -53,9 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             switch (preference.getKey()) {
                 case "password":
-                    EditText edit = ((EditTextPreference) preference).getEditText();
-                    String pref = edit.getTransformationMethod().getTransformation(newValue.toString(), edit).toString();
-                    preference.setSummary(pref);
+                    setPasswordSummary((EditTextPreference) preference, newValue.toString());
                     break;
                 case "theme":
                     AppCompatDelegate.setDefaultNightMode(Integer.parseInt((String) newValue));
@@ -64,6 +63,12 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
             }
             return true;
+        }
+
+        private void setPasswordSummary(EditTextPreference preference, CharSequence value) {
+            EditText edit = preference.getEditText();
+            String pref = edit.getTransformationMethod().getTransformation(value, edit).toString();
+            preference.setSummary(pref);
         }
     }
 

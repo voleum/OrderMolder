@@ -4,12 +4,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DecimalFormat;
 import android.icu.text.DecimalFormatSymbols;
-import android.os.Build;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import androidx.annotation.RequiresApi;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
@@ -27,8 +25,12 @@ import dev.voleum.ordermolder.objects.Company;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.objects.TableObjects;
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 public class CashReceiptViewModel extends BaseObservable implements Spinner.OnItemSelectedListener {
 
     private DecimalFormat df;
@@ -41,12 +43,11 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
     private int selectedItemCompany;
     private int selectedItemPartner;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public CashReceiptViewModel() {
         cashReceipt = new CashReceipt();
         this.tableObjects = cashReceipt.getTableObjects();
         adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
-        initSpinnersData();
+        initSpinners();
         setDecimalFormat();
     }
 
@@ -54,7 +55,7 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
         cashReceipt = new CashReceipt(uid);
         this.tableObjects = cashReceipt.getTableObjects();
         this.adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
-        initSpinnersData();
+        initSpinners();
         setDecimalFormat();
     }
 
@@ -162,62 +163,88 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
         }
     }
 
-    private void initSpinnersData() {
-        // TODO: Async
-        DbHelper dbHelper = DbHelper.getInstance();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c;
+    private void initSpinners() {
+        initSpinnersData()
+                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-        // region Companies
-        companies = new ArrayList<>();
-        c = db.query(DbHelper.TABLE_COMPANIES,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+                    }
 
-        if (c.moveToFirst()) {
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                companies.add(company);
-                if (company.getUid().equals(cashReceipt.getCompanyUid())) {
-                    selectedItemCompany = companies.indexOf(company);
-                }
-            } while (c.moveToNext());
-        }
-        // endregion
+                    @Override
+                    public void onComplete() {
+                        notifyPropertyChanged(dev.voleum.ordermolder.BR.entryCompanies);
+                        notifyPropertyChanged(dev.voleum.ordermolder.BR.entryPartners);
+                    }
 
-        // region Partners
-        partners = new ArrayList<>();
-        c = db.query(DbHelper.TABLE_PARTNERS,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+                    @Override
+                    public void onError(Throwable e) {
 
-        if (c.moveToFirst()) {
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                partners.add(partner);
-                if (partner.getUid().equals(cashReceipt.getPartnerUid())) {
-                    selectedItemPartner = partners.indexOf(partner);
-                }
-            } while (c.moveToNext());
-        }
-        // endregion
+                    }
+                });
+    }
 
-        c.close();
-        dbHelper.close();
+    private Completable initSpinnersData() {
+        return Completable.create(subscriber -> {
+            DbHelper dbHelper = DbHelper.getInstance();
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor c;
+
+            // region Companies
+            companies = new ArrayList<>();
+            c = db.query(DbHelper.TABLE_COMPANIES,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
+
+            if (c.moveToFirst()) {
+                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+                do {
+                    Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+                    companies.add(company);
+                    if (company.getUid().equals(cashReceipt.getCompanyUid())) {
+                        selectedItemCompany = companies.indexOf(company);
+                    }
+                } while (c.moveToNext());
+            }
+            // endregion
+
+            // region Partners
+            partners = new ArrayList<>();
+            c = db.query(DbHelper.TABLE_PARTNERS,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
+
+            if (c.moveToFirst()) {
+                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+                do {
+                    Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+                    partners.add(partner);
+                    if (partner.getUid().equals(cashReceipt.getPartnerUid())) {
+                        selectedItemPartner = partners.indexOf(partner);
+                    }
+                } while (c.moveToNext());
+            }
+            // endregion
+
+            c.close();
+            dbHelper.close();
+
+            subscriber.onComplete();
+        });
     }
 
     public void countSum() {
@@ -240,21 +267,22 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
         countSum();
     }
 
-    // TODO: Async
-    public boolean saveCashReceipt() {
-        DbHelper dbHelper = DbHelper.getInstance();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            if (!cashReceipt.save(db)) return false;
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            return false;
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-        return true;
+    public Completable saveCashReceipt() {
+        return Completable.create(subscriber -> {
+            DbHelper dbHelper = DbHelper.getInstance();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.beginTransaction();
+            try {
+                if (!cashReceipt.save(db)) throw new Exception("Saving error!");
+                db.setTransactionSuccessful();
+            } catch (Exception e) {
+                subscriber.onError(e);
+            } finally {
+                db.endTransaction();
+                db.close();
+            }
+            subscriber.onComplete();
+        });
     }
 
     private void setDecimalFormat() {

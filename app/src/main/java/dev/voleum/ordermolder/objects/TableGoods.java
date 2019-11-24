@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.helpers.DecimalHelper;
 
 public class TableGoods extends Table {
 
@@ -77,7 +78,7 @@ public class TableGoods extends Table {
     }
 
     public void countSum() {
-        sum = quantity * price;
+        sum = DecimalHelper.round(quantity * price, 2);
     }
 
     public void increaseQuantity() {
