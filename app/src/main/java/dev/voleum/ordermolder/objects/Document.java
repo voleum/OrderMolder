@@ -37,7 +37,7 @@ public abstract class Document extends Obj {
     @NonNull
     @Override
     public String toString() {
-        return "Date: " + date + " " + time + " / Sum: " + sum;
+        return "Date: " + date + " " + time + " / Sum: " + moneyDecimalFormat.format(sum);
     }
 
     public String getDate() {

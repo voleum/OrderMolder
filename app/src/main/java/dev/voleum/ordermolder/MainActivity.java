@@ -9,12 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentTransaction fragmentTransaction;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
+    private ConstraintLayout progressLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        onNavigationItemSelectedListener = item -> {
+        progressLayout = findViewById(R.id.main_progress_layout);
+
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.navigation_main:
                     if (fragmentMain == null) fragmentMain = new FragmentMain();
@@ -98,10 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
             }
             return false;
-        };
-
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+        });
 
         fragmentMain = new FragmentMain();
         fragmentDocuments = new FragmentDocuments();
@@ -171,12 +173,18 @@ public class MainActivity extends AppCompatActivity {
                         .subscribe(new CompletableObserver() {
                                        @Override
                                        public void onSubscribe(Disposable d) {
-
+                                           progressLayout.setAlpha(0.0f);
+                                           progressLayout.setVisibility(View.VISIBLE);
+                                           progressLayout.animate().alpha(1.0f);
+                                           getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                                   WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                        }
 
                                        @Override
                                        public void onComplete() {
                                            Snackbar.make(v, R.string.snackbar_successful, Snackbar.LENGTH_SHORT).show();
+                                           progressLayout.setVisibility(View.GONE);
+                                           getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                        }
 
                                        @Override
@@ -193,12 +201,18 @@ public class MainActivity extends AppCompatActivity {
                         .subscribe(new CompletableObserver() {
                             @Override
                             public void onSubscribe(Disposable d) {
-
+                                progressLayout.setAlpha(0.0f);
+                                progressLayout.setVisibility(View.VISIBLE);
+                                progressLayout.animate().alpha(1.0f);
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             }
 
                             @Override
                             public void onComplete() {
                                 Snackbar.make(v, R.string.snackbar_successful, Snackbar.LENGTH_SHORT).show();
+                                progressLayout.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             }
 
                             @Override
