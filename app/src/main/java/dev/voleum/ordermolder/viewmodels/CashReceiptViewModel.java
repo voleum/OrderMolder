@@ -26,6 +26,10 @@ import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.objects.Partner;
 import dev.voleum.ordermolder.objects.TableObjects;
 import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class CashReceiptViewModel extends BaseObservable implements Spinner.OnItemSelectedListener {
 
@@ -43,7 +47,7 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
         cashReceipt = new CashReceipt();
         this.tableObjects = cashReceipt.getTableObjects();
         adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
-        initSpinnersData();
+        initSpinners();
         setDecimalFormat();
     }
 
@@ -51,7 +55,7 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
         cashReceipt = new CashReceipt(uid);
         this.tableObjects = cashReceipt.getTableObjects();
         this.adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
-        initSpinnersData();
+        initSpinners();
         setDecimalFormat();
     }
 
@@ -159,62 +163,88 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
         }
     }
 
-    private void initSpinnersData() {
-        // TODO: Async
-        DbHelper dbHelper = DbHelper.getInstance();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c;
+    private void initSpinners() {
+        initSpinnersData()
+                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-        // region Companies
-        companies = new ArrayList<>();
-        c = db.query(DbHelper.TABLE_COMPANIES,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+                    }
 
-        if (c.moveToFirst()) {
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                companies.add(company);
-                if (company.getUid().equals(cashReceipt.getCompanyUid())) {
-                    selectedItemCompany = companies.indexOf(company);
-                }
-            } while (c.moveToNext());
-        }
-        // endregion
+                    @Override
+                    public void onComplete() {
+                        notifyPropertyChanged(dev.voleum.ordermolder.BR.entryCompanies);
+                        notifyPropertyChanged(dev.voleum.ordermolder.BR.entryPartners);
+                    }
 
-        // region Partners
-        partners = new ArrayList<>();
-        c = db.query(DbHelper.TABLE_PARTNERS,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+                    @Override
+                    public void onError(Throwable e) {
 
-        if (c.moveToFirst()) {
-            int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-            int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-            int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-            do {
-                Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                partners.add(partner);
-                if (partner.getUid().equals(cashReceipt.getPartnerUid())) {
-                    selectedItemPartner = partners.indexOf(partner);
-                }
-            } while (c.moveToNext());
-        }
-        // endregion
+                    }
+                });
+    }
 
-        c.close();
-        dbHelper.close();
+    private Completable initSpinnersData() {
+        return Completable.create(subscriber -> {
+            DbHelper dbHelper = DbHelper.getInstance();
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor c;
+
+            // region Companies
+            companies = new ArrayList<>();
+            c = db.query(DbHelper.TABLE_COMPANIES,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
+
+            if (c.moveToFirst()) {
+                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+                do {
+                    Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+                    companies.add(company);
+                    if (company.getUid().equals(cashReceipt.getCompanyUid())) {
+                        selectedItemCompany = companies.indexOf(company);
+                    }
+                } while (c.moveToNext());
+            }
+            // endregion
+
+            // region Partners
+            partners = new ArrayList<>();
+            c = db.query(DbHelper.TABLE_PARTNERS,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
+
+            if (c.moveToFirst()) {
+                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+                do {
+                    Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+                    partners.add(partner);
+                    if (partner.getUid().equals(cashReceipt.getPartnerUid())) {
+                        selectedItemPartner = partners.indexOf(partner);
+                    }
+                } while (c.moveToNext());
+            }
+            // endregion
+
+            c.close();
+            dbHelper.close();
+
+            subscriber.onComplete();
+        });
     }
 
     public void countSum() {

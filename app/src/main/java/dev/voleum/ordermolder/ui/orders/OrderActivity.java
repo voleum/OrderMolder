@@ -186,9 +186,9 @@ public class OrderActivity extends AppCompatActivity {
 
                             @Override
                             public void onComplete() {
-                                progressLayout.setVisibility(View.GONE);
                                 savedWithoutClosing = true;
                                 Snackbar.make(fab, R.string.snackbar_doc_saved, Snackbar.LENGTH_SHORT).show();
+                                progressLayout.setVisibility(View.GONE);
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             }
 

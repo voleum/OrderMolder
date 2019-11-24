@@ -112,7 +112,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 if (data != null) {
                     orderViewModel.onAddGood((Good) data.getSerializableExtra("good"),
                             data.getDoubleExtra("quantity", 1.0),
-                            data.getDoubleExtra("price", 1.0));
+                            data.getDoubleExtra("price", 0.0));
                 }
             }
         }
