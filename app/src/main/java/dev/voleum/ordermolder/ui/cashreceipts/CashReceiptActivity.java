@@ -2,16 +2,18 @@ package dev.voleum.ordermolder.ui.cashreceipts;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
@@ -19,16 +21,22 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import dev.voleum.ordermolder.MainActivity;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.ActivityCashReceiptBinding;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
 import dev.voleum.ordermolder.viewmodels.CashReceiptViewModel;
+import io.reactivex.CompletableObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class CashReceiptActivity extends AppCompatActivity {
 
     private CashReceiptViewModel cashReceiptViewModel;
 
+    private ConstraintLayout progressLayout;
     protected ViewPager viewPager;
     protected FloatingActionButton fab;
     protected SectionsPagerAdapter sectionsPagerAdapter;
@@ -58,7 +66,6 @@ public class CashReceiptActivity extends AppCompatActivity {
         }
     };
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +98,8 @@ public class CashReceiptActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager.addOnPageChangeListener(onPageChangeListener);
+
+        progressLayout = findViewById(R.id.cash_receipt_progress_layout);
     }
 
     @Override
@@ -98,13 +107,33 @@ public class CashReceiptActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    if (cashReceiptViewModel.saveCashReceipt()) {
-                        Intent intent = new Intent();
-                        intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getCashReceipt());
-                        int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
-                        setResult(result, intent);
-                        finish();
-                    }
+                    cashReceiptViewModel.saveCashReceipt()
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new CompletableObserver() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
+                                    progressLayout.setAlpha(0.0f);
+                                    progressLayout.setVisibility(View.VISIBLE);
+                                    progressLayout.animate().alpha(1.0f);
+                                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                    Intent intent = new Intent();
+                                    intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getCashReceipt());
+                                    int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
+                                    setResult(result, intent);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    if (e != null) Log.d(MainActivity.LOG_TAG, e.getMessage());
+                                }
+                            });
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     if (savedWithoutClosing) {
@@ -139,14 +168,32 @@ public class CashReceiptActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
-                if (cashReceiptViewModel.getTableObjects().isEmpty()) {
-                    Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
-                }
-                // TODO: Async
-                if (cashReceiptViewModel.saveCashReceipt()) {
-                    savedWithoutClosing = true;
-                    Snackbar.make(fab, R.string.snackbar_doc_saved, Snackbar.LENGTH_SHORT).show();
-                }
+                cashReceiptViewModel.saveCashReceipt()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new CompletableObserver() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                progressLayout.setAlpha(0.0f);
+                                progressLayout.setVisibility(View.VISIBLE);
+                                progressLayout.animate().alpha(1.0f);
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                savedWithoutClosing = true;
+                                Snackbar.make(fab, R.string.snackbar_doc_saved, Snackbar.LENGTH_SHORT).show();
+                                progressLayout.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                if (e != null) Log.d(MainActivity.LOG_TAG, e.getMessage());
+                            }
+                        });
                 break;
             default:
                 break;

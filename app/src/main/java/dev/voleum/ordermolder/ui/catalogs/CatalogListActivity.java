@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.CatalogListRecyclerViewAdapter;
@@ -51,7 +50,6 @@ public class CatalogListActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        catalogs = getCatalogsList();
         CatalogListRecyclerViewAdapter adapter = new CatalogListRecyclerViewAdapter(catalogs);
         adapter.setOnEntryClickListener(onEntryClickListener);
         recyclerView.setAdapter(adapter);
@@ -60,7 +58,9 @@ public class CatalogListActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        catalogs = getCatalogsList();
     }
 
     private ArrayList<Catalog> getCatalogsList() {

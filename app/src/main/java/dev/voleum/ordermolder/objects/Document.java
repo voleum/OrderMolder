@@ -1,10 +1,8 @@
 package dev.voleum.ordermolder.objects;
 
 import android.icu.util.Calendar;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 public abstract class Document extends Obj {
 
@@ -39,7 +37,7 @@ public abstract class Document extends Obj {
     @NonNull
     @Override
     public String toString() {
-        return "Date: " + date + " " + time + " / Sum: " + sum;
+        return "Date: " + date + " " + time + " / Sum: " + moneyDecimalFormat.format(sum);
     }
 
     public String getDate() {
@@ -82,7 +80,6 @@ public abstract class Document extends Obj {
         this.sum = sum;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void setCurrentDate() {
         final Calendar calendar = Calendar.getInstance();
         int yy = calendar.get(Calendar.YEAR);
@@ -91,7 +88,6 @@ public abstract class Document extends Obj {
         date = (dd < 10 ? "0" + dd : String.valueOf(dd)) + "." + (mm < 10 ? "0" + mm : String.valueOf(mm)) + "." + yy;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void setCurrentTime() {
         final Calendar calendar = Calendar.getInstance();
         int hh = calendar.get(Calendar.HOUR_OF_DAY);
