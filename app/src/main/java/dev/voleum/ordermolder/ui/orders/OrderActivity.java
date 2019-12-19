@@ -107,6 +107,10 @@ public class OrderActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
+                    if (orderViewModel.getTableGoods().isEmpty()) {
+                        Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
+                        break;
+                    }
                     orderViewModel.saveOrder()
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -170,6 +174,7 @@ public class OrderActivity extends AppCompatActivity {
             case R.id.doc_save:
                 if (orderViewModel.getTableGoods().isEmpty()) {
                     Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
+                    break;
                 }
                 orderViewModel.saveOrder()
                         .subscribeOn(Schedulers.newThread())
