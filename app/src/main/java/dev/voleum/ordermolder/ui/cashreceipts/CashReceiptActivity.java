@@ -128,6 +128,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                                 public void onComplete() {
                                     Intent intent = new Intent();
                                     intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getCashReceipt());
+                                    intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                                     int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                                     setResult(result, intent);
                                     finish();
@@ -143,6 +144,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                     if (savedWithoutClosing) {
                         Intent intent = new Intent();
                         intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getCashReceipt());
+                        intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                         setResult(isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED, intent);
                     }
                     finish();

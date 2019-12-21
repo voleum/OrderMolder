@@ -63,6 +63,7 @@ public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
         DocViewHolder(DocHolderBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.binding.getRoot().setOnClickListener(this);
         }
 
         @Override
@@ -72,5 +73,4 @@ public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
             }
         }
     }
-
 }

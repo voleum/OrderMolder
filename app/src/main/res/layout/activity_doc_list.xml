@@ -22,9 +22,10 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_objs"
+            android:id="@+id/recycler_docs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
             android:data="@{viewModel.docs}"
             app:adapter="@{viewModel.adapter}" />
 

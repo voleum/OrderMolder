@@ -36,6 +36,7 @@ public class ObjectsCashReceiptListItemViewModel extends BaseObservable {
     @Bindable
     public void setSum(String sum) {
         tableObjects.setSum(Double.parseDouble(sum));
+        cashReceiptViewModel.countSum();
     }
 
     @Bindable
