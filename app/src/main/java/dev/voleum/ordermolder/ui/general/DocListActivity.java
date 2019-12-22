@@ -108,15 +108,16 @@ public class DocListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Document doc = null;
-        if (resultCode != 0) doc = (Document) data.getSerializableExtra(DOC);
-        switch (resultCode) {
-            case RESULT_SAVED:
-                docListViewModel.editDoc(doc, data.getIntExtra(POSITION, -1));
-                break;
-            case RESULT_CREATED:
-                docListViewModel.addDoc(doc);
-                break;
+        if (resultCode != 0 && data != null) {
+            Document doc = (Document) data.getSerializableExtra(DOC);
+            switch (resultCode) {
+                case RESULT_SAVED:
+                    docListViewModel.editDoc(doc, data.getIntExtra(POSITION, -1));
+                    break;
+                case RESULT_CREATED:
+                    docListViewModel.addDoc(doc);
+                    break;
+            }
         }
     }
 
