@@ -3,39 +3,45 @@ package dev.voleum.ordermolder.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.databinding.CatalogHolderBinding;
 import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.viewmodels.CatalogListItemViewModel;
 
 public class CatalogListRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Catalog> catalogs;
+    private List<Catalog> catalogs;
     private OnEntryClickListener onEntryClickListener;
 
     public interface OnEntryClickListener {
         void onEntryClick(View v, int position);
     }
 
-    public CatalogListRecyclerViewAdapter(ArrayList<Catalog> catalogs) {
+    public CatalogListRecyclerViewAdapter(List<Catalog> catalogs) {
         this.catalogs = catalogs;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
-        return new GoodViewHolder(v);
+        CatalogHolderBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.catalog_holder,
+                parent,
+                false);
+        return new GoodViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Catalog catalog = catalogs.get(position);
-        ((GoodViewHolder) holder).textView.setText(catalog.toString());
+        Catalog row = catalogs.get(position);
+        ((GoodViewHolder) holder).binding.setRow(new CatalogListItemViewModel(row));
     }
 
     @Override
@@ -47,12 +53,17 @@ public class CatalogListRecyclerViewAdapter extends RecyclerView.Adapter {
         this.onEntryClickListener = onEntryClickListener;
     }
 
+    public void setData(List<Catalog> catalogs) {
+        this.catalogs = catalogs;
+        notifyDataSetChanged();
+    }
+
     public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView textView;
-        GoodViewHolder(View view) {
-            super(view);
-            view.setOnClickListener(this);
-            textView = (TextView) view;
+        CatalogHolderBinding binding;
+        GoodViewHolder(CatalogHolderBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.binding.getRoot().setOnClickListener(this);
         }
 
         @Override

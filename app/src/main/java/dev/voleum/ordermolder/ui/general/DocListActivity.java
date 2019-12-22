@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Objects;
-
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.DocListRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityDocListBinding;
@@ -59,7 +57,7 @@ public class DocListActivity extends AppCompatActivity {
         recyclerDocs.setHasFixedSize(true);
         recyclerDocs.setLayoutManager(new LinearLayoutManager(this));
 
-        DocListRecyclerViewAdapter.OnEntryCLickListener onEntryCLickListener = (v, position) -> {
+        DocListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
             Document clickedDoc = binding.getViewModel().getDocs().get(position);
             Intent intentOut;
             switch (docType) {
@@ -78,7 +76,7 @@ public class DocListActivity extends AppCompatActivity {
             startActivityForResult(intentOut, REQUEST_CODE);
         };
 
-        binding.getViewModel().getAdapter().setOnEntryCLickListener(onEntryCLickListener);
+        binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
 
         View.OnClickListener fabClickListener = v -> {
             Intent intentOut;
@@ -99,22 +97,12 @@ public class DocListActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fab = findViewById(R.id.doc_list_fab);
         fab.setOnClickListener(fabClickListener);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        switch (docType) {
-            case ORDER:
-                setTitle(R.string.title_activity_orders);
-                break;
-            case CASH_RECEIPT:
-                setTitle(R.string.title_activity_cash_receipts);
-                break;
-            default:
-                setTitle(R.string.title_activity_unknown_doc);
-        }
-
+        setTitleDependOnType();
     }
 
     @Override
@@ -136,5 +124,18 @@ public class DocListActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    private void setTitleDependOnType() {
+        switch (docType) {
+            case ORDER:
+                setTitle(R.string.title_activity_orders);
+                break;
+            case CASH_RECEIPT:
+                setTitle(R.string.title_activity_cash_receipts);
+                break;
+            default:
+                setTitle(R.string.title_activity_unknown_doc);
+        }
     }
 }
