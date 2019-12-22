@@ -98,7 +98,7 @@ public class PlaceholderOrderFragment extends Fragment {
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(
-                        (view) -> startActivityForResult(new Intent(getActivity(), GoodsChooser.class), GOOD_CHOOSE_REQUEST)
+                        (view) -> startActivityForResult(new Intent(getActivity(), GoodsChooserActivity.class), GOOD_CHOOSE_REQUEST)
                 );
                 break;
         }
@@ -110,9 +110,12 @@ public class PlaceholderOrderFragment extends Fragment {
         if (requestCode == GOOD_CHOOSE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    orderViewModel.onAddGood((Good) data.getSerializableExtra("good"),
-                            data.getDoubleExtra("quantity", 1.0),
-                            data.getDoubleExtra("price", 0.0));
+                    Good good = (Good) data.getSerializableExtra(GoodsChooserActivity.GOOD);
+                    if (good != null) {
+                        orderViewModel.onAddGood(good,
+                                data.getDoubleExtra(GoodsChooserActivity.QUANTITY, 1.0),
+                                data.getDoubleExtra(GoodsChooserActivity.PRICE, 0.0));
+                    }
                 }
             }
         }
