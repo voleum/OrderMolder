@@ -257,13 +257,19 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
         notifyPropertyChanged(dev.voleum.ordermolder.BR.sum);
     }
 
-    public void onAddObject(Order order, Double sum) {
+    public void addObject(Order order, Double sum) {
         tableObjects.add(new TableObjects(cashReceipt.getUid(),
                 tableObjects.size(),
                 order.getUid(),
                 order.toString(),
                 sum));
         adapter.notifyItemInserted(tableObjects.size());
+        countSum();
+    }
+
+    public void removeObject(int position) {
+        tableObjects.remove(position);
+        adapter.notifyItemRemoved(position);
         countSum();
     }
 

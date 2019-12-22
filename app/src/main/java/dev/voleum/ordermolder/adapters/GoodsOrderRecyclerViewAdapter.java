@@ -1,6 +1,7 @@
 package dev.voleum.ordermolder.adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import dev.voleum.ordermolder.viewmodels.OrderViewModel;
 public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private List<TableGoods> goods;
+    private OnEntryLongClickListener onEntryLongClickListener;
     private OrderViewModel orderViewModel;
 
     public GoodsOrderRecyclerViewAdapter(List<TableGoods> goods, OrderViewModel orderViewModel) {
@@ -46,17 +48,35 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
         return goods.size();
     }
 
+    public void setOnEntryLongClickListener(OnEntryLongClickListener onEntryLongClickListener) {
+        this.onEntryLongClickListener = onEntryLongClickListener;
+    }
+
     public void setData(List<TableGoods> tableGoods) {
         this.goods = tableGoods;
         notifyDataSetChanged();
     }
 
-    public class GoodViewHolder extends RecyclerView.ViewHolder {
+    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         OrderGoodHolderBinding binding;
 
         GoodViewHolder(OrderGoodHolderBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.binding.getRoot().setOnLongClickListener(this);
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (onEntryLongClickListener != null) {
+                onEntryLongClickListener.onEntryLongClick(v, getLayoutPosition());
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public interface OnEntryLongClickListener {
+        void onEntryLongClick(View v, int position);
     }
 }

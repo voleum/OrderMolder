@@ -8,6 +8,7 @@
 
     <!--  MENU ITEMS  -->
     <string name="menu_save">Сохранить</string>
+    <string name="menu_delete">Удалить</string>
 
     <!--  SNACKBAR  -->
     <string name="snackbar_soon">Скоро&#8230;</string>

@@ -2,8 +2,12 @@ package dev.voleum.ordermolder.ui.general;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -37,6 +41,7 @@ public class DocListActivity extends AppCompatActivity {
     private DocListViewModel docListViewModel;
 
     private RecyclerView recyclerDocs;
+    private int recyclerPosition;
     private DocumentTypes docType;
 
     FloatingActionButton fab;
@@ -76,7 +81,15 @@ public class DocListActivity extends AppCompatActivity {
             startActivityForResult(intentOut, REQUEST_CODE);
         };
 
+        DocListRecyclerViewAdapter.OnEntryLongClickListener onEntryLongClickListener = (v, position) -> {
+            recyclerPosition = position;
+            v.showContextMenu();
+        };
+
         binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
+        binding.getViewModel().getAdapter().setOnEntryLongClickListener(onEntryLongClickListener);
+
+        registerForContextMenu(recyclerDocs);
 
         View.OnClickListener fabClickListener = v -> {
             Intent intentOut;
@@ -119,6 +132,23 @@ public class DocListActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.delete_item) {
+            docListViewModel.removeDoc(recyclerPosition);
+            return true;
+        }
+        return false;
     }
 
     @Override

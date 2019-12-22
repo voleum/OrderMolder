@@ -1,6 +1,7 @@
 package dev.voleum.ordermolder.adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import dev.voleum.ordermolder.viewmodels.ObjectsCashReceiptListItemViewModel;
 public class ObjectsCashReceiptRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private List<TableObjects> objects;
+    private OnEntryLongClickListener onEntryLongClickListener;
     private CashReceiptViewModel cashReceiptViewModel;
 
     public ObjectsCashReceiptRecyclerViewAdapter(List<TableObjects> objects, CashReceiptViewModel cashReceiptViewModel) {
@@ -46,17 +48,35 @@ public class ObjectsCashReceiptRecyclerViewAdapter extends RecyclerView.Adapter 
         return objects.size();
     }
 
+    public void setOnEntryLongClickListener(OnEntryLongClickListener onEntryLongClickListener) {
+        this.onEntryLongClickListener = onEntryLongClickListener;
+    }
+
     public void setData(List<TableObjects> tableObjects) {
         this.objects = tableObjects;
         notifyDataSetChanged();
     }
 
-    public class ObjectViewHolder extends RecyclerView.ViewHolder {
+    public class ObjectViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         CashReceiptObjectHolderBinding binding;
 
         ObjectViewHolder(CashReceiptObjectHolderBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.binding.getRoot().setOnLongClickListener(this);
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (onEntryLongClickListener != null) {
+                onEntryLongClickListener.onEntryLongClick(v, getLayoutPosition());
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public interface OnEntryLongClickListener {
+        void onEntryLongClick(View v, int position);
     }
 }

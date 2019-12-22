@@ -19,10 +19,7 @@ public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private List<Document> docs;
     private OnEntryClickListener onEntryClickListener;
-
-    public interface OnEntryClickListener {
-        void onEntryClick(View v, int position);
-    }
+    private OnEntryLongClickListener onEntryLongClickListener;
 
     public DocListRecyclerViewAdapter(List<Document> docs) {
         this.docs = docs;
@@ -53,24 +50,40 @@ public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
         this.onEntryClickListener = onEntryClickListener;
     }
 
+    public void setOnEntryLongClickListener(OnEntryLongClickListener onEntryLongClickListener) {
+        this.onEntryLongClickListener = onEntryLongClickListener;
+    }
+
     public void setData(List<Document> docs) {
         this.docs = docs;
         notifyDataSetChanged();
     }
 
-    public class DocViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class DocViewHolder extends RecyclerView.ViewHolder {
         DocHolderBinding binding;
         DocViewHolder(DocHolderBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            this.binding.getRoot().setOnClickListener(this);
+            this.binding.getRoot().setOnClickListener(v -> {
+                if (onEntryClickListener != null) {
+                    onEntryClickListener.onEntryClick(v, getLayoutPosition());
+                }
+            });
+            this.binding.getRoot().setOnLongClickListener(v -> {
+                if (onEntryLongClickListener != null) {
+                    onEntryLongClickListener.onEntryLongClick(v, getLayoutPosition());
+                    return true;
+                }
+                return false;
+            });
         }
+    }
 
-        @Override
-        public void onClick(View v) {
-            if (onEntryClickListener != null) {
-                onEntryClickListener.onEntryClick(v, getLayoutPosition());
-            }
-        }
+    public interface OnEntryClickListener {
+        void onEntryClick(View v, int position);
+    }
+
+    public interface OnEntryLongClickListener {
+        void onEntryLongClick(View v, int position);
     }
 }

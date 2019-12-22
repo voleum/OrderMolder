@@ -9,6 +9,7 @@
 
     <!--  MENU ITEMS  -->
     <string name="menu_save">Save</string>
+    <string name="menu_delete">Delete</string>
 
     <!--  SNACKBAR  -->
     <string name="snackbar_soon">Coming soon&#8230;</string>

@@ -2,7 +2,10 @@ package dev.voleum.ordermolder.ui.cashreceipts;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -42,6 +45,8 @@ public class PlaceholderCashReceiptFragment extends Fragment {
     private CashReceiptViewModel cashReceiptViewModel;
 
     private RecyclerView recyclerObjects;
+
+    private int recyclerPosition;
 
     public static PlaceholderCashReceiptFragment newInstance(int index) {
         PlaceholderCashReceiptFragment fragment = new PlaceholderCashReceiptFragment();
@@ -97,12 +102,19 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 recyclerObjects.setHasFixedSize(true);
                 recyclerObjects.setLayoutManager(new LinearLayoutManager(getContext()));
 
+                bindingRecycler.getViewModel().getAdapter().setOnEntryLongClickListener((v, position) -> {
+                    recyclerPosition = position;
+                    v.showContextMenu();
+                });
+
+                registerForContextMenu(recyclerObjects);
+
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
-                fab.setOnClickListener((view) -> {
-                    Intent intentOut = new Intent(getActivity(), ObjectsChooserActivity.class);
-                    intentOut.putExtra(DbHelper.COLUMN_COMPANY_UID, (cashReceiptViewModel.getCashReceipt().getCompanyUid()));
-                    intentOut.putExtra(DbHelper.COLUMN_PARTNER_UID, (cashReceiptViewModel.getCashReceipt().getPartnerUid()));
-                    startActivityForResult(intentOut, OBJECT_CHOOSE_REQUEST);
+                fab.setOnClickListener(view -> {
+                            Intent intentOut = new Intent(getActivity(), ObjectsChooserActivity.class);
+                            intentOut.putExtra(DbHelper.COLUMN_COMPANY_UID, (cashReceiptViewModel.getCashReceipt().getCompanyUid()));
+                            intentOut.putExtra(DbHelper.COLUMN_PARTNER_UID, (cashReceiptViewModel.getCashReceipt().getPartnerUid()));
+                            startActivityForResult(intentOut, OBJECT_CHOOSE_REQUEST);
                         }
                 );
                 break;
@@ -117,12 +129,29 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 if (data != null) {
                     Order object = (Order) data.getSerializableExtra(ObjectsChooserActivity.OBJECT);
                     if (object != null) {
-                        cashReceiptViewModel.onAddObject(object,
+                        cashReceiptViewModel.addObject(object,
                                 data.getDoubleExtra(ObjectsChooserActivity.SUM, 0.0));
                     }
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.list_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.delete_item) {
+            cashReceiptViewModel.removeObject(recyclerPosition);
+            return true;
+        }
+        return false;
     }
 }

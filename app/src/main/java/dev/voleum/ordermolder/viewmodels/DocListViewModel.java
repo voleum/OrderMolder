@@ -61,12 +61,21 @@ public class DocListViewModel extends BaseObservable {
 
     public void addDoc(Document doc) {
         docs.add(doc);
-        notifyChange();
+        adapter.notifyItemInserted(docs.size() - 1);
     }
 
     public void editDoc(Document doc, int position) {
         docs.set(position, doc);
-        notifyChange();
+        adapter.notifyItemChanged(position);
+    }
+
+    public void removeDoc(int position) {
+        deleteDocFromDb(docs.get(position).getUid())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+        docs.remove(position);
+        adapter.notifyItemRemoved(position);
     }
 
     private Completable initDocList() {
@@ -136,6 +145,35 @@ public class DocListViewModel extends BaseObservable {
             c.close();
             db.close();
             adapter = new DocListRecyclerViewAdapter(docs);
+        });
+    }
+
+    private Completable deleteDocFromDb(String uid) {
+
+        return Completable.create(subscriber -> {
+
+            DbHelper dbHelper = DbHelper.getInstance();
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+            String table;
+
+            switch (docType) {
+                case ORDER:
+                    table = DbHelper.TABLE_ORDERS;
+                    break;
+                case CASH_RECEIPT:
+                    table = DbHelper.TABLE_CASH_RECEIPTS;
+                    break;
+                default:
+                    return;
+            }
+
+            String whereClause = DbHelper.COLUMN_UID + " = ?";
+            String[] whereArgs = { uid };
+
+            db.delete(table, whereClause, whereArgs);
+
+            db.close();
         });
     }
 }
