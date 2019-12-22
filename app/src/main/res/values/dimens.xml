@@ -16,6 +16,7 @@
     <!-- View margins -->
     <dimen name="rounded_textview_margin">4dp</dimen>
     <dimen name="recycler_chooser">8dp</dimen>
+    <dimen name="recycler_view_item">8dp</dimen>
 
     <!-- Text sizes -->
     <dimen name="rounded_textview_text_size">16sp</dimen>
@@ -26,4 +27,8 @@
     <!-- Shapes radius -->
     <dimen name="rounded_textview_corner_radius">100dp</dimen>
     <dimen name="rounded_button_corner_radius">100dp</dimen>
+    <dimen name="rounded_recycler_view_item_corner_radius">8dp</dimen>
+
+    <!--  Elevations  -->
+    <dimen name="elevation_recycler_view_item">8dp</dimen>
 </resources>

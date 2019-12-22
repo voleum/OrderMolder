@@ -7,4 +7,5 @@
     <color name="colorSecondaryVariant">#80F57C00</color>
     <color name="colorOnSecondary">#FFF</color>
     <color name="colorBehindProgressBar">#B0000000</color>
+    <color name="background_recycler_view">#FFF</color>
 </resources>

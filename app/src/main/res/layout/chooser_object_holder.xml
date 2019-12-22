@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tool="http://schemas.android.com/tools">
+    xmlns:tool="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -8,11 +9,13 @@
             type="dev.voleum.ordermolder.viewmodels.ObjectsChooserItemViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/recycler_chooser"
-        android:orientation="horizontal">
+        android:layout_margin="@dimen/recycler_view_item"
+        android:background="@drawable/shape_rounded_recycler_view_item"
+        android:elevation="@dimen/elevation_recycler_view_item"
+        android:outlineProvider="bounds">
 
         <TextView
             android:id="@+id/tv_chooser_name"
@@ -20,6 +23,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{row.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tool:text="Object name" />
 
         <TextView
@@ -28,13 +34,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{row.sum}"
-            tool:text="100.00" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_objects_chooser_sign"
+            app:layout_constraintTop_toTopOf="parent"
+            tool:text="100.00"/>
 
         <TextView
-            android:id="@+id/tv_chooser_sign"
+            android:id="@+id/tv_objects_chooser_sign"
             style="@style/Widget.OrderMolder.TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sign_currency_ruble" />
-    </LinearLayout>
+            android:text="@string/sign_currency_ruble"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

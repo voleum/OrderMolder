@@ -32,7 +32,7 @@ public class GoodsChooserActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(R.string.title_catalogs);
+        setTitle(R.string.title_activity_goods);
 
         goodsChooserViewModel = new GoodsChooserViewModel();
 
