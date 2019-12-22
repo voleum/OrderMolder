@@ -11,7 +11,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="@dimen/recycler_view_item"
+        android:background="@drawable/shape_rounded_recycler_view_item"
+        android:elevation="@dimen/elevation_recycler_view_item"
+        android:orientation="horizontal"
+        android:outlineProvider="bounds">
 
         <TextView
             android:id="@+id/good_name"

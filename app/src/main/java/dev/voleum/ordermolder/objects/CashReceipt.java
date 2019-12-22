@@ -51,7 +51,6 @@ public class CashReceipt extends Document {
         int positionClIndex = c.getColumnIndex(DbHelper.COLUMN_POSITION);
         int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
         int dateTimeIndex = c.getColumnIndex(DbHelper.COLUMN_DATE);
-//        int sumIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
         int sumClIndex = c.getColumnIndex(DbHelper.COLUMN_SUM_CREDIT);
         if (c.moveToFirst()) {
             tableObjects = new ArrayList<>();
@@ -61,7 +60,6 @@ public class CashReceipt extends Document {
                 tableObjects.add(new TableObjects(uid,
                         c.getInt(positionClIndex),
                         c.getString(uidClIndex),
-//                        "Date: " + date + " " + time + " / Sum: " + c.getDouble(sumIndex),
                         "Date: " + date + " " + time,
                         c.getDouble(sumClIndex)));
             } while (c.moveToNext());

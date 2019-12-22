@@ -1,0 +1,4 @@
+<resources>
+    <!--  Elevations  -->
+    <dimen name="elevation_recycler_view_item">0dp</dimen>
+</resources>

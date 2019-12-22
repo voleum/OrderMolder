@@ -11,14 +11,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="@dimen/recycler_view_item"
+        android:background="@drawable/shape_rounded_recycler_view_item"
+        android:elevation="@dimen/elevation_recycler_view_item"
+        android:orientation="horizontal"
+        android:outlineProvider="bounds">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_margin="16dp"
             android:layout_weight="50"
             android:text="@{row.catalogTitle}"
             android:textSize="20sp"
