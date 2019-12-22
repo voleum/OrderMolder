@@ -3,49 +3,45 @@ package dev.voleum.ordermolder.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.databinding.ChooserGoodHolderBinding;
+import dev.voleum.ordermolder.viewmodels.GoodsChooserItemViewModel;
 
 public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<HashMap<String, Object>> goods;
+    private List<HashMap<String, Object>> goods;
     private OnEntryClickListener onEntryClickListener;
 
     public interface OnEntryClickListener {
         void onEntryClick(View v, int position);
     }
 
-    public GoodsChooserRecyclerViewAdapter(ArrayList<HashMap<String, Object>> goods) {
+    public GoodsChooserRecyclerViewAdapter(List<HashMap<String, Object>> goods) {
         this.goods = goods;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chooser_good_holder, parent, false);
-        return new GoodViewHolder(v);
+        ChooserGoodHolderBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.chooser_good_holder,
+                parent,
+                false);
+        return new GoodViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        HashMap<String, Object> binded = goods.get(position);
-        try {
-            Good good = (Good) binded.get("good");
-            double price;
-            price = (Double) binded.get("price");
-            ((GoodViewHolder) holder).tvName.setText(good.toString());
-            ((GoodViewHolder) holder).tvPrice.setText(String.valueOf(price));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        HashMap<String, Object> row = goods.get(position);
+        ((GoodViewHolder) holder).binding.setRow(new GoodsChooserItemViewModel(row));
     }
 
     @Override
@@ -57,14 +53,17 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
         this.onEntryClickListener = onEntryClickListener;
     }
 
+    public void setData(List<HashMap<String, Object>> goods) {
+        this.goods = goods;
+        notifyDataSetChanged();
+    }
+
     public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tvName;
-        TextView tvPrice;
-        GoodViewHolder(View view) {
-            super(view);
-            view.setOnClickListener(this);
-            tvName = view.findViewById(R.id.tv_chooser_name);
-            tvPrice = view.findViewById(R.id.tv_chooser_price);
+        ChooserGoodHolderBinding binding;
+        GoodViewHolder(ChooserGoodHolderBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.binding.getRoot().setOnClickListener(this);
         }
 
         @Override

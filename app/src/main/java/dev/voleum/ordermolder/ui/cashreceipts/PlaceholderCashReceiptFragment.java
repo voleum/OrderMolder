@@ -99,7 +99,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener((view) -> {
-                    Intent intentOut = new Intent(getActivity(), ObjectsChooser.class);
+                    Intent intentOut = new Intent(getActivity(), ObjectsChooserActivity.class);
                     intentOut.putExtra(DbHelper.COLUMN_COMPANY_UID, (cashReceiptViewModel.getCashReceipt().getCompanyUid()));
                     intentOut.putExtra(DbHelper.COLUMN_PARTNER_UID, (cashReceiptViewModel.getCashReceipt().getPartnerUid()));
                     startActivityForResult(intentOut, OBJECT_CHOOSE_REQUEST);
@@ -115,8 +115,11 @@ public class PlaceholderCashReceiptFragment extends Fragment {
         if (requestCode == OBJECT_CHOOSE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    cashReceiptViewModel.onAddObject((Order) data.getSerializableExtra("object"),
-                            data.getDoubleExtra("sum_credit", 0.0));
+                    Order object = (Order) data.getSerializableExtra(ObjectsChooserActivity.OBJECT);
+                    if (object != null) {
+                        cashReceiptViewModel.onAddObject(object,
+                                data.getDoubleExtra(ObjectsChooserActivity.SUM, 0.0));
+                    }
                 }
             }
         }

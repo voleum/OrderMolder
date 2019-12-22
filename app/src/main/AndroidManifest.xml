@@ -39,10 +39,10 @@
             android:name=".ui.catalogs.CatalogListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.orders.GoodsChooser"
+            android:name=".ui.orders.GoodsChooserActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.cashreceipts.ObjectsChooser"
+            android:name=".ui.cashreceipts.ObjectsChooserActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
