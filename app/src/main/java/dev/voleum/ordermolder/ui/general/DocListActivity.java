@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Objects;
-
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.DocListRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityDocListBinding;
@@ -59,7 +57,7 @@ public class DocListActivity extends AppCompatActivity {
         recyclerDocs.setHasFixedSize(true);
         recyclerDocs.setLayoutManager(new LinearLayoutManager(this));
 
-        DocListRecyclerViewAdapter.OnEntryCLickListener onEntryCLickListener = (v, position) -> {
+        DocListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
             Document clickedDoc = binding.getViewModel().getDocs().get(position);
             Intent intentOut;
             switch (docType) {
@@ -78,7 +76,7 @@ public class DocListActivity extends AppCompatActivity {
             startActivityForResult(intentOut, REQUEST_CODE);
         };
 
-        binding.getViewModel().getAdapter().setOnEntryCLickListener(onEntryCLickListener);
+        binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
 
         View.OnClickListener fabClickListener = v -> {
             Intent intentOut;
@@ -99,11 +97,37 @@ public class DocListActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fab = findViewById(R.id.doc_list_fab);
         fab.setOnClickListener(fabClickListener);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        setTitleDependOnType();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != 0 && data != null) {
+            Document doc = (Document) data.getSerializableExtra(DOC);
+            switch (resultCode) {
+                case RESULT_SAVED:
+                    docListViewModel.editDoc(doc, data.getIntExtra(POSITION, -1));
+                    break;
+                case RESULT_CREATED:
+                    docListViewModel.addDoc(doc);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    private void setTitleDependOnType() {
         switch (docType) {
             case ORDER:
                 setTitle(R.string.title_activity_orders);
@@ -114,27 +138,5 @@ public class DocListActivity extends AppCompatActivity {
             default:
                 setTitle(R.string.title_activity_unknown_doc);
         }
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Document doc = null;
-        if (resultCode != 0) doc = (Document) data.getSerializableExtra(DOC);
-        switch (resultCode) {
-            case RESULT_SAVED:
-                docListViewModel.editDoc(doc, data.getIntExtra(POSITION, -1));
-                break;
-            case RESULT_CREATED:
-                docListViewModel.addDoc(doc);
-                break;
-        }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
     }
 }

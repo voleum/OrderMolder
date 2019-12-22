@@ -5,7 +5,7 @@
     <data>
         <variable
             name="row"
-            type="dev.voleum.ordermolder.viewmodels.GoodsChooserItemViewModel" />
+            type="dev.voleum.ordermolder.viewmodels.ObjectsChooserItemViewModel" />
     </data>
 
     <LinearLayout
@@ -20,14 +20,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{row.name}"
-            tool:text="Good name" />
+            tool:text="Object name" />
 
         <TextView
             android:id="@+id/tv_chooser_price"
             style="@style/Widget.OrderMolder.TextView.RoundedColored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{row.price}"
+            android:text="@{row.sum}"
             tool:text="100.00" />
 
         <TextView

@@ -18,9 +18,9 @@ import dev.voleum.ordermolder.viewmodels.DocListItemViewModel;
 public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private List<Document> docs;
-    private OnEntryCLickListener onEntryCLickListener;
+    private OnEntryClickListener onEntryClickListener;
 
-    public interface OnEntryCLickListener {
+    public interface OnEntryClickListener {
         void onEntryClick(View v, int position);
     }
 
@@ -49,8 +49,8 @@ public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
         return docs.size();
     }
 
-    public void setOnEntryCLickListener(OnEntryCLickListener onEntryCLickListener) {
-        this.onEntryCLickListener = onEntryCLickListener;
+    public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
+        this.onEntryClickListener = onEntryClickListener;
     }
 
     public void setData(List<Document> docs) {
@@ -68,8 +68,8 @@ public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-            if (onEntryCLickListener != null) {
-                onEntryCLickListener.onEntryClick(v, getLayoutPosition());
+            if (onEntryClickListener != null) {
+                onEntryClickListener.onEntryClick(v, getLayoutPosition());
             }
         }
     }

@@ -3,39 +3,45 @@ package dev.voleum.ordermolder.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.databinding.ChooserObjectHolderBinding;
+import dev.voleum.ordermolder.viewmodels.ObjectsChooserItemViewModel;
 
 public class ObjectsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Order> objects;
+    private List<HashMap<String, Object>> objects;
     private OnEntryClickListener onEntryClickListener;
 
     public interface OnEntryClickListener {
         void onEntryClick(View v, int position);
     }
 
-    public ObjectsChooserRecyclerViewAdapter(ArrayList<Order> objects) {
+    public ObjectsChooserRecyclerViewAdapter(List<HashMap<String, Object>> objects) {
         this.objects = objects;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
-        return new ObjectViewHolder(v);
+        ChooserObjectHolderBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.chooser_object_holder,
+                parent,
+                false);
+        return new ObjectViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-//        Order object = objects.get(position);
-        ((ObjectViewHolder) holder).textView.setText(objects.toString());
+        HashMap<String, Object> row = objects.get(position);
+        ((ObjectViewHolder) holder).binding.setRow(new ObjectsChooserItemViewModel(row));
     }
 
     @Override
@@ -47,12 +53,17 @@ public class ObjectsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
         this.onEntryClickListener = onEntryClickListener;
     }
 
+    public void setData(List<HashMap<String, Object>> objects) {
+        this.objects = objects;
+        notifyDataSetChanged();
+    }
+
     public class ObjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView textView;
-        ObjectViewHolder(View view) {
-            super(view);
-            view.setOnClickListener(this);
-            textView = (TextView) view;
+        ChooserObjectHolderBinding binding;
+        ObjectViewHolder(ChooserObjectHolderBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.binding.getRoot().setOnClickListener(this);
         }
 
         @Override
