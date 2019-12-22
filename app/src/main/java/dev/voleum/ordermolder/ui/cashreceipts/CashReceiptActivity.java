@@ -107,6 +107,10 @@ public class CashReceiptActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
+                    if (cashReceiptViewModel.getTableObjects().isEmpty()) {
+                        Snackbar.make(fab, R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT).show();
+                        break;
+                    }
                     cashReceiptViewModel.saveCashReceipt()
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -124,6 +128,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                                 public void onComplete() {
                                     Intent intent = new Intent();
                                     intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getCashReceipt());
+                                    intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                                     int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                                     setResult(result, intent);
                                     finish();
@@ -139,6 +144,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                     if (savedWithoutClosing) {
                         Intent intent = new Intent();
                         intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getCashReceipt());
+                        intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                         setResult(isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED, intent);
                     }
                     finish();
@@ -168,6 +174,10 @@ public class CashReceiptActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
+                if (cashReceiptViewModel.getTableObjects().isEmpty()) {
+                    Snackbar.make(fab, R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT).show();
+                    break;
+                }
                 cashReceiptViewModel.saveCashReceipt()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())

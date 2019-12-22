@@ -4,6 +4,8 @@ import android.icu.util.Calendar;
 
 import androidx.annotation.NonNull;
 
+import dev.voleum.ordermolder.R;
+
 public abstract class Document extends Obj {
 
     protected String date;
@@ -37,7 +39,7 @@ public abstract class Document extends Obj {
     @NonNull
     @Override
     public String toString() {
-        return "Date: " + date + " " + time + " / Sum: " + moneyDecimalFormat.format(sum);
+        return "Date: " + date + " " + time + " / Sum: " + moneyDecimalFormat.format(sum) + " \u20BD";
     }
 
     public String getDate() {

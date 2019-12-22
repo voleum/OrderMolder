@@ -107,6 +107,10 @@ public class OrderActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
+                    if (orderViewModel.getTableGoods().isEmpty()) {
+                        Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
+                        break;
+                    }
                     orderViewModel.saveOrder()
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -124,6 +128,7 @@ public class OrderActivity extends AppCompatActivity {
                                 public void onComplete() {
                                     Intent intent = new Intent();
                                     intent.putExtra(DocListActivity.DOC, orderViewModel.getOrder());
+                                    intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                                     int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                                     setResult(result, intent);
                                     finish();
@@ -139,6 +144,7 @@ public class OrderActivity extends AppCompatActivity {
                     if (savedWithoutClosing) {
                         Intent intent = new Intent();
                         intent.putExtra(DocListActivity.DOC, orderViewModel.getOrder());
+                        intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                         setResult(isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED, intent);
                     }
                     finish();
@@ -170,6 +176,7 @@ public class OrderActivity extends AppCompatActivity {
             case R.id.doc_save:
                 if (orderViewModel.getTableGoods().isEmpty()) {
                     Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
+                    break;
                 }
                 orderViewModel.saveOrder()
                         .subscribeOn(Schedulers.newThread())
