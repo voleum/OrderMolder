@@ -2,7 +2,10 @@ package dev.voleum.ordermolder.ui.orders;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -41,6 +44,8 @@ public class PlaceholderOrderFragment extends Fragment {
     private OrderViewModel orderViewModel;
 
     private RecyclerView recyclerGoods;
+
+    private int recyclerPosition;
 
     public static PlaceholderOrderFragment newInstance(int index) {
         PlaceholderOrderFragment fragment = new PlaceholderOrderFragment();
@@ -96,9 +101,17 @@ public class PlaceholderOrderFragment extends Fragment {
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
 
+                bindingRecycler.getViewModel().getAdapter().setOnEntryLongClickListener((v, position) -> {
+                    recyclerPosition = position;
+                    v.showContextMenu();
+                });
+
+                registerForContextMenu(recyclerGoods);
+
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
-                fab.setOnClickListener(
-                        (view) -> startActivityForResult(new Intent(getActivity(), GoodsChooserActivity.class), GOOD_CHOOSE_REQUEST)
+                fab.setOnClickListener(view -> {
+                            startActivityForResult(new Intent(getActivity(), GoodsChooserActivity.class), GOOD_CHOOSE_REQUEST);
+                        }
                 );
                 break;
         }
@@ -112,7 +125,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 if (data != null) {
                     Good good = (Good) data.getSerializableExtra(GoodsChooserActivity.GOOD);
                     if (good != null) {
-                        orderViewModel.onAddGood(good,
+                        orderViewModel.addGood(good,
                                 data.getDoubleExtra(GoodsChooserActivity.QUANTITY, 1.0),
                                 data.getDoubleExtra(GoodsChooserActivity.PRICE, 0.0));
                     }
@@ -120,5 +133,22 @@ public class PlaceholderOrderFragment extends Fragment {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.list_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.delete_item) {
+            orderViewModel.removeGood(recyclerPosition);
+            return true;
+        }
+        return false;
     }
 }

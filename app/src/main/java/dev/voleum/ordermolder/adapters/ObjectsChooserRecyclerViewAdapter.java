@@ -20,10 +20,6 @@ public class ObjectsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
     private List<HashMap<String, Object>> objects;
     private OnEntryClickListener onEntryClickListener;
 
-    public interface OnEntryClickListener {
-        void onEntryClick(View v, int position);
-    }
-
     public ObjectsChooserRecyclerViewAdapter(List<HashMap<String, Object>> objects) {
         this.objects = objects;
     }
@@ -72,5 +68,9 @@ public class ObjectsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
                 onEntryClickListener.onEntryClick(v, getLayoutPosition());
             }
         }
+    }
+
+    public interface OnEntryClickListener {
+        void onEntryClick(View v, int position);
     }
 }

@@ -20,10 +20,6 @@ public class CatalogListRecyclerViewAdapter extends RecyclerView.Adapter {
     private List<Catalog> catalogs;
     private OnEntryClickListener onEntryClickListener;
 
-    public interface OnEntryClickListener {
-        void onEntryClick(View v, int position);
-    }
-
     public CatalogListRecyclerViewAdapter(List<Catalog> catalogs) {
         this.catalogs = catalogs;
     }
@@ -72,5 +68,9 @@ public class CatalogListRecyclerViewAdapter extends RecyclerView.Adapter {
                 onEntryClickListener.onEntryClick(v, getLayoutPosition());
             }
         }
+    }
+
+    public interface OnEntryClickListener {
+        void onEntryClick(View v, int position);
     }
 }

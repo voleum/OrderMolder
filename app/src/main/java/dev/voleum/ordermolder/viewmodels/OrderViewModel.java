@@ -301,7 +301,7 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
         notifyPropertyChanged(dev.voleum.ordermolder.BR.sum);
     }
 
-    public void onAddGood(Good good, double quantity, double price) {
+    public void addGood(Good good, double quantity, double price) {
         tableGoods.add(new TableGoods(order.getUid(),
                 tableGoods.size(),
                 good.getUid(),
@@ -310,6 +310,12 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
                 price,
                 quantity * price));
         adapter.notifyItemInserted(tableGoods.size());
+        countSum();
+    }
+
+    public void removeGood(int position) {
+        tableGoods.remove(position);
+        adapter.notifyItemRemoved(position);
         countSum();
     }
 
