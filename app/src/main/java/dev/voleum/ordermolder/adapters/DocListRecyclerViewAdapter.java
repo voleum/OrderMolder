@@ -3,39 +3,45 @@ package dev.voleum.ordermolder.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.databinding.DocHolderBinding;
 import dev.voleum.ordermolder.objects.Document;
+import dev.voleum.ordermolder.viewmodels.DocListItemViewModel;
 
 public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Document> docs;
+    private List<Document> docs;
     private OnEntryCLickListener onEntryCLickListener;
 
     public interface OnEntryCLickListener {
         void onEntryClick(View v, int position);
     }
 
-    public DocListRecyclerViewAdapter(ArrayList<Document> docs) {
+    public DocListRecyclerViewAdapter(List<Document> docs) {
         this.docs = docs;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
-        return new OrderViewHolder(v);
+        DocHolderBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.doc_holder,
+                parent,
+                false);
+        return new DocViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Document doc = docs.get(position);
-        ((OrderViewHolder) holder).textView.setText(doc.toString());
+        Document row = docs.get(position);
+        ((DocViewHolder) holder).binding.setRow(new DocListItemViewModel(row));
     }
 
     @Override
@@ -47,12 +53,17 @@ public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
         this.onEntryCLickListener = onEntryCLickListener;
     }
 
-    public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView textView;
-        OrderViewHolder(@NonNull View view) {
-            super(view);
-            view.setOnClickListener(this);
-            textView = (TextView) view;
+    public void setData(List<Document> docs) {
+        this.docs = docs;
+        notifyDataSetChanged();
+    }
+
+    public class DocViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        DocHolderBinding binding;
+        DocViewHolder(DocHolderBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.binding.getRoot().setOnClickListener(this);
         }
 
         @Override
@@ -62,5 +73,4 @@ public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
             }
         }
     }
-
 }
