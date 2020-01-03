@@ -47,13 +47,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        switch (typeDoc) {
-            case TYPE_ORDER:
-                return PlaceholderOrderFragment.newInstance(position + 1);
-            case TYPE_CASH_RECEIPT:
-                return PlaceholderCashReceiptFragment.newInstance(position + 1);
-        }
-        return PlaceholderOrderFragment.newInstance(position + 1);
+        if (typeDoc == TYPE_ORDER) return PlaceholderOrderFragment.newInstance(position + 1);
+        else return PlaceholderCashReceiptFragment.newInstance(position + 1);
     }
 
     @Nullable

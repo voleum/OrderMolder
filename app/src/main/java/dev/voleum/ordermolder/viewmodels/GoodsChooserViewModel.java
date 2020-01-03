@@ -24,8 +24,10 @@ public class GoodsChooserViewModel extends BaseObservable {
 
     private List<HashMap<String, Object>> goods;
     private GoodsChooserRecyclerViewAdapter adapter;
+    private GoodsChooserRecyclerViewAdapter.OnEntryClickListener onEntryClickListener;
 
-    public GoodsChooserViewModel() {
+    public GoodsChooserViewModel(GoodsChooserRecyclerViewAdapter.OnEntryClickListener onEntryClickListener) {
+        this.onEntryClickListener = onEntryClickListener;
         initGoodList()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -94,6 +96,7 @@ public class GoodsChooserViewModel extends BaseObservable {
             c.close();
             db.close();
             adapter = new GoodsChooserRecyclerViewAdapter(goods);
+            adapter.setOnEntryClickListener(onEntryClickListener);
         });
     }
 }

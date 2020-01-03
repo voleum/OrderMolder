@@ -65,12 +65,12 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             if (onEntryClickListener != null) {
-                onEntryClickListener.onEntryClick(v, getLayoutPosition());
+                onEntryClickListener.onEntryClick(v, goods.get(getLayoutPosition()));
             }
         }
     }
 
     public interface OnEntryClickListener {
-        void onEntryClick(View v, int position);
+        void onEntryClick(View v, HashMap<String, Object> row);
     }
 }

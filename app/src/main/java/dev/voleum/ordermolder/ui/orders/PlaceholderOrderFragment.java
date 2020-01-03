@@ -45,8 +45,6 @@ public class PlaceholderOrderFragment extends Fragment {
 
     private RecyclerView recyclerGoods;
 
-    private int recyclerPosition;
-
     public static PlaceholderOrderFragment newInstance(int index) {
         PlaceholderOrderFragment fragment = new PlaceholderOrderFragment();
         Bundle bundle = new Bundle();
@@ -102,7 +100,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
 
                 bindingRecycler.getViewModel().getAdapter().setOnEntryLongClickListener((v, position) -> {
-                    recyclerPosition = position;
+                    ((OrderActivity) getActivity()).setRecyclerPosition(position);
                     v.showContextMenu();
                 });
 
@@ -146,8 +144,11 @@ public class PlaceholderOrderFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete_item) {
-            orderViewModel.removeGood(recyclerPosition);
-            return true;
+            OrderActivity orderActivity = (OrderActivity) getActivity();
+            if (orderActivity != null) {
+                orderViewModel.removeGood(orderActivity.getRecyclerPosition());
+                return true;
+            }
         }
         return false;
     }
