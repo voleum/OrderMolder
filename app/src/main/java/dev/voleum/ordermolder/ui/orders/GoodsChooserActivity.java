@@ -10,9 +10,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
-
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.adapters.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityGoodsChooserBinding;
 import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.viewmodels.GoodsChooserViewModel;
@@ -34,7 +33,18 @@ public class GoodsChooserActivity extends AppCompatActivity {
 
         setTitle(R.string.title_activity_goods);
 
-        goodsChooserViewModel = new GoodsChooserViewModel();
+        GoodsChooserRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = ((v, row) -> {
+//            HashMap<String, Object> chosen = binding.getViewModel().getGoods().get(position);
+            double price = (double) row.get(PRICE);
+            setResult(RESULT_OK, new Intent()
+                    .putExtra(GOOD, (Good) row.get(GOOD))
+                    .putExtra(QUANTITY, 1.0)
+                    .putExtra(PRICE, price)
+                    .putExtra(SUM, price));
+            finish();
+        });
+
+        goodsChooserViewModel = new GoodsChooserViewModel(onEntryClickListener);
 
         ActivityGoodsChooserBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_goods_chooser);
         binding.setViewModel(goodsChooserViewModel);
@@ -44,16 +54,16 @@ public class GoodsChooserActivity extends AppCompatActivity {
         recyclerGoods.setHasFixedSize(true);
         recyclerGoods.setLayoutManager(new LinearLayoutManager(this));
 
-        binding.getViewModel().getAdapter().setOnEntryClickListener((v, position) -> {
-            HashMap<String, Object> chosen = binding.getViewModel().getGoods().get(position);
-            double price = (double) chosen.get(PRICE);
-            setResult(RESULT_OK, new Intent()
-                    .putExtra(GOOD, (Good) chosen.get(GOOD))
-                    .putExtra(QUANTITY, 1.0)
-                    .putExtra(PRICE, price)
-                    .putExtra(SUM, price));
-            finish();
-        });
+//        binding.getViewModel().getAdapter().setOnEntryClickListener((v, position) -> {
+//            HashMap<String, Object> chosen = binding.getViewModel().getGoods().get(position);
+//            double price = (double) chosen.get(PRICE);
+//            setResult(RESULT_OK, new Intent()
+//                    .putExtra(GOOD, (Good) chosen.get(GOOD))
+//                    .putExtra(QUANTITY, 1.0)
+//                    .putExtra(PRICE, price)
+//                    .putExtra(SUM, price));
+//            finish();
+//        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

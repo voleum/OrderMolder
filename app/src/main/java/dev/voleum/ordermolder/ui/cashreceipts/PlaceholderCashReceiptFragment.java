@@ -46,8 +46,6 @@ public class PlaceholderCashReceiptFragment extends Fragment {
 
     private RecyclerView recyclerObjects;
 
-    private int recyclerPosition;
-
     public static PlaceholderCashReceiptFragment newInstance(int index) {
         PlaceholderCashReceiptFragment fragment = new PlaceholderCashReceiptFragment();
         Bundle bundle = new Bundle();
@@ -103,7 +101,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 recyclerObjects.setLayoutManager(new LinearLayoutManager(getContext()));
 
                 bindingRecycler.getViewModel().getAdapter().setOnEntryLongClickListener((v, position) -> {
-                    recyclerPosition = position;
+                    ((CashReceiptActivity) getActivity()).setRecyclerPosition(position);
                     v.showContextMenu();
                 });
 
@@ -149,8 +147,11 @@ public class PlaceholderCashReceiptFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete_item) {
-            cashReceiptViewModel.removeObject(recyclerPosition);
-            return true;
+            CashReceiptActivity cashReceiptActivity = (CashReceiptActivity) getActivity();
+            if (cashReceiptActivity != null) {
+                cashReceiptViewModel.removeObject(cashReceiptActivity.getRecyclerPosition());
+                return true;
+            }
         }
         return false;
     }

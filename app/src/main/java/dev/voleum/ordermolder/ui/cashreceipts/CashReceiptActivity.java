@@ -41,6 +41,8 @@ public class CashReceiptActivity extends AppCompatActivity {
     protected FloatingActionButton fab;
     protected SectionsPagerAdapter sectionsPagerAdapter;
 
+    private int recyclerPosition;
+
     private boolean isCreating;
     private boolean savedWithoutClosing;
 
@@ -209,6 +211,14 @@ public class CashReceiptActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    public int getRecyclerPosition() {
+        return recyclerPosition;
+    }
+
+    public void setRecyclerPosition(int recyclerPosition) {
+        this.recyclerPosition = recyclerPosition;
     }
 
     public CashReceiptViewModel getCashReceiptViewModel() {
