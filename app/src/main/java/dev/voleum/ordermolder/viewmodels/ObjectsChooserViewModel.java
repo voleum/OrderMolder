@@ -17,9 +17,6 @@ import dev.voleum.ordermolder.adapters.ObjectsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.ui.cashreceipts.ObjectsChooserActivity;
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class ObjectsChooserViewModel extends BaseObservable {
 
@@ -31,10 +28,7 @@ public class ObjectsChooserViewModel extends BaseObservable {
     public ObjectsChooserViewModel(String companyUid, String partnerUid) {
         this.companyUid = companyUid;
         this.partnerUid = partnerUid;
-        initObjectsList()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        initObjectsList();
     }
 
     @Bindable
@@ -59,47 +53,44 @@ public class ObjectsChooserViewModel extends BaseObservable {
         }
     }
 
-    private Completable initObjectsList() {
+    private void initObjectsList() {
 
-        return Completable.create(subscriber -> {
+        objects = new ArrayList<>();
 
-            objects = new ArrayList<>();
+        DbHelper dbHelper = DbHelper.getInstance();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String orderBy = DbHelper.COLUMN_DATE;
+        String[] selectionArgs = {companyUid, partnerUid};
+        Cursor c = db.rawQuery("SELECT *" +
+                        " FROM " + DbHelper.TABLE_ORDERS +
+                        " WHERE " + DbHelper.COLUMN_COMPANY_UID + " = ?" +
+                        " AND " + DbHelper.COLUMN_PARTNER_UID + " = ?" +
+                        " ORDER BY " + orderBy,
+                selectionArgs);
 
-            DbHelper dbHelper = DbHelper.getInstance();
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String orderBy = DbHelper.COLUMN_DATE;
-            String[] selectionArgs = { companyUid, partnerUid };
-            Cursor c = db.rawQuery("SELECT *" +
-                    " FROM " + DbHelper.TABLE_ORDERS +
-                    " WHERE " + DbHelper.COLUMN_COMPANY_UID + " = ?" +
-                    " AND " + DbHelper.COLUMN_PARTNER_UID + " = ?" +
-                    " ORDER BY " + orderBy,
-                    selectionArgs);
+        HashMap<String, Object> values;
 
-            HashMap<String, Object> values;
-
-            if (c.moveToFirst()) {
-                int uidIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-                int dateIndex = c.getColumnIndex(DbHelper.COLUMN_DATE);
-                int companyIndex = c.getColumnIndex(DbHelper.COLUMN_COMPANY_UID);
-                int partnerIndex = c.getColumnIndex(DbHelper.COLUMN_PARTNER_UID);
-                int warehouseIndex = c.getColumnIndex(DbHelper.COLUMN_WAREHOUSE_UID);
-                int sumIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
-                do {
-                    values = new HashMap<>();
-                    values.put(ObjectsChooserActivity.OBJECT, new Order(c.getString(uidIndex),
-                            c.getString(dateIndex),
-                            c.getString(companyIndex),
-                            c.getString(partnerIndex),
-                            c.getString(warehouseIndex),
-                            c.getDouble(sumIndex)));
-                    values.put(ObjectsChooserActivity.SUM, c.getDouble(sumIndex));
-                    objects.add(values);
-                } while (c.moveToNext());
-            }
-            c.close();
-            db.close();
-            adapter = new ObjectsChooserRecyclerViewAdapter(objects);
-        });
+        if (c.moveToFirst()) {
+            int uidIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+            int dateIndex = c.getColumnIndex(DbHelper.COLUMN_DATE);
+            int companyIndex = c.getColumnIndex(DbHelper.COLUMN_COMPANY_UID);
+            int partnerIndex = c.getColumnIndex(DbHelper.COLUMN_PARTNER_UID);
+            int warehouseIndex = c.getColumnIndex(DbHelper.COLUMN_WAREHOUSE_UID);
+            int sumIndex = c.getColumnIndex(DbHelper.COLUMN_SUM);
+            do {
+                values = new HashMap<>();
+                values.put(ObjectsChooserActivity.OBJECT, new Order(c.getString(uidIndex),
+                        c.getString(dateIndex),
+                        c.getString(companyIndex),
+                        c.getString(partnerIndex),
+                        c.getString(warehouseIndex),
+                        c.getDouble(sumIndex)));
+                values.put(ObjectsChooserActivity.SUM, c.getDouble(sumIndex));
+                objects.add(values);
+            } while (c.moveToNext());
+        }
+        c.close();
+        db.close();
+        adapter = new ObjectsChooserRecyclerViewAdapter(objects);
     }
 }
