@@ -1,15 +1,13 @@
 package dev.voleum.ordermolder.helpers;
 
-import io.reactivex.Completable;
+import io.reactivex.Single;
 
 public class Exchanger {
 
-    // TODO: flowable? (connected, received, sent)
-    public static Completable exchange() {
-        return Completable.create(subscriber -> {
+    public static Single<String> exchange() {
+        return Single.create(subscriber -> {
             ConnectionHelper connection = new ConnectionHelper();
-            connection.exchange();
-            subscriber.onComplete();
+            subscriber.onSuccess(connection.exchange());
         });
     }
 }

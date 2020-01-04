@@ -30,6 +30,7 @@ import dev.voleum.ordermolder.fragments.FragmentMain;
 import dev.voleum.ordermolder.fragments.FragmentReports;
 import dev.voleum.ordermolder.helpers.Exchanger;
 import io.reactivex.CompletableObserver;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -198,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 Exchanger.exchange()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new CompletableObserver() {
+                        .subscribe(new SingleObserver<String>() {
                             @Override
                             public void onSubscribe(Disposable d) {
                                 progressLayout.setAlpha(0.0f);
@@ -209,15 +210,15 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onComplete() {
-                                Snackbar.make(v, R.string.snackbar_successful, Snackbar.LENGTH_SHORT).show();
+                            public void onSuccess(String s) {
+                                Snackbar.make(v, s, Snackbar.LENGTH_SHORT).show();
                                 progressLayout.setVisibility(View.GONE);
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             }
 
                             @Override
                             public void onError(Throwable e) {
-                                if (e != null) Log.d(LOG_TAG, e.getMessage());
+                                if (e != null) Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_SHORT).show();
                             }
                         });
                 break;

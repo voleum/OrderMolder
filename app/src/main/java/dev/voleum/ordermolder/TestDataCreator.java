@@ -17,7 +17,7 @@ public class TestDataCreator {
         return Completable.create(subscriber -> {
             SharedPreferences sharedPref = MainActivity.getPref();
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("url", "ftp.kutuzov-it.ru.1gb.ru");
+            editor.putString("url", "ftp.kutuzov-it-ru.1gb.ru");
             editor.putString("username", "w_kutuzov-it-ru_61baf58a\n");
             editor.putString("password", "71ea541e3jkl");
             editor.putBoolean("passive", true);

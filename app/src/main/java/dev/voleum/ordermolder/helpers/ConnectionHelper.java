@@ -2,7 +2,6 @@ package dev.voleum.ordermolder.helpers;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.util.Log;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -29,22 +28,35 @@ class ConnectionHelper {
     private String username = sharedPreferences.getString("username", "");
     private String password = sharedPreferences.getString("password", "");
 
-    // TODO: Separate connection, download and upload
-    boolean exchange() {
+    String exchange() {
+
+        if (hostname.isEmpty()) return MainActivity.getRess().getString(R.string.snackbar_empty_hostname);
+        if (username.isEmpty()) return MainActivity.getRess().getString(R.string.snackbar_empty_username);
+        if (password.isEmpty()) return MainActivity.getRess().getString(R.string.snackbar_empty_password);
+
         FTPClient ftp = new FTPClient();
 
         try {
             // region Connect
             ftp.connect(hostname, port);
             if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
-                Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
-                return false;
+                return ftp.getReplyString();
             }
             if (usePassiveMode) ftp.enterLocalPassiveMode();
             ftp.login(username, password);
             // endregion
 
             XmlHelper xmlHelper = new XmlHelper();
+
+            // region Output
+            try (OutputStream output = ftp.storeFileStream(FILE_NAME_OUTPUT)) {
+                if (output == null) {
+                    return ftp.getReplyString();
+                }
+                xmlHelper.serializeXml(output);
+                ftp.completePendingCommand();
+            }
+            // endregion
 
             // region Input
             try (InputStream input = ftp.retrieveFileStream(FILE_NAME_INPUT)) {
@@ -56,24 +68,13 @@ class ConnectionHelper {
             }
             // endregion
 
-            // region Output
-            try (OutputStream output = ftp.storeFileStream(FILE_NAME_OUTPUT)) {
-                if (output == null) {
-                    Log.d(MainActivity.LOG_TAG, ftp.getReplyString());
-                    return false;
-                }
-                xmlHelper.serializeXml(output);
-                ftp.completePendingCommand();
-            }
-            // endregion
-
-            return true;
+            return MainActivity.getRess().getString(R.string.snackbar_successful);
         } catch (SocketException e) {
             e.printStackTrace();
-            return false;
+            return e.getMessage();
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return e.getMessage();
         } finally {
             if (ftp.isConnected()) {
                 try {
@@ -83,11 +84,5 @@ class ConnectionHelper {
                 }
             }
         }
-
     }
-
-//    private void connect(FTPClient ftp) {
-//
-//    }
-
 }
