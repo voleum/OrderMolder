@@ -66,9 +66,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void setPasswordSummary(EditTextPreference preference, CharSequence value) {
-            EditText edit = preference.getEditText();
-            String pref = edit.getTransformationMethod().getTransformation(value, edit).toString();
-            preference.setSummary(pref);
+            if (value != null) {
+                EditText edit = preference.getEditText();
+                String pref = edit.getTransformationMethod().getTransformation(value, edit).toString();
+                preference.setSummary(pref);
+            }
         }
     }
 

@@ -21,6 +21,9 @@
     <string name="snackbar_unknown_doc_type">Неизвестный тип документа</string>
     <string name="snackbar_successful">Успешно!</string>
     <string name="snackbar_unsuccessful">Что-то пошло не так!</string>
+    <string name="snackbar_empty_hostname">Пустое имя хоста!</string>
+    <string name="snackbar_empty_username">Пустое имя пользователя!</string>
+    <string name="snackbar_empty_password">Пустой пароль!</string>
 
     <!--  BUTTONS  -->
     <string name="button_exchange">Обмен данными</string>

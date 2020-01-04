@@ -16,11 +16,16 @@ import dev.voleum.ordermolder.databinding.ActivityCatListBinding;
 import dev.voleum.ordermolder.enums.CatalogTypes;
 import dev.voleum.ordermolder.objects.Catalog;
 import dev.voleum.ordermolder.viewmodels.CatalogListViewModel;
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class CatalogListActivity extends AppCompatActivity {
 
     CatalogListViewModel catalogListViewModel;
     RecyclerView recyclerCatalogs;
+
+    ActivityCatListBinding binding;
 
     private CatalogTypes catalogType;
 
@@ -29,38 +34,46 @@ public class CatalogListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         catalogType = (CatalogTypes) getIntent().getSerializableExtra(CatalogActivity.CAT_TYPE);
+        setTitleDependOnType();
 
-        catalogListViewModel = new CatalogListViewModel(catalogType);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_cat_list);
 
-        ActivityCatListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_cat_list);
-        binding.setViewModel(catalogListViewModel);
-        binding.executePendingBindings();
-
-        recyclerCatalogs = binding.getRoot().findViewById(R.id.recycler_catalogs);
-        recyclerCatalogs.setHasFixedSize(true);
-        recyclerCatalogs.setLayoutManager(new LinearLayoutManager(this));
-
-        CatalogListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
-            Catalog clickedCatalog = binding.getViewModel().getCatalogs().get(position);
-            Intent intentOut = new Intent(CatalogListActivity.this, CatalogActivity.class)
-                    .putExtra(CatalogActivity.CAT_TYPE, catalogType)
-                    .putExtra(CatalogActivity.CAT, clickedCatalog);
-            startActivity(intentOut);
-        };
-
-        binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
+        initData()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        setTitleDependOnType();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    private Completable initData() {
+        return Completable.create(subscriber -> {
+            catalogListViewModel = new CatalogListViewModel(catalogType);
+            binding.setViewModel(catalogListViewModel);
+            binding.executePendingBindings();
+
+            recyclerCatalogs = binding.getRoot().findViewById(R.id.recycler_catalogs);
+            recyclerCatalogs.setHasFixedSize(true);
+            recyclerCatalogs.setLayoutManager(new LinearLayoutManager(this));
+
+            CatalogListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
+                Catalog clickedCatalog = binding.getViewModel().getCatalogs().get(position);
+                Intent intentOut = new Intent(CatalogListActivity.this, CatalogActivity.class)
+                        .putExtra(CatalogActivity.CAT_TYPE, catalogType)
+                        .putExtra(CatalogActivity.CAT, clickedCatalog);
+                startActivity(intentOut);
+            };
+
+            binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
+        });
     }
 
     private void setTitleDependOnType() {

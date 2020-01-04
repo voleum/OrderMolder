@@ -28,10 +28,22 @@ public class CashReceipt extends Document {
 
     public CashReceipt(String uid, String dateTime, String companyUid, String partnerUid, double sum) {
         super(uid, dateTime, companyUid, partnerUid, sum);
+        this.tableObjects = new ArrayList<>();
+    }
+
+    public CashReceipt(String uid, String dateTime, String companyUid, String partnerUid, double sum, List<TableObjects> tableObjects) {
+        super(uid, dateTime, companyUid, partnerUid, sum);
+        this.tableObjects = tableObjects;
     }
 
     public CashReceipt(String uid, String date, String time, String companyUid, String partnerUid, double sum) {
         super(uid, date, time, companyUid, partnerUid, sum);
+        this.tableObjects = new ArrayList<>();
+    }
+
+    public CashReceipt(String uid, String date, String time, String companyUid, String partnerUid, double sum, List<TableObjects> tableObjects) {
+        super(uid, date, time, companyUid, partnerUid, sum);
+        this.tableObjects = tableObjects;
     }
 
     // TODO: Async
@@ -123,5 +135,9 @@ public class CashReceipt extends Document {
 
     public List<TableObjects> getTableObjects() {
         return tableObjects;
+    }
+
+    public void addObject(TableObjects row) {
+        tableObjects.add(row);
     }
 }

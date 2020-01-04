@@ -22,6 +22,9 @@
     <string name="snackbar_unknown_doc_type">Unknown document type</string>
     <string name="snackbar_successful">Successful!</string>
     <string name="snackbar_unsuccessful">Something went wrong!</string>
+    <string name="snackbar_empty_hostname">Hostname is empty!</string>
+    <string name="snackbar_empty_username">Username is empty!</string>
+    <string name="snackbar_empty_password">Password is empty!</string>
 
     <!--  BUTTONS  -->
     <string name="button_exchange">Exchange</string>

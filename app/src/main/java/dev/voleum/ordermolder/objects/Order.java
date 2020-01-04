@@ -30,6 +30,7 @@ public class Order extends Document {
     public Order(String uid, String dateTime, String companyUid, String partnerUid, String warehouseUid, double sum) {
         super(uid, dateTime, companyUid, partnerUid, sum);
         this.warehouseUid = warehouseUid;
+        this.tableGoods = new ArrayList<>();
     }
 
     public Order(String uid, String dateTime, String companyUid, String partnerUid, String warehouseUid, double sum, List<TableGoods> tableGoods) {
@@ -41,6 +42,7 @@ public class Order extends Document {
     public Order(String uid, String date, String time, String companyUid, String partnerUid, String warehouseUid, double sum) {
         super(uid, date, time, companyUid, partnerUid, sum);
         this.warehouseUid = warehouseUid;
+        this.tableGoods = new ArrayList<>();
     }
 
     public Order(String uid, String date, String time, String companyUid, String partnerUid, String warehouseUid, double sum, List<TableGoods> tableGoods) {
@@ -151,5 +153,9 @@ public class Order extends Document {
 
     public List<TableGoods> getTableGoods() {
         return tableGoods;
+    }
+
+    public void addGood(TableGoods row) {
+        tableGoods.add(row);
     }
 }
