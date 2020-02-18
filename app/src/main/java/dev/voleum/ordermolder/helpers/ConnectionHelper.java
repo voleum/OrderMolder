@@ -51,7 +51,7 @@ class ConnectionHelper {
             // region Output
             try (OutputStream output = ftp.storeFileStream(FILE_NAME_OUTPUT)) {
                 if (output == null) {
-                    return ftp.getReplyString();
+                    return MainActivity.getRess().getString(R.string.snackbar_couldnt_send_data);
                 }
                 xmlHelper.serializeXml(output);
                 ftp.completePendingCommand();
@@ -60,11 +60,12 @@ class ConnectionHelper {
 
             // region Input
             try (InputStream input = ftp.retrieveFileStream(FILE_NAME_INPUT)) {
-                if (input != null) {
-                    boolean parsed = xmlHelper.parseXml(input);
-                    ftp.completePendingCommand();
-                    if (parsed) ftp.deleteFile(FILE_NAME_INPUT);
+                if (input == null) {
+                    return MainActivity.getRess().getString(R.string.snackbar_couldnt_receive_data);
                 }
+                boolean parsed = xmlHelper.parseXml(input);
+                ftp.completePendingCommand();
+                if (parsed) ftp.deleteFile(FILE_NAME_INPUT);
             }
             // endregion
 

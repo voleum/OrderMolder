@@ -25,6 +25,8 @@
     <string name="snackbar_empty_hostname">Hostname is empty!</string>
     <string name="snackbar_empty_username">Username is empty!</string>
     <string name="snackbar_empty_password">Password is empty!</string>
+    <string name="snackbar_couldnt_send_data">Couldn\'t send the data!</string>
+    <string name="snackbar_couldnt_receive_data">Couldn\'t receive the data!</string>
 
     <!--  BUTTONS  -->
     <string name="button_exchange">Exchange</string>
