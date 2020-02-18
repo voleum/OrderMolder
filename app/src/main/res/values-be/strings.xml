@@ -24,6 +24,8 @@
     <string name="snackbar_empty_hostname">Пустое имя хоста!</string>
     <string name="snackbar_empty_username">Пустое имя пользователя!</string>
     <string name="snackbar_empty_password">Пустой пароль!</string>
+    <string name="snackbar_couldnt_send_data">Не удалось отправить данные!</string>
+    <string name="snackbar_couldnt_receive_data">Не удалось получить данные!</string>
 
     <!--  BUTTONS  -->
     <string name="button_exchange">Обмен данными</string>

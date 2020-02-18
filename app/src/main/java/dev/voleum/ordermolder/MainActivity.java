@@ -67,14 +67,7 @@ public class MainActivity extends AppCompatActivity {
         resources = getResources();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (sharedPref.getBoolean("first_launch", true)) {
-            SharedPreferences.Editor editor = sharedPref.edit();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) editor.putString("theme", "-1");
-            else editor.putString("theme", "3");
-            editor.putString("port", "21");
-            editor.putBoolean("first_launch", false);
-            editor.apply();
-        }
+        if (sharedPref.getBoolean("first_launch", true)) fillSharedPrefs();
 
         AppCompatDelegate.setDefaultNightMode(Integer.parseInt(sharedPref.getString("theme", "-1")));
 
@@ -223,6 +216,15 @@ public class MainActivity extends AppCompatActivity {
                         });
                 break;
         }
+    }
+
+    private void fillSharedPrefs() {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) editor.putString("theme", "-1");
+        else editor.putString("theme", "3");
+        editor.putString("port", "21");
+        editor.putBoolean("first_launch", false);
+        editor.apply();
     }
 
     public static Resources getRess() {
