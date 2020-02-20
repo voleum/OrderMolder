@@ -83,15 +83,40 @@ public class CatalogListViewModel extends BaseObservable {
                 table = "";
         }
 
-        String orderBy = DbHelper.COLUMN_NAME;
+//        String orderBy = DbHelper.COLUMN_NAME;
 
-        Cursor c = db.query(table,
-                null,
-                null,
-                null,
-                null,
-                null,
-                orderBy);
+//        Cursor c = db.query(table,
+//                null,
+//                null,
+//                null,
+//                null,
+//                null,
+//                orderBy);
+
+        StringBuilder textQuery = new StringBuilder();
+
+        textQuery.append("SELECT " + DbHelper.COLUMN_ID +
+                ", " + DbHelper.COLUMN_NAME);
+
+        if (catType == CatalogTypes.COMPANY || catType == CatalogTypes.PARTNER)
+            textQuery.append(", " + DbHelper.COLUMN_TIN);
+        if (catType == CatalogTypes.GOOD)
+            textQuery.append(", " + DbHelper.COLUMN_GROUP_UID +
+                    ", " + DbHelper.COLUMN_UNIT_UID);
+        if (catType == CatalogTypes.UNIT)
+            textQuery.append(", " + DbHelper.COLUMN_CODE +
+                    ", " + DbHelper.COLUMN_FULL_NAME);
+
+        textQuery.append(" FROM " + table);
+        if (catType == CatalogTypes.GOOD)
+            textQuery.append(" LEFT JOIN " + DbHelper.TABLE_GOODS_GROUPS +
+                    " ON " + DbHelper.COLUMN_UNIT_UID + " = " + DbHelper.COLUMN_UID +
+                    " LEFT JOIN " + DbHelper.TABLE_UNITS +
+                    " ON " + DbHelper.COLUMN_UNIT_UID + " = " + DbHelper.COLUMN_UID);
+
+        textQuery.append(" ORDER BY " + DbHelper.COLUMN_NAME);
+
+        Cursor c = db.rawQuery(textQuery.toString(), null);
 
         if (c.moveToFirst()) {
             int uidIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
@@ -101,8 +126,9 @@ public class CatalogListViewModel extends BaseObservable {
             int unitIndex = -1;
             int codeIndex = -1;
             int fullNameIndex = -1;
-            if (catType == CatalogTypes.COMPANY || catType == CatalogTypes.PARTNER)
+            if (catType == CatalogTypes.COMPANY || catType == CatalogTypes.PARTNER) {
                 tinIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+            }
             if (catType == CatalogTypes.GOOD) {
                 groupIndex = c.getColumnIndex(DbHelper.COLUMN_GROUP_UID);
                 unitIndex = c.getColumnIndex(DbHelper.COLUMN_UNIT_UID);

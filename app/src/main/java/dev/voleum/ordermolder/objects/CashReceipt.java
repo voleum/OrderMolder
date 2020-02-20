@@ -46,7 +46,6 @@ public class CashReceipt extends Document {
         this.tableObjects = tableObjects;
     }
 
-    // TODO: Async
     @Override
     protected void getDocFromDb(String uid) {
         DbHelper dbHelper = DbHelper.getInstance();
