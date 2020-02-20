@@ -57,7 +57,8 @@ public class GoodsChooserViewModel extends BaseObservable {
         DbHelper dbHelper = DbHelper.getInstance();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor c = db.rawQuery("SELECT " + DbHelper.COLUMN_UID + ", " +
+        Cursor c = db.rawQuery("SELECT " +
+                DbHelper.COLUMN_UID + ", " +
                 DbHelper.COLUMN_GROUP_UID + ", " +
                 DbHelper.COLUMN_NAME + ", " +
                 DbHelper.COLUMN_UNIT_UID + ", " +

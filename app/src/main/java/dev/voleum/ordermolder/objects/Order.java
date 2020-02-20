@@ -51,7 +51,6 @@ public class Order extends Document {
         this.tableGoods = tableGoods;
     }
 
-    // TODO: Async
     @Override
     protected void getDocFromDb(String uid) {
         DbHelper dbHelper = DbHelper.getInstance();

@@ -22,8 +22,8 @@ public class CatalogViewModel<T extends Catalog> extends BaseObservable {
         this.catalog = catalog;
         this.name = catalog.getName();
         this.tin = catalog instanceof EconomicEntity ? ((EconomicEntity) catalog).getTin() : null;
-        this.group = catalog instanceof Good ? ((Good) catalog).getGroupUid() : null;
-        this.unit = catalog instanceof Good ? ((Good) catalog).getUnitUid() : null;
+        this.group = catalog instanceof Good ? ((Good) catalog).getGroupName() : null;
+        this.unit = catalog instanceof Good ? ((Good) catalog).getUnitName() : null;
         this.fullName = catalog instanceof Unit ? ((Unit) catalog).getFullName() : null;
         this.code = catalog instanceof Unit ? String.valueOf(((Unit) catalog).getCode()) : null;
     }
