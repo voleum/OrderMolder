@@ -3,8 +3,6 @@ package dev.voleum.ordermolder.database;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import dev.voleum.ordermolder.MainActivity;
-
 public class DbPreparerData {
 
     public DbPreparerData() {
