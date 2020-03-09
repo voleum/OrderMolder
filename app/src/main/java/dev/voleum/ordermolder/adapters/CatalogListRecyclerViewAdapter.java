@@ -31,13 +31,13 @@ public class CatalogListRecyclerViewAdapter extends RecyclerView.Adapter {
                 R.layout.catalog_holder,
                 parent,
                 false);
-        return new GoodViewHolder(binding);
+        return new CatalogViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Catalog row = catalogs.get(position);
-        ((GoodViewHolder) holder).binding.setRow(new CatalogListItemViewModel(row));
+        ((CatalogViewHolder) holder).binding.setRow(new CatalogListItemViewModel(row));
     }
 
     @Override
@@ -54,9 +54,9 @@ public class CatalogListRecyclerViewAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CatalogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CatalogHolderBinding binding;
-        GoodViewHolder(CatalogHolderBinding binding) {
+        CatalogViewHolder(CatalogHolderBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener(this);

@@ -30,7 +30,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private int typeDoc;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm, int typeDoc) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.context = context;
         this.typeDoc = typeDoc;
         switch (typeDoc) {
