@@ -29,6 +29,7 @@ import dev.voleum.ordermolder.fragments.FragmentDocuments;
 import dev.voleum.ordermolder.fragments.FragmentMain;
 import dev.voleum.ordermolder.fragments.FragmentReports;
 import dev.voleum.ordermolder.helpers.Exchanger;
+import dev.voleum.ordermolder.ui.SettingsActivity;
 import io.reactivex.CompletableObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
