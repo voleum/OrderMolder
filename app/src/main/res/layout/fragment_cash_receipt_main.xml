@@ -25,7 +25,7 @@
                 app:date="@={viewModel.date}"
                 app:time="@={viewModel.time}" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -34,7 +34,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/object_company" />
+                    android:text="@string/object_company"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Spinner
                     android:id="@+id/cash_receipt_spinner_companies"
@@ -44,11 +46,14 @@
                     android:layout_gravity="center_vertical"
                     android:entries="@{viewModel.entryCompanies}"
                     android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}"
-                    android:selectedItemPosition="@={viewModel.selectedItemCompany}" />
+                    android:selectedItemPosition="@={viewModel.selectedItemCompany}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -57,7 +62,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/object_partner" />
+                    android:text="@string/object_partner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Spinner
                     android:id="@+id/cash_receipt_spinner_partners"
@@ -67,9 +74,12 @@
                     android:layout_gravity="center_vertical"
                     android:entries="@{viewModel.entryPartners}"
                     android:onItemSelected="@{(parent, view, position, id) -> viewModel.onItemSelected(parent, view, position, id)}"
-                    android:selectedItemPosition="@={viewModel.selectedItemPartner}" />
+                    android:selectedItemPosition="@={viewModel.selectedItemPartner}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <include
                 android:id="@+id/order_sum"
@@ -77,7 +87,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:sum="@{viewModel.sum}" />
-
         </LinearLayout>
     </ScrollView>
 </layout>
