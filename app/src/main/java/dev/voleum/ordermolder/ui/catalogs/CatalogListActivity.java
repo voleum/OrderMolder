@@ -1,5 +1,6 @@
 package dev.voleum.ordermolder.ui.catalogs;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -17,7 +18,9 @@ import dev.voleum.ordermolder.enums.CatalogTypes;
 import dev.voleum.ordermolder.objects.Catalog;
 import dev.voleum.ordermolder.viewmodels.CatalogListViewModel;
 import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class CatalogListActivity extends AppCompatActivity {
@@ -28,6 +31,7 @@ public class CatalogListActivity extends AppCompatActivity {
     ActivityCatListBinding binding;
 
     private CatalogTypes catalogType;
+    private Context context = this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +45,41 @@ public class CatalogListActivity extends AppCompatActivity {
         initData()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        binding.setViewModel(catalogListViewModel);
+                        binding.executePendingBindings();
+
+                        recyclerCatalogs = binding.getRoot().findViewById(R.id.recycler_catalogs);
+                        recyclerCatalogs.setHasFixedSize(true);
+                        recyclerCatalogs.setLayoutManager(new LinearLayoutManager(context));
+
+                        CatalogListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
+                            Catalog clickedCatalog = binding.getViewModel().getCatalogs().get(position);
+                            Intent intentOut = new Intent(CatalogListActivity.this, CatalogActivity.class)
+                                    .putExtra(CatalogActivity.CAT_TYPE, catalogType)
+                                    .putExtra(CatalogActivity.CAT, clickedCatalog);
+                            startActivity(intentOut);
+                        };
+
+                        binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
+
+                        Toolbar toolbar = findViewById(R.id.toolbar);
+                        setSupportActionBar(toolbar);
+                        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     @Override
@@ -53,26 +91,7 @@ public class CatalogListActivity extends AppCompatActivity {
     private Completable initData() {
         return Completable.create(subscriber -> {
             catalogListViewModel = new CatalogListViewModel(catalogType);
-            binding.setViewModel(catalogListViewModel);
-            binding.executePendingBindings();
-
-            recyclerCatalogs = binding.getRoot().findViewById(R.id.recycler_catalogs);
-            recyclerCatalogs.setHasFixedSize(true);
-            recyclerCatalogs.setLayoutManager(new LinearLayoutManager(this));
-
-            CatalogListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
-                Catalog clickedCatalog = binding.getViewModel().getCatalogs().get(position);
-                Intent intentOut = new Intent(CatalogListActivity.this, CatalogActivity.class)
-                        .putExtra(CatalogActivity.CAT_TYPE, catalogType)
-                        .putExtra(CatalogActivity.CAT, clickedCatalog);
-                startActivity(intentOut);
-            };
-
-            binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
-
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            subscriber.onComplete();
         });
     }
 

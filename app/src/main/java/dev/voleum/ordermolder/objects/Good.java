@@ -24,8 +24,8 @@ public class Good extends Catalog {
         super(uid, name);
         this.groupUid = groupUid;
         this.unitUid = unitUid;
-        this.groupName = groupUid;
-        this.unitName = unitUid;
+        this.groupName = groupName;
+        this.unitName = unitName;
     }
 
     @Override
