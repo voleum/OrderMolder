@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -76,8 +77,12 @@ public class CashReceiptActivity extends AppCompatActivity {
         isCreating = (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true));
         savedWithoutClosing = false;
 
-        if (isCreating) cashReceiptViewModel = new CashReceiptViewModel();
-        else cashReceiptViewModel = new CashReceiptViewModel(getIntent().getStringExtra(DocListActivity.DOC));
+//        if (isCreating) cashReceiptViewModel = new CashReceiptViewModel();
+//        else cashReceiptViewModel = new CashReceiptViewModel(getIntent().getStringExtra(DocListActivity.DOC));
+        cashReceiptViewModel = new ViewModelProvider(this).get(CashReceiptViewModel.class);
+        if (isCreating) cashReceiptViewModel.setCashReceipt();
+        else cashReceiptViewModel.setCashReceipt(getIntent().getStringExtra(DocListActivity.DOC));
+
         ActivityCashReceiptBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_cash_receipt);
         binding.setViewModel(cashReceiptViewModel);
         binding.executePendingBindings();
