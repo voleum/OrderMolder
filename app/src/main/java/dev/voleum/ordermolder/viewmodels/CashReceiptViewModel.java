@@ -20,6 +20,7 @@ import java.util.Locale;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.ObjectsCashReceiptRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.objects.CashReceipt;
 import dev.voleum.ordermolder.objects.Company;
 import dev.voleum.ordermolder.objects.Order;
@@ -31,7 +32,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class CashReceiptViewModel extends BaseObservable implements Spinner.OnItemSelectedListener {
+public class CashReceiptViewModel extends ViewModelObservable implements Spinner.OnItemSelectedListener {
 
     private DecimalFormat df;
 
@@ -44,19 +45,7 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
     private int selectedItemPartner;
 
     public CashReceiptViewModel() {
-        cashReceipt = new CashReceipt();
-        this.tableObjects = cashReceipt.getTableObjects();
-        adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
-        initSpinners();
-        setDecimalFormat();
-    }
 
-    public CashReceiptViewModel(String uid) {
-        cashReceipt = new CashReceipt(uid);
-        this.tableObjects = cashReceipt.getTableObjects();
-        this.adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
-        initSpinners();
-        setDecimalFormat();
     }
 
     @Override
@@ -161,6 +150,24 @@ public class CashReceiptViewModel extends BaseObservable implements Spinner.OnIt
         if (recyclerView.getAdapter() instanceof ObjectsCashReceiptRecyclerViewAdapter) {
             ((ObjectsCashReceiptRecyclerViewAdapter) recyclerView.getAdapter()).setData(tableObjects);
         }
+    }
+
+    public void setCashReceipt() {
+        if (cashReceipt != null) return;
+        cashReceipt = new CashReceipt();
+        this.tableObjects = cashReceipt.getTableObjects();
+        adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
+        initSpinners();
+        setDecimalFormat();
+    }
+
+    public void setCashReceipt(String uid) {
+        if (cashReceipt != null) return;
+        cashReceipt = new CashReceipt(uid);
+        this.tableObjects = cashReceipt.getTableObjects();
+        this.adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
+        initSpinners();
+        setDecimalFormat();
     }
 
     private void initSpinners() {

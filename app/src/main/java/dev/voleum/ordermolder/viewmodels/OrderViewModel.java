@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
+import androidx.databinding.Observable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.helpers.DecimalHelper;
+import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.objects.Company;
 import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.objects.Order;
@@ -31,7 +32,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class OrderViewModel extends BaseObservable implements Spinner.OnItemSelectedListener {
+public class OrderViewModel extends ViewModelObservable implements Spinner.OnItemSelectedListener {
 
     private DecimalFormat df;
 
@@ -46,19 +47,7 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
     private int selectedItemWarehouse;
 
     public OrderViewModel() {
-        order = new Order();
-        this.tableGoods = order.getTableGoods();
-        this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
-        initSpinners();
-        df = DecimalHelper.newMoneyFieldFormat();
-    }
 
-    public OrderViewModel(String uid) {
-        order = new Order(uid);
-        this.tableGoods = order.getTableGoods();
-        this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
-        initSpinners();
-        df = DecimalHelper.newMoneyFieldFormat();
     }
 
     @Override
@@ -181,6 +170,24 @@ public class OrderViewModel extends BaseObservable implements Spinner.OnItemSele
         if (recyclerView.getAdapter() instanceof GoodsOrderRecyclerViewAdapter) {
             ((GoodsOrderRecyclerViewAdapter) recyclerView.getAdapter()).setData(tableGoods);
         }
+    }
+
+    public void setOrder() {
+        if (order != null) return;
+        order = new Order();
+        this.tableGoods = order.getTableGoods();
+        this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
+        initSpinners();
+        df = DecimalHelper.newMoneyFieldFormat();
+    }
+
+    public void setOrder(String uid) {
+        if (order != null) return;
+        order = new Order(uid);
+        this.tableGoods = order.getTableGoods();
+        this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
+        initSpinners();
+        df = DecimalHelper.newMoneyFieldFormat();
     }
 
     private void initSpinners() {

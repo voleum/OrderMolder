@@ -15,20 +15,17 @@ import java.util.List;
 import dev.voleum.ordermolder.adapters.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.adapters.ObjectsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.ui.cashreceipts.ObjectsChooserActivity;
 
-public class ObjectsChooserViewModel extends BaseObservable {
+public class ObjectsChooserViewModel extends ViewModelObservable {
 
     private List<HashMap<String, Object>> objects;
     private ObjectsChooserRecyclerViewAdapter adapter;
-    private String companyUid;
-    private String partnerUid;
 
-    public ObjectsChooserViewModel(String companyUid, String partnerUid) {
-        this.companyUid = companyUid;
-        this.partnerUid = partnerUid;
-        initObjectsList();
+    public ObjectsChooserViewModel() {
+
     }
 
     @Bindable
@@ -53,7 +50,11 @@ public class ObjectsChooserViewModel extends BaseObservable {
         }
     }
 
-    private void initObjectsList() {
+    public void init(String companyUid, String partnerUid) {
+        initObjectsList(companyUid, partnerUid);
+    }
+
+    private void initObjectsList(String companyUid, String partnerUid) {
 
         objects = new ArrayList<>();
 
