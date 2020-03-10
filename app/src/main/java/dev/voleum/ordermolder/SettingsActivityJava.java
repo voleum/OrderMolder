@@ -13,7 +13,8 @@ import androidx.preference.Preference;
 import com.takisoft.preferencex.EditTextPreference;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
-public class SettingsActivity extends AppCompatActivity {
+@Deprecated
+public class SettingsActivityJava extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
