@@ -52,7 +52,8 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/catalog_name_label"
+                    android:gravity="end"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     bind:text="@{viewModel.name}" />
 
@@ -62,6 +63,7 @@
                     style="@style/Widget.OrderMolder.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:text="@string/object_tin"
                     android:visibility="@{viewModel.catalog instanceof EconomicEntity ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
@@ -72,8 +74,9 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:visibility="@{viewModel.catalog instanceof EconomicEntity ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintStart_toEndOf="@id/catalog_tin_label"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_name"
                     bind:text="@{viewModel.tin}" />
 
@@ -83,6 +86,7 @@
                     style="@style/Widget.OrderMolder.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:text="@string/object_group"
                     android:visibility="@{viewModel.catalog instanceof Good ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
@@ -93,8 +97,9 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:visibility="@{viewModel.catalog instanceof Good ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintStart_toEndOf="@id/catalog_group_label"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_name"
                     bind:text="@{viewModel.group}" />
 
@@ -103,6 +108,7 @@
                     style="@style/Widget.OrderMolder.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:text="@string/object_unit"
                     android:visibility="@{viewModel.catalog instanceof Good ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
@@ -113,8 +119,9 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:visibility="@{viewModel.catalog instanceof Good ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintStart_toEndOf="@id/catalog_group_label"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_group"
                     bind:text="@{viewModel.unit}" />
 
@@ -124,6 +131,7 @@
                     style="@style/Widget.OrderMolder.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:text="@string/object_full_name"
                     android:visibility="@{viewModel.catalog instanceof Unit ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
@@ -134,8 +142,9 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:visibility="@{viewModel.catalog instanceof Unit ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintStart_toEndOf="@id/catalog_full_name_label"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_name"
                     bind:text="@{viewModel.fullName}" />
 
@@ -144,6 +153,7 @@
                     style="@style/Widget.OrderMolder.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:text="@string/object_code"
                     android:visibility="@{viewModel.catalog instanceof Unit ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
@@ -154,8 +164,9 @@
                     style="@style/Widget.OrderMolder.TextView.RoundedColored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:visibility="@{viewModel.catalog instanceof Unit ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintStart_toEndOf="@id/catalog_code_label"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/catalog_full_name"
                     bind:text="@{viewModel.code}" />
 
