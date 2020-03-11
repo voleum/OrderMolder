@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -76,8 +77,12 @@ public class OrderActivity extends AppCompatActivity {
         isCreating = (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true));
         savedWithoutClosing = false;
 
-        if (isCreating) orderViewModel = new OrderViewModel();
-        else orderViewModel = new OrderViewModel(getIntent().getStringExtra(DocListActivity.DOC));
+//        if (isCreating) orderViewModel = new OrderViewModel();
+//        else orderViewModel = new OrderViewModel(getIntent().getStringExtra(DocListActivity.DOC));
+        orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
+        if (isCreating) orderViewModel.setOrder();
+        else orderViewModel.setOrder(getIntent().getStringExtra(DocListActivity.DOC));
+
         ActivityOrderBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_order);
         binding.setViewModel(orderViewModel);
         binding.executePendingBindings();
