@@ -28,7 +28,7 @@ import dev.voleum.ordermolder.databinding.FragmentCashReceiptMainBinding;
 import dev.voleum.ordermolder.databinding.FragmentCashReceiptSecondaryPageBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
 import dev.voleum.ordermolder.fragments.SelectTimeFragment;
-import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.viewmodels.CashReceiptViewModel;
 
 import static android.app.Activity.RESULT_OK;

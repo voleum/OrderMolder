@@ -1,20 +1,24 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
 import dev.voleum.ordermolder.database.DbHelper;
-import dev.voleum.ordermolder.MainActivity;
 
-public class Company extends EconomicEntity {
+@Entity
+public class Partner extends EconomicEntity {
 
-    public Company(String uid, String name, String tin) {
+    public Partner(String uid, String name, String tin) {
         super(uid, name, tin);
     }
 
-    public Company(String tin) {
+    @Ignore
+    public Partner(String tin) {
         DbAsyncGetData dbAsyncGetData = new DbAsyncGetData();
         dbAsyncGetData.execute(tin);
     }
@@ -25,7 +29,7 @@ public class Company extends EconomicEntity {
         cv.put(DbHelper.COLUMN_UID, uid);
         cv.put(DbHelper.COLUMN_NAME, name);
         cv.put(DbHelper.COLUMN_TIN, tin);
-        db.insertWithOnConflict(DbHelper.TABLE_COMPANIES, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        db.insertWithOnConflict(DbHelper.TABLE_PARTNERS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
         return true;
     }
 
@@ -36,7 +40,7 @@ public class Company extends EconomicEntity {
                 DbHelper dbHelper = DbHelper.getInstance();
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 String selection = DbHelper.COLUMN_TIN + " = ?";
-                Cursor c = db.query(DbHelper.TABLE_COMPANIES,
+                Cursor c = db.query(DbHelper.TABLE_PARTNERS,
                         null,
                         selection,
                         uids,
@@ -55,5 +59,4 @@ public class Company extends EconomicEntity {
             return null;
         }
     }
-
 }

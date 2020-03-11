@@ -8,7 +8,7 @@ import androidx.databinding.Bindable;
 import java.util.HashMap;
 
 import dev.voleum.ordermolder.helpers.DecimalHelper;
-import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.models.Good;
 import dev.voleum.ordermolder.ui.orders.GoodsChooserActivity;
 
 public class GoodsChooserItemViewModel extends BaseObservable {

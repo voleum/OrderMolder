@@ -16,7 +16,7 @@ import java.util.HashMap;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.databinding.ActivityObjectsChooserBinding;
-import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.viewmodels.ObjectsChooserViewModel;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;

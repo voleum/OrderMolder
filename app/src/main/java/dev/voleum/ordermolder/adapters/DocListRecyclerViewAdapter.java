@@ -12,7 +12,7 @@ import java.util.List;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.DocHolderBinding;
-import dev.voleum.ordermolder.objects.Document;
+import dev.voleum.ordermolder.models.Document;
 import dev.voleum.ordermolder.viewmodels.DocListItemViewModel;
 
 public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {

@@ -27,7 +27,7 @@ import dev.voleum.ordermolder.databinding.FragmentOrderMainBinding;
 import dev.voleum.ordermolder.databinding.FragmentOrderSecondaryPageBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
 import dev.voleum.ordermolder.fragments.SelectTimeFragment;
-import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.models.Good;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
 
 import static android.app.Activity.RESULT_OK;

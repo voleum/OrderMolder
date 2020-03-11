@@ -1,10 +1,13 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.room.Entity;
+
 import dev.voleum.ordermolder.database.DbHelper;
 
+@Entity
 public class Unit extends Catalog {
 
     private int code;

@@ -15,7 +15,7 @@ import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.CatalogListRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityCatListBinding;
 import dev.voleum.ordermolder.enums.CatalogTypes;
-import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.models.Catalog;
 import dev.voleum.ordermolder.viewmodels.CatalogListViewModel;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;

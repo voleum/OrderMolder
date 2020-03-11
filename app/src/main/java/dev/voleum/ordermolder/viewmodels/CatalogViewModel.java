@@ -4,10 +4,10 @@ import androidx.databinding.Bindable;
 import androidx.databinding.Observable;
 
 import dev.voleum.ordermolder.helpers.ViewModelObservable;
-import dev.voleum.ordermolder.objects.Catalog;
-import dev.voleum.ordermolder.objects.EconomicEntity;
-import dev.voleum.ordermolder.objects.Good;
-import dev.voleum.ordermolder.objects.Unit;
+import dev.voleum.ordermolder.models.Catalog;
+import dev.voleum.ordermolder.models.EconomicEntity;
+import dev.voleum.ordermolder.models.Good;
+import dev.voleum.ordermolder.models.Unit;
 
 public class CatalogViewModel<T extends Catalog> extends ViewModelObservable implements Observable {
 

@@ -9,7 +9,6 @@ import android.widget.Spinner;
 
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
-import androidx.databinding.Observable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -20,12 +19,12 @@ import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.helpers.DecimalHelper;
 import dev.voleum.ordermolder.helpers.ViewModelObservable;
-import dev.voleum.ordermolder.objects.Company;
-import dev.voleum.ordermolder.objects.Good;
-import dev.voleum.ordermolder.objects.Order;
-import dev.voleum.ordermolder.objects.Partner;
-import dev.voleum.ordermolder.objects.TableGoods;
-import dev.voleum.ordermolder.objects.Warehouse;
+import dev.voleum.ordermolder.models.Company;
+import dev.voleum.ordermolder.models.Good;
+import dev.voleum.ordermolder.models.Order;
+import dev.voleum.ordermolder.models.Partner;
+import dev.voleum.ordermolder.models.TableGoods;
+import dev.voleum.ordermolder.models.Warehouse;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
