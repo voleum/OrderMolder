@@ -17,18 +17,18 @@ import java.util.ArrayList;
 import dev.voleum.ordermolder.MainActivity;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.database.DbPreparerData;
-import dev.voleum.ordermolder.objects.CashReceipt;
-import dev.voleum.ordermolder.objects.Company;
-import dev.voleum.ordermolder.objects.Good;
-import dev.voleum.ordermolder.objects.Group;
-import dev.voleum.ordermolder.objects.Obj;
-import dev.voleum.ordermolder.objects.Order;
-import dev.voleum.ordermolder.objects.Partner;
-import dev.voleum.ordermolder.objects.Price;
-import dev.voleum.ordermolder.objects.TableGoods;
-import dev.voleum.ordermolder.objects.TableObjects;
-import dev.voleum.ordermolder.objects.Unit;
-import dev.voleum.ordermolder.objects.Warehouse;
+import dev.voleum.ordermolder.models.CashReceipt;
+import dev.voleum.ordermolder.models.Company;
+import dev.voleum.ordermolder.models.Good;
+import dev.voleum.ordermolder.models.Group;
+import dev.voleum.ordermolder.models.Obj;
+import dev.voleum.ordermolder.models.Order;
+import dev.voleum.ordermolder.models.Partner;
+import dev.voleum.ordermolder.models.Price;
+import dev.voleum.ordermolder.models.TableGoods;
+import dev.voleum.ordermolder.models.TableObjects;
+import dev.voleum.ordermolder.models.Unit;
+import dev.voleum.ordermolder.models.Warehouse;
 
 class XmlHelper {
 

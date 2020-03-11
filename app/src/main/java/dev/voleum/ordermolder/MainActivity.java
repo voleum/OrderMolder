@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int MENU_ITEM_CATALOGS = 2;
     public static final int MENU_ITEM_REPORTS = 3;
 
-    private static Resources resources = null;
-    private static SharedPreferences sharedPref = null;
+//    private static Resources resources = null;
+//    private static SharedPreferences sharedPref = null;
 
     private int checkedMenuItem = MENU_ITEM_MAIN;
 
@@ -65,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        resources = getResources();
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+//        resources = getResources();
+//        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (sharedPref.getBoolean("first_launch", true)) fillSharedPrefs();
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("first_launch", true)) fillSharedPrefs();
 
-        AppCompatDelegate.setDefaultNightMode(Integer.parseInt(sharedPref.getString("theme", "-1")));
+        AppCompatDelegate.setDefaultNightMode(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("theme", "-1")));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -220,19 +220,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fillSharedPrefs() {
-        SharedPreferences.Editor editor = sharedPref.edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) editor.putString("theme", "-1");
         else editor.putString("theme", "3");
         editor.putString("port", "21");
-        editor.putBoolean("first_launch", false);
+        editor.putBoolean("first_launch", true);
         editor.apply();
     }
 
-    public static Resources getRess() {
-        return resources;
-    }
-
-    public static SharedPreferences getPref() {
-        return sharedPref;
-    }
+//    public static Resources getRess() {
+//        return resources;
+//    }
+//
+//    public static SharedPreferences getPref() {
+//        return sharedPref;
+//    }
 }

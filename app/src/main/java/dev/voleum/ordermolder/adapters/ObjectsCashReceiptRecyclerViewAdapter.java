@@ -12,7 +12,7 @@ import java.util.List;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.CashReceiptObjectHolderBinding;
-import dev.voleum.ordermolder.objects.TableObjects;
+import dev.voleum.ordermolder.models.TableObjects;
 import dev.voleum.ordermolder.viewmodels.CashReceiptViewModel;
 import dev.voleum.ordermolder.viewmodels.ObjectsCashReceiptListItemViewModel;
 

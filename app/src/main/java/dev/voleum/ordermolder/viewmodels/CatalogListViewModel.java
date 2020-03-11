@@ -14,12 +14,12 @@ import java.util.List;
 import dev.voleum.ordermolder.adapters.CatalogListRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.enums.CatalogTypes;
-import dev.voleum.ordermolder.objects.Catalog;
-import dev.voleum.ordermolder.objects.Company;
-import dev.voleum.ordermolder.objects.Good;
-import dev.voleum.ordermolder.objects.Partner;
-import dev.voleum.ordermolder.objects.Unit;
-import dev.voleum.ordermolder.objects.Warehouse;
+import dev.voleum.ordermolder.models.Catalog;
+import dev.voleum.ordermolder.models.Company;
+import dev.voleum.ordermolder.models.Good;
+import dev.voleum.ordermolder.models.Partner;
+import dev.voleum.ordermolder.models.Unit;
+import dev.voleum.ordermolder.models.Warehouse;
 
 public class CatalogListViewModel extends BaseObservable {
 

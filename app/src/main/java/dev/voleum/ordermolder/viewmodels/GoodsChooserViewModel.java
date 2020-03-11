@@ -3,7 +3,6 @@ package dev.voleum.ordermolder.viewmodels;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +14,7 @@ import java.util.List;
 import dev.voleum.ordermolder.adapters.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.helpers.ViewModelObservable;
-import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.models.Good;
 import dev.voleum.ordermolder.ui.orders.GoodsChooserActivity;
 
 public class GoodsChooserViewModel extends ViewModelObservable {
@@ -43,7 +42,7 @@ public class GoodsChooserViewModel extends ViewModelObservable {
         return goods;
     }
 
-    @BindingAdapter("android:data")
+    @BindingAdapter("app:goodsData")
     public static void setData(RecyclerView recyclerView, List<HashMap<String, Object>> goods) {
         if (recyclerView.getAdapter() instanceof GoodsChooserRecyclerViewAdapter) {
             ((GoodsChooserRecyclerViewAdapter) recyclerView.getAdapter()).setData(goods);

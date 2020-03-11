@@ -21,7 +21,7 @@ import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.DocListRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityDocListBinding;
 import dev.voleum.ordermolder.enums.DocumentTypes;
-import dev.voleum.ordermolder.objects.Document;
+import dev.voleum.ordermolder.models.Document;
 import dev.voleum.ordermolder.ui.cashreceipts.CashReceiptActivity;
 import dev.voleum.ordermolder.ui.orders.OrderActivity;
 import dev.voleum.ordermolder.viewmodels.DocListViewModel;

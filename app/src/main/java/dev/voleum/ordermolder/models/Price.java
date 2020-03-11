@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;

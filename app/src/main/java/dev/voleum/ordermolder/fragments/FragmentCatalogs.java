@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
-import dev.voleum.ordermolder.MainActivity;
+import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.enums.CatalogTypes;
 import dev.voleum.ordermolder.ui.catalogs.CatalogActivity;
@@ -22,7 +22,7 @@ import dev.voleum.ordermolder.ui.catalogs.CatalogListActivity;
 
 public class FragmentCatalogs extends androidx.fragment.app.ListFragment {
 
-    private final String[] catalogs = MainActivity.getRess().getStringArray(R.array.catalogs);
+    private final String[] catalogs = OrderMolder.getApplication().getResources().getStringArray(R.array.catalogs);
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

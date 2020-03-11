@@ -9,7 +9,6 @@ import androidx.preference.Preference
 import com.takisoft.preferencex.EditTextPreference
 import com.takisoft.preferencex.PreferenceFragmentCompat
 import dev.voleum.ordermolder.R
-import dev.voleum.ordermolder.SettingsActivityJava
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -19,7 +18,7 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.settings_activity)
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.settings, SettingsActivityJava.SettingsFragment())
+                .replace(R.id.settings, SettingsFragment())
                 .commit()
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)

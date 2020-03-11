@@ -12,7 +12,7 @@ import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.ActivityCatBinding;
-import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.models.Catalog;
 import dev.voleum.ordermolder.viewmodels.CatalogViewModel;
 
 public class CatalogActivity extends AppCompatActivity {

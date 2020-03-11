@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityGoodsChooserBinding;
-import dev.voleum.ordermolder.objects.Good;
+import dev.voleum.ordermolder.models.Good;
 import dev.voleum.ordermolder.viewmodels.GoodsChooserViewModel;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;

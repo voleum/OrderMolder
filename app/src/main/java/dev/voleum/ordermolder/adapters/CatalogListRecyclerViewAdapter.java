@@ -12,7 +12,7 @@ import java.util.List;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.CatalogHolderBinding;
-import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.models.Catalog;
 import dev.voleum.ordermolder.viewmodels.CatalogListItemViewModel;
 
 public class CatalogListRecyclerViewAdapter extends RecyclerView.Adapter {

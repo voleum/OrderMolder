@@ -1,10 +1,8 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
 
 import android.icu.util.Calendar;
 
 import androidx.annotation.NonNull;
-
-import dev.voleum.ordermolder.R;
 
 public abstract class Document extends Obj {
 
