@@ -14,18 +14,18 @@ import java.util.List;
 
 import dev.voleum.ordermolder.adapters.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.ui.orders.GoodsChooserActivity;
 
-public class GoodsChooserViewModel extends BaseObservable {
+public class GoodsChooserViewModel extends ViewModelObservable {
 
     private List<HashMap<String, Object>> goods;
     private GoodsChooserRecyclerViewAdapter adapter;
     private GoodsChooserRecyclerViewAdapter.OnEntryClickListener onEntryClickListener;
 
-    public GoodsChooserViewModel(GoodsChooserRecyclerViewAdapter.OnEntryClickListener onEntryClickListener) {
-        this.onEntryClickListener = onEntryClickListener;
-        initGoodList();
+    public GoodsChooserViewModel() {
+
     }
 
     @Bindable
@@ -48,6 +48,10 @@ public class GoodsChooserViewModel extends BaseObservable {
         if (recyclerView.getAdapter() instanceof GoodsChooserRecyclerViewAdapter) {
             ((GoodsChooserRecyclerViewAdapter) recyclerView.getAdapter()).setData(goods);
         }
+    }
+
+    public void init() {
+        initGoodList();
     }
 
     private void initGoodList() {
@@ -90,5 +94,9 @@ public class GoodsChooserViewModel extends BaseObservable {
         db.close();
         adapter = new GoodsChooserRecyclerViewAdapter(goods);
         adapter.setOnEntryClickListener(onEntryClickListener);
+    }
+
+    public void setOnEntryClickListener(GoodsChooserRecyclerViewAdapter.OnEntryClickListener onEntryClickListener) {
+        this.onEntryClickListener = onEntryClickListener;
     }
 }

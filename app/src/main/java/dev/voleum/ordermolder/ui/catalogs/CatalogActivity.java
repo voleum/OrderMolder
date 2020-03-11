@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Objects;
 
@@ -29,7 +30,9 @@ public class CatalogActivity extends AppCompatActivity {
         catalog = (Catalog) getIntent().getSerializableExtra(CAT);
 
         ActivityCatBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_cat);
-        binding.setViewModel(new CatalogViewModel(catalog));
+        CatalogViewModel viewModel = new ViewModelProvider(this).get(CatalogViewModel.class);
+        viewModel.setCatalog(catalog);
+        binding.setViewModel(viewModel);
         binding.executePendingBindings();
 
         Toolbar toolbar = findViewById(R.id.toolbar);

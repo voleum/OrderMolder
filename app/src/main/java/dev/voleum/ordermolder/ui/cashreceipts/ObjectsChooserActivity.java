@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +19,9 @@ import dev.voleum.ordermolder.databinding.ActivityObjectsChooserBinding;
 import dev.voleum.ordermolder.objects.Order;
 import dev.voleum.ordermolder.viewmodels.ObjectsChooserViewModel;
 import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ObjectsChooserActivity extends AppCompatActivity {
@@ -42,10 +45,31 @@ public class ObjectsChooserActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initData()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        objectsChooserViewModel = new ViewModelProvider(this).get(ObjectsChooserViewModel.class);
+
+        if (objectsChooserViewModel.getObjects() == null) {
+            initData()
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            completeOnCreate();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
+        } else {
+            completeOnCreate();
+        }
     }
 
     @Override
@@ -56,26 +80,29 @@ public class ObjectsChooserActivity extends AppCompatActivity {
 
     private Completable initData() {
         return Completable.create(subscriber -> {
-            objectsChooserViewModel
-                    = new ObjectsChooserViewModel(getIntent().getStringExtra(DbHelper.COLUMN_COMPANY_UID),
+            objectsChooserViewModel.init(getIntent().getStringExtra(DbHelper.COLUMN_COMPANY_UID),
                     getIntent().getStringExtra(DbHelper.COLUMN_PARTNER_UID));
-
-            binding.setViewModel(objectsChooserViewModel);
-            binding.executePendingBindings();
-
-            recyclerObjects = binding.getRoot().findViewById(R.id.recycler_objects_chooser);
-            recyclerObjects.setHasFixedSize(true);
-            recyclerObjects.setLayoutManager(new LinearLayoutManager(this));
-
-            binding.getViewModel().getAdapter().setOnEntryClickListener((v, position) -> {
-                HashMap<String, Object> chosen = binding.getViewModel().getObjects().get(position);
-                double sum = (double) chosen.get(ObjectsChooserActivity.SUM);
-                setResult(RESULT_OK, new Intent()
-                        .putExtra(OBJECT, (Order) chosen.get(OBJECT))
-                        .putExtra(SUM, sum));
-                finish();
-            });
-            setTitle(R.string.title_activity_orders);
+            subscriber.onComplete();
         });
+    }
+
+    private void completeOnCreate() {
+
+        binding.setViewModel(objectsChooserViewModel);
+        binding.executePendingBindings();
+
+        recyclerObjects = binding.getRoot().findViewById(R.id.recycler_objects_chooser);
+        recyclerObjects.setHasFixedSize(true);
+        recyclerObjects.setLayoutManager(new LinearLayoutManager(this));
+
+        binding.getViewModel().getAdapter().setOnEntryClickListener((v, position) -> {
+            HashMap<String, Object> chosen = binding.getViewModel().getObjects().get(position);
+            double sum = (double) chosen.get(ObjectsChooserActivity.SUM);
+            setResult(RESULT_OK, new Intent()
+                    .putExtra(OBJECT, (Order) chosen.get(OBJECT))
+                    .putExtra(SUM, sum));
+            finish();
+        });
+        setTitle(R.string.title_activity_orders);
     }
 }

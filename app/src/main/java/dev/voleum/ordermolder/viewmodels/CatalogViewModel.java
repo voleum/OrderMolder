@@ -1,14 +1,15 @@
 package dev.voleum.ordermolder.viewmodels;
 
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.Observable;
 
+import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.objects.Catalog;
 import dev.voleum.ordermolder.objects.EconomicEntity;
 import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.objects.Unit;
 
-public class CatalogViewModel<T extends Catalog> extends BaseObservable {
+public class CatalogViewModel<T extends Catalog> extends ViewModelObservable implements Observable {
 
     private T catalog;
     private String name;
@@ -18,14 +19,8 @@ public class CatalogViewModel<T extends Catalog> extends BaseObservable {
     private String fullName;
     private String code;
 
-    public CatalogViewModel(T catalog) {
-        this.catalog = catalog;
-        this.name = catalog.getName();
-        this.tin = catalog instanceof EconomicEntity ? ((EconomicEntity) catalog).getTin() : null;
-        this.group = catalog instanceof Good ? ((Good) catalog).getGroupName() : null;
-        this.unit = catalog instanceof Good ? ((Good) catalog).getUnitName() : null;
-        this.fullName = catalog instanceof Unit ? ((Unit) catalog).getFullName() : null;
-        this.code = catalog instanceof Unit ? String.valueOf(((Unit) catalog).getCode()) : null;
+    public CatalogViewModel() {
+
     }
 
     @Bindable
@@ -61,5 +56,16 @@ public class CatalogViewModel<T extends Catalog> extends BaseObservable {
     @Bindable
     public String getCode() {
         return code;
+    }
+
+    public void setCatalog(T catalog) {
+        if (this.catalog != null) return;
+        this.catalog = catalog;
+        this.name = catalog.getName();
+        this.tin = catalog instanceof EconomicEntity ? ((EconomicEntity) catalog).getTin() : null;
+        this.group = catalog instanceof Good ? ((Good) catalog).getGroupName() : null;
+        this.unit = catalog instanceof Good ? ((Good) catalog).getUnitName() : null;
+        this.fullName = catalog instanceof Unit ? ((Unit) catalog).getFullName() : null;
+        this.code = catalog instanceof Unit ? String.valueOf(((Unit) catalog).getCode()) : null;
     }
 }
