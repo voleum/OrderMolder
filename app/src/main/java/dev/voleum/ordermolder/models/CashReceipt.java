@@ -4,16 +4,23 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.database.DbRoom;
 
+@Entity
 public class CashReceipt extends Document {
 
+    @Ignore
     private List<TableObjects> tableObjects;
 
+    @Ignore
     public CashReceipt() {
         setCurrentDate();
         setCurrentTime();
@@ -22,15 +29,18 @@ public class CashReceipt extends Document {
         sum = 0;
     }
 
+    @Ignore
     public CashReceipt(String uid) {
         getDocFromDb(uid);
     }
 
+    @Ignore
     public CashReceipt(String uid, String dateTime, String companyUid, String partnerUid, double sum) {
         super(uid, dateTime, companyUid, partnerUid, sum);
         this.tableObjects = new ArrayList<>();
     }
 
+    @Ignore
     public CashReceipt(String uid, String dateTime, String companyUid, String partnerUid, double sum, List<TableObjects> tableObjects) {
         super(uid, dateTime, companyUid, partnerUid, sum);
         this.tableObjects = tableObjects;
@@ -41,6 +51,7 @@ public class CashReceipt extends Document {
         this.tableObjects = new ArrayList<>();
     }
 
+    @Ignore
     public CashReceipt(String uid, String date, String time, String companyUid, String partnerUid, double sum, List<TableObjects> tableObjects) {
         super(uid, date, time, companyUid, partnerUid, sum);
         this.tableObjects = tableObjects;
@@ -130,6 +141,12 @@ public class CashReceipt extends Document {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean save(DbRoom db) {
+        db.getCashReceiptDao().insertAll(this);
+        return true;
     }
 
     public List<TableObjects> getTableObjects() {

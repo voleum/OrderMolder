@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.room.Entity;
 
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.database.DbRoom;
 
 @Entity
 public class Unit extends Catalog {
@@ -27,6 +28,12 @@ public class Unit extends Catalog {
         cv.put(DbHelper.COLUMN_NAME, name);
         cv.put(DbHelper.COLUMN_FULL_NAME, fullName);
         db.insertWithOnConflict(DbHelper.TABLE_UNITS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
+    }
+
+    @Override
+    public boolean save(DbRoom db) {
+        db.getUnitDao().insertAll(this);
         return true;
     }
 

@@ -7,6 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.database.DbRoom;
 
 @Entity
 public class Good extends Catalog {
@@ -41,6 +42,12 @@ public class Good extends Catalog {
         cv.put(DbHelper.COLUMN_NAME, name);
         cv.put(DbHelper.COLUMN_UNIT_UID, unitUid);
         db.insertWithOnConflict(DbHelper.TABLE_GOODS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
+    }
+
+    @Override
+    public boolean save(DbRoom db) {
+        db.getGoodDao().insertAll(this);
         return true;
     }
 

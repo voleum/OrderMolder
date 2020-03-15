@@ -3,10 +3,15 @@ package dev.voleum.ordermolder.database;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
+import dev.voleum.ordermolder.database.dao.CashReceiptDao;
 import dev.voleum.ordermolder.database.dao.CompanyDao;
 import dev.voleum.ordermolder.database.dao.GoodDao;
 import dev.voleum.ordermolder.database.dao.GroupDao;
+import dev.voleum.ordermolder.database.dao.OrderDao;
 import dev.voleum.ordermolder.database.dao.PartnerDao;
+import dev.voleum.ordermolder.database.dao.PriceDao;
+import dev.voleum.ordermolder.database.dao.TableGoodsDao;
+import dev.voleum.ordermolder.database.dao.TableObjectsDao;
 import dev.voleum.ordermolder.database.dao.UnitDao;
 import dev.voleum.ordermolder.database.dao.WarehouseDao;
 import dev.voleum.ordermolder.models.CashReceipt;
@@ -28,11 +33,11 @@ import dev.voleum.ordermolder.models.Warehouse;
         Good.class,
         Unit.class,
         Group.class,
-//        Order.class,
-//        CashReceipt.class,
-//        TableGoods.class,
-//        TableObjects.class,
-//        Price.class
+        Order.class,
+        CashReceipt.class,
+        TableGoods.class,
+        TableObjects.class,
+        Price.class
         },
         version = 1,
         exportSchema = false)
@@ -43,4 +48,9 @@ public abstract class DbRoom extends RoomDatabase {
     public abstract GoodDao getGoodDao();
     public abstract UnitDao getUnitDao();
     public abstract GroupDao getGroupDao();
+    public abstract OrderDao getOrderDao();
+    public abstract CashReceiptDao getCashReceiptDao();
+    public abstract TableGoodsDao getTableGoodsDao();
+    public abstract TableObjectsDao getTableObjectsDao();
+    public abstract PriceDao getPriceDao();
 }

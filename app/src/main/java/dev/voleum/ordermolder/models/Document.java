@@ -99,5 +99,6 @@ public abstract class Document extends Obj {
                 + ":" + (ss < 10 ? "0" + ss : String.valueOf(ss));
     }
 
+    @Deprecated
     protected abstract void getDocFromDb(String uid);
 }

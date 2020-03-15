@@ -15,8 +15,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import dev.voleum.ordermolder.MainActivity;
+import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.database.DbPreparerData;
+import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.models.CashReceipt;
 import dev.voleum.ordermolder.models.Company;
 import dev.voleum.ordermolder.models.Good;
@@ -72,9 +74,7 @@ class XmlHelper {
 
     boolean parseXml(InputStream input) {
 
-        DbHelper dbHelper = DbHelper.getInstance();
-
-        try (SQLiteDatabase db = dbHelper.getReadableDatabase()) {
+        try {
             XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
             xppf.setNamespaceAware(true);
             XmlPullParser xpp = xppf.newPullParser();
@@ -83,6 +83,8 @@ class XmlHelper {
             ArrayList<Obj> arrayListObj = new ArrayList<>();
             String currentTypeElem = UNKNOWN;
             String currentUid = "";
+
+            DbRoom db = OrderMolder.getApplication().getDatabase();
 
             while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
                 switch (xpp.getEventType()) {
@@ -194,10 +196,7 @@ class XmlHelper {
                 xpp.next();
             }
             return true;
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
             return false;
         } finally {
@@ -330,9 +329,7 @@ class XmlHelper {
             xs.endDocument();
 
             xs.flush();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         } finally {
             try {
