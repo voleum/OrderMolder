@@ -24,7 +24,7 @@ public interface GroupDao {
     @Delete
     void deleteAll(Group... groups);
 
-    @Query("SELECT * FROM `Group`")
+    @Query("SELECT * FROM `group`")
     List<Group> getAll();
 
     @Query("DELETE FROM `group`")

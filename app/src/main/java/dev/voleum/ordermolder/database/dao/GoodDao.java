@@ -9,7 +9,6 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import dev.voleum.ordermolder.models.Company;
 import dev.voleum.ordermolder.models.Good;
 
 @Dao
@@ -24,7 +23,9 @@ public interface GoodDao {
     @Delete
     void deleteAll(Good... goods);
 
-    @Query("SELECT * FROM good")
+    @Query("SELECT good.uid, good.name, good.groupUid, good.unitUid, `group`.name AS groupName, unit.name AS unitName FROM good" +
+            " LEFT JOIN `group` ON good.groupUid = `group`.uid" +
+            " LEFT JOIN unit ON good.unitUid = unit.uid")
     List<Good> getAll();
 
     @Query("DELETE FROM good")

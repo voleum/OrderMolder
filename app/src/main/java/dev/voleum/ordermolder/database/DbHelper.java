@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import dev.voleum.ordermolder.OrderMolder;
 
+@Deprecated
 public class DbHelper extends SQLiteOpenHelper {
 
 //    private static DbHelper instance = null;

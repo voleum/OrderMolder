@@ -61,7 +61,7 @@ public class CatalogListActivity extends AppCompatActivity {
                         recyclerCatalogs.setLayoutManager(new LinearLayoutManager(context));
 
                         CatalogListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
-                            Catalog clickedCatalog = binding.getViewModel().getCatalogs().get(position);
+                            Catalog clickedCatalog = (Catalog) binding.getViewModel().getCatalogs().get(position);
                             Intent intentOut = new Intent(CatalogListActivity.this, CatalogActivity.class)
                                     .putExtra(CatalogActivity.CAT_TYPE, catalogType)
                                     .putExtra(CatalogActivity.CAT, clickedCatalog);
