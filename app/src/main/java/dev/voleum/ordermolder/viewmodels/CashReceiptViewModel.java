@@ -1,7 +1,5 @@
 package dev.voleum.ordermolder.viewmodels;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DecimalFormat;
 import android.icu.text.DecimalFormatSymbols;
 import android.view.View;
@@ -12,13 +10,13 @@ import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.ObjectsCashReceiptRecyclerViewAdapter;
-import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.models.CashReceipt;
 import dev.voleum.ordermolder.models.Company;
@@ -194,61 +192,64 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
 
     private Completable initSpinnersData() {
         return Completable.create(subscriber -> {
-            DbHelper dbHelper = DbHelper.getInstance();
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor c;
-
-            // region Companies
-            companies = new ArrayList<>();
-            c = db.query(DbHelper.TABLE_COMPANIES,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null);
-
-            if (c.moveToFirst()) {
-                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-                do {
-                    Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                    companies.add(company);
-                    if (company.getUid().equals(cashReceipt.getCompanyUid())) {
-                        selectedItemCompany = companies.indexOf(company);
-                    }
-                } while (c.moveToNext());
-            }
-            // endregion
-
-            // region Partners
-            partners = new ArrayList<>();
-            c = db.query(DbHelper.TABLE_PARTNERS,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null);
-
-            if (c.moveToFirst()) {
-                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-                do {
-                    Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-                    partners.add(partner);
-                    if (partner.getUid().equals(cashReceipt.getPartnerUid())) {
-                        selectedItemPartner = partners.indexOf(partner);
-                    }
-                } while (c.moveToNext());
-            }
-            // endregion
-
-            c.close();
-            dbHelper.close();
-
+//            DbHelper dbHelper = DbHelper.getInstance();
+//            SQLiteDatabase db = dbHelper.getReadableDatabase();
+//            Cursor c;
+            DbRoom db = OrderMolder.getApplication().getDatabase();
+//
+//            // region Companies
+//            companies = new ArrayList<>();
+            companies = db.getCompanyDao().getAll();
+//            c = db.query(DbHelper.TABLE_COMPANIES,
+//                    null,
+//                    null,
+//                    null,
+//                    null,
+//                    null,
+//                    null);
+//
+//            if (c.moveToFirst()) {
+//                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+//                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+//                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+//                do {
+//                    Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+//                    companies.add(company);
+//                    if (company.getUid().equals(cashReceipt.getCompanyUid())) {
+//                        selectedItemCompany = companies.indexOf(company);
+//                    }
+//                } while (c.moveToNext());
+//            }
+//            // endregion
+//
+//            // region Partners
+//            partners = new ArrayList<>();
+            partners = db.getPartnerDao().getAll();
+//            c = db.query(DbHelper.TABLE_PARTNERS,
+//                    null,
+//                    null,
+//                    null,
+//                    null,
+//                    null,
+//                    null);
+//
+//            if (c.moveToFirst()) {
+//                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
+//                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
+//                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
+//                do {
+//                    Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
+//                    partners.add(partner);
+//                    if (partner.getUid().equals(cashReceipt.getPartnerUid())) {
+//                        selectedItemPartner = partners.indexOf(partner);
+//                    }
+//                } while (c.moveToNext());
+//            }
+//            // endregion
+//
+//            c.close();
+//            dbHelper.close();
+//
             subscriber.onComplete();
         });
     }
@@ -279,20 +280,22 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
         countSum();
     }
 
-    public Completable saveCashReceipt() {
+    public Completable saveCashReceipt(CashReceipt cashReceipt) {
         return Completable.create(subscriber -> {
-            DbHelper dbHelper = DbHelper.getInstance();
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            db.beginTransaction();
-            try {
-                if (!cashReceipt.save(db)) throw new Exception("Saving error!");
-                db.setTransactionSuccessful();
-            } catch (Exception e) {
-                subscriber.onError(e);
-            } finally {
-                db.endTransaction();
-                db.close();
-            }
+//            DbHelper dbHelper = DbHelper.getInstance();
+//            SQLiteDatabase db = dbHelper.getWritableDatabase();
+//            db.beginTransaction();
+//            try {
+//                if (!cashReceipt.save(db)) throw new Exception("Saving error!");
+//                db.setTransactionSuccessful();
+//            } catch (Exception e) {
+//                subscriber.onError(e);
+//            } finally {
+//                db.endTransaction();
+//                db.close();
+//            }
+            DbRoom db = OrderMolder.getApplication().getDatabase();
+            db.getCashReceiptDao().insertAll(cashReceipt);
             subscriber.onComplete();
         });
     }

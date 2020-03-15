@@ -17,12 +17,14 @@ import dev.voleum.ordermolder.database.dao.CompanyDao;
 import dev.voleum.ordermolder.database.dao.GoodDao;
 import dev.voleum.ordermolder.database.dao.GroupDao;
 import dev.voleum.ordermolder.database.dao.PartnerDao;
+import dev.voleum.ordermolder.database.dao.PriceDao;
 import dev.voleum.ordermolder.database.dao.UnitDao;
 import dev.voleum.ordermolder.database.dao.WarehouseDao;
 import dev.voleum.ordermolder.models.Company;
 import dev.voleum.ordermolder.models.Good;
 import dev.voleum.ordermolder.models.Group;
 import dev.voleum.ordermolder.models.Partner;
+import dev.voleum.ordermolder.models.Price;
 import dev.voleum.ordermolder.models.Unit;
 import dev.voleum.ordermolder.models.Warehouse;
 import io.reactivex.Completable;
@@ -48,6 +50,7 @@ public class TestDataCreator {
             GroupDao groupDao = db.getGroupDao();
             GoodDao goodDao = db.getGoodDao();
             WarehouseDao warehouseDao = db.getWarehouseDao();
+            PriceDao priceDao = db.getPriceDao();
 
             companyDao.deleteAllRecords();
             partnerDao.deleteAllRecords();
@@ -55,20 +58,21 @@ public class TestDataCreator {
             groupDao.deleteAllRecords();
             goodDao.deleteAllRecords();
             warehouseDao.deleteAllRecords();
+            priceDao.deleteAllRecords();
 
             Company[] companies = new Company[3];
             for (int i = 0; i < companies.length; i++) {
                 companies[i] = new Company(getNewUid(),
-                        "00000" + (i + 1),
-                        "Company " + (i + 1));
+                        "Company " + (i + 1),
+                        "00000" + (i + 1));
             }
             companyDao.insertAll(companies);
 
             Partner[] partners = new Partner[10];
             for (int i = 0; i < 10; i++) {
                 partners[i] = new Partner(getNewUid(),
-                        "00000" + (i + 1),
-                        "Partner " + (i + 1));
+                        "Partner " + (i + 1),
+                        "00000" + (i + 1));
             }
             partnerDao.insertAll(partners);
 
@@ -113,13 +117,13 @@ public class TestDataCreator {
             }
             warehouseDao.insertAll(warehouses);
 
-//            android.icu.text.DecimalFormat df = new DecimalFormat("#.##");
-//            for (int i = 0; i < goodUids.length; i++) {
-//                cv.clear();
-//                cv.put(DbHelper.COLUMN_GOOD_UID, goodUids[i]);
-//                cv.put(DbHelper.COLUMN_PRICE, Double.parseDouble(df.format(i % 2 == 0 ? i * 8.96 + 17.23 : i * 3.09 + 13.51).replace(",", ".")));
-//                db.insert(DbHelper.TABLE_PRICE_LIST, null, cv);
-//            }
+            android.icu.text.DecimalFormat df = new DecimalFormat("#.##");
+            Price[] prices = new Price[goodUids.length];
+            for (int i = 0; i < prices.length; i++) {
+                prices[i] = new Price(goodUids[i],
+                        Double.parseDouble(df.format(i % 2 == 0 ? i * 8.96 + 17.23 : i * 3.09 + 13.51).replace(",", ".")));
+            }
+            priceDao.insertAll(prices);
 
             subscriber.onComplete();
         });

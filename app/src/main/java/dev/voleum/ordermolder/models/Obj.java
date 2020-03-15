@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
+import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.helpers.DecimalHelper;
 
 public abstract class Obj implements Serializable {
@@ -38,5 +39,8 @@ public abstract class Obj implements Serializable {
         this.uid = uid;
     }
 
+    @Deprecated
     public abstract boolean save(SQLiteDatabase db);
+
+    public abstract boolean save(DbRoom db);
 }

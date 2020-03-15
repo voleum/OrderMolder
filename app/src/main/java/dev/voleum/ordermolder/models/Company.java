@@ -9,6 +9,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 
 import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.database.DbRoom;
 
 @Entity
 public class Company extends EconomicEntity {
@@ -30,6 +31,12 @@ public class Company extends EconomicEntity {
         cv.put(DbHelper.COLUMN_NAME, name);
         cv.put(DbHelper.COLUMN_TIN, tin);
         db.insertWithOnConflict(DbHelper.TABLE_COMPANIES, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return true;
+    }
+
+    @Override
+    public boolean save(DbRoom db) {
+        db.getCompanyDao().insertAll(this);
         return true;
     }
 

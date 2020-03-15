@@ -42,7 +42,7 @@ public class GoodsChooserViewModel extends ViewModelObservable {
         return goods;
     }
 
-    @BindingAdapter("app:goodsData")
+    @BindingAdapter("goodsData")
     public static void setData(RecyclerView recyclerView, List<HashMap<String, Object>> goods) {
         if (recyclerView.getAdapter() instanceof GoodsChooserRecyclerViewAdapter) {
             ((GoodsChooserRecyclerViewAdapter) recyclerView.getAdapter()).setData(goods);

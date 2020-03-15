@@ -118,7 +118,7 @@ public class OrderActivity extends AppCompatActivity {
                         Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
                         break;
                     }
-                    orderViewModel.saveOrder()
+                    orderViewModel.saveOrder(orderViewModel.getOrder())
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new CompletableObserver() {
@@ -185,7 +185,7 @@ public class OrderActivity extends AppCompatActivity {
                     Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
-                orderViewModel.saveOrder()
+                orderViewModel.saveOrder(orderViewModel.getOrder())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new CompletableObserver() {
