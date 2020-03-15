@@ -16,6 +16,7 @@ public class Good extends Catalog {
     private String groupName;
     private String unitName;
 
+    @Ignore
     public Good(String uid, String groupUid, String name, String unitUid) {
         super(uid, name);
         this.groupUid = groupUid;
@@ -24,7 +25,6 @@ public class Good extends Catalog {
         this.unitName = unitUid;
     }
 
-    @Ignore
     public Good(String uid, String groupUid, String name, String unitUid, String groupName, String unitName) {
         super(uid, name);
         this.groupUid = groupUid;
