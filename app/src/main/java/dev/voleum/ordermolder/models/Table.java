@@ -5,7 +5,6 @@ import androidx.room.PrimaryKey;
 public abstract class Table extends Obj {
 
     @PrimaryKey protected int position;
-//    protected String uid;
 
     public Table(String uid, int position) {
         super(uid);

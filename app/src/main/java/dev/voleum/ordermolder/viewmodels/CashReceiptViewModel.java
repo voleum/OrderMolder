@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.UUID;
 
 import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
@@ -168,37 +169,13 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
         if (cashReceipt != null) return;
         cashReceipt = new CashReceipt();
         this.tableObjects = cashReceipt.getTableObjects();
-//        this.adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
         getCashReceiptByUid(uid)
                 .andThen(initSpinnersData())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-//        initSpinners();
         df = DecimalHelper.newMoneyFieldFormat();
     }
-
-//    private void initSpinners() {
-//        initSpinnersData()
-//                .subscribeOn(Schedulers.newThread())
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new CompletableObserver() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//                });
-//    }
 
     private Completable initSpinnersData() {
         return Completable.create(subscriber -> {
@@ -277,6 +254,13 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
 
     public Completable saveCashReceipt(CashReceipt cashReceipt) {
         return Completable.create(subscriber -> {
+            if (cashReceipt.getUid().isEmpty()) {
+                String uid = UUID.randomUUID().toString();
+                cashReceipt.setUid(uid);
+                for (int i = 0; i < tableObjects.size(); i++) {
+                    tableObjects.get(i).setUid(uid);
+                }
+            }
             DbRoom db = OrderMolder.getApplication().getDatabase();
             db.getCashReceiptDao().insertAll(cashReceipt);
             db.getTableObjectsDao().insertAll(Arrays.copyOf(tableObjects.toArray(), tableObjects.size(), TableObjects[].class));

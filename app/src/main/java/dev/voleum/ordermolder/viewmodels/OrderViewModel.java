@@ -288,7 +288,13 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
 
     public Completable saveOrder(Order order) {
         return Completable.create(subscriber -> {
-            if (order.getUid().isEmpty()) order.setUid(UUID.randomUUID().toString());
+            if (order.getUid().isEmpty()) {
+                String uid = UUID.randomUUID().toString();
+                order.setUid(uid);
+                for (int i = 0; i < tableGoods.size(); i++) {
+                    tableGoods.get(i).setUid(uid);
+                }
+            }
             DbRoom db = OrderMolder.getApplication().getDatabase();
             db.getOrderDao().insertAll(order);
             db.getTableGoodsDao().insertAll(Arrays.copyOf(tableGoods.toArray(), tableGoods.size(), TableGoods[].class));

@@ -1,6 +1,5 @@
 package dev.voleum.ordermolder.models;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DecimalFormat;
 
 import androidx.room.Ignore;
@@ -39,9 +38,6 @@ public abstract class Obj implements Serializable {
     public void setUid(String uid) {
         this.uid = uid;
     }
-
-    @Deprecated
-    public abstract boolean save(SQLiteDatabase db);
 
     public abstract boolean save(DbRoom db);
 }
