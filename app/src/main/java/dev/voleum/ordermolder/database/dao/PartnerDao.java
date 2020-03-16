@@ -26,6 +26,9 @@ public interface PartnerDao {
     @Query("SELECT * FROM partner")
     List<Partner> getAll();
 
+    @Query("SELECT * FROM partner WHERE uid = :uid")
+    Partner getByUid(String uid);
+
     @Query("DELETE FROM partner")
     void deleteAllRecords();
 }

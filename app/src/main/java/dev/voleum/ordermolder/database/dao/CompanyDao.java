@@ -26,6 +26,9 @@ public interface CompanyDao {
     @Query("SELECT * FROM company")
     List<Company> getAll();
 
+    @Query("SELECT * FROM company WHERE uid = :uid")
+    Company getByUid(String uid);
+
     @Query("DELETE FROM company")
     void deleteAllRecords();
 }

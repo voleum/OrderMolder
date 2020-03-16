@@ -26,6 +26,9 @@ public interface OrderDao {
     @Query("SELECT * FROM `order`")
     List<Order> getAll();
 
+    @Query("SELECT * FROM `order` WHERE uid = :uid")
+    Order getByUid(String uid);
+
     @Query("DELETE FROM `order`")
     void deleteAllRecords();
 }

@@ -13,14 +13,15 @@ import java.util.List;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.ChooserGoodHolderBinding;
+import dev.voleum.ordermolder.models.Price;
 import dev.voleum.ordermolder.viewmodels.GoodsChooserItemViewModel;
 
 public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private List<HashMap<String, Object>> goods;
+    private List<Price> goods;
     private OnEntryClickListener onEntryClickListener;
 
-    public GoodsChooserRecyclerViewAdapter(List<HashMap<String, Object>> goods) {
+    public GoodsChooserRecyclerViewAdapter(List<Price> goods) {
         this.goods = goods;
     }
 
@@ -36,7 +37,7 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        HashMap<String, Object> row = goods.get(position);
+        Price row = goods.get(position);
         ((GoodViewHolder) holder).binding.setRow(new GoodsChooserItemViewModel(row));
     }
 
@@ -49,7 +50,7 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
         this.onEntryClickListener = onEntryClickListener;
     }
 
-    public void setData(List<HashMap<String, Object>> goods) {
+    public void setData(List<Price> goods) {
         this.goods = goods;
         notifyDataSetChanged();
     }
@@ -71,6 +72,6 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public interface OnEntryClickListener {
-        void onEntryClick(View v, HashMap<String, Object> row);
+        void onEntryClick(View v, Price row);
     }
 }
