@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
+import dev.voleum.ordermolder.BR;
 import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.ObjectsCashReceiptRecyclerViewAdapter;
@@ -202,8 +203,8 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
                 }
             }
 
-            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryCompanies);
-            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryPartners);
+            notifyPropertyChanged(BR.entryCompanies);
+            notifyPropertyChanged(BR.entryPartners);
         });
     }
 
@@ -248,6 +249,7 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
                 selectedMenuItemPosition = position;
                 v.showContextMenu();
             });
+            notifyPropertyChanged(BR.title);
             subscriber.onComplete();
         });
     }

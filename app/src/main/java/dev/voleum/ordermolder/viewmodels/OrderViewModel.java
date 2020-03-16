@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
+import dev.voleum.ordermolder.BR;
 import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
@@ -233,9 +234,9 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
                 }
             }
 
-            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryCompanies);
-            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryPartners);
-            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryWarehouses);
+            notifyPropertyChanged(BR.entryCompanies);
+            notifyPropertyChanged(BR.entryPartners);
+            notifyPropertyChanged(BR.entryWarehouses);
         });
     }
 
@@ -282,6 +283,7 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
                 selectedMenuItemPosition = position;
                 v.showContextMenu();
             });
+            notifyPropertyChanged(BR.title);
             subscriber.onComplete();
         });
     }

@@ -2,16 +2,13 @@
 
 package dev.voleum.ordermolder;
 
-import android.content.ContentValues;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DecimalFormat;
 
 import androidx.preference.PreferenceManager;
 
 import java.util.UUID;
 
-import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.database.dao.CompanyDao;
 import dev.voleum.ordermolder.database.dao.GoodDao;
