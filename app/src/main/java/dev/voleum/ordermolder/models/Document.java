@@ -18,7 +18,7 @@ public abstract class Document extends Obj {
 
     protected Document(String uid, String dateTime, String companyUid, String partnerUid, double sum) {
         super(uid);
-        this.date = dateTime.substring(0, 10).replace("-", ".");
+        this.date = dateTime.substring(0, 10).replace('-', '.');
         this.time = dateTime.substring(11, 19);
         this.companyUid = companyUid;
         this.partnerUid = partnerUid;
@@ -55,6 +55,10 @@ public abstract class Document extends Obj {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getDateTime() {
+        return date.replace('.', '-') + " " + time + ".000";
     }
 
     public String getCompanyUid() {
