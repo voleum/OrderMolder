@@ -9,6 +9,7 @@ import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -193,32 +194,8 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
                 .andThen(initSpinnersData())
                 .subscribeOn(Schedulers.newThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CompletableObserver() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        notifyPropertyChanged(dev.voleum.ordermolder.BR.entryCompanies);
-                        notifyPropertyChanged(dev.voleum.ordermolder.BR.entryPartners);
-                        notifyPropertyChanged(dev.voleum.ordermolder.BR.entryWarehouses);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
-        df = DecimalHelper.newMoneyFieldFormat();
-    }
-
-    private void initOrder(String uid) {
-        getOrderByUid(uid)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
+        df = DecimalHelper.newMoneyFieldFormat();
     }
 
     private Completable initSpinnersData() {
@@ -256,7 +233,9 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
                 }
             }
 
-            subscriber.onComplete();
+            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryCompanies);
+            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryPartners);
+            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryWarehouses);
         });
     }
 
@@ -266,6 +245,11 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
         ) {
             sum += row.getSum();
         }
+
+        BigDecimal bd = BigDecimal.valueOf(sum);
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        sum = bd.doubleValue();
+
         order.setSum(sum);
         notifyPropertyChanged(dev.voleum.ordermolder.BR.sum);
     }
@@ -306,9 +290,6 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
         return Completable.create(subscriber -> {
             if (order.getUid().isEmpty()) order.setUid(UUID.randomUUID().toString());
             DbRoom db = OrderMolder.getApplication().getDatabase();
-            order.setCompanyUid(companies.get(selectedItemCompany).getUid());
-            order.setPartnerUid(partners.get(selectedItemPartner).getUid());
-            order.setWarehouseUid(warehouses.get(selectedItemWarehouse).getUid());
             db.getOrderDao().insertAll(order);
             db.getTableGoodsDao().insertAll(Arrays.copyOf(tableGoods.toArray(), tableGoods.size(), TableGoods[].class));
             subscriber.onComplete();

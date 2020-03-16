@@ -9,7 +9,6 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import dev.voleum.ordermolder.models.TableGoods;
 import dev.voleum.ordermolder.models.TableObjects;
 
 @Dao
@@ -26,6 +25,9 @@ public interface TableObjectsDao {
 
     @Query("SELECT * FROM tableobjects")
     List<TableObjects> getAll();
+
+    @Query("SELECT * FROM tableobjects WHERE uid = :uid")
+    List<TableObjects> getByUid(String uid);
 
     @Query("DELETE FROM tableobjects")
     void deleteAllRecords();

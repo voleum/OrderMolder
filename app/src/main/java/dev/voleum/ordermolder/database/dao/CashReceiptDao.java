@@ -26,6 +26,9 @@ public interface CashReceiptDao {
     @Query("SELECT * FROM cashreceipt")
     List<CashReceipt> getAll();
 
+    @Query("SELECT * FROM cashreceipt WHERE uid = :uid")
+    CashReceipt getByUid(String uid);
+
     @Query("DELETE FROM cashreceipt")
     void deleteAllRecords();
 }

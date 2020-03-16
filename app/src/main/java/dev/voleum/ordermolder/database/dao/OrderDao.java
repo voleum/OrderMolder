@@ -29,6 +29,9 @@ public interface OrderDao {
     @Query("SELECT * FROM `order` WHERE uid = :uid")
     Order getByUid(String uid);
 
+    @Query("SELECT * FROM `order` WHERE companyUid = :companyUid AND partnerUID = :partnerUid")
+    List<Order> getByCompanyAndPartner(String companyUid, String partnerUid);
+
     @Query("DELETE FROM `order`")
     void deleteAllRecords();
 }
