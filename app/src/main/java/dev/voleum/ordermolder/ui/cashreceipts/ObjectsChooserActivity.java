@@ -11,12 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
-
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.databinding.ActivityObjectsChooserBinding;
-import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.viewmodels.ObjectsChooserViewModel;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -26,8 +22,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ObjectsChooserActivity extends AppCompatActivity {
 
-    public static final String OBJECT = "object";
-    public static final String SUM = "sum";
+    public static final String ORDER = "order";
+    public static final String COMPANY_UID = "company_uid";
+    public static final String PARTNER_UID = "partner_uid";
 
     private ActivityObjectsChooserBinding binding;
 
@@ -47,7 +44,7 @@ public class ObjectsChooserActivity extends AppCompatActivity {
 
         objectsChooserViewModel = new ViewModelProvider(this).get(ObjectsChooserViewModel.class);
 
-        if (objectsChooserViewModel.getObjects() == null) {
+        if (objectsChooserViewModel.getOrders() == null) {
             initData()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -80,8 +77,8 @@ public class ObjectsChooserActivity extends AppCompatActivity {
 
     private Completable initData() {
         return Completable.create(subscriber -> {
-            objectsChooserViewModel.init(getIntent().getStringExtra(DbHelper.COLUMN_COMPANY_UID),
-                    getIntent().getStringExtra(DbHelper.COLUMN_PARTNER_UID));
+            objectsChooserViewModel.init(getIntent().getStringExtra(COMPANY_UID),
+                    getIntent().getStringExtra(PARTNER_UID));
             subscriber.onComplete();
         });
     }
@@ -95,12 +92,9 @@ public class ObjectsChooserActivity extends AppCompatActivity {
         recyclerObjects.setHasFixedSize(true);
         recyclerObjects.setLayoutManager(new LinearLayoutManager(this));
 
-        binding.getViewModel().getAdapter().setOnEntryClickListener((v, position) -> {
-            HashMap<String, Object> chosen = binding.getViewModel().getObjects().get(position);
-            double sum = (double) chosen.get(ObjectsChooserActivity.SUM);
+        binding.getViewModel().getAdapter().setOnEntryClickListener((v, row) -> {
             setResult(RESULT_OK, new Intent()
-                    .putExtra(OBJECT, (Order) chosen.get(OBJECT))
-                    .putExtra(SUM, sum));
+                    .putExtra(ORDER, row));
             finish();
         });
         setTitle(R.string.title_activity_orders);

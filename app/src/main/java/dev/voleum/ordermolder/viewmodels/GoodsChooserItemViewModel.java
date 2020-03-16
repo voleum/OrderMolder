@@ -14,8 +14,8 @@ public class GoodsChooserItemViewModel extends BaseObservable {
 
     private Price price;
 
-    public GoodsChooserItemViewModel(Price values) {
-        this.price = values;
+    public GoodsChooserItemViewModel(Price price) {
+        this.price = price;
         df = DecimalHelper.newMoneyFieldFormat();
     }
 

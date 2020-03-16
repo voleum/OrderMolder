@@ -1,7 +1,6 @@
 package dev.voleum.ordermolder.viewmodels;
 
 import android.icu.text.DecimalFormat;
-import android.icu.text.DecimalFormatSymbols;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -10,13 +9,17 @@ import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
+import java.util.ListIterator;
 
 import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.ObjectsCashReceiptRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbRoom;
+import dev.voleum.ordermolder.helpers.DecimalHelper;
 import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.models.CashReceipt;
 import dev.voleum.ordermolder.models.Company;
@@ -24,9 +27,7 @@ import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.models.Partner;
 import dev.voleum.ordermolder.models.TableObjects;
 import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class CashReceiptViewModel extends ViewModelObservable implements Spinner.OnItemSelectedListener {
@@ -40,6 +41,8 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
     private List<Partner> partners;
     private int selectedItemCompany;
     private int selectedItemPartner;
+
+    private int selectedMenuItemPosition;
 
     public CashReceiptViewModel() {
 
@@ -154,103 +157,76 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
         cashReceipt = new CashReceipt();
         this.tableObjects = cashReceipt.getTableObjects();
         adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
-        initSpinners();
-        setDecimalFormat();
+        initSpinnersData()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+        df = DecimalHelper.newMoneyFieldFormat();
     }
 
     public void setCashReceipt(String uid) {
         if (cashReceipt != null) return;
-        cashReceipt = new CashReceipt(uid);
+        cashReceipt = new CashReceipt();
         this.tableObjects = cashReceipt.getTableObjects();
-        this.adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
-        initSpinners();
-        setDecimalFormat();
-    }
-
-    private void initSpinners() {
-        initSpinnersData()
+//        this.adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
+        getCashReceiptByUid(uid)
+                .andThen(initSpinnersData())
                 .subscribeOn(Schedulers.newThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CompletableObserver() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        notifyPropertyChanged(dev.voleum.ordermolder.BR.entryCompanies);
-                        notifyPropertyChanged(dev.voleum.ordermolder.BR.entryPartners);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+//        initSpinners();
+        df = DecimalHelper.newMoneyFieldFormat();
     }
+
+//    private void initSpinners() {
+//        initSpinnersData()
+//                .subscribeOn(Schedulers.newThread())
+//                .subscribeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new CompletableObserver() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//                });
+//    }
 
     private Completable initSpinnersData() {
         return Completable.create(subscriber -> {
-//            DbHelper dbHelper = DbHelper.getInstance();
-//            SQLiteDatabase db = dbHelper.getReadableDatabase();
-//            Cursor c;
+
             DbRoom db = OrderMolder.getApplication().getDatabase();
-//
-//            // region Companies
-//            companies = new ArrayList<>();
-            companies = db.getCompanyDao().getAll();
-//            c = db.query(DbHelper.TABLE_COMPANIES,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null);
-//
-//            if (c.moveToFirst()) {
-//                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-//                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-//                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-//                do {
-//                    Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-//                    companies.add(company);
-//                    if (company.getUid().equals(cashReceipt.getCompanyUid())) {
-//                        selectedItemCompany = companies.indexOf(company);
-//                    }
-//                } while (c.moveToNext());
-//            }
-//            // endregion
-//
-//            // region Partners
-//            partners = new ArrayList<>();
-            partners = db.getPartnerDao().getAll();
-//            c = db.query(DbHelper.TABLE_PARTNERS,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null);
-//
-//            if (c.moveToFirst()) {
-//                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-//                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-//                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-//                do {
-//                    Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-//                    partners.add(partner);
-//                    if (partner.getUid().equals(cashReceipt.getPartnerUid())) {
-//                        selectedItemPartner = partners.indexOf(partner);
-//                    }
-//                } while (c.moveToNext());
-//            }
-//            // endregion
-//
-//            c.close();
-//            dbHelper.close();
-//
-            subscriber.onComplete();
+
+            companies = new ArrayList<>();
+            ListIterator<Company> companyListIterator = db.getCompanyDao().getAll().listIterator();
+            while (companyListIterator.hasNext()) {
+                Company c = companyListIterator.next();
+                companies.add(c);
+                if (c.getUid().equals(cashReceipt.getCompanyUid())) {
+                    selectedItemCompany = companyListIterator.previousIndex();
+                }
+            }
+
+            partners = new ArrayList<>();
+            ListIterator<Partner> partnerListIterator = db.getPartnerDao().getAll().listIterator();
+            while (partnerListIterator.hasNext()) {
+                Partner p = partnerListIterator.next();
+                partners.add(p);
+                if (p.getUid().equals(cashReceipt.getPartnerUid())) {
+                    selectedItemPartner = partnerListIterator.previousIndex();
+                }
+            }
+
+            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryCompanies);
+            notifyPropertyChanged(dev.voleum.ordermolder.BR.entryPartners);
         });
     }
 
@@ -260,16 +236,21 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
         ) {
             sum += row.getSum();
         }
+
+        BigDecimal bd = BigDecimal.valueOf(sum);
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        sum = bd.doubleValue();
+
         cashReceipt.setSum(sum);
         notifyPropertyChanged(dev.voleum.ordermolder.BR.sum);
     }
 
-    public void addObject(Order order, Double sum) {
+    public void addObject(Order order) {
         tableObjects.add(new TableObjects(cashReceipt.getUid(),
                 tableObjects.size(),
                 order.getUid(),
                 order.toString(),
-                sum));
+                order.getSum()));
         adapter.notifyItemInserted(tableObjects.size());
         countSum();
     }
@@ -280,31 +261,26 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
         countSum();
     }
 
-    public Completable saveCashReceipt(CashReceipt cashReceipt) {
+    public Completable getCashReceiptByUid(String uid) {
         return Completable.create(subscriber -> {
-//            DbHelper dbHelper = DbHelper.getInstance();
-//            SQLiteDatabase db = dbHelper.getWritableDatabase();
-//            db.beginTransaction();
-//            try {
-//                if (!cashReceipt.save(db)) throw new Exception("Saving error!");
-//                db.setTransactionSuccessful();
-//            } catch (Exception e) {
-//                subscriber.onError(e);
-//            } finally {
-//                db.endTransaction();
-//                db.close();
-//            }
             DbRoom db = OrderMolder.getApplication().getDatabase();
-            db.getCashReceiptDao().insertAll(cashReceipt);
+            cashReceipt = db.getCashReceiptDao().getByUid(uid);
+            tableObjects = db.getTableObjectsDao().getByUid(uid);
+            adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
+            adapter.setOnEntryLongClickListener((v, position) -> {
+                selectedMenuItemPosition = position;
+                v.showContextMenu();
+            });
             subscriber.onComplete();
         });
     }
 
-    private void setDecimalFormat() {
-        String format = "0.00";
-        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        otherSymbols.setDecimalSeparator('.');
-        otherSymbols.setGroupingSeparator(',');
-        df = new DecimalFormat(format, otherSymbols);
+    public Completable saveCashReceipt(CashReceipt cashReceipt) {
+        return Completable.create(subscriber -> {
+            DbRoom db = OrderMolder.getApplication().getDatabase();
+            db.getCashReceiptDao().insertAll(cashReceipt);
+            db.getTableObjectsDao().insertAll(Arrays.copyOf(tableObjects.toArray(), tableObjects.size(), TableObjects[].class));
+            subscriber.onComplete();
+        });
     }
 }
