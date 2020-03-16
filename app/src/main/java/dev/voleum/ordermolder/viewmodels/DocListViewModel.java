@@ -70,8 +70,6 @@ public class DocListViewModel<T extends Document> extends BaseObservable {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        docs.remove(recyclerPosition);
-        adapter.notifyItemRemoved(recyclerPosition);
     }
 
     private Completable initDocList() {
@@ -110,6 +108,9 @@ public class DocListViewModel<T extends Document> extends BaseObservable {
                     db.getCashReceiptDao().deleteAll((CashReceipt) docs.get(recyclerPosition));
                     break;
             }
+
+            docs.remove(recyclerPosition);
+            adapter.notifyItemRemoved(recyclerPosition);
         });
     }
 }

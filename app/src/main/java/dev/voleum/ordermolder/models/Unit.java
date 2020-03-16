@@ -1,11 +1,7 @@
 package dev.voleum.ordermolder.models;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-
 import androidx.room.Entity;
 
-import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.database.DbRoom;
 
 @Entity
@@ -18,17 +14,6 @@ public class Unit extends Catalog {
         super(uid, name);
         this.code = code;
         this.fullName = fullName;
-    }
-
-    @Override
-    public boolean save(SQLiteDatabase db) {
-        ContentValues cv = new ContentValues();
-        cv.put(DbHelper.COLUMN_UID, uid);
-        cv.put(DbHelper.COLUMN_CODE, code);
-        cv.put(DbHelper.COLUMN_NAME, name);
-        cv.put(DbHelper.COLUMN_FULL_NAME, fullName);
-        db.insertWithOnConflict(DbHelper.TABLE_UNITS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-        return true;
     }
 
     @Override
