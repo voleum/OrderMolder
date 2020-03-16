@@ -27,7 +27,7 @@ import dev.voleum.ordermolder.databinding.FragmentOrderMainBinding;
 import dev.voleum.ordermolder.databinding.FragmentOrderSecondaryPageBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
 import dev.voleum.ordermolder.fragments.SelectTimeFragment;
-import dev.voleum.ordermolder.models.Good;
+import dev.voleum.ordermolder.models.Price;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -99,11 +99,6 @@ public class PlaceholderOrderFragment extends Fragment {
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                bindingRecycler.getViewModel().getAdapter().setOnEntryLongClickListener((v, position) -> {
-                    ((OrderActivity) getActivity()).setRecyclerPosition(position);
-                    v.showContextMenu();
-                });
-
                 registerForContextMenu(recyclerGoods);
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
@@ -111,6 +106,7 @@ public class PlaceholderOrderFragment extends Fragment {
                             startActivityForResult(new Intent(getActivity(), GoodsChooserActivity.class), GOOD_CHOOSE_REQUEST);
                         }
                 );
+
                 break;
         }
         return root;
@@ -121,12 +117,8 @@ public class PlaceholderOrderFragment extends Fragment {
         if (requestCode == GOOD_CHOOSE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    Good good = (Good) data.getSerializableExtra(GoodsChooserActivity.GOOD);
-                    if (good != null) {
-                        orderViewModel.addGood(good,
-                                data.getDoubleExtra(GoodsChooserActivity.QUANTITY, 1.0),
-                                data.getDoubleExtra(GoodsChooserActivity.PRICE, 0.0));
-                    }
+                    Price price = (Price) data.getSerializableExtra(GoodsChooserActivity.PRICE);
+                    orderViewModel.addRow(price.getUid(), price.getPrice(), price.getGoodName());
                 }
             }
         }
@@ -146,7 +138,7 @@ public class PlaceholderOrderFragment extends Fragment {
         if (item.getItemId() == R.id.delete_item) {
             OrderActivity orderActivity = (OrderActivity) getActivity();
             if (orderActivity != null) {
-                orderViewModel.removeGood(orderActivity.getRecyclerPosition());
+                orderViewModel.removeGood();
                 return true;
             }
         }

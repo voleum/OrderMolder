@@ -9,7 +9,11 @@ import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.UUID;
 
 import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
@@ -18,7 +22,6 @@ import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.helpers.DecimalHelper;
 import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.models.Company;
-import dev.voleum.ordermolder.models.Good;
 import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.models.Partner;
 import dev.voleum.ordermolder.models.TableGoods;
@@ -42,6 +45,8 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
     private int selectedItemCompany;
     private int selectedItemPartner;
     private int selectedItemWarehouse;
+
+    private int selectedMenuItemPosition;
 
     public OrderViewModel() {
 
@@ -174,21 +179,18 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
         order = new Order();
         this.tableGoods = order.getTableGoods();
         this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
-        initSpinners();
+        initSpinnersData()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
         df = DecimalHelper.newMoneyFieldFormat();
     }
 
     public void setOrder(String uid) {
         if (order != null) return;
-        order = new Order(uid);
-        this.tableGoods = order.getTableGoods();
-        this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
-        initSpinners();
-        df = DecimalHelper.newMoneyFieldFormat();
-    }
-
-    private void initSpinners() {
-        initSpinnersData()
+        order = new Order();
+        getOrderByUid(uid)
+                .andThen(initSpinnersData())
                 .subscribeOn(Schedulers.newThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CompletableObserver() {
@@ -209,92 +211,51 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
 
                     }
                 });
+        df = DecimalHelper.newMoneyFieldFormat();
+    }
+
+    private void initOrder(String uid) {
+        getOrderByUid(uid)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     private Completable initSpinnersData() {
         return Completable.create(subscriber -> {
-//            DbHelper dbHelper = DbHelper.getInstance();
-//            SQLiteDatabase db = dbHelper.getReadableDatabase();
-//            Cursor c;
+
             DbRoom db = OrderMolder.getApplication().getDatabase();
-//
-//          // region Companies
-//            companies = new ArrayList<>();
-            companies = db.getCompanyDao().getAll();
-//            c = db.query(DbHelper.TABLE_COMPANIES,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null);
-//
-//            if (c.moveToFirst()) {
-//                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-//                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-//                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-//                do {
-//                    Company company = new Company(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-//                    companies.add(company);
-//                    if (company.getUid().equals(order.getCompanyUid())) {
-//                        selectedItemCompany = companies.indexOf(company);
-//                    }
-//                } while (c.moveToNext());
-//            }
-//            // endregion
-//
-//            // region Partners
-//            partners = new ArrayList<>();
-            partners = db.getPartnerDao().getAll();
-//            c = db.query(DbHelper.TABLE_PARTNERS,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null);
-//
-//            if (c.moveToFirst()) {
-//                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-//                int tinClIndex = c.getColumnIndex(DbHelper.COLUMN_TIN);
-//                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-//                do {
-//                    Partner partner = new Partner(c.getString(uidClIndex), c.getString(nameClIndex), c.getString(tinClIndex));
-//                    partners.add(partner);
-//                    if (partner.getUid().equals(order.getPartnerUid())) {
-//                        selectedItemPartner = partners.indexOf(partner);
-//                    }
-//                } while (c.moveToNext());
-//            }
-//            // endregion
-//
-//            // region Warehouses
-//            warehouses = new ArrayList<>();
-            warehouses = db.getWarehouseDao().getAll();
-//            c = db.query(DbHelper.TABLE_WAREHOUSES,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null,
-//                    null);
-//
-//            if (c.moveToFirst()) {
-//                int uidClIndex = c.getColumnIndex(DbHelper.COLUMN_UID);
-//                int nameClIndex = c.getColumnIndex(DbHelper.COLUMN_NAME);
-//                do {
-//                    Warehouse warehouse = new Warehouse(c.getString(uidClIndex), c.getString(nameClIndex));
-//                    warehouses.add(warehouse);
-//                    if (warehouse.getUid().equals(order.getWarehouseUid())) {
-//                        selectedItemWarehouse = warehouses.indexOf(warehouse);
-//                    }
-//                } while (c.moveToNext());
-//            }
-//            // endregion
-//
-//            c.close();
-//            dbHelper.close();
-//
+
+            companies = new ArrayList<>();
+            ListIterator<Company> companyListIterator = db.getCompanyDao().getAll().listIterator();
+            while (companyListIterator.hasNext()) {
+                Company c = companyListIterator.next();
+                companies.add(c);
+                if (c.getUid().equals(order.getCompanyUid())) {
+                    selectedItemCompany = companyListIterator.previousIndex();
+                }
+            }
+
+            partners = new ArrayList<>();
+            ListIterator<Partner> partnerListIterator = db.getPartnerDao().getAll().listIterator();
+            while (partnerListIterator.hasNext()) {
+                Partner p = partnerListIterator.next();
+                partners.add(p);
+                if (p.getUid().equals(order.getPartnerUid())) {
+                    selectedItemPartner = partnerListIterator.previousIndex();
+                }
+            }
+
+            warehouses = new ArrayList<>();
+            ListIterator<Warehouse> warehouseListIterator = db.getWarehouseDao().getAll().listIterator();
+            while (warehouseListIterator.hasNext()) {
+                Warehouse w = warehouseListIterator.next();
+                warehouses.add(w);
+                if (w.getUid().equals(order.getWarehouseUid())) {
+                    selectedItemWarehouse = warehouseListIterator.previousIndex();
+                }
+            }
+
             subscriber.onComplete();
         });
     }
@@ -309,40 +270,47 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
         notifyPropertyChanged(dev.voleum.ordermolder.BR.sum);
     }
 
-    public void addGood(Good good, double quantity, double price) {
+    public void addRow(String goodUid, double price, String goodName) {
         tableGoods.add(new TableGoods(order.getUid(),
                 tableGoods.size(),
-                good.getUid(),
-                good.getName(),
-                quantity,
+                goodUid,
+                goodName,
+                1,
                 price,
-                quantity * price));
+                price));
         adapter.notifyItemInserted(tableGoods.size());
         countSum();
     }
 
-    public void removeGood(int position) {
-        tableGoods.remove(position);
-        adapter.notifyItemRemoved(position);
+    public void removeGood() {
+        tableGoods.remove(selectedMenuItemPosition);
+        adapter.notifyItemRemoved(selectedMenuItemPosition);
         countSum();
+    }
+
+    public Completable getOrderByUid(String uid) {
+        return Completable.create(subscriber -> {
+            DbRoom db = OrderMolder.getApplication().getDatabase();
+            order = db.getOrderDao().getByUid(uid);
+            tableGoods = db.getTableGoodsDao().getByUid(uid);
+            adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
+            adapter.setOnEntryLongClickListener((v, position) -> {
+                selectedMenuItemPosition = position;
+                v.showContextMenu();
+            });
+            subscriber.onComplete();
+        });
     }
 
     public Completable saveOrder(Order order) {
         return Completable.create(subscriber -> {
-//            DbHelper dbHelper = DbHelper.getInstance();
-//            SQLiteDatabase db = dbHelper.getWritableDatabase();
-//            db.beginTransaction();
-//            try {
-//                if (!order.save(db)) throw new Exception("Saving error!");
-//                db.setTransactionSuccessful();
-//            } catch (Exception e) {
-//                subscriber.onError(e);
-//            } finally {
-//                db.endTransaction();
-//                db.close();
-//            }
+            if (order.getUid().isEmpty()) order.setUid(UUID.randomUUID().toString());
             DbRoom db = OrderMolder.getApplication().getDatabase();
+            order.setCompanyUid(companies.get(selectedItemCompany).getUid());
+            order.setPartnerUid(partners.get(selectedItemPartner).getUid());
+            order.setWarehouseUid(warehouses.get(selectedItemWarehouse).getUid());
             db.getOrderDao().insertAll(order);
+            db.getTableGoodsDao().insertAll(Arrays.copyOf(tableGoods.toArray(), tableGoods.size(), TableGoods[].class));
             subscriber.onComplete();
         });
     }

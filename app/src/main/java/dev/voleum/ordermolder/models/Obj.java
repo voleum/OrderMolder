@@ -31,6 +31,7 @@ public abstract class Obj implements Serializable {
         moneyDecimalFormat = DecimalHelper.newMoneyFieldFormat();
     }
 
+    @NotNull
     public String getUid() {
         return uid;
     }

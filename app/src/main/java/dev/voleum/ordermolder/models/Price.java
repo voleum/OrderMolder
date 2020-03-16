@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 
 import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.database.DbRoom;
@@ -12,10 +13,18 @@ import dev.voleum.ordermolder.database.DbRoom;
 public class Price extends Obj {
 
     double price;
+    String goodName;
 
+    @Ignore
     public Price(String uid, double price) {
         super(uid);
         this.price = price;
+    }
+
+    public Price(String uid, double price, String goodName) {
+        super(uid);
+        this.price = price;
+        this.goodName = goodName;
     }
 
     @Override
@@ -35,5 +44,9 @@ public class Price extends Obj {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getGoodName() {
+        return goodName;
     }
 }

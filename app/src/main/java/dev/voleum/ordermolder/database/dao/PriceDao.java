@@ -23,7 +23,7 @@ public interface PriceDao {
     @Delete
     void deleteAll(Price... prices);
 
-    @Query("SELECT * FROM good LEFT JOIN price ON ")
+    @Query("SELECT price.uid, price.price, good.name AS goodName FROM price LEFT JOIN good ON price.uid = good.uid")
     List<Price> getAll();
 
     @Query("DELETE FROM price")

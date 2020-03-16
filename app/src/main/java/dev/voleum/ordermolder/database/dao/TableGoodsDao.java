@@ -26,6 +26,9 @@ public interface TableGoodsDao {
     @Query("SELECT * FROM tablegoods")
     List<TableGoods> getAll();
 
+    @Query("SELECT * FROM tablegoods WHERE uid = :uid")
+    List<TableGoods> getByUid(String uid);
+
     @Query("DELETE FROM tablegoods")
     void deleteAllRecords();
 }
