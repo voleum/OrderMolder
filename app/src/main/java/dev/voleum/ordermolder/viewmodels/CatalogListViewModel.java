@@ -1,7 +1,5 @@
 package dev.voleum.ordermolder.viewmodels;
 
-import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,30 +11,13 @@ import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.enums.CatalogTypes;
 import dev.voleum.ordermolder.models.Catalog;
 
-public class CatalogListViewModel<T extends Catalog> extends BaseObservable {
+public class CatalogListViewModel extends ObjListViewModel<Catalog, CatalogListRecyclerViewAdapter> {
 
-    private List<T> catalogs;
-    private CatalogListRecyclerViewAdapter adapter;
     private CatalogTypes catType;
 
     public CatalogListViewModel(CatalogTypes catType) {
         this.catType = catType;
-        initCatalogList();
-    }
-
-    @Bindable
-    public void setAdapter(CatalogListRecyclerViewAdapter adapter) {
-        this.adapter = adapter;
-    }
-
-    @Bindable
-    public CatalogListRecyclerViewAdapter getAdapter() {
-        return adapter;
-    }
-
-    @Bindable
-    public List<T> getCatalogs() {
-        return catalogs;
+        initList();
     }
 
     @BindingAdapter("android:data")
@@ -46,28 +27,28 @@ public class CatalogListViewModel<T extends Catalog> extends BaseObservable {
         }
     }
 
-    private void initCatalogList() {
+    protected void initList() {
 
         DbRoom db = OrderMolder.getApplication().getDatabase();
 
         switch (catType) {
             case COMPANY:
-                catalogs = (List<T>) db.getCompanyDao().getAll();
+                objs = db.getCompanyDao().getAll();
                 break;
             case PARTNER:
-                catalogs = (List<T>) db.getPartnerDao().getAll();
+                objs = db.getPartnerDao().getAll();
                 break;
             case WAREHOUSE:
-                catalogs = (List<T>) db.getWarehouseDao().getAll();
+                objs = db.getWarehouseDao().getAll();
                 break;
             case GOOD:
-                catalogs = (List<T>) db.getGoodDao().getAll();
+                objs = db.getGoodDao().getAll();
                 break;
             case UNIT:
-                catalogs = (List<T>) db.getUnitDao().getAll();
+                objs = db.getUnitDao().getAll();
                 break;
         }
 
-        adapter = new CatalogListRecyclerViewAdapter(catalogs);
+        adapter = new CatalogListRecyclerViewAdapter(objs);
     }
 }
