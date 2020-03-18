@@ -15,13 +15,12 @@ import dev.voleum.ordermolder.databinding.CatalogHolderBinding;
 import dev.voleum.ordermolder.models.Catalog;
 import dev.voleum.ordermolder.viewmodels.ObjListItemViewModel;
 
-public class CatalogListRecyclerViewAdapter<T extends Catalog> extends RecyclerView.Adapter {
+public class CatalogListRecyclerViewAdapter<T extends Catalog> extends AbstractRecyclerViewAdapter<T> {
 
-    private List<T> catalogs;
     private OnEntryClickListener onEntryClickListener;
 
-    public CatalogListRecyclerViewAdapter(List<T> catalogs) {
-        this.catalogs = catalogs;
+    public CatalogListRecyclerViewAdapter(List<T> list) {
+        super(list);
     }
 
     @NonNull
@@ -36,22 +35,11 @@ public class CatalogListRecyclerViewAdapter<T extends Catalog> extends RecyclerV
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Catalog row = catalogs.get(position);
-        ((CatalogViewHolder) holder).binding.setRow(new ObjListItemViewModel<>((row)));
-    }
-
-    @Override
-    public int getItemCount() {
-        return catalogs.size();
+        ((CatalogViewHolder) holder).binding.setRow(new ObjListItemViewModel<>((list.get(position))));
     }
 
     public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
         this.onEntryClickListener = onEntryClickListener;
-    }
-
-    public void setData(List<T> catalogs) {
-        this.catalogs = catalogs;
-        notifyDataSetChanged();
     }
 
     public class CatalogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

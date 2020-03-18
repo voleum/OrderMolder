@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
 import java.util.List;
 
 import dev.voleum.ordermolder.R;
@@ -16,13 +15,12 @@ import dev.voleum.ordermolder.databinding.ChooserGoodHolderBinding;
 import dev.voleum.ordermolder.models.Price;
 import dev.voleum.ordermolder.viewmodels.GoodsChooserItemViewModel;
 
-public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
+public class GoodsChooserRecyclerViewAdapter extends AbstractRecyclerViewAdapter<Price> {
 
-    private List<Price> goods;
     private OnEntryClickListener onEntryClickListener;
 
-    public GoodsChooserRecyclerViewAdapter(List<Price> goods) {
-        this.goods = goods;
+    public GoodsChooserRecyclerViewAdapter(List<Price> list) {
+        super(list);
     }
 
     @NonNull
@@ -37,22 +35,11 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Price row = goods.get(position);
-        ((GoodViewHolder) holder).binding.setRow(new GoodsChooserItemViewModel(row));
-    }
-
-    @Override
-    public int getItemCount() {
-        return goods.size();
+        ((GoodViewHolder) holder).binding.setRow(new GoodsChooserItemViewModel(list.get(position)));
     }
 
     public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
         this.onEntryClickListener = onEntryClickListener;
-    }
-
-    public void setData(List<Price> goods) {
-        this.goods = goods;
-        notifyDataSetChanged();
     }
 
     public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -66,7 +53,7 @@ public class GoodsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             if (onEntryClickListener != null) {
-                onEntryClickListener.onEntryClick(v, goods.get(getLayoutPosition()));
+                onEntryClickListener.onEntryClick(v, list.get(getLayoutPosition()));
             }
         }
     }

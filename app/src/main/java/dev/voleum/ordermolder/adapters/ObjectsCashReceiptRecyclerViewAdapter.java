@@ -16,14 +16,13 @@ import dev.voleum.ordermolder.models.TableObjects;
 import dev.voleum.ordermolder.viewmodels.CashReceiptViewModel;
 import dev.voleum.ordermolder.viewmodels.ObjectsCashReceiptListItemViewModel;
 
-public class ObjectsCashReceiptRecyclerViewAdapter extends RecyclerView.Adapter {
+public class ObjectsCashReceiptRecyclerViewAdapter extends AbstractRecyclerViewAdapter<TableObjects> {
 
-    private List<TableObjects> objects;
     private OnEntryLongClickListener onEntryLongClickListener;
     private CashReceiptViewModel cashReceiptViewModel;
 
-    public ObjectsCashReceiptRecyclerViewAdapter(List<TableObjects> objects, CashReceiptViewModel cashReceiptViewModel) {
-        this.objects = objects;
+    public ObjectsCashReceiptRecyclerViewAdapter(List<TableObjects> list, CashReceiptViewModel cashReceiptViewModel) {
+        super(list);
         this.cashReceiptViewModel = cashReceiptViewModel;
     }
 
@@ -39,22 +38,12 @@ public class ObjectsCashReceiptRecyclerViewAdapter extends RecyclerView.Adapter 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        TableObjects row = objects.get(position);
-        ((ObjectsCashReceiptRecyclerViewAdapter.ObjectViewHolder) holder).binding.setRow(new ObjectsCashReceiptListItemViewModel(row, cashReceiptViewModel));
-    }
-
-    @Override
-    public int getItemCount() {
-        return objects.size();
+        ((ObjectsCashReceiptRecyclerViewAdapter.ObjectViewHolder) holder)
+                .binding.setRow(new ObjectsCashReceiptListItemViewModel(list.get(position), cashReceiptViewModel));
     }
 
     public void setOnEntryLongClickListener(OnEntryLongClickListener onEntryLongClickListener) {
         this.onEntryLongClickListener = onEntryLongClickListener;
-    }
-
-    public void setData(List<TableObjects> tableObjects) {
-        this.objects = tableObjects;
-        notifyDataSetChanged();
     }
 
     public class ObjectViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
