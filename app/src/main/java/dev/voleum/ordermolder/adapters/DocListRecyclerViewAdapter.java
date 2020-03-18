@@ -15,14 +15,13 @@ import dev.voleum.ordermolder.databinding.DocHolderBinding;
 import dev.voleum.ordermolder.models.Document;
 import dev.voleum.ordermolder.viewmodels.ObjListItemViewModel;
 
-public class DocListRecyclerViewAdapter<T extends Document> extends RecyclerView.Adapter {
+public class DocListRecyclerViewAdapter<T extends Document> extends AbstractRecyclerViewAdapter<T> {
 
-    private List<T> docs;
     private OnEntryClickListener onEntryClickListener;
     private OnEntryLongClickListener onEntryLongClickListener;
 
-    public DocListRecyclerViewAdapter(List<T> docs) {
-        this.docs = docs;
+    public DocListRecyclerViewAdapter(List<T> list) {
+        super(list);
     }
 
     @NonNull
@@ -37,13 +36,7 @@ public class DocListRecyclerViewAdapter<T extends Document> extends RecyclerView
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Document row = docs.get(position);
-        ((DocViewHolder) holder).binding.setRow(new ObjListItemViewModel<Document>(row));
-    }
-
-    @Override
-    public int getItemCount() {
-        return docs.size();
+        ((DocViewHolder) holder).binding.setRow(new ObjListItemViewModel<>(list.get(position)));
     }
 
     public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
@@ -52,11 +45,6 @@ public class DocListRecyclerViewAdapter<T extends Document> extends RecyclerView
 
     public void setOnEntryLongClickListener(OnEntryLongClickListener onEntryLongClickListener) {
         this.onEntryLongClickListener = onEntryLongClickListener;
-    }
-
-    public void setData(List<T> docs) {
-        this.docs = docs;
-        notifyDataSetChanged();
     }
 
     public class DocViewHolder extends RecyclerView.ViewHolder {

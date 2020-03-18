@@ -16,14 +16,13 @@ import dev.voleum.ordermolder.models.TableGoods;
 import dev.voleum.ordermolder.viewmodels.GoodsOrderListItemViewModel;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
 
-public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
+public class GoodsOrderRecyclerViewAdapter extends AbstractRecyclerViewAdapter<TableGoods> {
 
-    private List<TableGoods> goods;
     private OnEntryLongClickListener onEntryLongClickListener;
     private OrderViewModel orderViewModel;
 
-    public GoodsOrderRecyclerViewAdapter(List<TableGoods> goods, OrderViewModel orderViewModel) {
-        this.goods = goods;
+    public GoodsOrderRecyclerViewAdapter(List<TableGoods> list, OrderViewModel orderViewModel) {
+        super(list);
         this.orderViewModel = orderViewModel;
     }
 
@@ -39,22 +38,11 @@ public class GoodsOrderRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        TableGoods row = goods.get(position);
-        ((GoodViewHolder) holder).binding.setRow(new GoodsOrderListItemViewModel(row, orderViewModel));
-    }
-
-    @Override
-    public int getItemCount() {
-        return goods.size();
+        ((GoodViewHolder) holder).binding.setRow(new GoodsOrderListItemViewModel(list.get(position), orderViewModel));
     }
 
     public void setOnEntryLongClickListener(OnEntryLongClickListener onEntryLongClickListener) {
         this.onEntryLongClickListener = onEntryLongClickListener;
-    }
-
-    public void setData(List<TableGoods> tableGoods) {
-        this.goods = tableGoods;
-        notifyDataSetChanged();
     }
 
     public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
