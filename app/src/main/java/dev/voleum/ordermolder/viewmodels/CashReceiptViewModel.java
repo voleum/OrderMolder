@@ -157,7 +157,7 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
     public void setCashReceipt() {
         if (cashReceipt != null) return;
         cashReceipt = new CashReceipt();
-        this.tableObjects = cashReceipt.getTableObjects();
+        this.tableObjects = cashReceipt.getTable();
         adapter = new ObjectsCashReceiptRecyclerViewAdapter(tableObjects, this);
         initSpinnersData()
                 .subscribeOn(Schedulers.newThread())
@@ -169,7 +169,7 @@ public class CashReceiptViewModel extends ViewModelObservable implements Spinner
     public void setCashReceipt(String uid) {
         if (cashReceipt != null) return;
         cashReceipt = new CashReceipt();
-        this.tableObjects = cashReceipt.getTableObjects();
+        this.tableObjects = cashReceipt.getTable();
         getCashReceiptByUid(uid)
                 .andThen(initSpinnersData())
                 .subscribeOn(Schedulers.newThread())

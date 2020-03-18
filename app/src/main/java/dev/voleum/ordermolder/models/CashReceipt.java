@@ -9,54 +9,37 @@ import java.util.List;
 import dev.voleum.ordermolder.database.DbRoom;
 
 @Entity
-public class CashReceipt extends Document {
-
-    @Ignore
-    private List<TableObjects> tableObjects;
+public class CashReceipt extends Document<TableObjects> {
 
     @Ignore
     public CashReceipt() {
-        setCurrentDate();
-        setCurrentTime();
-        tableObjects = new ArrayList<>();
-        uid = companyUid = partnerUid = "";
-        sum = 0;
+        super();
     }
 
     @Ignore
     public CashReceipt(String uid, String dateTime, String companyUid, String partnerUid, double sum) {
         super(uid, dateTime, companyUid, partnerUid, sum);
-        this.tableObjects = new ArrayList<>();
     }
 
     @Ignore
     public CashReceipt(String uid, String dateTime, String companyUid, String partnerUid, double sum, List<TableObjects> tableObjects) {
         super(uid, dateTime, companyUid, partnerUid, sum);
-        this.tableObjects = tableObjects;
+        this.table = tableObjects;
     }
 
     public CashReceipt(String uid, String date, String time, String companyUid, String partnerUid, double sum) {
         super(uid, date, time, companyUid, partnerUid, sum);
-        this.tableObjects = new ArrayList<>();
     }
 
     @Ignore
     public CashReceipt(String uid, String date, String time, String companyUid, String partnerUid, double sum, List<TableObjects> tableObjects) {
         super(uid, date, time, companyUid, partnerUid, sum);
-        this.tableObjects = tableObjects;
+        this.table = tableObjects;
     }
 
     @Override
     public boolean save(DbRoom db) {
         db.getCashReceiptDao().insertAll(this);
         return true;
-    }
-
-    public List<TableObjects> getTableObjects() {
-        return tableObjects;
-    }
-
-    public void addObject(TableObjects row) {
-        tableObjects.add(row);
     }
 }

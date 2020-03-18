@@ -13,7 +13,6 @@ public class TableGoods extends Table {
     private String goodName;
     private double quantity;
     private double price;
-    private double sum;
 
     @Ignore
     public TableGoods(String uid, int position, String goodUid, double quantity, double price, double sum) {
@@ -31,7 +30,6 @@ public class TableGoods extends Table {
         this.goodName = goodName;
         this.quantity = quantity;
         this.price = price;
-        this.sum = sum;
     }
 
     @Override
@@ -62,14 +60,6 @@ public class TableGoods extends Table {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public double getSum() {
-        return sum;
-    }
-
-    public void setSum(double sum) {
-        this.sum = sum;
     }
 
     public void countSum() {

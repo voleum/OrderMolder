@@ -29,9 +29,7 @@ import dev.voleum.ordermolder.models.Partner;
 import dev.voleum.ordermolder.models.TableGoods;
 import dev.voleum.ordermolder.models.Warehouse;
 import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class OrderViewModel extends ViewModelObservable implements Spinner.OnItemSelectedListener {
@@ -179,7 +177,7 @@ public class OrderViewModel extends ViewModelObservable implements Spinner.OnIte
     public void setOrder() {
         if (order != null) return;
         order = new Order();
-        this.tableGoods = order.getTableGoods();
+        this.tableGoods = order.getTable();
         this.adapter = new GoodsOrderRecyclerViewAdapter(tableGoods, this);
         initSpinnersData()
                 .subscribeOn(Schedulers.newThread())
