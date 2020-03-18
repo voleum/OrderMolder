@@ -10,7 +10,7 @@ import java.util.Locale;
 
 import dev.voleum.ordermolder.models.Table;
 
-public class AbstractDocListItemViewModel<T extends Table, E extends AbstractDocViewModel> extends BaseObservable {
+public abstract class AbstractDocListItemViewModel<T extends Table, E extends AbstractDocViewModel> extends BaseObservable {
 
     protected DecimalFormat df;
 

@@ -60,7 +60,7 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
         if (document != null) return;
         document = new CashReceipt();
         this.table = document.getTable();
-        getCashReceiptByUid(uid)
+        getDocByUid(uid)
                 .andThen(initSpinnersData())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,7 +68,7 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
         df = DecimalHelper.newMoneyFieldFormat();
     }
 
-    public void addObject(Order order) {
+    public void addRow(Order order) {
         table.add(new TableObjects(document.getUid(),
                 table.size(),
                 order.getUid(),
@@ -78,7 +78,7 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
         countSum();
     }
 
-    public Completable getCashReceiptByUid(String uid) {
+    public Completable getDocByUid(String uid) {
         return Completable.create(subscriber -> {
             DbRoom db = OrderMolder.getApplication().getDatabase();
             document = db.getCashReceiptDao().getByUid(uid);
@@ -93,7 +93,7 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
         });
     }
 
-    public Completable saveCashReceipt(CashReceipt document) {
+    public Completable saveDoc(CashReceipt document) {
         return Completable.create(subscriber -> {
             checkUid();
             DbRoom db = OrderMolder.getApplication().getDatabase();

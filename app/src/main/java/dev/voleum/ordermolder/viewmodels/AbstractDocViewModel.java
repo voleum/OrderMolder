@@ -23,7 +23,7 @@ import dev.voleum.ordermolder.models.Partner;
 import dev.voleum.ordermolder.models.Table;
 import io.reactivex.Completable;
 
-abstract public class AbstractDocViewModel<D extends Document, T extends Table, E extends RecyclerView.Adapter> extends ViewModelObservable implements Spinner.OnItemSelectedListener {
+public abstract class AbstractDocViewModel<D extends Document, T extends Table, E extends RecyclerView.Adapter> extends ViewModelObservable implements Spinner.OnItemSelectedListener {
 
     protected DecimalFormat df;
 
@@ -192,4 +192,8 @@ abstract public class AbstractDocViewModel<D extends Document, T extends Table, 
             }
         }
     }
+
+    public abstract Completable getDocByUid(String uid);
+
+    public abstract Completable saveDoc(D document);
 }
