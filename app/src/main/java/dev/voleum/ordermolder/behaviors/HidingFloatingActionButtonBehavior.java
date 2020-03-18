@@ -13,10 +13,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HidingFloatingActionButtonBehavior extends FloatingActionButton.Behavior {
 
-//    public HidingFloatingActionButtonBehavior() {
-//        super();
-//    }
-
     public HidingFloatingActionButtonBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

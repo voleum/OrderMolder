@@ -1,28 +1,14 @@
 package dev.voleum.ordermolder.database.dao;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import java.util.List;
 
-import dev.voleum.ordermolder.models.Company;
 import dev.voleum.ordermolder.models.Group;
 
 @Dao
-public interface GroupDao {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(Group... groups);
-
-    @Update
-    void updateAll(Group... groups);
-
-    @Delete
-    void deleteAll(Group... groups);
+public interface GroupDao extends AbstractDao<Group> {
 
     @Query("SELECT * FROM `group`")
     List<Group> getAll();
