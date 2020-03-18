@@ -13,7 +13,7 @@ import java.util.List;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.DocHolderBinding;
 import dev.voleum.ordermolder.models.Document;
-import dev.voleum.ordermolder.viewmodels.DocListItemViewModel;
+import dev.voleum.ordermolder.viewmodels.ObjListItemViewModel;
 
 public class DocListRecyclerViewAdapter<T extends Document> extends RecyclerView.Adapter {
 
@@ -38,7 +38,7 @@ public class DocListRecyclerViewAdapter<T extends Document> extends RecyclerView
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Document row = docs.get(position);
-        ((DocViewHolder) holder).binding.setRow(new DocListItemViewModel(row));
+        ((DocViewHolder) holder).binding.setRow(new ObjListItemViewModel<Document>(row));
     }
 
     @Override

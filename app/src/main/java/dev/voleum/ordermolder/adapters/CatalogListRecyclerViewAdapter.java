@@ -13,7 +13,7 @@ import java.util.List;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.CatalogHolderBinding;
 import dev.voleum.ordermolder.models.Catalog;
-import dev.voleum.ordermolder.viewmodels.CatalogListItemViewModel;
+import dev.voleum.ordermolder.viewmodels.ObjListItemViewModel;
 
 public class CatalogListRecyclerViewAdapter<T extends Catalog> extends RecyclerView.Adapter {
 
@@ -37,7 +37,7 @@ public class CatalogListRecyclerViewAdapter<T extends Catalog> extends RecyclerV
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Catalog row = catalogs.get(position);
-        ((CatalogViewHolder) holder).binding.setRow(new CatalogListItemViewModel(row));
+        ((CatalogViewHolder) holder).binding.setRow(new ObjListItemViewModel<>((row)));
     }
 
     @Override

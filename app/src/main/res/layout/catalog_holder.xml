@@ -5,7 +5,7 @@
     <data>
         <variable
             name="row"
-            type="dev.voleum.ordermolder.viewmodels.CatalogListItemViewModel" />
+            type="dev.voleum.ordermolder.viewmodels.ObjListItemViewModel" />
     </data>
 
     <LinearLayout
@@ -23,7 +23,7 @@
             android:layout_gravity="start|center_vertical"
             android:layout_margin="16dp"
             android:layout_weight="50"
-            android:text="@{row.catalogTitle}"
+            android:text="@{row.title}"
             android:textSize="20sp"
             tools:text="Doc title" />
 
