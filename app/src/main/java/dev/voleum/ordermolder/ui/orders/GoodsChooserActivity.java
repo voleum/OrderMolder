@@ -46,7 +46,7 @@ public class GoodsChooserActivity extends AppCompatActivity {
 
         goodsChooserViewModel = new ViewModelProvider(this).get(GoodsChooserViewModel.class);
 
-        if (goodsChooserViewModel.getGoods() == null) {
+        if (goodsChooserViewModel.getItems() == null) {
             initData()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -79,7 +79,7 @@ public class GoodsChooserActivity extends AppCompatActivity {
 
     private Completable initData() {
         return Completable.create(subscriber -> {
-            goodsChooserViewModel.init();
+            goodsChooserViewModel.initList();
             subscriber.onComplete();
         });
     }

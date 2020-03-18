@@ -44,7 +44,7 @@ public class ObjectsChooserActivity extends AppCompatActivity {
 
         objectsChooserViewModel = new ViewModelProvider(this).get(ObjectsChooserViewModel.class);
 
-        if (objectsChooserViewModel.getOrders() == null) {
+        if (objectsChooserViewModel.getItems() == null) {
             initData()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -77,7 +77,7 @@ public class ObjectsChooserActivity extends AppCompatActivity {
 
     private Completable initData() {
         return Completable.create(subscriber -> {
-            objectsChooserViewModel.init(getIntent().getStringExtra(COMPANY_UID),
+            objectsChooserViewModel.initList(getIntent().getStringExtra(COMPANY_UID),
                     getIntent().getStringExtra(PARTNER_UID));
             subscriber.onComplete();
         });

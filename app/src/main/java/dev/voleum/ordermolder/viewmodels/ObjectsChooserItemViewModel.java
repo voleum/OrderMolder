@@ -1,22 +1,16 @@
 package dev.voleum.ordermolder.viewmodels;
 
-import android.icu.text.DecimalFormat;
-
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import dev.voleum.ordermolder.helpers.DecimalHelper;
 import dev.voleum.ordermolder.models.Order;
 
-public class ObjectsChooserItemViewModel extends BaseObservable {
-
-    private DecimalFormat df;
+public class ObjectsChooserItemViewModel extends AbstractChooserItemViewModel {
 
     private Order order;
 
     public ObjectsChooserItemViewModel(Order order) {
+        super();
         this.order = order;
-        df = DecimalHelper.newMoneyFieldFormat();
     }
 
     @Bindable
