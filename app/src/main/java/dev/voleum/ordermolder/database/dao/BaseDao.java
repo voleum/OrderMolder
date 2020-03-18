@@ -7,7 +7,7 @@ import androidx.room.Update;
 
 import dev.voleum.ordermolder.models.Obj;
 
-public interface AbstractDao<T extends Obj> {
+public interface BaseDao<T extends Obj> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(T... objects);

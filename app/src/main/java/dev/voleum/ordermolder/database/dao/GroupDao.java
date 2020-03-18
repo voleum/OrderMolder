@@ -8,7 +8,7 @@ import java.util.List;
 import dev.voleum.ordermolder.models.Group;
 
 @Dao
-public interface GroupDao extends AbstractDao<Group> {
+public interface GroupDao extends BaseDao<Group> {
 
     @Query("SELECT * FROM `group`")
     List<Group> getAll();

@@ -110,11 +110,11 @@ public class OrderActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    if (orderViewModel.getTableGoods().isEmpty()) {
+                    if (orderViewModel.getTable().isEmpty()) {
                         Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
                         break;
                     }
-                    orderViewModel.saveOrder(orderViewModel.getOrder())
+                    orderViewModel.saveOrder(orderViewModel.getDocument())
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new CompletableObserver() {
@@ -126,7 +126,7 @@ public class OrderActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete() {
                                     Intent intent = new Intent();
-                                    intent.putExtra(DocListActivity.DOC, orderViewModel.getOrder());
+                                    intent.putExtra(DocListActivity.DOC, orderViewModel.getDocument());
                                     intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                                     int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                                     setResult(result, intent);
@@ -142,7 +142,7 @@ public class OrderActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_NEGATIVE:
                     if (savedWithoutClosing) {
                         Intent intent = new Intent();
-                        intent.putExtra(DocListActivity.DOC, orderViewModel.getOrder());
+                        intent.putExtra(DocListActivity.DOC, orderViewModel.getDocument());
                         intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                         setResult(isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED, intent);
                     }
@@ -173,11 +173,11 @@ public class OrderActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
-                if (orderViewModel.getTableGoods().isEmpty()) {
+                if (orderViewModel.getTable().isEmpty()) {
                     Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
-                orderViewModel.saveOrder(orderViewModel.getOrder())
+                orderViewModel.saveOrder(orderViewModel.getDocument())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new CompletableObserver() {

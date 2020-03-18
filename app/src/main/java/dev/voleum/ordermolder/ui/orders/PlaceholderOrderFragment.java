@@ -138,7 +138,7 @@ public class PlaceholderOrderFragment extends Fragment {
         if (item.getItemId() == R.id.delete_item) {
             OrderActivity orderActivity = (OrderActivity) getActivity();
             if (orderActivity != null) {
-                orderViewModel.removeGood();
+                orderViewModel.removeRow();
                 return true;
             }
         }

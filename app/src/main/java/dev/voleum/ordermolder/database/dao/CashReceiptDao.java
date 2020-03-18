@@ -8,7 +8,7 @@ import java.util.List;
 import dev.voleum.ordermolder.models.CashReceipt;
 
 @Dao
-public interface CashReceiptDao extends AbstractDao<CashReceipt> {
+public interface CashReceiptDao extends BaseDao<CashReceipt> {
 
     @Query("SELECT * FROM cashreceipt")
     List<CashReceipt> getAll();

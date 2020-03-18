@@ -8,7 +8,7 @@ import java.util.List;
 import dev.voleum.ordermolder.models.Warehouse;
 
 @Dao
-public interface WarehouseDao extends AbstractDao<Warehouse> {
+public interface WarehouseDao extends BaseDao<Warehouse> {
 
     @Query("SELECT * FROM warehouse")
     List<Warehouse> getAll();
