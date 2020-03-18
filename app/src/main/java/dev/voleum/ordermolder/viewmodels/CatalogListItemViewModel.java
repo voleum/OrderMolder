@@ -3,7 +3,7 @@ package dev.voleum.ordermolder.viewmodels;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.models.Catalog;
 
 public class CatalogListItemViewModel extends BaseObservable {
 

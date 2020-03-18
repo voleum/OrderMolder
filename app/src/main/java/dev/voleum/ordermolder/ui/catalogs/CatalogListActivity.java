@@ -15,7 +15,7 @@ import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.CatalogListRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityCatListBinding;
 import dev.voleum.ordermolder.enums.CatalogTypes;
-import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.models.Catalog;
 import dev.voleum.ordermolder.viewmodels.CatalogListViewModel;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -61,7 +61,7 @@ public class CatalogListActivity extends AppCompatActivity {
                         recyclerCatalogs.setLayoutManager(new LinearLayoutManager(context));
 
                         CatalogListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
-                            Catalog clickedCatalog = binding.getViewModel().getCatalogs().get(position);
+                            Catalog clickedCatalog = (Catalog) binding.getViewModel().getCatalogs().get(position);
                             Intent intentOut = new Intent(CatalogListActivity.this, CatalogActivity.class)
                                     .putExtra(CatalogActivity.CAT_TYPE, catalogType)
                                     .putExtra(CatalogActivity.CAT, clickedCatalog);

@@ -1,15 +1,24 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DecimalFormat;
+
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
+import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.helpers.DecimalHelper;
 
 public abstract class Obj implements Serializable {
 
+    @Ignore
     protected DecimalFormat moneyDecimalFormat;
+
+    @PrimaryKey
+    @NotNull
     protected String uid;
 
     protected Obj() {
@@ -21,6 +30,7 @@ public abstract class Obj implements Serializable {
         moneyDecimalFormat = DecimalHelper.newMoneyFieldFormat();
     }
 
+    @NotNull
     public String getUid() {
         return uid;
     }
@@ -29,5 +39,5 @@ public abstract class Obj implements Serializable {
         this.uid = uid;
     }
 
-    public abstract boolean save(SQLiteDatabase db);
+    public abstract boolean save(DbRoom db);
 }

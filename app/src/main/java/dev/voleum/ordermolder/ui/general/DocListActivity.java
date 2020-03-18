@@ -1,5 +1,6 @@
 package dev.voleum.ordermolder.ui.general;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -21,10 +22,15 @@ import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.DocListRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityDocListBinding;
 import dev.voleum.ordermolder.enums.DocumentTypes;
-import dev.voleum.ordermolder.objects.Document;
+import dev.voleum.ordermolder.models.Document;
 import dev.voleum.ordermolder.ui.cashreceipts.CashReceiptActivity;
 import dev.voleum.ordermolder.ui.orders.OrderActivity;
 import dev.voleum.ordermolder.viewmodels.DocListViewModel;
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class DocListActivity extends AppCompatActivity {
 
@@ -41,8 +47,8 @@ public class DocListActivity extends AppCompatActivity {
     private DocListViewModel docListViewModel;
 
     private RecyclerView recyclerDocs;
-    private int recyclerPosition;
     private DocumentTypes docType;
+    private Context context = this;
 
     FloatingActionButton fab;
 
@@ -52,44 +58,61 @@ public class DocListActivity extends AppCompatActivity {
 
         docType = (DocumentTypes) getIntent().getSerializableExtra(DOC_TYPE);
 
-        docListViewModel = new DocListViewModel(docType);
-
         ActivityDocListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_doc_list);
-        binding.setViewModel(docListViewModel);
-        binding.executePendingBindings();
 
-        recyclerDocs = binding.getRoot().findViewById(R.id.recycler_docs);
-        recyclerDocs.setHasFixedSize(true);
-        recyclerDocs.setLayoutManager(new LinearLayoutManager(this));
+        initData()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-        DocListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
-            Document clickedDoc = binding.getViewModel().getDocs().get(position);
-            Intent intentOut;
-            switch (docType) {
-                case ORDER:
-                    intentOut = new Intent(DocListActivity.this, OrderActivity.class);
-                    break;
-                case CASH_RECEIPT:
-                    intentOut = new Intent(DocListActivity.this, CashReceiptActivity.class);
-                    break;
-                default:
-                    intentOut = null;
-            }
-            intentOut.putExtra(IS_CREATING, false);
-            intentOut.putExtra(DOC, clickedDoc.getUid());
-            intentOut.putExtra(POSITION, position);
-            startActivityForResult(intentOut, REQUEST_CODE);
-        };
+                    }
 
-        DocListRecyclerViewAdapter.OnEntryLongClickListener onEntryLongClickListener = (v, position) -> {
-            recyclerPosition = position;
-            v.showContextMenu();
-        };
+                    @Override
+                    public void onComplete() {
 
-        binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
-        binding.getViewModel().getAdapter().setOnEntryLongClickListener(onEntryLongClickListener);
+                        binding.setViewModel(docListViewModel);
+                        binding.executePendingBindings();
 
-        registerForContextMenu(recyclerDocs);
+                        recyclerDocs = binding.getRoot().findViewById(R.id.recycler_docs);
+                        recyclerDocs.setHasFixedSize(true);
+                        recyclerDocs.setLayoutManager(new LinearLayoutManager(context));
+
+                        DocListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
+                            Document clickedDoc = (Document) binding.getViewModel().getDocs().get(position);
+                            Intent intentOut;
+                            switch (docType) {
+                                case ORDER:
+                                    intentOut = new Intent(DocListActivity.this, OrderActivity.class);
+                                    break;
+                                case CASH_RECEIPT:
+                                    intentOut = new Intent(DocListActivity.this, CashReceiptActivity.class);
+                                    break;
+                                default:
+                                    intentOut = null;
+                            }
+                            intentOut.putExtra(IS_CREATING, false);
+                            intentOut.putExtra(DOC, clickedDoc.getUid());
+                            intentOut.putExtra(POSITION, position);
+                            startActivityForResult(intentOut, REQUEST_CODE);
+                        };
+
+                        registerForContextMenu(recyclerDocs);
+
+                        Toolbar toolbar = findViewById(R.id.toolbar);
+                        setSupportActionBar(toolbar);
+                        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+                        // FIXME: sometimes produced NullPointerException since adapter is not initialized yet
+                        binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
 
         View.OnClickListener fabClickListener = v -> {
             Intent intentOut;
@@ -107,10 +130,6 @@ public class DocListActivity extends AppCompatActivity {
             intentOut.putExtra(POSITION, docListViewModel.getDocs().size());
             startActivityForResult(intentOut, REQUEST_CODE);
         };
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fab = findViewById(R.id.doc_list_fab);
         fab.setOnClickListener(fabClickListener);
@@ -145,7 +164,7 @@ public class DocListActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete_item) {
-            docListViewModel.removeDoc(recyclerPosition);
+            docListViewModel.removeDoc();
             return true;
         }
         return false;
@@ -168,5 +187,12 @@ public class DocListActivity extends AppCompatActivity {
             default:
                 setTitle(R.string.title_activity_unknown_doc);
         }
+    }
+
+    private Completable initData() {
+        return Completable.create(subscriber -> {
+            docListViewModel = new DocListViewModel(docType);
+            subscriber.onComplete();
+        });
     }
 }

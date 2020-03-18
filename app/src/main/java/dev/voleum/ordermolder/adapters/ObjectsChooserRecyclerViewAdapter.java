@@ -8,20 +8,20 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
 import java.util.List;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.ChooserObjectHolderBinding;
+import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.viewmodels.ObjectsChooserItemViewModel;
 
 public class ObjectsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private List<HashMap<String, Object>> objects;
+    private List<Order> orders;
     private OnEntryClickListener onEntryClickListener;
 
-    public ObjectsChooserRecyclerViewAdapter(List<HashMap<String, Object>> objects) {
-        this.objects = objects;
+    public ObjectsChooserRecyclerViewAdapter(List<Order> orders) {
+        this.orders = orders;
     }
 
     @NonNull
@@ -36,21 +36,21 @@ public class ObjectsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        HashMap<String, Object> row = objects.get(position);
+        Order row = orders.get(position);
         ((ObjectViewHolder) holder).binding.setRow(new ObjectsChooserItemViewModel(row));
     }
 
     @Override
     public int getItemCount() {
-        return objects.size();
+        return orders.size();
     }
 
     public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
         this.onEntryClickListener = onEntryClickListener;
     }
 
-    public void setData(List<HashMap<String, Object>> objects) {
-        this.objects = objects;
+    public void setData(List<Order> orders) {
+        this.orders = orders;
         notifyDataSetChanged();
     }
 
@@ -65,12 +65,12 @@ public class ObjectsChooserRecyclerViewAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             if (onEntryClickListener != null) {
-                onEntryClickListener.onEntryClick(v, getLayoutPosition());
+                onEntryClickListener.onEntryClick(v, orders.get(getLayoutPosition()));
             }
         }
     }
 
     public interface OnEntryClickListener {
-        void onEntryClick(View v, int position);
+        void onEntryClick(View v, Order row);
     }
 }

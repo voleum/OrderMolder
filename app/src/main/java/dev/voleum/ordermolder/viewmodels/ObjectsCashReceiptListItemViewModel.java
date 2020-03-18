@@ -8,7 +8,7 @@ import androidx.databinding.Bindable;
 
 import java.util.Locale;
 
-import dev.voleum.ordermolder.objects.TableObjects;
+import dev.voleum.ordermolder.models.TableObjects;
 
 public class ObjectsCashReceiptListItemViewModel extends BaseObservable {
 

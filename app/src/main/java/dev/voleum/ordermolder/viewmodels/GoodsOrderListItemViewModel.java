@@ -10,7 +10,7 @@ import androidx.databinding.Bindable;
 import java.util.Locale;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.objects.TableGoods;
+import dev.voleum.ordermolder.models.TableGoods;
 
 public class GoodsOrderListItemViewModel extends BaseObservable implements View.OnClickListener {
 

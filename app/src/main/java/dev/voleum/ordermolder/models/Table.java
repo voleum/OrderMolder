@@ -1,8 +1,10 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
+
+import androidx.room.PrimaryKey;
 
 public abstract class Table extends Obj {
 
-    protected int position;
+    @PrimaryKey protected int position;
 
     public Table(String uid, int position) {
         super(uid);
