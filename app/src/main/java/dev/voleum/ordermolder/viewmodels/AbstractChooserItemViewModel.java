@@ -6,7 +6,7 @@ import androidx.databinding.BaseObservable;
 
 import dev.voleum.ordermolder.helpers.DecimalHelper;
 
-abstract public class AbstractChooserItemViewModel extends BaseObservable {
+public abstract class AbstractChooserItemViewModel extends BaseObservable {
 
     protected DecimalFormat df;
 

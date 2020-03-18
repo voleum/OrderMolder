@@ -83,7 +83,7 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
     public void setOrder(String uid) {
         if (document != null) return;
         document = new Order();
-        getOrderByUid(uid)
+        getDocByUid(uid)
                 .andThen(initSpinnersData())
                 .subscribeOn(Schedulers.newThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -103,7 +103,7 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
         countSum();
     }
 
-    public Completable getOrderByUid(String uid) {
+    public Completable getDocByUid(String uid) {
         return Completable.create(subscriber -> {
             DbRoom db = OrderMolder.getApplication().getDatabase();
             document = db.getOrderDao().getByUid(uid);
@@ -118,7 +118,7 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
         });
     }
 
-    public Completable saveOrder(Order document) {
+    public Completable saveDoc(Order document) {
         return Completable.create(subscriber -> {
             checkUid();
             DbRoom db = OrderMolder.getApplication().getDatabase();

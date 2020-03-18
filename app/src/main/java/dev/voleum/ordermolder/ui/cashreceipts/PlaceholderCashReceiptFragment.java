@@ -120,7 +120,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                         Order order = (Order) data.getSerializableExtra(ObjectsChooserActivity.ORDER);
-                        if (order != null) cashReceiptViewModel.addObject(order);
+                        if (order != null) cashReceiptViewModel.addRow(order);
                 }
             }
         }

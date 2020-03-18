@@ -114,7 +114,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                         Snackbar.make(fab, R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT).show();
                         break;
                     }
-                    cashReceiptViewModel.saveCashReceipt(cashReceiptViewModel.getDocument())
+                    cashReceiptViewModel.saveDoc(cashReceiptViewModel.getDocument())
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new CompletableObserver() {
@@ -177,7 +177,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                     Snackbar.make(fab, R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
-                cashReceiptViewModel.saveCashReceipt(cashReceiptViewModel.getDocument())
+                cashReceiptViewModel.saveDoc(cashReceiptViewModel.getDocument())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new CompletableObserver() {
