@@ -120,11 +120,7 @@ public class OrderActivity extends AppCompatActivity {
                             .subscribe(new CompletableObserver() {
                                 @Override
                                 public void onSubscribe(Disposable d) {
-                                    progressLayout.setAlpha(0.0f);
-                                    progressLayout.setVisibility(View.VISIBLE);
-                                    progressLayout.animate().alpha(1.0f);
-                                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    showProgressLayout();
                                 }
 
                                 @Override
@@ -187,11 +183,7 @@ public class OrderActivity extends AppCompatActivity {
                         .subscribe(new CompletableObserver() {
                             @Override
                             public void onSubscribe(Disposable d) {
-                                progressLayout.setAlpha(0.0f);
-                                progressLayout.setVisibility(View.VISIBLE);
-                                progressLayout.animate().alpha(1.0f);
-                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                showProgressLayout();
                             }
 
                             @Override
@@ -216,5 +208,13 @@ public class OrderActivity extends AppCompatActivity {
 
     public OrderViewModel getOrderViewModel() {
         return orderViewModel;
+    }
+
+    private void showProgressLayout() {
+        progressLayout.setAlpha(0.0f);
+        progressLayout.setVisibility(View.VISIBLE);
+        progressLayout.animate().alpha(1.0f);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

@@ -19,10 +19,6 @@ public class CatalogViewModel<T extends Catalog> extends ViewModelObservable imp
     private String fullName;
     private String code;
 
-    public CatalogViewModel() {
-
-    }
-
     @Bindable
     public T getCatalog() {
         return catalog;

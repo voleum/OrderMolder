@@ -47,6 +47,8 @@ public class DocListActivity extends AppCompatActivity {
     private DocListViewModel docListViewModel;
 
     private RecyclerView recyclerDocs;
+    private ActivityDocListBinding binding;
+
     private DocumentTypes docType;
     private Context context = this;
 
@@ -58,7 +60,7 @@ public class DocListActivity extends AppCompatActivity {
 
         docType = (DocumentTypes) getIntent().getSerializableExtra(DOC_TYPE);
 
-        ActivityDocListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_doc_list);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_doc_list);
 
         initData()
                 .subscribeOn(Schedulers.newThread())
@@ -104,7 +106,6 @@ public class DocListActivity extends AppCompatActivity {
                         setSupportActionBar(toolbar);
                         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-                        // FIXME: sometimes produced NullPointerException since adapter is not initialized yet
                         binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
                     }
 

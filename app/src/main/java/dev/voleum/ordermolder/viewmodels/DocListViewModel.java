@@ -27,10 +27,7 @@ public class DocListViewModel<T extends Document> extends BaseObservable {
 
     public DocListViewModel(DocumentTypes docType) {
         this.docType = docType;
-        initDocList()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        initDocList();
     }
 
     @Bindable
@@ -72,26 +69,24 @@ public class DocListViewModel<T extends Document> extends BaseObservable {
                 .subscribe();
     }
 
-    private Completable initDocList() {
-        return Completable.create(subscriber -> {
+    private void initDocList() {
 
-            DbRoom db = OrderMolder.getApplication().getDatabase();
+        DbRoom db = OrderMolder.getApplication().getDatabase();
 
-            switch (docType) {
-                case ORDER:
-                    docs = (List<T>) db.getOrderDao().getAll();
-                    break;
-                case CASH_RECEIPT:
-                    docs = (List<T>) db.getCashReceiptDao().getAll();
-                    break;
-            }
+        switch (docType) {
+            case ORDER:
+                docs = (List<T>) db.getOrderDao().getAll();
+                break;
+            case CASH_RECEIPT:
+                docs = (List<T>) db.getCashReceiptDao().getAll();
+                break;
+        }
 
-            adapter = new DocListRecyclerViewAdapter(docs);
+        adapter = new DocListRecyclerViewAdapter(docs);
 
-            adapter.setOnEntryLongClickListener((v, position) -> {
-                recyclerPosition = position;
-                v.showContextMenu();
-            });
+        adapter.setOnEntryLongClickListener((v, position) -> {
+            recyclerPosition = position;
+            v.showContextMenu();
         });
     }
 
