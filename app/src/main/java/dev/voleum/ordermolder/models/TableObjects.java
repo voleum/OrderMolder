@@ -10,7 +10,6 @@ public class TableObjects extends Table {
 
     private String objectUid;
     private String objectName;
-    private double sum;
 
     @Ignore
     public TableObjects(String uid, int position, String objectUid, double sum) {
@@ -39,13 +38,5 @@ public class TableObjects extends Table {
 
     public String getObjectName() {
         return objectName;
-    }
-
-    public double getSum() {
-        return sum;
-    }
-
-    public void setSum(double sum) {
-        this.sum = sum;
     }
 }

@@ -3,8 +3,12 @@ package dev.voleum.ordermolder.models;
 import android.icu.util.Calendar;
 
 import androidx.annotation.NonNull;
+import androidx.room.Ignore;
 
-public abstract class Document extends Obj {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Document<T extends Table> extends Obj {
 
     protected String date;
     protected String time;
@@ -12,8 +16,15 @@ public abstract class Document extends Obj {
     protected String partnerUid;
     protected double sum;
 
-    protected Document() {
+    @Ignore
+    protected List<T> table;
 
+    protected Document() {
+        setCurrentDate();
+        setCurrentTime();
+        table = new ArrayList<>();
+        uid = companyUid = partnerUid = "";
+        sum = 0;
     }
 
     protected Document(String uid, String dateTime, String companyUid, String partnerUid, double sum) {
@@ -23,6 +34,7 @@ public abstract class Document extends Obj {
         this.companyUid = companyUid;
         this.partnerUid = partnerUid;
         this.sum = sum;
+        this.table = new ArrayList<>();
     }
 
     protected Document(String uid, String date, String time, String companyUid, String partnerUid, double sum) {
@@ -32,6 +44,7 @@ public abstract class Document extends Obj {
         this.companyUid = companyUid;
         this.partnerUid = partnerUid;
         this.sum = sum;
+        this.table = new ArrayList<>();
     }
 
     @NonNull
@@ -101,5 +114,13 @@ public abstract class Document extends Obj {
         time = (hh < 10 ? "0" + hh : String.valueOf(hh))
                 + ":" + (mm < 10 ? "0" + mm : String.valueOf(mm))
                 + ":" + (ss < 10 ? "0" + ss : String.valueOf(ss));
+    }
+
+    public List<T> getTable() {
+        return table;
+    }
+
+    public void addRow(T row) {
+        table.add(row);
     }
 }

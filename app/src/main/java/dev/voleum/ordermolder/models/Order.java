@@ -9,46 +9,38 @@ import java.util.List;
 import dev.voleum.ordermolder.database.DbRoom;
 
 @Entity
-public class Order extends Document {
+public class Order extends Document<TableGoods> {
 
     private String warehouseUid;
-    @Ignore
-    private List<TableGoods> tableGoods;
 
     @Ignore
     public Order() {
-        setCurrentDate();
-        setCurrentTime();
-        tableGoods = new ArrayList<>();
-        uid = companyUid = partnerUid = warehouseUid = "";
-        sum = 0;
+        super();
     }
 
     @Ignore
     public Order(String uid, String dateTime, String companyUid, String partnerUid, String warehouseUid, double sum) {
         super(uid, dateTime, companyUid, partnerUid, sum);
         this.warehouseUid = warehouseUid;
-        this.tableGoods = new ArrayList<>();
     }
 
     @Ignore
     public Order(String uid, String dateTime, String companyUid, String partnerUid, String warehouseUid, double sum, List<TableGoods> tableGoods) {
         super(uid, dateTime, companyUid, partnerUid, sum);
         this.warehouseUid = warehouseUid;
-        this.tableGoods = tableGoods;
+        this.table = tableGoods;
     }
 
     public Order(String uid, String date, String time, String companyUid, String partnerUid, String warehouseUid, double sum) {
         super(uid, date, time, companyUid, partnerUid, sum);
         this.warehouseUid = warehouseUid;
-        this.tableGoods = new ArrayList<>();
     }
 
     @Ignore
     public Order(String uid, String date, String time, String companyUid, String partnerUid, String warehouseUid, double sum, List<TableGoods> tableGoods) {
         super(uid, date, time, companyUid, partnerUid, sum);
         this.warehouseUid = warehouseUid;
-        this.tableGoods = tableGoods;
+        this.table = tableGoods;
     }
 
     @Override
@@ -63,13 +55,5 @@ public class Order extends Document {
 
     public void setWarehouseUid(String warehouseUid) {
         this.warehouseUid = warehouseUid;
-    }
-
-    public List<TableGoods> getTableGoods() {
-        return tableGoods;
-    }
-
-    public void addGood(TableGoods row) {
-        tableGoods.add(row);
     }
 }
