@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.UUID;
 
 import dev.voleum.ordermolder.BR;
 import dev.voleum.ordermolder.OrderMolder;
@@ -27,7 +26,7 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class OrderViewModel extends AbstractDocumentViewModel<Order, TableGoods, GoodsOrderRecyclerViewAdapter> implements Spinner.OnItemSelectedListener {
+public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, GoodsOrderRecyclerViewAdapter> implements Spinner.OnItemSelectedListener {
 
     private List<Warehouse> warehouses;
     private int selectedItemWarehouse;
@@ -121,13 +120,7 @@ public class OrderViewModel extends AbstractDocumentViewModel<Order, TableGoods,
 
     public Completable saveOrder(Order document) {
         return Completable.create(subscriber -> {
-            if (document.getUid().isEmpty()) {
-                String uid = UUID.randomUUID().toString();
-                document.setUid(uid);
-                for (int i = 0; i < table.size(); i++) {
-                    table.get(i).setUid(uid);
-                }
-            }
+            checkUid();
             DbRoom db = OrderMolder.getApplication().getDatabase();
             db.getOrderDao().insertAll(document);
             db.getTableGoodsDao().deleteByUid(document.getUid());

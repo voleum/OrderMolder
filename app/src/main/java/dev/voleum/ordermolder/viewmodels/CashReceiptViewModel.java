@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import dev.voleum.ordermolder.BR;
 import dev.voleum.ordermolder.OrderMolder;
@@ -24,7 +23,7 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class CashReceiptViewModel extends AbstractDocumentViewModel<CashReceipt, TableObjects, ObjectsCashReceiptRecyclerViewAdapter> implements Spinner.OnItemSelectedListener {
+public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, TableObjects, ObjectsCashReceiptRecyclerViewAdapter> implements Spinner.OnItemSelectedListener {
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -96,13 +95,7 @@ public class CashReceiptViewModel extends AbstractDocumentViewModel<CashReceipt,
 
     public Completable saveCashReceipt(CashReceipt document) {
         return Completable.create(subscriber -> {
-            if (document.getUid().isEmpty()) {
-                String uid = UUID.randomUUID().toString();
-                document.setUid(uid);
-                for (int i = 0; i < table.size(); i++) {
-                    table.get(i).setUid(uid);
-                }
-            }
+            checkUid();
             DbRoom db = OrderMolder.getApplication().getDatabase();
             db.getCashReceiptDao().insertAll(document);
             db.getTableObjectsDao().deleteByUid(document.getUid());
