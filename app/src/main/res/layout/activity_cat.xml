@@ -5,9 +5,9 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="dev.voleum.ordermolder.objects.EconomicEntity" />
-        <import type="dev.voleum.ordermolder.objects.Good" />
-        <import type="dev.voleum.ordermolder.objects.Unit" />
+        <import type="dev.voleum.ordermolder.models.EconomicEntity" />
+        <import type="dev.voleum.ordermolder.models.Good" />
+        <import type="dev.voleum.ordermolder.models.Unit" />
         <variable
             name="viewModel"
             type="dev.voleum.ordermolder.viewmodels.CatalogViewModel" />

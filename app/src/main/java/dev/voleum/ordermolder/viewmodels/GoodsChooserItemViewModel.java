@@ -5,32 +5,27 @@ import android.icu.text.DecimalFormat;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import java.util.HashMap;
-
 import dev.voleum.ordermolder.helpers.DecimalHelper;
-import dev.voleum.ordermolder.objects.Good;
-import dev.voleum.ordermolder.ui.orders.GoodsChooserActivity;
+import dev.voleum.ordermolder.models.Price;
 
 public class GoodsChooserItemViewModel extends BaseObservable {
 
     private DecimalFormat df;
 
-    private HashMap<String, Object> values;
-    private Good good;
+    private Price price;
 
-    public GoodsChooserItemViewModel(HashMap<String, Object> values) {
-        this.values = values;
-        this.good = (Good) values.get(GoodsChooserActivity.GOOD);
+    public GoodsChooserItemViewModel(Price price) {
+        this.price = price;
         df = DecimalHelper.newMoneyFieldFormat();
     }
 
     @Bindable
     public String getName() {
-        return good.getName();
+        return price.getGoodName();
     }
 
     @Bindable
     public String getPrice() {
-        return String.valueOf(df.format(values.get(GoodsChooserActivity.PRICE)));
+        return String.valueOf(df.format(price.getPrice()));
     }
 }

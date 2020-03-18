@@ -12,7 +12,7 @@ import java.util.List;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.OrderGoodHolderBinding;
-import dev.voleum.ordermolder.objects.TableGoods;
+import dev.voleum.ordermolder.models.TableGoods;
 import dev.voleum.ordermolder.viewmodels.GoodsOrderListItemViewModel;
 import dev.voleum.ordermolder.viewmodels.OrderViewModel;
 

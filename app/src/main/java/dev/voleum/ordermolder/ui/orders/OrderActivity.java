@@ -42,8 +42,6 @@ public class OrderActivity extends AppCompatActivity {
     protected FloatingActionButton fab;
     protected SectionsPagerAdapter sectionsPagerAdapter;
 
-    private int recyclerPosition;
-
     private boolean isCreating;
     private boolean savedWithoutClosing;
 
@@ -77,8 +75,6 @@ public class OrderActivity extends AppCompatActivity {
         isCreating = (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true));
         savedWithoutClosing = false;
 
-//        if (isCreating) orderViewModel = new OrderViewModel();
-//        else orderViewModel = new OrderViewModel(getIntent().getStringExtra(DocListActivity.DOC));
         orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
         if (isCreating) orderViewModel.setOrder();
         else orderViewModel.setOrder(getIntent().getStringExtra(DocListActivity.DOC));
@@ -118,7 +114,7 @@ public class OrderActivity extends AppCompatActivity {
                         Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
                         break;
                     }
-                    orderViewModel.saveOrder()
+                    orderViewModel.saveOrder(orderViewModel.getOrder())
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new CompletableObserver() {
@@ -185,7 +181,7 @@ public class OrderActivity extends AppCompatActivity {
                     Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
-                orderViewModel.saveOrder()
+                orderViewModel.saveOrder(orderViewModel.getOrder())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new CompletableObserver() {
@@ -216,14 +212,6 @@ public class OrderActivity extends AppCompatActivity {
                 break;
         }
         return true;
-    }
-
-    public int getRecyclerPosition() {
-        return recyclerPosition;
-    }
-
-    public void setRecyclerPosition(int recyclerPosition) {
-        this.recyclerPosition = recyclerPosition;
     }
 
     public OrderViewModel getOrderViewModel() {

@@ -12,16 +12,16 @@ import java.util.List;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.DocHolderBinding;
-import dev.voleum.ordermolder.objects.Document;
+import dev.voleum.ordermolder.models.Document;
 import dev.voleum.ordermolder.viewmodels.DocListItemViewModel;
 
-public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
+public class DocListRecyclerViewAdapter<T extends Document> extends RecyclerView.Adapter {
 
-    private List<Document> docs;
+    private List<T> docs;
     private OnEntryClickListener onEntryClickListener;
     private OnEntryLongClickListener onEntryLongClickListener;
 
-    public DocListRecyclerViewAdapter(List<Document> docs) {
+    public DocListRecyclerViewAdapter(List<T> docs) {
         this.docs = docs;
     }
 
@@ -54,7 +54,7 @@ public class DocListRecyclerViewAdapter extends RecyclerView.Adapter {
         this.onEntryLongClickListener = onEntryLongClickListener;
     }
 
-    public void setData(List<Document> docs) {
+    public void setData(List<T> docs) {
         this.docs = docs;
         notifyDataSetChanged();
     }

@@ -3,7 +3,7 @@ package dev.voleum.ordermolder.viewmodels;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import dev.voleum.ordermolder.objects.Document;
+import dev.voleum.ordermolder.models.Document;
 
 public class DocListItemViewModel extends BaseObservable {
 

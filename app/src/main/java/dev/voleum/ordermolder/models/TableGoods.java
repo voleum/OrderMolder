@@ -1,11 +1,12 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import androidx.room.Entity;
+import androidx.room.Ignore;
 
-import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.helpers.DecimalHelper;
 
+@Entity
 public class TableGoods extends Table {
 
     private String goodUid;
@@ -14,6 +15,7 @@ public class TableGoods extends Table {
     private double price;
     private double sum;
 
+    @Ignore
     public TableGoods(String uid, int position, String goodUid, double quantity, double price, double sum) {
         super(uid, position);
         this.goodUid = goodUid;
@@ -33,15 +35,8 @@ public class TableGoods extends Table {
     }
 
     @Override
-    public boolean save(SQLiteDatabase db) {
-        ContentValues cv = new ContentValues();
-        cv.put(DbHelper.COLUMN_ORDER_UID, uid);
-        cv.put(DbHelper.COLUMN_POSITION, position);
-        cv.put(DbHelper.COLUMN_GOOD_UID, goodUid);
-        cv.put(DbHelper.COLUMN_QUANTITY, quantity);
-        cv.put(DbHelper.COLUMN_PRICE, price);
-        cv.put(DbHelper.COLUMN_SUM, sum);
-        db.insertWithOnConflict(DbHelper.TABLE_GOODS_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+    public boolean save(DbRoom db) {
+        db.getTableGoodsDao().insertAll(this);
         return true;
     }
 

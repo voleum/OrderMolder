@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityGoodsChooserBinding;
-import dev.voleum.ordermolder.objects.Good;
 import dev.voleum.ordermolder.viewmodels.GoodsChooserViewModel;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -24,21 +23,14 @@ import io.reactivex.schedulers.Schedulers;
 
 public class GoodsChooserActivity extends AppCompatActivity {
 
-    public static final String GOOD = "good";
-    public static final String QUANTITY = "quantity";
     public static final String PRICE = "price";
-    public static final String SUM = "sum";
 
     private ActivityGoodsChooserBinding binding;
     private GoodsChooserViewModel goodsChooserViewModel;
 
     GoodsChooserRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = ((v, row) -> {
-        double price = (double) row.get(PRICE);
         setResult(RESULT_OK, new Intent()
-                .putExtra(GOOD, (Good) row.get(GOOD))
-                .putExtra(QUANTITY, 1.0)
-                .putExtra(PRICE, price)
-                .putExtra(SUM, price));
+                .putExtra(PRICE, row));
         finish();
     });
 

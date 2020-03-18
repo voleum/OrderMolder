@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"
-            android:data="@{viewModel.objects}"
+            app:ordersData="@{viewModel.orders}"
             app:adapter="@{viewModel.adapter}" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

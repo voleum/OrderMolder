@@ -14,16 +14,16 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
-import dev.voleum.ordermolder.MainActivity;
+import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.enums.DocumentTypes;
-import dev.voleum.ordermolder.objects.CashReceipt;
-import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.models.CashReceipt;
+import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 
 public class FragmentDocuments extends androidx.fragment.app.ListFragment {
 
-    private final String[] documents = MainActivity.getRess().getStringArray(R.array.documents);
+    private final String[] documents = OrderMolder.getApplication().getResources().getStringArray(R.array.documents);
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

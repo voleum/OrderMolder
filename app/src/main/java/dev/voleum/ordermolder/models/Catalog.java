@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
 
 import androidx.annotation.NonNull;
 

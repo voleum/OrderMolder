@@ -12,15 +12,15 @@ import java.util.List;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.CatalogHolderBinding;
-import dev.voleum.ordermolder.objects.Catalog;
+import dev.voleum.ordermolder.models.Catalog;
 import dev.voleum.ordermolder.viewmodels.CatalogListItemViewModel;
 
-public class CatalogListRecyclerViewAdapter extends RecyclerView.Adapter {
+public class CatalogListRecyclerViewAdapter<T extends Catalog> extends RecyclerView.Adapter {
 
-    private List<Catalog> catalogs;
+    private List<T> catalogs;
     private OnEntryClickListener onEntryClickListener;
 
-    public CatalogListRecyclerViewAdapter(List<Catalog> catalogs) {
+    public CatalogListRecyclerViewAdapter(List<T> catalogs) {
         this.catalogs = catalogs;
     }
 
@@ -49,7 +49,7 @@ public class CatalogListRecyclerViewAdapter extends RecyclerView.Adapter {
         this.onEntryClickListener = onEntryClickListener;
     }
 
-    public void setData(List<Catalog> catalogs) {
+    public void setData(List<T> catalogs) {
         this.catalogs = catalogs;
         notifyDataSetChanged();
     }

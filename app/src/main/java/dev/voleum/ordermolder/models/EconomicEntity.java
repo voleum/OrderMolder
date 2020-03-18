@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
 
 public abstract class EconomicEntity extends Catalog {
 

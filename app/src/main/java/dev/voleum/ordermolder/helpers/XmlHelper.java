@@ -1,7 +1,5 @@
 package dev.voleum.ordermolder.helpers;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -13,22 +11,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
 
 import dev.voleum.ordermolder.MainActivity;
-import dev.voleum.ordermolder.database.DbHelper;
-import dev.voleum.ordermolder.database.DbPreparerData;
-import dev.voleum.ordermolder.objects.CashReceipt;
-import dev.voleum.ordermolder.objects.Company;
-import dev.voleum.ordermolder.objects.Good;
-import dev.voleum.ordermolder.objects.Group;
-import dev.voleum.ordermolder.objects.Obj;
-import dev.voleum.ordermolder.objects.Order;
-import dev.voleum.ordermolder.objects.Partner;
-import dev.voleum.ordermolder.objects.Price;
-import dev.voleum.ordermolder.objects.TableGoods;
-import dev.voleum.ordermolder.objects.TableObjects;
-import dev.voleum.ordermolder.objects.Unit;
-import dev.voleum.ordermolder.objects.Warehouse;
+import dev.voleum.ordermolder.OrderMolder;
+import dev.voleum.ordermolder.database.DbRoom;
+import dev.voleum.ordermolder.models.CashReceipt;
+import dev.voleum.ordermolder.models.Company;
+import dev.voleum.ordermolder.models.Good;
+import dev.voleum.ordermolder.models.Group;
+import dev.voleum.ordermolder.models.Obj;
+import dev.voleum.ordermolder.models.Order;
+import dev.voleum.ordermolder.models.Partner;
+import dev.voleum.ordermolder.models.Price;
+import dev.voleum.ordermolder.models.Table;
+import dev.voleum.ordermolder.models.TableGoods;
+import dev.voleum.ordermolder.models.TableObjects;
+import dev.voleum.ordermolder.models.Unit;
+import dev.voleum.ordermolder.models.Warehouse;
 
 class XmlHelper {
 
@@ -36,53 +38,53 @@ class XmlHelper {
 
     private final String UNKNOWN = "Unknown";
 
-    private final String TAG_CASH_RECEIPT = "CashReceipt";
-    private final String TAG_CATALOG = "Catalog";
-    private final String TAG_COMPANY = "Company";
-    private final String TAG_DOCUMENT = "Document";
-    private final String TAG_GOOD = "Good";
-    private final String TAG_GOOD_GROUP = "GoodGroup";
-    private final String TAG_ITEM = "Item";
-    private final String TAG_ORDER = "Order";
-    private final String TAG_PARTNER = "Partner";
-    private final String TAG_PRICE_LIST = "PriceList";
-    private final String TAG_REPORT = "Report";
-    private final String TAG_ROW = "Row";
-    private final String TAG_UNIT = "Unit";
-    private final String TAG_WAREHOUSE = "Warehouse";
+    private final String TAG_CASH_RECEIPT     = "CashReceipt";
+    private final String TAG_COMPANY          = "Company";
+    private final String TAG_DOCUMENT         = "Document";
+    private final String TAG_GOOD             = "Good";
+    private final String TAG_GOOD_GROUP       = "GoodGroup";
+    private final String TAG_ITEM             = "Item";
+    private final String TAG_ORDER            = "Order";
+    private final String TAG_PARTNER          = "Partner";
+    private final String TAG_PRICE_LIST       = "PriceList";
+    private final String TAG_ROW              = "Row";
+    private final String TAG_UNIT             = "Unit";
+    private final String TAG_WAREHOUSE        = "Warehouse";
 
-    private final String ATTRIBUTE_CODE = "Code";
-    private final String ATTRIBUTE_COMPANY = "Company";
-    private final String ATTRIBUTE_DATE = "Date";
-    private final String ATTRIBUTE_FULL_NAME = "FullName";
-    private final String ATTRIBUTE_GOOD = "Good";
-    private final String ATTRIBUTE_GROUP = "Group";
-    private final String ATTRIBUTE_NAME = "Name";
-    private final String ATTRIBUTE_ORDER = "Order";
-    private final String ATTRIBUTE_PARTNER = "Partner";
-    private final String ATTRIBUTE_POSITION = "Position";
-    private final String ATTRIBUTE_PRICE = "Price";
-    private final String ATTRIBUTE_QUANTITY = "Quantity";
-    private final String ATTRIBUTE_SUM = "Sum";
+    private final String ATTRIBUTE_CODE       = "Code";
+    private final String ATTRIBUTE_COMPANY    = "Company";
+    private final String ATTRIBUTE_DATE       = "Date";
+    private final String ATTRIBUTE_FULL_NAME  = "FullName";
+    private final String ATTRIBUTE_GOOD       = "Good";
+    private final String ATTRIBUTE_GROUP      = "Group";
+    private final String ATTRIBUTE_NAME       = "Name";
+    private final String ATTRIBUTE_ORDER      = "Order";
+    private final String ATTRIBUTE_PARTNER    = "Partner";
+    private final String ATTRIBUTE_POSITION   = "Position";
+    private final String ATTRIBUTE_PRICE      = "Price";
+    private final String ATTRIBUTE_QUANTITY   = "Quantity";
+    private final String ATTRIBUTE_SUM        = "Sum";
     private final String ATTRIBUTE_SUM_CREDIT = "SumCredit";
-    private final String ATTRIBUTE_TIN = "TIN";
-    private final String ATTRIBUTE_UID = "UID";
-    private final String ATTRIBUTE_UNIT = "Unit";
-    private final String ATTRIBUTE_WAREHOUSE = "Warehouse";
+    private final String ATTRIBUTE_TIN        = "TIN";
+    private final String ATTRIBUTE_UID        = "UID";
+    private final String ATTRIBUTE_UNIT       = "Unit";
+    private final String ATTRIBUTE_WAREHOUSE  = "Warehouse";
 
     boolean parseXml(InputStream input) {
 
-        DbHelper dbHelper = DbHelper.getInstance();
-
-        try (SQLiteDatabase db = dbHelper.getReadableDatabase()) {
+        try {
             XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
             xppf.setNamespaceAware(true);
             XmlPullParser xpp = xppf.newPullParser();
             xpp.setInput(input, ENCODING_UTF8);
 
-            ArrayList<Obj> arrayListObj = new ArrayList<>();
+            List<Obj> objList     = new ArrayList<>();
+            List<Table> tableList = new ArrayList<>();
+
             String currentTypeElem = UNKNOWN;
             String currentUid = "";
+
+            DbRoom db = OrderMolder.getApplication().getDatabase();
 
             while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
                 switch (xpp.getEventType()) {
@@ -97,38 +99,38 @@ class XmlHelper {
                                 case TAG_ITEM:
                                     switch (currentTypeElem) {
                                         case TAG_COMPANY:
-                                            arrayListObj.add(new Company(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                            objList.add(new Company(xpp.getAttributeValue(null, ATTRIBUTE_UID),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_NAME),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_TIN)));
                                             break;
                                         case TAG_PARTNER:
-                                            arrayListObj.add(new Partner(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                            objList.add(new Partner(xpp.getAttributeValue(null, ATTRIBUTE_UID),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_NAME),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_TIN)));
                                             break;
                                         case TAG_GOOD_GROUP:
-                                            arrayListObj.add(new Group(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                            objList.add(new Group(xpp.getAttributeValue(null, ATTRIBUTE_UID),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_NAME)));
                                             break;
                                         case TAG_GOOD:
-                                            arrayListObj.add(new Good(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                            objList.add(new Good(xpp.getAttributeValue(null, ATTRIBUTE_UID),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_GROUP),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_NAME),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_UNIT)));
                                             break;
                                         case TAG_WAREHOUSE:
-                                            arrayListObj.add(new Warehouse(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                            objList.add(new Warehouse(xpp.getAttributeValue(null, ATTRIBUTE_UID),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_NAME)));
                                             break;
                                         case TAG_UNIT:
-                                            arrayListObj.add(new Unit(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                            objList.add(new Unit(xpp.getAttributeValue(null, ATTRIBUTE_UID),
                                                     Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_CODE)),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_NAME),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_FULL_NAME)));
                                             break;
                                         case TAG_ORDER:
                                             currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
-                                            arrayListObj.add(new Order(currentUid,
+                                            objList.add(new Order(currentUid,
                                                     xpp.getAttributeValue(null, ATTRIBUTE_DATE),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
@@ -137,37 +139,33 @@ class XmlHelper {
                                             break;
                                         case TAG_CASH_RECEIPT:
                                             currentUid = xpp.getAttributeValue(null, ATTRIBUTE_UID);
-                                            arrayListObj.add(new CashReceipt(currentUid,
+                                            objList.add(new CashReceipt(currentUid,
                                                     xpp.getAttributeValue(null, ATTRIBUTE_DATE),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_COMPANY),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_PARTNER),
                                                     Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
                                             break;
                                         case TAG_PRICE_LIST:
-                                            arrayListObj.add(new Price(xpp.getAttributeValue(null, ATTRIBUTE_UID),
+                                            objList.add(new Price(xpp.getAttributeValue(null, ATTRIBUTE_UID),
                                                     Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_PRICE))));
                                             break;
-                                        default:
-                                            continue;
-                                    }
-                                    break;
-                                case TAG_ROW:
-                                    switch (currentTypeElem) {
-                                        case TAG_ORDER:
-                                            Order order = (Order) arrayListObj.get(arrayListObj.size() - 1);
-                                            order.addGood(new TableGoods(currentUid,
-                                                    Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_POSITION)),
-                                                    xpp.getAttributeValue(null, ATTRIBUTE_GOOD),
-                                                    Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_QUANTITY)),
-                                                    Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_PRICE)),
-                                                    Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
-                                            break;
-                                        case TAG_CASH_RECEIPT:
-                                            CashReceipt cashReceipt = (CashReceipt) arrayListObj.get(arrayListObj.size() - 1);
-                                            cashReceipt.addObject(new TableObjects(currentUid,
+                                        case TAG_ROW:
+                                            switch (currentTypeElem) {
+                                                case TAG_ORDER:
+                                                    objList.add(new TableGoods(currentUid,
+                                                            Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_POSITION)),
+                                                            xpp.getAttributeValue(null, ATTRIBUTE_GOOD),
+                                                            Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_QUANTITY)),
+                                                            Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_PRICE)),
+                                                            Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM))));
+                                                    break;
+                                                case TAG_CASH_RECEIPT:
+                                                    objList.add(new TableObjects(currentUid,
                                                     Integer.parseInt(xpp.getAttributeValue(null, ATTRIBUTE_POSITION)),
                                                     xpp.getAttributeValue(null, ATTRIBUTE_ORDER),
                                                     Double.parseDouble(xpp.getAttributeValue(null, ATTRIBUTE_SUM_CREDIT))));
+                                                    break;
+                                            }
                                             break;
                                         default:
                                             continue;
@@ -178,11 +176,49 @@ class XmlHelper {
                         break;
 
                     case XmlPullParser.END_TAG:
-                        if (xpp.getDepth() == 2) {
-                            for (int i = 0; i < arrayListObj.size(); i++) {
-                                arrayListObj.get(i).save(db);
+                        int depth = xpp.getDepth();
+
+                        if (depth == 2) {
+                            switch (currentTypeElem) {
+                                case TAG_COMPANY:
+                                    db.getCompanyDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), Company[].class));
+                                    break;
+                                case TAG_PARTNER:
+                                    db.getPartnerDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), Partner[].class));
+                                    break;
+                                case TAG_GOOD_GROUP:
+                                    db.getGroupDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), Group[].class));
+                                    break;
+                                case TAG_GOOD:
+                                    db.getGoodDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), Good[].class));
+                                    break;
+                                case TAG_WAREHOUSE:
+                                    db.getWarehouseDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), Warehouse[].class));
+                                    break;
+                                case TAG_UNIT:
+                                    db.getUnitDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), Unit[].class));
+                                    break;
+                                case TAG_ORDER:
+                                    db.getOrderDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), Order[].class));
+                                    break;
+                                case TAG_CASH_RECEIPT:
+                                    db.getCashReceiptDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), CashReceipt[].class));
+                                    break;
+                                case TAG_PRICE_LIST:
+                                    db.getPriceDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), Price[].class));
+                                    break;
                             }
-                            arrayListObj.clear();
+                            objList.clear();
+                        } else if (depth == 3) {
+                            switch (currentTypeElem) {
+                                case TAG_ORDER:
+                                    db.getTableGoodsDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), TableGoods[].class));
+                                    break;
+                                case TAG_CASH_RECEIPT:
+                                    db.getTableObjectsDao().insertAll(Arrays.copyOf(objList.toArray(), objList.size(), TableObjects[].class));
+                                    break;
+                            }
+                            tableList.clear();
                         }
 
                     case XmlPullParser.TEXT:
@@ -194,10 +230,7 @@ class XmlHelper {
                 xpp.next();
             }
             return true;
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
             return false;
         } finally {
@@ -212,14 +245,15 @@ class XmlHelper {
     void serializeXml(OutputStream output) {
 
         try {
+
             XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
             xppf.setNamespaceAware(true);
             XmlSerializer xs = xppf.newSerializer();
             xs.setOutput(output, ENCODING_UTF8);
 
-            xs.startDocument(ENCODING_UTF8, null);
+            DbRoom db = OrderMolder.getApplication().getDatabase();
 
-            DbPreparerData preparer = new DbPreparerData();
+            xs.startDocument(ENCODING_UTF8, null);
 
             // region <Document>
             xs.startTag(null, TAG_DOCUMENT);
@@ -227,52 +261,41 @@ class XmlHelper {
             // region <Order>
             xs.startTag(null, TAG_ORDER);
 
-            Cursor ordersCursor = preparer.prepareDoc(DbHelper.TABLE_ORDERS);
+            ListIterator<Order> orderListIterator = db.getOrderDao().getAll().listIterator();
 
-            if (ordersCursor.moveToFirst()) {
-                int uidIndex = ordersCursor.getColumnIndex(DbHelper.COLUMN_UID);
-                int dateIndex = ordersCursor.getColumnIndex(DbHelper.COLUMN_DATE);
-                int companyUidIndex = ordersCursor.getColumnIndex(DbHelper.COLUMN_COMPANY_UID);
-                int partnerUidIndex = ordersCursor.getColumnIndex(DbHelper.COLUMN_PARTNER_UID);
-                int warehouseUidIndex = ordersCursor.getColumnIndex(DbHelper.COLUMN_WAREHOUSE_UID);
-                int sumIndex = ordersCursor.getColumnIndex(DbHelper.COLUMN_SUM);
-                do {
+                while (orderListIterator.hasNext()) {
+
+                    Order order = orderListIterator.next();
+
                     // region Header
                     xs.startTag(null, TAG_ITEM);
-                    xs.attribute(null, ATTRIBUTE_UID, ordersCursor.getString(uidIndex));
-                    xs.attribute(null, ATTRIBUTE_DATE, ordersCursor.getString(dateIndex));
-                    xs.attribute(null, ATTRIBUTE_COMPANY, ordersCursor.getString(companyUidIndex));
-                    xs.attribute(null, ATTRIBUTE_PARTNER, ordersCursor.getString(partnerUidIndex));
-                    xs.attribute(null, ATTRIBUTE_WAREHOUSE, ordersCursor.getString(warehouseUidIndex));
-                    xs.attribute(null, ATTRIBUTE_SUM, ordersCursor.getString(sumIndex));
+                    xs.attribute(null, ATTRIBUTE_UID, order.getUid());
+                    xs.attribute(null, ATTRIBUTE_DATE, order.getDateTime());
+                    xs.attribute(null, ATTRIBUTE_COMPANY, order.getCompanyUid());
+                    xs.attribute(null, ATTRIBUTE_PARTNER, order.getPartnerUid());
+                    xs.attribute(null, ATTRIBUTE_WAREHOUSE, order.getWarehouseUid());
+                    xs.attribute(null, ATTRIBUTE_SUM, String.valueOf(order.getSum()));
                     // endregion Header
 
                     // region Table Goods
-                    Cursor tablesGoodsCursor = preparer.prepareTable(DbHelper.TABLE_GOODS_TABLE, DbHelper.COLUMN_ORDER_UID, ordersCursor.getString(uidIndex));
+                    ListIterator<TableGoods> tableGoodsListIterator = db.getTableGoodsDao().getByUid(order.getUid()).listIterator();
 
-                    if (tablesGoodsCursor.moveToFirst()) {
-                        int positionIndex = tablesGoodsCursor.getColumnIndex(DbHelper.COLUMN_POSITION);
-                        int goodUidIndex = tablesGoodsCursor.getColumnIndex(DbHelper.COLUMN_GOOD_UID);
-                        int quantityIndex = tablesGoodsCursor.getColumnIndex(DbHelper.COLUMN_QUANTITY);
-                        int priceIndex = tablesGoodsCursor.getColumnIndex(DbHelper.COLUMN_PRICE);
-                        int sumGoodIndex = tablesGoodsCursor.getColumnIndex(DbHelper.COLUMN_SUM);
-                        do {
+                        while (tableGoodsListIterator.hasNext()) {
+
+                            TableGoods tableGoods = tableGoodsListIterator.next();
+
                             xs.startTag(null, TAG_ROW);
-                            xs.attribute(null, ATTRIBUTE_POSITION, String.valueOf(tablesGoodsCursor.getInt(positionIndex)));
-                            xs.attribute(null, ATTRIBUTE_GOOD, tablesGoodsCursor.getString(goodUidIndex));
-                            xs.attribute(null, ATTRIBUTE_QUANTITY, String.valueOf(tablesGoodsCursor.getDouble(quantityIndex)));
-                            xs.attribute(null, ATTRIBUTE_PRICE, String.valueOf(tablesGoodsCursor.getDouble(priceIndex)));
-                            xs.attribute(null, ATTRIBUTE_SUM, String.valueOf(tablesGoodsCursor.getDouble(sumGoodIndex)));
+                            xs.attribute(null, ATTRIBUTE_POSITION, String.valueOf(tableGoods.getPosition()));
+                            xs.attribute(null, ATTRIBUTE_GOOD, tableGoods.getGoodUid());
+                            xs.attribute(null, ATTRIBUTE_QUANTITY, String.valueOf(tableGoods.getQuantity()));
+                            xs.attribute(null, ATTRIBUTE_PRICE, String.valueOf(tableGoods.getPrice()));
+                            xs.attribute(null, ATTRIBUTE_SUM, String.valueOf(tableGoods.getSum()));
                             xs.endTag(null, TAG_ROW);
-                        } while (tablesGoodsCursor.moveToNext());
-                        tablesGoodsCursor.close();
+                        }
                     }
                     // endregion Table Goods
 
                     xs.endTag(null, TAG_ITEM);
-                } while (ordersCursor.moveToNext());
-                ordersCursor.close();
-            }
 
             xs.endTag(null, TAG_ORDER);
             // endregion <Order>
@@ -280,46 +303,38 @@ class XmlHelper {
             // region <CashReceipt>
             xs.startTag(null, TAG_CASH_RECEIPT);
 
-            Cursor cashReceiptCursor = preparer.prepareDoc(DbHelper.TABLE_CASH_RECEIPTS);
+            ListIterator<CashReceipt> cashReceiptListIterator = db.getCashReceiptDao().getAll().listIterator();
 
-            if (cashReceiptCursor.moveToFirst()) {
-                int uidIndex = cashReceiptCursor.getColumnIndex(DbHelper.COLUMN_UID);
-                int dateIndex = cashReceiptCursor.getColumnIndex(DbHelper.COLUMN_DATE);
-                int companyUidIndex = cashReceiptCursor.getColumnIndex(DbHelper.COLUMN_COMPANY_UID);
-                int partnerUidIndex = cashReceiptCursor.getColumnIndex(DbHelper.COLUMN_PARTNER_UID);
-                int sumIndex = cashReceiptCursor.getColumnIndex(DbHelper.COLUMN_SUM);
-                do {
+                while (cashReceiptListIterator.hasNext()) {
+
+                    CashReceipt cashReceipt = cashReceiptListIterator.next();
+
                     // region Header
                     xs.startTag(null, TAG_ITEM);
-                    xs.attribute(null, ATTRIBUTE_UID, cashReceiptCursor.getString(uidIndex));
-                    xs.attribute(null, ATTRIBUTE_DATE, cashReceiptCursor.getString(dateIndex));
-                    xs.attribute(null, ATTRIBUTE_COMPANY, cashReceiptCursor.getString(companyUidIndex));
-                    xs.attribute(null, ATTRIBUTE_PARTNER, cashReceiptCursor.getString(partnerUidIndex));
-                    xs.attribute(null, ATTRIBUTE_SUM, cashReceiptCursor.getString(sumIndex));
+                    xs.attribute(null, ATTRIBUTE_UID, cashReceipt.getUid());
+                    xs.attribute(null, ATTRIBUTE_DATE, cashReceipt.getDateTime());
+                    xs.attribute(null, ATTRIBUTE_COMPANY, cashReceipt.getCompanyUid());
+                    xs.attribute(null, ATTRIBUTE_PARTNER, cashReceipt.getPartnerUid());
+                    xs.attribute(null, ATTRIBUTE_SUM, String.valueOf(cashReceipt.getSum()));
                     // endregion Header
 
                     // region Table Objects
-                    Cursor tablesObjectsCursor = preparer.prepareTable(DbHelper.TABLE_OBJECTS_TABLE, DbHelper.COLUMN_CASH_RECEIPT_UID, cashReceiptCursor.getString(uidIndex));
+                    ListIterator<TableObjects> tableObjectsListIterator = db.getTableObjectsDao().getByUid(cashReceipt.getUid()).listIterator();
 
-                    if (tablesObjectsCursor.moveToFirst()) {
-                        int positionIndex = tablesObjectsCursor.getColumnIndex(DbHelper.COLUMN_POSITION);
-                        int orderUidIndex = tablesObjectsCursor.getColumnIndex(DbHelper.COLUMN_ORDER_UID);
-                        int sumCreditIndex = tablesObjectsCursor.getColumnIndex(DbHelper.COLUMN_SUM_CREDIT);
-                        do {
+                        while (tableObjectsListIterator.hasNext()) {
+
+                            TableObjects tableObjects = tableObjectsListIterator.next();
+
                             xs.startTag(null, TAG_ROW);
-                            xs.attribute(null, ATTRIBUTE_POSITION, String.valueOf(tablesObjectsCursor.getInt(positionIndex)));
-                            xs.attribute(null, ATTRIBUTE_ORDER, tablesObjectsCursor.getString(orderUidIndex));
-                            xs.attribute(null, ATTRIBUTE_SUM_CREDIT, String.valueOf(tablesObjectsCursor.getDouble(sumCreditIndex)));
+                            xs.attribute(null, ATTRIBUTE_POSITION, String.valueOf(tableObjects.getPosition()));
+                            xs.attribute(null, ATTRIBUTE_ORDER, tableObjects.getObjectUid());
+                            xs.attribute(null, ATTRIBUTE_SUM_CREDIT, String.valueOf(tableObjects.getSum()));
                             xs.endTag(null, TAG_ROW);
-                        } while (tablesObjectsCursor.moveToNext());
-                        tablesObjectsCursor.close();
-                    }
+                        }
                     // endregion Table Objects
 
                     xs.endTag(null, TAG_ITEM);
-                } while (cashReceiptCursor.moveToNext());
-                cashReceiptCursor.close();
-            }
+                }
 
             xs.endTag(null, TAG_CASH_RECEIPT);
             // endregion <CashReceipt>
@@ -330,9 +345,7 @@ class XmlHelper {
             xs.endDocument();
 
             xs.flush();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         } finally {
             try {

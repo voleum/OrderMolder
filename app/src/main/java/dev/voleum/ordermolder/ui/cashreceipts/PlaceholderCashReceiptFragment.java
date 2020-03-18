@@ -23,12 +23,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.database.DbHelper;
 import dev.voleum.ordermolder.databinding.FragmentCashReceiptMainBinding;
 import dev.voleum.ordermolder.databinding.FragmentCashReceiptSecondaryPageBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
 import dev.voleum.ordermolder.fragments.SelectTimeFragment;
-import dev.voleum.ordermolder.objects.Order;
+import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.viewmodels.CashReceiptViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -110,8 +109,8 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(view -> {
                             Intent intentOut = new Intent(getActivity(), ObjectsChooserActivity.class);
-                            intentOut.putExtra(DbHelper.COLUMN_COMPANY_UID, (cashReceiptViewModel.getCashReceipt().getCompanyUid()));
-                            intentOut.putExtra(DbHelper.COLUMN_PARTNER_UID, (cashReceiptViewModel.getCashReceipt().getPartnerUid()));
+                            intentOut.putExtra(ObjectsChooserActivity.COMPANY_UID, (cashReceiptViewModel.getCashReceipt().getCompanyUid()));
+                            intentOut.putExtra(ObjectsChooserActivity.PARTNER_UID, (cashReceiptViewModel.getCashReceipt().getPartnerUid()));
                             startActivityForResult(intentOut, OBJECT_CHOOSE_REQUEST);
                         }
                 );
@@ -125,11 +124,8 @@ public class PlaceholderCashReceiptFragment extends Fragment {
         if (requestCode == OBJECT_CHOOSE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    Order object = (Order) data.getSerializableExtra(ObjectsChooserActivity.OBJECT);
-                    if (object != null) {
-                        cashReceiptViewModel.addObject(object,
-                                data.getDoubleExtra(ObjectsChooserActivity.SUM, 0.0));
-                    }
+                        Order order = (Order) data.getSerializableExtra(ObjectsChooserActivity.ORDER);
+                        if (order != null) cashReceiptViewModel.addObject(order);
                 }
             }
         }

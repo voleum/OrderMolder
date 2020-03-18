@@ -1,10 +1,11 @@
-package dev.voleum.ordermolder.objects;
+package dev.voleum.ordermolder.models;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import androidx.room.Entity;
+import androidx.room.Ignore;
 
-import dev.voleum.ordermolder.database.DbHelper;
+import dev.voleum.ordermolder.database.DbRoom;
 
+@Entity
 public class Good extends Catalog {
 
     private String groupUid;
@@ -12,6 +13,7 @@ public class Good extends Catalog {
     private String groupName;
     private String unitName;
 
+    @Ignore
     public Good(String uid, String groupUid, String name, String unitUid) {
         super(uid, name);
         this.groupUid = groupUid;
@@ -29,13 +31,8 @@ public class Good extends Catalog {
     }
 
     @Override
-    public boolean save(SQLiteDatabase db) {
-        ContentValues cv = new ContentValues();
-        cv.put(DbHelper.COLUMN_UID, uid);
-        cv.put(DbHelper.COLUMN_GROUP_UID, groupUid);
-        cv.put(DbHelper.COLUMN_NAME, name);
-        cv.put(DbHelper.COLUMN_UNIT_UID, unitUid);
-        db.insertWithOnConflict(DbHelper.TABLE_GOODS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+    public boolean save(DbRoom db) {
+        db.getGoodDao().insertAll(this);
         return true;
     }
 
