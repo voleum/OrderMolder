@@ -8,7 +8,7 @@ import java.util.List;
 import dev.voleum.ordermolder.models.Good;
 
 @Dao
-public interface GoodDao extends AbstractDao<Good> {
+public interface GoodDao extends BaseDao<Good> {
 
     @Query("SELECT good.uid, good.name, good.groupUid, good.unitUid, `group`.name AS groupName, unit.name AS unitName FROM good" +
             " LEFT JOIN `group` ON good.groupUid = `group`.uid" +

@@ -42,8 +42,6 @@ public class CashReceiptActivity extends AppCompatActivity {
     protected FloatingActionButton fab;
     protected SectionsPagerAdapter sectionsPagerAdapter;
 
-    private int recyclerPosition;
-
     private boolean isCreating;
     private boolean savedWithoutClosing;
 
@@ -112,11 +110,11 @@ public class CashReceiptActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    if (cashReceiptViewModel.getTableObjects().isEmpty()) {
+                    if (cashReceiptViewModel.getTable().isEmpty()) {
                         Snackbar.make(fab, R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT).show();
                         break;
                     }
-                    cashReceiptViewModel.saveCashReceipt(cashReceiptViewModel.getCashReceipt())
+                    cashReceiptViewModel.saveCashReceipt(cashReceiptViewModel.getDocument())
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new CompletableObserver() {
@@ -128,7 +126,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete() {
                                     Intent intent = new Intent();
-                                    intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getCashReceipt());
+                                    intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getDocument());
                                     intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                                     int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                                     setResult(result, intent);
@@ -144,7 +142,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_NEGATIVE:
                     if (savedWithoutClosing) {
                         Intent intent = new Intent();
-                        intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getCashReceipt());
+                        intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getDocument());
                         intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                         setResult(isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED, intent);
                     }
@@ -175,11 +173,11 @@ public class CashReceiptActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
-                if (cashReceiptViewModel.getTableObjects().isEmpty()) {
+                if (cashReceiptViewModel.getTable().isEmpty()) {
                     Snackbar.make(fab, R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
-                cashReceiptViewModel.saveCashReceipt(cashReceiptViewModel.getCashReceipt())
+                cashReceiptViewModel.saveCashReceipt(cashReceiptViewModel.getDocument())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new CompletableObserver() {
@@ -206,14 +204,6 @@ public class CashReceiptActivity extends AppCompatActivity {
                 break;
         }
         return true;
-    }
-
-    public int getRecyclerPosition() {
-        return recyclerPosition;
-    }
-
-    public void setRecyclerPosition(int recyclerPosition) {
-        this.recyclerPosition = recyclerPosition;
     }
 
     public CashReceiptViewModel getCashReceiptViewModel() {

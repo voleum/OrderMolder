@@ -8,7 +8,7 @@ import java.util.List;
 import dev.voleum.ordermolder.models.Unit;
 
 @Dao
-public interface UnitDao extends AbstractDao<Unit> {
+public interface UnitDao extends BaseDao<Unit> {
 
     @Query("SELECT * FROM unit")
     List<Unit> getAll();

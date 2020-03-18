@@ -99,18 +99,13 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 recyclerObjects.setHasFixedSize(true);
                 recyclerObjects.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                bindingRecycler.getViewModel().getAdapter().setOnEntryLongClickListener((v, position) -> {
-                    ((CashReceiptActivity) getActivity()).setRecyclerPosition(position);
-                    v.showContextMenu();
-                });
-
                 registerForContextMenu(recyclerObjects);
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(view -> {
                             Intent intentOut = new Intent(getActivity(), ObjectsChooserActivity.class);
-                            intentOut.putExtra(ObjectsChooserActivity.COMPANY_UID, (cashReceiptViewModel.getCashReceipt().getCompanyUid()));
-                            intentOut.putExtra(ObjectsChooserActivity.PARTNER_UID, (cashReceiptViewModel.getCashReceipt().getPartnerUid()));
+                            intentOut.putExtra(ObjectsChooserActivity.COMPANY_UID, (cashReceiptViewModel.getDocument().getCompanyUid()));
+                            intentOut.putExtra(ObjectsChooserActivity.PARTNER_UID, (cashReceiptViewModel.getDocument().getPartnerUid()));
                             startActivityForResult(intentOut, OBJECT_CHOOSE_REQUEST);
                         }
                 );
@@ -145,7 +140,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
         if (item.getItemId() == R.id.delete_item) {
             CashReceiptActivity cashReceiptActivity = (CashReceiptActivity) getActivity();
             if (cashReceiptActivity != null) {
-                cashReceiptViewModel.removeObject(cashReceiptActivity.getRecyclerPosition());
+                cashReceiptViewModel.removeRow();
                 return true;
             }
         }

@@ -8,13 +8,16 @@ import java.util.List;
 import dev.voleum.ordermolder.models.TableObjects;
 
 @Dao
-public interface TableObjectsDao extends AbstractDao<TableObjects> {
+public interface TableObjectsDao extends BaseDao<TableObjects> {
 
     @Query("SELECT * FROM tableobjects")
     List<TableObjects> getAll();
 
     @Query("SELECT * FROM tableobjects WHERE uid = :uid")
     List<TableObjects> getByUid(String uid);
+
+    @Query("DELETE FROM tableobjects WHERE uid = :uid")
+    void deleteByUid(String uid);
 
     @Query("DELETE FROM tableobjects")
     void deleteAllRecords();

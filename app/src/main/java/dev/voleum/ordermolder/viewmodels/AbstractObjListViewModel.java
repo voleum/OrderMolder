@@ -8,7 +8,7 @@ import java.util.List;
 
 import dev.voleum.ordermolder.models.Obj;
 
-abstract public class ObjListViewModel<T extends Obj, E extends RecyclerView.Adapter> extends BaseObservable {
+abstract public class AbstractObjListViewModel<T extends Obj, E extends RecyclerView.Adapter> extends BaseObservable {
 
     protected List<? extends T> objs;
     protected E adapter;
