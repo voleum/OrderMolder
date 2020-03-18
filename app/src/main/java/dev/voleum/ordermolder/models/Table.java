@@ -4,6 +4,9 @@ import androidx.room.PrimaryKey;
 
 public abstract class Table extends Obj {
 
+    protected String objUid;
+    protected String objName;
+
     @PrimaryKey protected int position;
     protected double sum;
 
@@ -28,4 +31,19 @@ public abstract class Table extends Obj {
         this.sum = sum;
     }
 
+    public String getObjUid() {
+        return objUid;
+    }
+
+    public void setObjUid(String objUid) {
+        this.objUid = objUid;
+    }
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
+    }
 }

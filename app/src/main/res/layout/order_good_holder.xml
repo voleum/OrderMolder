@@ -25,7 +25,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_weight="50"
-            android:text="@{row.goodName}"
+            android:text="@{row.name}"
             android:textSize="20sp"
             tools:text="Good name" />
 

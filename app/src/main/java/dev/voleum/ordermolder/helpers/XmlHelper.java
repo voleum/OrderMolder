@@ -286,7 +286,7 @@ class XmlHelper {
 
                             xs.startTag(null, TAG_ROW);
                             xs.attribute(null, ATTRIBUTE_POSITION, String.valueOf(tableGoods.getPosition()));
-                            xs.attribute(null, ATTRIBUTE_GOOD, tableGoods.getGoodUid());
+                            xs.attribute(null, ATTRIBUTE_GOOD, tableGoods.getObjUid());
                             xs.attribute(null, ATTRIBUTE_QUANTITY, String.valueOf(tableGoods.getQuantity()));
                             xs.attribute(null, ATTRIBUTE_PRICE, String.valueOf(tableGoods.getPrice()));
                             xs.attribute(null, ATTRIBUTE_SUM, String.valueOf(tableGoods.getSum()));
@@ -327,7 +327,7 @@ class XmlHelper {
 
                             xs.startTag(null, TAG_ROW);
                             xs.attribute(null, ATTRIBUTE_POSITION, String.valueOf(tableObjects.getPosition()));
-                            xs.attribute(null, ATTRIBUTE_ORDER, tableObjects.getObjectUid());
+                            xs.attribute(null, ATTRIBUTE_ORDER, tableObjects.getObjUid());
                             xs.attribute(null, ATTRIBUTE_SUM_CREDIT, String.valueOf(tableObjects.getSum()));
                             xs.endTag(null, TAG_ROW);
                         }

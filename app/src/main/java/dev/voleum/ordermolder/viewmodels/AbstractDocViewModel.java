@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.UUID;
 
 import dev.voleum.ordermolder.BR;
 import dev.voleum.ordermolder.OrderMolder;
@@ -22,7 +23,7 @@ import dev.voleum.ordermolder.models.Partner;
 import dev.voleum.ordermolder.models.Table;
 import io.reactivex.Completable;
 
-abstract public class AbstractDocumentViewModel<D extends Document, T extends Table, E extends RecyclerView.Adapter> extends ViewModelObservable implements Spinner.OnItemSelectedListener {
+abstract public class AbstractDocViewModel<D extends Document, T extends Table, E extends RecyclerView.Adapter> extends ViewModelObservable implements Spinner.OnItemSelectedListener {
 
     protected DecimalFormat df;
 
@@ -180,5 +181,15 @@ abstract public class AbstractDocumentViewModel<D extends Document, T extends Ta
 
     protected void initOthers(DbRoom db) {
 
+    }
+
+    protected void checkUid() {
+        if (document.getUid().isEmpty()) {
+            String uid = UUID.randomUUID().toString();
+            document.setUid(uid);
+            for (int i = 0; i < table.size(); i++) {
+                table.get(i).setUid(uid);
+            }
+        }
     }
 }

@@ -1,38 +1,16 @@
 package dev.voleum.ordermolder.viewmodels;
 
-import android.icu.text.DecimalFormat;
-import android.icu.text.DecimalFormatSymbols;
 import android.view.View;
 
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-
-import java.util.Locale;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.models.TableGoods;
 
-public class GoodsOrderListItemViewModel extends BaseObservable implements View.OnClickListener {
+public class GoodsOrderListItemViewModel extends AbstractDocListItemViewModel<TableGoods, OrderViewModel> implements View.OnClickListener {
 
-    private DecimalFormat df;
-
-    private TableGoods tableGoods;
-    private OrderViewModel orderViewModel;
-
-    public GoodsOrderListItemViewModel(TableGoods tableGoods, OrderViewModel orderViewModel) {
-        String format = "0.00";
-        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        otherSymbols.setDecimalSeparator('.');
-        otherSymbols.setGroupingSeparator(',');
-        df = new DecimalFormat(format, otherSymbols);
-
-        this.tableGoods = tableGoods;
-        this.orderViewModel = orderViewModel;
-    }
-
-    @Bindable
-    public String getGoodName() {
-        return tableGoods.getGoodName();
+    public GoodsOrderListItemViewModel(TableGoods table, OrderViewModel viewModel) {
+        super(table, viewModel);
     }
 
     @Bindable
@@ -43,14 +21,14 @@ public class GoodsOrderListItemViewModel extends BaseObservable implements View.
         } catch (NumberFormatException ignored) {
 
         }
-        tableGoods.setQuantity(q);
-        tableGoods.countSum();
-        orderViewModel.countSum();
+        table.setQuantity(q);
+        table.countSum();
+        viewModel.countSum();
     }
 
     @Bindable
     public String getQuantity() {
-        return String.valueOf(df.format(tableGoods.getQuantity()));
+        return String.valueOf(df.format(table.getQuantity()));
     }
 
     @Bindable
@@ -61,32 +39,27 @@ public class GoodsOrderListItemViewModel extends BaseObservable implements View.
         } catch (NumberFormatException ignored) {
 
         }
-        tableGoods.setPrice(p);
-        tableGoods.countSum();
-        orderViewModel.countSum();
+        table.setPrice(p);
+        table.countSum();
+        viewModel.countSum();
     }
 
     @Bindable
     public String getPrice() {
-        return String.valueOf(df.format(tableGoods.getPrice()));
-    }
-
-    @Bindable
-    public double getSum() {
-        return tableGoods.getSum();
+        return String.valueOf(df.format(table.getPrice()));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.good_plus:
-                tableGoods.increaseQuantity();
+                table.increaseQuantity();
                 break;
             case R.id.good_minus:
-                tableGoods.decreaseQuantity();
+                table.decreaseQuantity();
                 break;
         }
         notifyChange();
-        orderViewModel.countSum();
+        viewModel.countSum();
     }
 }
