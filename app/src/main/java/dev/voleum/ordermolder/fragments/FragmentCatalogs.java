@@ -1,35 +1,22 @@
 package dev.voleum.ordermolder.fragments;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Objects;
-
-import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.enums.CatalogTypes;
 import dev.voleum.ordermolder.ui.catalogs.CatalogActivity;
 import dev.voleum.ordermolder.ui.catalogs.CatalogListActivity;
 
-public class FragmentCatalogs extends androidx.fragment.app.ListFragment {
+public class FragmentCatalogs extends AbstractListFragmentKotlin {
 
-    private final String[] catalogs = OrderMolder.getApplication().getResources().getStringArray(R.array.catalogs);
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        ListAdapter adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_list_item_1, catalogs);
-        setListAdapter(adapter);
+    public FragmentCatalogs() {
+        super(R.array.catalogs);
     }
 
     @Override
