@@ -16,7 +16,6 @@ import java.util.UUID;
 import dev.voleum.ordermolder.BR;
 import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.database.DbRoom;
-import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.models.Company;
 import dev.voleum.ordermolder.models.Document;
 import dev.voleum.ordermolder.models.Partner;

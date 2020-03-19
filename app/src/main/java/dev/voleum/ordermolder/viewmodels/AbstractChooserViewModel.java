@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.models.Obj;
 
 public abstract class AbstractChooserViewModel<T extends Obj, E extends RecyclerView.Adapter> extends ViewModelObservable {

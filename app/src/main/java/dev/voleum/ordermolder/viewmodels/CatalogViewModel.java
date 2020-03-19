@@ -3,7 +3,6 @@ package dev.voleum.ordermolder.viewmodels;
 import androidx.databinding.Bindable;
 import androidx.databinding.Observable;
 
-import dev.voleum.ordermolder.helpers.ViewModelObservable;
 import dev.voleum.ordermolder.models.Catalog;
 import dev.voleum.ordermolder.models.EconomicEntity;
 import dev.voleum.ordermolder.models.Good;

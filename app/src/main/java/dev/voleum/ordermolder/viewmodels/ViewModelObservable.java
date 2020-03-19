@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.helpers;
+package dev.voleum.ordermolder.viewmodels;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
