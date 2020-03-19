@@ -6,7 +6,7 @@ import androidx.annotation.ArrayRes
 import androidx.fragment.app.ListFragment
 import dev.voleum.ordermolder.OrderMolder
 
-abstract class AbstractListFragmentKotlin(@ArrayRes itemList: Int) : ListFragment() {
+abstract class AbstractListFragment(@ArrayRes itemList: Int) : ListFragment() {
 
     val list: Array<String> = OrderMolder.getApplication().resources.getStringArray(itemList)
 

@@ -2,7 +2,6 @@ package dev.voleum.ordermolder;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int MENU_ITEM_CATALOGS = 2;
     public static final int MENU_ITEM_REPORTS = 3;
 
-//    private static Resources resources = null;
-//    private static SharedPreferences sharedPref = null;
-
     private int checkedMenuItem = MENU_ITEM_MAIN;
 
     private FragmentMain fragmentMain;
@@ -64,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        resources = getResources();
-//        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("first_launch", true)) fillSharedPrefs();
 
