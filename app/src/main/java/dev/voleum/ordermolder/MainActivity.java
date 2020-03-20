@@ -105,19 +105,19 @@ public class MainActivity extends AppCompatActivity {
         switch (checkedMenuItem) {
             case MENU_ITEM_MAIN:
                 setTitle(R.string.title_main);
-                fragmentTransaction.add(R.id.frameLayoutFragment, fragmentMain);
+                fragmentTransaction.add(R.id.frame_layout_fragment, fragmentMain);
                 break;
             case MENU_ITEM_DOCUMENTS:
                 setTitle(R.string.title_documents);
-                fragmentTransaction.add(R.id.frameLayoutFragment, fragmentDocuments);
+                fragmentTransaction.add(R.id.frame_layout_fragment, fragmentDocuments);
                 break;
             case MENU_ITEM_CATALOGS:
                 setTitle(R.string.title_catalogs);
-                fragmentTransaction.add(R.id.frameLayoutFragment, fragmentCatalogs);
+                fragmentTransaction.add(R.id.frame_layout_fragment, fragmentCatalogs);
                 break;
             case MENU_ITEM_REPORTS:
                 setTitle(R.string.title_reports);
-                fragmentTransaction.add(R.id.frameLayoutFragment, fragmentReports);
+                fragmentTransaction.add(R.id.frame_layout_fragment, fragmentReports);
                 break;
         }
         fragmentTransaction.commit();
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onNavigationSelectedItem(@StringRes int title, Fragment fragment, int checkedMenuItem) {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayoutFragment, fragment);
+        fragmentTransaction.replace(R.id.frame_layout_fragment, fragment);
         fragmentTransaction.commit();
         setTitle(title);
         this.checkedMenuItem = checkedMenuItem;
@@ -220,12 +220,4 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean("first_launch", true);
         editor.apply();
     }
-
-//    public static Resources getRess() {
-//        return resources;
-//    }
-//
-//    public static SharedPreferences getPref() {
-//        return sharedPref;
-//    }
 }
