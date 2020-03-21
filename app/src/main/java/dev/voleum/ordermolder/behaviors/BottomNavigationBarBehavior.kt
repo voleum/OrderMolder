@@ -5,9 +5,9 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ViewCompat
 import com.google.android.material.snackbar.Snackbar
 
+@Deprecated("Not needed enough")
 class BottomNavigationBarBehavior<T : View>(context: Context, attrs: AttributeSet) : CoordinatorLayout.Behavior<T>(context, attrs) {
 
 //    override fun onStartNestedScroll(

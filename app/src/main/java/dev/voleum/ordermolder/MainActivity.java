@@ -29,7 +29,6 @@ import dev.voleum.ordermolder.fragments.FragmentMain;
 import dev.voleum.ordermolder.fragments.FragmentReports;
 import dev.voleum.ordermolder.helpers.Exchanger;
 import dev.voleum.ordermolder.ui.SettingsActivity;
-import io.reactivex.CompletableObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -158,21 +157,15 @@ public class MainActivity extends AppCompatActivity {
                 TestDataCreator.createTestData()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new CompletableObserver() {
+                        .subscribe(new SingleObserver<String>() {
                                        @Override
                                        public void onSubscribe(Disposable d) {
-                                           progressLayout.setAlpha(0.0f);
-                                           progressLayout.setVisibility(View.VISIBLE);
-                                           progressLayout.animate().alpha(1.0f);
-                                           getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                                   WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                           showProgressLayout();
                                        }
 
                                        @Override
-                                       public void onComplete() {
-                                           Snackbar.make(v, R.string.snackbar_successful, Snackbar.LENGTH_SHORT).show();
-                                           progressLayout.setVisibility(View.GONE);
-                                           getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                       public void onSuccess(String s) {
+                                           showSnackbar(v, s);
                                        }
 
                                        @Override
@@ -189,18 +182,12 @@ public class MainActivity extends AppCompatActivity {
                         .subscribe(new SingleObserver<String>() {
                             @Override
                             public void onSubscribe(Disposable d) {
-                                progressLayout.setAlpha(0.0f);
-                                progressLayout.setVisibility(View.VISIBLE);
-                                progressLayout.animate().alpha(1.0f);
-                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                showProgressLayout();
                             }
 
                             @Override
                             public void onSuccess(String s) {
-                                Snackbar.make(v, s, Snackbar.LENGTH_SHORT).show();
-                                progressLayout.setVisibility(View.GONE);
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                showSnackbar(v, s);
                             }
 
                             @Override
@@ -219,5 +206,19 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("port", "21");
         editor.putBoolean("first_launch", true);
         editor.apply();
+    }
+
+    private void showProgressLayout() {
+        progressLayout.setAlpha(0.0f);
+        progressLayout.setVisibility(View.VISIBLE);
+        progressLayout.animate().alpha(1.0f);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void showSnackbar(View v, String s) {
+        Snackbar.make(v, s, Snackbar.LENGTH_SHORT).show();
+        progressLayout.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }
