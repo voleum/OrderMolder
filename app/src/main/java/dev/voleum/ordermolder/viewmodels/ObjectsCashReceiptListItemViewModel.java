@@ -12,12 +12,12 @@ public class ObjectsCashReceiptListItemViewModel extends AbstractDocListItemView
 
     @Bindable
     public String getObjectName() {
-        return table.getObjName();
+        return getTable().getObjName();
     }
 
     @Bindable
     public void setSum(String sum) {
-        table.setSum(Double.parseDouble(sum));
-        viewModel.countSum();
+        getTable().setSum(Double.parseDouble(sum));
+        getViewModel().countSum();
     }
 }
