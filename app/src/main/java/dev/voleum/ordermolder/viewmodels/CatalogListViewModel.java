@@ -11,7 +11,7 @@ import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.enums.CatalogTypes;
 import dev.voleum.ordermolder.models.Catalog;
 
-public class CatalogListViewModel extends AbstractObjListViewModel<Catalog, CatalogListRecyclerViewAdapter> {
+public class CatalogListViewModel extends AbstractObjListViewModel<Catalog, CatalogListRecyclerViewAdapter<? extends Catalog>> {
 
     private CatalogTypes catType;
 
