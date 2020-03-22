@@ -87,6 +87,7 @@ public class DocListViewModel<T extends Document> extends BaseObservable {
         adapter.setOnEntryLongClickListener((v, position) -> {
             recyclerPosition = position;
             v.showContextMenu();
+            return true;
         });
     }
 

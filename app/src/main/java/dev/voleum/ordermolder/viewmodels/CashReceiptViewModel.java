@@ -87,6 +87,7 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
             adapter.setOnEntryLongClickListener((v, position) -> {
                 selectedMenuItemPosition = position;
                 v.showContextMenu();
+                return true;
             });
             notifyPropertyChanged(BR.title);
             subscriber.onComplete();

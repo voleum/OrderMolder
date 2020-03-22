@@ -82,7 +82,7 @@ public class DocListActivity extends AppCompatActivity {
                         recyclerDocs.setLayoutManager(new LinearLayoutManager(context));
 
                         DocListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
-                            Document clickedDoc = (Document) binding.getViewModel().getDocs().get(position);
+                            Document clickedDoc = (Document) docListViewModel.getDocs().get(position);
                             Intent intentOut;
                             switch (docType) {
                                 case ORDER:
@@ -106,7 +106,7 @@ public class DocListActivity extends AppCompatActivity {
                         setSupportActionBar(toolbar);
                         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-                        binding.getViewModel().getAdapter().setOnEntryClickListener(onEntryClickListener);
+                        docListViewModel.getAdapter().setOnEntryClickListener(onEntryClickListener);
                     }
 
                     @Override

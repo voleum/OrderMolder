@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.GoodsChooserRecyclerViewAdapter;
 import dev.voleum.ordermolder.databinding.ActivityGoodsChooserBinding;
+import dev.voleum.ordermolder.models.Price;
 import dev.voleum.ordermolder.viewmodels.GoodsChooserViewModel;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -28,7 +29,8 @@ public class GoodsChooserActivity extends AppCompatActivity {
     private ActivityGoodsChooserBinding binding;
     private GoodsChooserViewModel goodsChooserViewModel;
 
-    GoodsChooserRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = ((v, row) -> {
+    GoodsChooserRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = ((v, position) -> {
+        Price row = goodsChooserViewModel.getAdapter().getList().get(position);
         setResult(RESULT_OK, new Intent()
                 .putExtra(PRICE, row));
         finish();
