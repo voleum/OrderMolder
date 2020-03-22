@@ -29,10 +29,10 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.cash_receipt_spinner_companies:
-                document.setCompanyUid((companies.get(position)).getUid());
+                getDocument().setCompanyUid((getCompanies().get(position)).getUid());
                 break;
             case R.id.cash_receipt_spinner_partners:
-                document.setPartnerUid((partners.get(position)).getUid());
+                getDocument().setPartnerUid((getPartners().get(position)).getUid());
                 break;
         }
     }
@@ -45,47 +45,45 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
     }
 
     public void setCashReceipt() {
-        if (document != null) return;
-        document = new CashReceipt();
-        this.table = document.getTable();
-        adapter = new ObjectsCashReceiptRecyclerViewAdapter(table, this);
+        if (getDocument() != null) return;
+        setDocument(new CashReceipt());
+        setTable(getDocument().getTable());
+        setAdapter(new ObjectsCashReceiptRecyclerViewAdapter(getTable(), this));
         initSpinnersData()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        df = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     public void setCashReceipt(String uid) {
-        if (document != null) return;
-        document = new CashReceipt();
-        this.table = document.getTable();
+        if (getDocument() != null) return;
+        setDocument(new CashReceipt());
+        setTable(getDocument().getTable());
         getDocByUid(uid)
                 .andThen(initSpinnersData())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        df = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     public void addRow(Order order) {
-        table.add(new TableObjects(document.getUid(),
-                table.size(),
+        getTable().add(new TableObjects(getDocument().getUid(),
+                getTable().size(),
                 order.getUid(),
                 order.toString(),
                 order.getSum()));
-        adapter.notifyItemInserted(table.size());
+        getAdapter().notifyItemInserted(getTable().size());
         countSum();
     }
 
     public Completable getDocByUid(String uid) {
         return Completable.create(subscriber -> {
             DbRoom db = OrderMolder.getApplication().getDatabase();
-            document = db.getCashReceiptDao().getByUid(uid);
-            table = db.getTableObjectsDao().getByUid(uid);
-            adapter = new ObjectsCashReceiptRecyclerViewAdapter(table, this);
-            adapter.setOnEntryLongClickListener((v, position) -> {
-                selectedMenuItemPosition = position;
+            setDocument(db.getCashReceiptDao().getByUid(uid));
+            setTable(db.getTableObjectsDao().getByUid(uid));
+            setAdapter(new ObjectsCashReceiptRecyclerViewAdapter(getTable(), this));
+            getAdapter().setOnEntryLongClickListener((v, position) -> {
+                setSelectedMenuItemPosition(position);
                 v.showContextMenu();
                 return true;
             });
@@ -100,7 +98,7 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
             DbRoom db = OrderMolder.getApplication().getDatabase();
             db.getCashReceiptDao().insertAll(document);
             db.getTableObjectsDao().deleteByUid(document.getUid());
-            db.getTableObjectsDao().insertAll(Arrays.copyOf(table.toArray(), table.size(), TableObjects[].class));
+            db.getTableObjectsDao().insertAll(Arrays.copyOf(getTable().toArray(), getTable().size(), TableObjects[].class));
             subscriber.onComplete();
         });
     }
