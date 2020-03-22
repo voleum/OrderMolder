@@ -22,7 +22,7 @@ public class ObjectsChooserViewModel extends AbstractChooserViewModel<Order, Obj
 
     public void initList(String companyUid, String partnerUid) {
         DbRoom db = OrderMolder.getApplication().getDatabase();
-        items = db.getOrderDao().getByCompanyAndPartner(companyUid, partnerUid);
-        adapter = new ObjectsChooserRecyclerViewAdapter(items);
+        setItems(db.getOrderDao().getByCompanyAndPartner(companyUid, partnerUid));
+        adapter = new ObjectsChooserRecyclerViewAdapter(getItems());
     }
 }
