@@ -21,14 +21,14 @@ public class GoodsOrderListItemViewModel extends AbstractDocListItemViewModel<Ta
         } catch (NumberFormatException ignored) {
 
         }
-        table.setQuantity(q);
-        table.countSum();
-        viewModel.countSum();
+        getTable().setQuantity(q);
+        getTable().countSum();
+        getViewModel().countSum();
     }
 
     @Bindable
     public String getQuantity() {
-        return String.valueOf(df.format(table.getQuantity()));
+        return String.valueOf(getDf().format(getTable().getQuantity()));
     }
 
     @Bindable
@@ -39,27 +39,27 @@ public class GoodsOrderListItemViewModel extends AbstractDocListItemViewModel<Ta
         } catch (NumberFormatException ignored) {
 
         }
-        table.setPrice(p);
-        table.countSum();
-        viewModel.countSum();
+        getTable().setPrice(p);
+        getTable().countSum();
+        getViewModel().countSum();
     }
 
     @Bindable
     public String getPrice() {
-        return String.valueOf(df.format(table.getPrice()));
+        return String.valueOf(getDf().format(getTable().getPrice()));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.good_plus:
-                table.increaseQuantity();
+                getTable().increaseQuantity();
                 break;
             case R.id.good_minus:
-                table.decreaseQuantity();
+                getTable().decreaseQuantity();
                 break;
         }
         notifyChange();
-        viewModel.countSum();
+        getViewModel().countSum();
     }
 }
