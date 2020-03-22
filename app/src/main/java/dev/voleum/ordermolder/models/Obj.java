@@ -22,12 +22,12 @@ public abstract class Obj implements Serializable {
     protected String uid;
 
     protected Obj() {
-        moneyDecimalFormat = DecimalHelper.newMoneyFieldFormat();
+        moneyDecimalFormat = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     protected Obj(String uid) {
         this.uid = uid;
-        moneyDecimalFormat = DecimalHelper.newMoneyFieldFormat();
+        moneyDecimalFormat = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     @NotNull

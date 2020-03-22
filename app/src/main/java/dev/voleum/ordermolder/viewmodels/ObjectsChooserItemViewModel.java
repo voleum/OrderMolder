@@ -20,6 +20,6 @@ public class ObjectsChooserItemViewModel extends AbstractChooserItemViewModel {
 
     @Bindable
     public String getSum() {
-        return String.valueOf(df.format(order.getSum()));
+        return String.valueOf(getDf().format(order.getSum()));
     }
 }

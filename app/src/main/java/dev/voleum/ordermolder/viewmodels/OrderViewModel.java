@@ -77,7 +77,7 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        df = DecimalHelper.newMoneyFieldFormat();
+        df = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     public void setOrder(String uid) {
@@ -88,7 +88,7 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
                 .subscribeOn(Schedulers.newThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        df = DecimalHelper.newMoneyFieldFormat();
+        df = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     public void addRow(String goodUid, double price, String goodName) {
