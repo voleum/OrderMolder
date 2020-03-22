@@ -20,6 +20,6 @@ public class GoodsChooserItemViewModel extends AbstractChooserItemViewModel {
 
     @Bindable
     public String getPrice() {
-        return String.valueOf(df.format(price.getPrice()));
+        return String.valueOf(getDf().format(price.getPrice()));
     }
 }

@@ -53,7 +53,7 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        df = DecimalHelper.newMoneyFieldFormat();
+        df = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     public void setCashReceipt(String uid) {
@@ -65,7 +65,7 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        df = DecimalHelper.newMoneyFieldFormat();
+        df = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     public void addRow(Order order) {

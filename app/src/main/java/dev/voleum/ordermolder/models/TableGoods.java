@@ -53,7 +53,7 @@ public class TableGoods extends Table {
     }
 
     public void countSum() {
-        sum = DecimalHelper.round(quantity * price, 2);
+        sum = DecimalHelper.Companion.round(quantity * price, 2);
     }
 
     public void increaseQuantity() {
