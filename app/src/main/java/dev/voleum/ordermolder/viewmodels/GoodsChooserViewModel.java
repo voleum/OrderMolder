@@ -21,7 +21,7 @@ public class GoodsChooserViewModel extends AbstractChooserViewModel<Price, Goods
 
     public void initList() {
         DbRoom db = OrderMolder.getApplication().getDatabase();
-        items = db.getPriceDao().getAll();
-        adapter = new GoodsChooserRecyclerViewAdapter(items);
+        setItems(db.getPriceDao().getAll());
+        adapter = new GoodsChooserRecyclerViewAdapter(getItems());
     }
 }
