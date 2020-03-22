@@ -112,6 +112,7 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
             adapter.setOnEntryLongClickListener((v, position) -> {
                 selectedMenuItemPosition = position;
                 v.showContextMenu();
+                return true;
             });
             notifyPropertyChanged(BR.title);
             subscriber.onComplete();

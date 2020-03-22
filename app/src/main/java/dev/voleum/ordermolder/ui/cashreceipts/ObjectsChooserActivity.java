@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.ActivityObjectsChooserBinding;
+import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.viewmodels.ObjectsChooserViewModel;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -92,7 +93,8 @@ public class ObjectsChooserActivity extends AppCompatActivity {
         recyclerObjects.setHasFixedSize(true);
         recyclerObjects.setLayoutManager(new LinearLayoutManager(this));
 
-        binding.getViewModel().getAdapter().setOnEntryClickListener((v, row) -> {
+        binding.getViewModel().getAdapter().setOnEntryClickListener( (v, position) -> {
+            Order row = objectsChooserViewModel.getAdapter().getList().get(position);
             setResult(RESULT_OK, new Intent()
                     .putExtra(ORDER, row));
             finish();
