@@ -16,6 +16,7 @@ public class Order extends Document<TableGoods> {
     @Ignore
     public Order() {
         super();
+        warehouseUid = "";
     }
 
     @Ignore

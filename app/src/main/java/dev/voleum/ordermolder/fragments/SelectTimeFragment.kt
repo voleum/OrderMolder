@@ -30,7 +30,7 @@ class SelectTimeFragment() : DialogFragment(), TimePickerDialog.OnTimeSetListene
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         hh = hourOfDay
         mm = minute
-        val newTime = "${if (hh < 10) "0" else ""}$hh:${if (mm < 10) "0" else ""}:00"
+        val newTime = "${if (hh < 10) "0" else ""}$hh:${if (mm < 10) "0" else ""}$mm:00"
         targetFragment!!.activity!!.findViewById<TextView>(R.id.tv_time).text = newTime
     }
 

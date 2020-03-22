@@ -18,7 +18,6 @@ import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.GoodsOrderRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbRoom;
-import dev.voleum.ordermolder.helpers.DecimalHelper;
 import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.models.TableGoods;
 import dev.voleum.ordermolder.models.Warehouse;
@@ -35,13 +34,13 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.order_spinner_companies:
-                document.setCompanyUid((companies.get(position)).getUid());
+                getDocument().setCompanyUid((getCompanies().get(position)).getUid());
                 break;
             case R.id.order_spinner_partners:
-                document.setPartnerUid((partners.get(position)).getUid());
+                getDocument().setPartnerUid((getPartners().get(position)).getUid());
                 break;
             case R.id.order_spinner_warehouses:
-                document.setWarehouseUid((warehouses.get(position)).getUid());
+                getDocument().setWarehouseUid((warehouses.get(position)).getUid());
                 break;
         }
     }
@@ -57,7 +56,7 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
     }
 
     @Bindable
-    public List<Warehouse> getEntryWarehouses() {
+    public List<Warehouse> getWarehouses() {
         return warehouses;
     }
 
@@ -69,48 +68,46 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
     }
 
     public void setOrder() {
-        if (document != null) return;
-        document = new Order();
-        this.table = document.getTable();
-        this.adapter = new GoodsOrderRecyclerViewAdapter(table, this);
+        if (getDocument() != null) return;
+        setDocument(new Order());
+        setTable(getDocument().getTable());
+        setAdapter(new GoodsOrderRecyclerViewAdapter(getTable(), this));
         initSpinnersData()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        df = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     public void setOrder(String uid) {
-        if (document != null) return;
-        document = new Order();
+        if (getDocument() != null) return;
+        setDocument(new Order());
         getDocByUid(uid)
                 .andThen(initSpinnersData())
                 .subscribeOn(Schedulers.newThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        df = DecimalHelper.Companion.moneyFieldFormat();
     }
 
     public void addRow(String goodUid, double price, String goodName) {
-        table.add(new TableGoods(document.getUid(),
-                table.size(),
+        getTable().add(new TableGoods(getDocument().getUid(),
+                getTable().size(),
                 goodUid,
                 goodName,
                 1,
                 price,
                 price));
-        adapter.notifyItemInserted(table.size());
+        getAdapter().notifyItemInserted(getTable().size());
         countSum();
     }
 
     public Completable getDocByUid(String uid) {
         return Completable.create(subscriber -> {
             DbRoom db = OrderMolder.getApplication().getDatabase();
-            document = db.getOrderDao().getByUid(uid);
-            table = db.getTableGoodsDao().getByUid(uid);
-            adapter = new GoodsOrderRecyclerViewAdapter(table, this);
-            adapter.setOnEntryLongClickListener((v, position) -> {
-                selectedMenuItemPosition = position;
+            setDocument(db.getOrderDao().getByUid(uid));
+            setTable(db.getTableGoodsDao().getByUid(uid));
+            setAdapter(new GoodsOrderRecyclerViewAdapter(getTable(), this));
+            getAdapter().setOnEntryLongClickListener((v, position) -> {
+                setSelectedMenuItemPosition(position);
                 v.showContextMenu();
                 return true;
             });
@@ -125,7 +122,7 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
             DbRoom db = OrderMolder.getApplication().getDatabase();
             db.getOrderDao().insertAll(document);
             db.getTableGoodsDao().deleteByUid(document.getUid());
-            db.getTableGoodsDao().insertAll(Arrays.copyOf(table.toArray(), table.size(), TableGoods[].class));
+            db.getTableGoodsDao().insertAll(Arrays.copyOf(getTable().toArray(), getTable().size(), TableGoods[].class));
             subscriber.onComplete();
         });
     }
@@ -137,9 +134,9 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
         while (warehouseListIterator.hasNext()) {
             Warehouse w = warehouseListIterator.next();
             warehouses.add(w);
-            if (w.getUid().equals(document.getWarehouseUid())) {
+            if (w.getUid().equals(getDocument().getWarehouseUid())) {
                 selectedItemWarehouse = warehouseListIterator.previousIndex();
-                notifyPropertyChanged(BR.entryWarehouses);
+                notifyPropertyChanged(BR.warehouses);
             }
         }
     }
