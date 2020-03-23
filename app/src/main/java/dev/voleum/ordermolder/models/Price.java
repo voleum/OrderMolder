@@ -1,5 +1,6 @@
 package dev.voleum.ordermolder.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 
@@ -34,6 +35,12 @@ public class Price extends Obj {
     }
 
     public String getGoodName() {
+        return goodName;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
         return goodName;
     }
 }

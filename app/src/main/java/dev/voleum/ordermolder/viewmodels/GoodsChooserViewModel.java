@@ -12,7 +12,7 @@ import dev.voleum.ordermolder.models.Price;
 
 public class GoodsChooserViewModel extends AbstractChooserViewModel<Price, GoodsChooserRecyclerViewAdapter> {
 
-    @BindingAdapter("goodsData")
+    @BindingAdapter("data")
     public static void setData(RecyclerView recyclerView, List<Price> goods) {
         if (recyclerView.getAdapter() instanceof GoodsChooserRecyclerViewAdapter) {
             ((GoodsChooserRecyclerViewAdapter) recyclerView.getAdapter()).setData(goods);
