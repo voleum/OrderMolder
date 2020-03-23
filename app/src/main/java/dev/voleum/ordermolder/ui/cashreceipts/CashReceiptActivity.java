@@ -192,6 +192,7 @@ public class CashReceiptActivity extends AppCompatActivity {
                                 Snackbar.make(fab, R.string.snackbar_doc_saved, Snackbar.LENGTH_SHORT).show();
                                 progressLayout.setVisibility(View.GONE);
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                cashReceiptViewModel.notifyChange();
                             }
 
                             @Override
