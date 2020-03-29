@@ -28,5 +28,11 @@ class GoodsOrderRecyclerViewAdapter(list: List<TableGoods>, val viewModel: Order
                 .row = GoodsOrderListItemViewModel(list[position], viewModel)
     }
 
-    inner class GoodViewHolder(binding: OrderGoodHolderBinding) : AbstractViewHolder(binding)
+    inner class GoodViewHolder(binding: OrderGoodHolderBinding) : AbstractViewHolder(binding) {
+
+        init {
+            binding.goodPrice.setOnEditorActionListener(onEditorActionListener)
+            binding.goodQuantity.setOnEditorActionListener(onEditorActionListener)
+        }
+    }
 }
