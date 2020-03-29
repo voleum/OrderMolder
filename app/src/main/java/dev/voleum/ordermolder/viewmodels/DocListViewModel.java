@@ -11,19 +11,21 @@ import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.adapters.DocListRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.enums.DocumentTypes;
+import dev.voleum.ordermolder.helpers.DocListViewModelItemTouchHelper;
 import dev.voleum.ordermolder.models.CashReceipt;
 import dev.voleum.ordermolder.models.Document;
 import dev.voleum.ordermolder.models.Order;
 import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class DocListViewModel<T extends Document> extends BaseObservable {
+public class DocListViewModel<T extends Document> extends BaseObservable implements DocListViewModelItemTouchHelper {
 
     private List<T> docs;
     private DocListRecyclerViewAdapter adapter;
     private DocumentTypes docType;
-    private int recyclerPosition;
 
     public DocListViewModel(DocumentTypes docType) {
         this.docType = docType;
@@ -52,6 +54,30 @@ public class DocListViewModel<T extends Document> extends BaseObservable {
         }
     }
 
+    @Override
+    public void onItemDismiss(int position) {
+        deleteDocFromDb(docs.get(position))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        docs.remove(position);
+                        adapter.notifyItemRemoved(position);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
     public void addDoc(T doc) {
         docs.add(doc);
         adapter.notifyItemInserted(docs.size() - 1);
@@ -60,13 +86,6 @@ public class DocListViewModel<T extends Document> extends BaseObservable {
     public void editDoc(T doc, int position) {
         docs.set(position, doc);
         adapter.notifyItemChanged(position);
-    }
-
-    public void removeDoc() {
-        deleteDocFromDb(docs.get(recyclerPosition).getUid())
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
     }
 
     private void initDocList() {
@@ -83,30 +102,25 @@ public class DocListViewModel<T extends Document> extends BaseObservable {
         }
 
         adapter = new DocListRecyclerViewAdapter(docs);
-
-        adapter.setOnEntryLongClickListener((v, position) -> {
-            recyclerPosition = position;
-            v.showContextMenu();
-            return true;
-        });
     }
 
-    private Completable deleteDocFromDb(String uid) {
+    private Completable deleteDocFromDb(Document document) {
         return Completable.create(subscriber -> {
 
             DbRoom db = OrderMolder.getApplication().getDatabase();
 
             switch (docType) {
                 case ORDER:
-                    db.getOrderDao().deleteAll((Order) docs.get(recyclerPosition));
+                    db.getOrderDao().deleteAll((Order) document);
+                    db.getTableGoodsDao().deleteByUid(document.getUid());
                     break;
                 case CASH_RECEIPT:
-                    db.getCashReceiptDao().deleteAll((CashReceipt) docs.get(recyclerPosition));
+                    db.getCashReceiptDao().deleteAll((CashReceipt) document);
+                    db.getTableObjectsDao().deleteByUid(document.getUid());
                     break;
             }
 
-            docs.remove(recyclerPosition);
-            adapter.notifyItemRemoved(recyclerPosition);
+            subscriber.onComplete();
         });
     }
 }

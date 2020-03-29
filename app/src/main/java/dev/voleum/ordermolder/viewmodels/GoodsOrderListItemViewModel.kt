@@ -33,6 +33,5 @@ class GoodsOrderListItemViewModel(table: TableGoods, viewModel: OrderViewModel) 
             R.id.good_minus -> table.decreaseQuantity()
         }
         notifyChange()
-        viewModel.countSum()
     }
 }

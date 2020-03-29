@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -100,25 +101,23 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
         countSum();
     }
 
+    @NonNull
     public Completable getDocByUid(String uid) {
         return Completable.create(subscriber -> {
             DbRoom db = OrderMolder.getApplication().getDatabase();
             setDocument(db.getOrderDao().getByUid(uid));
             setTable(db.getTableGoodsDao().getByUid(uid));
             setAdapter(new GoodsOrderRecyclerViewAdapter(getTable(), this));
-            getAdapter().setOnEntryLongClickListener((v, position) -> {
-                setSelectedMenuItemPosition(position);
-                v.showContextMenu();
-                return true;
-            });
             notifyPropertyChanged(BR.title);
             subscriber.onComplete();
         });
     }
 
+    @NonNull
     public Completable saveDoc(Order document) {
         return Completable.create(subscriber -> {
             checkUid();
+            numberTable();
             DbRoom db = OrderMolder.getApplication().getDatabase();
             db.getOrderDao().insertAll(document);
             db.getTableGoodsDao().deleteByUid(document.getUid());
