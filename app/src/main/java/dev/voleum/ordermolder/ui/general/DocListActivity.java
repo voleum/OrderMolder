@@ -3,16 +3,13 @@ package dev.voleum.ordermolder.ui.general;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.DocListRecyclerViewAdapter;
+import dev.voleum.ordermolder.callbacks.DocListItemTouchHelperCallback;
 import dev.voleum.ordermolder.databinding.ActivityDocListBinding;
 import dev.voleum.ordermolder.enums.DocumentTypes;
 import dev.voleum.ordermolder.models.Document;
@@ -80,6 +78,10 @@ public class DocListActivity extends AppCompatActivity {
                         recyclerDocs = binding.getRoot().findViewById(R.id.recycler_docs);
                         recyclerDocs.setHasFixedSize(true);
                         recyclerDocs.setLayoutManager(new LinearLayoutManager(context));
+
+                        ItemTouchHelper.Callback callback = new DocListItemTouchHelperCallback(docListViewModel);
+                        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+                        touchHelper.attachToRecyclerView(recyclerDocs);
 
                         DocListRecyclerViewAdapter.OnEntryClickListener onEntryClickListener = (v, position) -> {
                             Document clickedDoc = (Document) docListViewModel.getDocs().get(position);
@@ -152,23 +154,6 @@ public class DocListActivity extends AppCompatActivity {
                     break;
             }
         }
-    }
-
-    @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.list_context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.delete_item) {
-            docListViewModel.removeDoc();
-            return true;
-        }
-        return false;
     }
 
     @Override

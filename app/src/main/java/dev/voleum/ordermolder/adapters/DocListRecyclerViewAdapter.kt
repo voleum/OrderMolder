@@ -30,7 +30,6 @@ class DocListRecyclerViewAdapter<T : Document<*>>(list: List<T>) : AbstractRecyc
 
         init {
             binding.root.setOnClickListener { v -> onEntryClickListener.onEntryClick(v, layoutPosition) }
-            binding.root.setOnLongClickListener { v -> onEntryLongClickListener.onEntryLongClick(v, layoutPosition) }
         }
     }
 }

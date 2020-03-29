@@ -8,6 +8,7 @@ import dev.voleum.ordermolder.BR
 import dev.voleum.ordermolder.OrderMolder
 import dev.voleum.ordermolder.database.DbRoom
 import dev.voleum.ordermolder.helpers.DecimalHelper
+import dev.voleum.ordermolder.helpers.TableViewModelItemTouchHelper
 import dev.voleum.ordermolder.models.Company
 import dev.voleum.ordermolder.models.Document
 import dev.voleum.ordermolder.models.Partner
@@ -16,7 +17,7 @@ import io.reactivex.Completable
 import java.util.*
 import kotlin.collections.ArrayList
 
-abstract class AbstractDocViewModel<D : Document<T>, T : Table, E : RecyclerView.Adapter<*>> : ViewModelObservable(), AdapterView.OnItemSelectedListener {
+abstract class AbstractDocViewModel<D : Document<T>, T : Table, E : RecyclerView.Adapter<*>> : ViewModelObservable(), AdapterView.OnItemSelectedListener, TableViewModelItemTouchHelper {
 
     private val df = DecimalHelper.moneyFieldFormat()
 
@@ -61,10 +62,18 @@ abstract class AbstractDocViewModel<D : Document<T>, T : Table, E : RecyclerView
         @Bindable set
         @Bindable get
 
-    open var selectedMenuItemPosition = 0
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        table?.swap(fromPosition, toPosition)
+        adapter!!.notifyItemMoved(fromPosition, toPosition)
+        return true
+    }
 
+    override fun onItemDismiss(position: Int) {
+        table!!.removeAt(position)
+        adapter!!.notifyItemRemoved(position)
+        countSum()
     }
 
     open fun checkUid() {
@@ -81,12 +90,6 @@ abstract class AbstractDocViewModel<D : Document<T>, T : Table, E : RecyclerView
                 .toDouble()
         document?.sum = sum
         notifyPropertyChanged(BR.sum)
-    }
-
-    open fun removeRow() {
-        table!!.removeAt(selectedMenuItemPosition)
-        adapter?.notifyItemRemoved(selectedMenuItemPosition)
-        countSum()
     }
 
     open fun initSpinnersData(): Completable {
@@ -129,11 +132,19 @@ abstract class AbstractDocViewModel<D : Document<T>, T : Table, E : RecyclerView
         }
     }
 
-    protected open fun initOthers(db: DbRoom) {
+    protected open fun initOthers(db: DbRoom) {}
 
+    fun numberTable() {
+        table!!.forEach { it.position = table!!.indexOf(it) }
     }
 
     abstract fun getDocByUid(uid: String): Completable
 
     abstract fun saveDoc(document: D): Completable
+}
+
+private fun <E> MutableList<E>?.swap(index1: Int, index2: Int) {
+    val tmp: E = this!![index1]
+    this[index1] = this[index2]
+    this[index2] = tmp
 }

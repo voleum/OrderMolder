@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +16,6 @@ import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.adapters.ObjectsCashReceiptRecyclerViewAdapter;
 import dev.voleum.ordermolder.database.DbRoom;
-import dev.voleum.ordermolder.helpers.DecimalHelper;
 import dev.voleum.ordermolder.models.CashReceipt;
 import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.models.TableObjects;
@@ -76,25 +76,23 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
         countSum();
     }
 
+    @NonNull
     public Completable getDocByUid(String uid) {
         return Completable.create(subscriber -> {
             DbRoom db = OrderMolder.getApplication().getDatabase();
             setDocument(db.getCashReceiptDao().getByUid(uid));
             setTable(db.getTableObjectsDao().getByUid(uid));
             setAdapter(new ObjectsCashReceiptRecyclerViewAdapter(getTable(), this));
-            getAdapter().setOnEntryLongClickListener((v, position) -> {
-                setSelectedMenuItemPosition(position);
-                v.showContextMenu();
-                return true;
-            });
             notifyPropertyChanged(BR.title);
             subscriber.onComplete();
         });
     }
 
+    @NonNull
     public Completable saveDoc(CashReceipt document) {
         return Completable.create(subscriber -> {
             checkUid();
+            numberTable();
             DbRoom db = OrderMolder.getApplication().getDatabase();
             db.getCashReceiptDao().insertAll(document);
             db.getTableObjectsDao().deleteByUid(document.getUid());

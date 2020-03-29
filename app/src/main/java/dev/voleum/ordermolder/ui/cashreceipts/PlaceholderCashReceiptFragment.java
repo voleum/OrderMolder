@@ -2,10 +2,7 @@ package dev.voleum.ordermolder.ui.cashreceipts;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.callbacks.TableItemTouchHelperCallback;
 import dev.voleum.ordermolder.databinding.FragmentCashReceiptMainBinding;
 import dev.voleum.ordermolder.databinding.FragmentCashReceiptSecondaryPageBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
@@ -95,11 +94,14 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                             false);
                 bindingRecycler.setViewModel(cashReceiptViewModel);
                 root = bindingRecycler.getRoot();
+
                 recyclerObjects = root.findViewById(R.id.recycler_tab_cash_receipt);
                 recyclerObjects.setHasFixedSize(true);
                 recyclerObjects.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                registerForContextMenu(recyclerObjects);
+                ItemTouchHelper.Callback callback = new TableItemTouchHelperCallback(cashReceiptViewModel);
+                ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+                touchHelper.attachToRecyclerView(recyclerObjects);
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(view -> {
@@ -125,25 +127,5 @@ public class PlaceholderCashReceiptFragment extends Fragment {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.list_context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.delete_item) {
-            CashReceiptActivity cashReceiptActivity = (CashReceiptActivity) getActivity();
-            if (cashReceiptActivity != null) {
-                cashReceiptViewModel.removeRow();
-                return true;
-            }
-        }
-        return false;
     }
 }

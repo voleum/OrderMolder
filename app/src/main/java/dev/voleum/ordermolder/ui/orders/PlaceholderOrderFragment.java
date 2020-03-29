@@ -2,10 +2,7 @@ package dev.voleum.ordermolder.ui.orders;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Objects;
 
 import dev.voleum.ordermolder.R;
+import dev.voleum.ordermolder.callbacks.TableItemTouchHelperCallback;
 import dev.voleum.ordermolder.databinding.FragmentOrderMainBinding;
 import dev.voleum.ordermolder.databinding.FragmentOrderSecondaryPageBinding;
 import dev.voleum.ordermolder.fragments.SelectDateFragment;
@@ -95,11 +94,14 @@ public class PlaceholderOrderFragment extends Fragment {
                             false);
                 bindingRecycler.setViewModel(orderViewModel);
                 root = bindingRecycler.getRoot();
+
                 recyclerGoods = root.findViewById(R.id.recycler_tab_order);
                 recyclerGoods.setHasFixedSize(true);
                 recyclerGoods.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                registerForContextMenu(recyclerGoods);
+                ItemTouchHelper.Callback callback = new TableItemTouchHelperCallback(orderViewModel);
+                ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+                touchHelper.attachToRecyclerView(recyclerGoods);
 
                 FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
                 fab.setOnClickListener(view -> {
@@ -123,25 +125,5 @@ public class PlaceholderOrderFragment extends Fragment {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.list_context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.delete_item) {
-            OrderActivity orderActivity = (OrderActivity) getActivity();
-            if (orderActivity != null) {
-                orderViewModel.removeRow();
-                return true;
-            }
-        }
-        return false;
     }
 }
