@@ -31,7 +31,8 @@ class GoodsOrderRecyclerViewAdapter(list: List<TableGoods>, val viewModel: Order
     inner class GoodViewHolder(binding: OrderGoodHolderBinding) : AbstractViewHolder(binding) {
 
         init {
-            binding.root.setOnLongClickListener { v -> onEntryLongClickListener.onEntryLongClick(v, layoutPosition) }
+            binding.goodPrice.setOnEditorActionListener(onEditorActionListener)
+            binding.goodQuantity.setOnEditorActionListener(onEditorActionListener)
         }
     }
 }

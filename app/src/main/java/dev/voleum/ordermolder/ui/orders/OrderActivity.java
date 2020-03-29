@@ -1,5 +1,6 @@
 package dev.voleum.ordermolder.ui.orders;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -58,6 +60,7 @@ public class OrderActivity extends AppCompatActivity {
             }
             else {
                 fab.hide();
+                clearFocus();
             }
         }
 
@@ -135,7 +138,7 @@ public class OrderActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onError(Throwable e) {
-                                    if (e != null) Log.d(MainActivity.LOG_TAG, e.getMessage());
+                                    if (e != null) Log.e(MainActivity.LOG_TAG, e.getMessage());
                                 }
                             });
                     break;
@@ -183,6 +186,7 @@ public class OrderActivity extends AppCompatActivity {
                         .subscribe(new CompletableObserver() {
                             @Override
                             public void onSubscribe(Disposable d) {
+                                clearFocus();
                                 showProgressLayout();
                             }
 
@@ -197,7 +201,7 @@ public class OrderActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(Throwable e) {
-                                if (e != null) Log.d(MainActivity.LOG_TAG, e.getMessage());
+                                if (e != null) Log.e(MainActivity.LOG_TAG, e.getMessage());
                             }
                         });
                 break;
@@ -217,5 +221,12 @@ public class OrderActivity extends AppCompatActivity {
         progressLayout.animate().alpha(1.0f);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void clearFocus() {
+        View focusedView = getCurrentFocus();
+        if (focusedView != null) focusedView.clearFocus();
+        InputMethodManager imm = (InputMethodManager) viewPager.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
     }
 }
