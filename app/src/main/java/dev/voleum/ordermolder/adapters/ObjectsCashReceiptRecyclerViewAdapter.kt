@@ -27,10 +27,5 @@ class ObjectsCashReceiptRecyclerViewAdapter(list: List<TableObjects>, val viewMo
                 .row = ObjectsCashReceiptListItemViewModel(list[position], viewModel)
     }
 
-    inner class ObjectViewHolder(binding: CashReceiptObjectHolderBinding) : AbstractViewHolder(binding) {
-
-        init {
-            binding.root.setOnLongClickListener { v -> onEntryLongClickListener.onEntryLongClick(v, layoutPosition) }
-        }
-    }
+    inner class ObjectViewHolder(binding: CashReceiptObjectHolderBinding) : AbstractViewHolder(binding)
 }
