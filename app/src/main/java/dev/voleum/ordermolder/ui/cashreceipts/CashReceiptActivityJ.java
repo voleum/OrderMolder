@@ -1,4 +1,4 @@
-package dev.voleum.ordermolder.ui.orders;
+package dev.voleum.ordermolder.ui.cashreceipts;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,18 +26,19 @@ import com.google.android.material.tabs.TabLayout;
 
 import dev.voleum.ordermolder.MainActivity;
 import dev.voleum.ordermolder.R;
-import dev.voleum.ordermolder.databinding.ActivityOrderBinding;
+import dev.voleum.ordermolder.databinding.ActivityCashReceiptBinding;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
 import dev.voleum.ordermolder.ui.general.SectionsPagerAdapter;
-import dev.voleum.ordermolder.viewmodels.OrderViewModel;
+import dev.voleum.ordermolder.viewmodels.CashReceiptViewModel;
 import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class OrderActivity extends AppCompatActivity {
+@Deprecated
+public class CashReceiptActivityJ extends AppCompatActivity {
 
-    private OrderViewModel orderViewModel;
+    private CashReceiptViewModel cashReceiptViewModel;
 
     private ConstraintLayout progressLayout;
     protected ViewPager viewPager;
@@ -73,23 +74,23 @@ public class OrderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order);
+        setContentView(R.layout.activity_cash_receipt);
 
         isCreating = (getIntent().getBooleanExtra(DocListActivity.IS_CREATING, true));
         savedWithoutClosing = false;
 
-        orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
-        if (isCreating) orderViewModel.setOrder();
-        else orderViewModel.setOrder(getIntent().getStringExtra(DocListActivity.DOC));
+        cashReceiptViewModel = new ViewModelProvider(this).get(CashReceiptViewModel.class);
+        if (isCreating) cashReceiptViewModel.setCashReceipt();
+        else cashReceiptViewModel.setCashReceipt(getIntent().getStringExtra(DocListActivity.DOC));
 
-        ActivityOrderBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_order);
-        binding.setViewModel(orderViewModel);
+        ActivityCashReceiptBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_cash_receipt);
+        binding.setViewModel(cashReceiptViewModel);
         binding.executePendingBindings();
 
         sectionsPagerAdapter = new SectionsPagerAdapter(
                 this,
                 getSupportFragmentManager(),
-                SectionsPagerAdapter.TYPE_ORDER);
+                SectionsPagerAdapter.TYPE_CASH_RECEIPT);
 
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -105,7 +106,7 @@ public class OrderActivity extends AppCompatActivity {
 
         viewPager.addOnPageChangeListener(onPageChangeListener);
 
-        progressLayout = findViewById(R.id.order_progress_layout);
+        progressLayout = findViewById(R.id.progress_layout);
     }
 
     @Override
@@ -113,23 +114,24 @@ public class OrderActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    if (orderViewModel.getTable().isEmpty()) {
-                        Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
+                    if (cashReceiptViewModel.getTable().isEmpty()) {
+                        Snackbar.make(fab, R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT).show();
                         break;
                     }
-                    orderViewModel.saveDoc(orderViewModel.getDocument())
+                    cashReceiptViewModel.saveDoc(cashReceiptViewModel.getDocument())
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new CompletableObserver() {
                                 @Override
                                 public void onSubscribe(Disposable d) {
+                                    clearFocus();
                                     showProgressLayout();
                                 }
 
                                 @Override
                                 public void onComplete() {
                                     Intent intent = new Intent();
-                                    intent.putExtra(DocListActivity.DOC, orderViewModel.getDocument());
+                                    intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getDocument());
                                     intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                                     int result = isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED;
                                     setResult(result, intent);
@@ -145,7 +147,7 @@ public class OrderActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_NEGATIVE:
                     if (savedWithoutClosing) {
                         Intent intent = new Intent();
-                        intent.putExtra(DocListActivity.DOC, orderViewModel.getDocument());
+                        intent.putExtra(DocListActivity.DOC, cashReceiptViewModel.getDocument());
                         intent.putExtra(DocListActivity.POSITION, getIntent().getIntExtra(DocListActivity.POSITION, -1));
                         setResult(isCreating ? DocListActivity.RESULT_CREATED : DocListActivity.RESULT_SAVED, intent);
                     }
@@ -176,17 +178,16 @@ public class OrderActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.doc_save:
-                if (orderViewModel.getTable().isEmpty()) {
-                    Snackbar.make(fab, R.string.snackbar_empty_goods_list, Snackbar.LENGTH_SHORT).show();
+                if (cashReceiptViewModel.getTable().isEmpty()) {
+                    Snackbar.make(fab, R.string.snackbar_empty_objects_list, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
-                orderViewModel.saveDoc(orderViewModel.getDocument())
+                cashReceiptViewModel.saveDoc(cashReceiptViewModel.getDocument())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new CompletableObserver() {
                             @Override
                             public void onSubscribe(Disposable d) {
-                                clearFocus();
                                 showProgressLayout();
                             }
 
@@ -196,7 +197,7 @@ public class OrderActivity extends AppCompatActivity {
                                 Snackbar.make(fab, R.string.snackbar_doc_saved, Snackbar.LENGTH_SHORT).show();
                                 progressLayout.setVisibility(View.GONE);
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                orderViewModel.notifyChange();
+                                cashReceiptViewModel.notifyChange();
                             }
 
                             @Override
@@ -211,8 +212,8 @@ public class OrderActivity extends AppCompatActivity {
         return true;
     }
 
-    public OrderViewModel getOrderViewModel() {
-        return orderViewModel;
+    public CashReceiptViewModel getCashReceiptViewModel() {
+        return cashReceiptViewModel;
     }
 
     private void showProgressLayout() {
