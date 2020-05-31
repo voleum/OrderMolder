@@ -26,6 +26,12 @@
 
     <style name="Preference_TextAppearanceMaterialSubhead" />
 
+    <style name="Widget.OrderMolder.Button.Circle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="strokeWidth">@dimen/rounded_button_stroke_width</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.OrderMolder.Button.Circle</item>
+    </style>
+
     <style name="Widget.OrderMolder.TextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:textSize">@dimen/rounded_textview_text_size</item>
         <item name="android:padding">@dimen/rounded_textview_padding</item>
@@ -38,10 +44,6 @@
         <item name="android:background">@drawable/shape_rounded_textview</item>
     </style>
 
-    <style name="ShapeAppearance.OrderMolder.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerSize">@dimen/rounded_button_corner_radius</item>
-    </style>
-
     <style name="Widget.OrderMolder.Spinner" parent="Widget.AppCompat.TextView.SpinnerItem" />
     <style name="Widget.OrderMolder.Spinner.RoundedColored">
         <item name="android:padding">@dimen/rounded_spinner_padding</item>
@@ -50,4 +52,13 @@
     </style>
 
     <style name="TextAppearance.OrderMolder.Widget.TextView.SpinnerItem" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem" />
+
+    <style name="ShapeAppearance.OrderMolder.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">@dimen/rounded_button_corner_radius</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.OrderMolder.Button.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
