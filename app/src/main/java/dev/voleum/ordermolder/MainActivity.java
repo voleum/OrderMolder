@@ -1,8 +1,6 @@
 package dev.voleum.ordermolder;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,12 +11,10 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,7 +32,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String LOG_TAG = "voleum_log";
     public static final String CHECKED_MENU_ITEM = "checked_menu_item";
 
     public static final int MENU_ITEM_MAIN = 0;
@@ -59,10 +54,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("first_launch", true)) fillSharedPrefs();
-
-        AppCompatDelegate.setDefaultNightMode(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("theme", "-1")));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -170,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
                                        @Override
                                        public void onError(Throwable e) {
-                                           if (e != null) Log.d(LOG_TAG, e.getMessage());
+                                           if (e != null) Log.d(OrderMolder.LOG_TAG, e.getMessage());
                                        }
                                    }
                         );
@@ -197,15 +188,6 @@ public class MainActivity extends AppCompatActivity {
                         });
                 break;
         }
-    }
-
-    private void fillSharedPrefs() {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) editor.putString("theme", "-1");
-        else editor.putString("theme", "3");
-        editor.putString("port", "21");
-        editor.putBoolean("first_launch", true);
-        editor.apply();
     }
 
     private void showProgressLayout() {
