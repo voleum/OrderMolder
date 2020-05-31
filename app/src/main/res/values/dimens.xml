@@ -18,11 +18,15 @@
     <dimen name="recycler_chooser">8dp</dimen>
     <dimen name="recycler_view_item">8dp</dimen>
 
+    <!--    View insets-->
+    <dimen name="rounded_button_inset">0dp</dimen>
+
     <!-- Text sizes -->
     <dimen name="rounded_textview_text_size">16sp</dimen>
 
     <!-- Lines width -->
     <dimen name="rounded_textview_stroke_width">2dp</dimen>
+    <dimen name="rounded_button_stroke_width">2dp</dimen>
 
     <!-- Shapes radius -->
     <dimen name="rounded_textview_corner_radius">100dp</dimen>
@@ -31,4 +35,10 @@
 
     <!--  Elevations  -->
     <dimen name="elevation_recycler_view_item">8dp</dimen>
+
+    <!--    View width-->
+    <dimen name="rounded_button_width">48dp</dimen>
+
+    <!--    View height-->
+    <dimen name="rounded_button_height">48dp</dimen>
 </resources>

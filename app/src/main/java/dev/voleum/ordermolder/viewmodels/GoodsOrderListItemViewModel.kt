@@ -9,7 +9,7 @@ class GoodsOrderListItemViewModel(table: TableGoods, viewModel: OrderViewModel) 
 
     var quantity: String = ""
         @Bindable set(value) {
-            val q = value.toDouble()
+            val q = if (value == "") 0.00 else value.toDouble()
             table.quantity = q
             table.countSum()
             viewModel.countSum()
@@ -19,7 +19,7 @@ class GoodsOrderListItemViewModel(table: TableGoods, viewModel: OrderViewModel) 
 
     var price: String = ""
         @Bindable set(value) {
-            val p = value.toDouble()
+            val p = if (value == "") 0.00 else value.toDouble()
             table.price = p
             table.countSum()
             viewModel.countSum()
