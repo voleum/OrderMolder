@@ -68,7 +68,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
         View root = null;
         switch (index) {
             case 1:
-                cashReceiptViewModel = ((CashReceiptActivity) getActivity()).getCashReceiptViewModel();
+                cashReceiptViewModel = ((CashReceiptActivity) getActivity()).getDocViewModel();
                 FragmentCashReceiptMainBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cash_receipt_main, null, false);
                 binding.setViewModel(cashReceiptViewModel);
                 root = binding.getRoot();
@@ -86,7 +86,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 });
                 break;
             case 2:
-                cashReceiptViewModel = ((CashReceiptActivity) getActivity()).getCashReceiptViewModel();
+                cashReceiptViewModel = ((CashReceiptActivity) getActivity()).getDocViewModel();
                 FragmentCashReceiptSecondaryPageBinding bindingRecycler
                         = DataBindingUtil.inflate(inflater,
                             R.layout.fragment_cash_receipt_secondary_page,

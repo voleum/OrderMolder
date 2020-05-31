@@ -68,7 +68,7 @@ public class PlaceholderOrderFragment extends Fragment {
         View root = null;
         switch (index) {
             case 1:
-                orderViewModel = ((OrderActivity) getActivity()).getOrderViewModel();
+                orderViewModel = ((OrderActivity) getActivity()).getDocViewModel();
                 FragmentOrderMainBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_order_main, null, false);
                 binding.setViewModel(orderViewModel);
                 root = binding.getRoot();
@@ -86,7 +86,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 });
                 break;
             case 2:
-                orderViewModel = ((OrderActivity) getActivity()).getOrderViewModel();
+                orderViewModel = ((OrderActivity) getActivity()).getDocViewModel();
                 FragmentOrderSecondaryPageBinding bindingRecycler
                         = DataBindingUtil.inflate(inflater,
                             R.layout.fragment_order_secondary_page,

@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketException;
 
-import dev.voleum.ordermolder.MainActivity;
 import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 

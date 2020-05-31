@@ -140,7 +140,7 @@ abstract class AbstractDocViewModel<D : Document<T>, T : Table, E : RecyclerView
 
     abstract fun getDocByUid(uid: String): Completable
 
-    abstract fun saveDoc(document: D): Completable
+    abstract fun saveDoc(document: D?): Completable
 }
 
 private fun <E> MutableList<E>?.swap(index1: Int, index2: Int) {
