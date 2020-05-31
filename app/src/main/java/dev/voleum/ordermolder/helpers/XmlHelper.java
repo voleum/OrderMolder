@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
-import dev.voleum.ordermolder.MainActivity;
 import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.database.DbRoom;
 import dev.voleum.ordermolder.models.CashReceipt;
@@ -225,7 +224,7 @@ class XmlHelper {
                         break;
 
                     default:
-                        Log.d(MainActivity.LOG_TAG, "Not used type: " + xpp.getEventType());
+                        Log.d(OrderMolder.LOG_TAG, "Not used type: " + xpp.getEventType());
                 }
                 xpp.next();
             }
