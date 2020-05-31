@@ -24,7 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import dev.voleum.ordermolder.MainActivity;
+import dev.voleum.ordermolder.OrderMolder;
 import dev.voleum.ordermolder.R;
 import dev.voleum.ordermolder.databinding.ActivityCashReceiptBinding;
 import dev.voleum.ordermolder.ui.general.DocListActivity;
@@ -140,7 +140,7 @@ public class CashReceiptActivityJ extends AppCompatActivity {
 
                                 @Override
                                 public void onError(Throwable e) {
-                                    if (e != null) Log.e(MainActivity.LOG_TAG, e.getMessage());
+                                    if (e != null) Log.e(OrderMolder.LOG_TAG, e.getMessage());
                                 }
                             });
                     break;
@@ -202,7 +202,7 @@ public class CashReceiptActivityJ extends AppCompatActivity {
 
                             @Override
                             public void onError(Throwable e) {
-                                if (e != null) Log.e(MainActivity.LOG_TAG, e.getMessage());
+                                if (e != null) Log.e(OrderMolder.LOG_TAG, e.getMessage());
                             }
                         });
                 break;

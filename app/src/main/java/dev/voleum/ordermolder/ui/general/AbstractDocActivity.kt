@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import dev.voleum.ordermolder.MainActivity
+import dev.voleum.ordermolder.OrderMolder
 import dev.voleum.ordermolder.R
 import dev.voleum.ordermolder.models.Document
 import dev.voleum.ordermolder.viewmodels.AbstractDocViewModel
@@ -90,7 +90,7 @@ abstract class AbstractDocActivity<D : Document<*>, V : AbstractDocViewModel<D, 
                                     }
 
                                     override fun onError(e: Throwable) {
-                                        Log.e(MainActivity.LOG_TAG, e.message.toString())
+                                        Log.e(OrderMolder.LOG_TAG, e.message.toString())
                                     }
                                 })
                     }
@@ -139,7 +139,7 @@ abstract class AbstractDocActivity<D : Document<*>, V : AbstractDocViewModel<D, 
                                 }
 
                                 override fun onError(e: Throwable) {
-                                    Log.e(MainActivity.LOG_TAG, e.message.toString())
+                                    Log.e(OrderMolder.LOG_TAG, e.message.toString())
                                 }
                             })
                 }
