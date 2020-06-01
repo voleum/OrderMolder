@@ -74,4 +74,7 @@
     <string name="object_company">Организация</string>
     <string name="object_partner">Партнёр</string>
     <string name="object_warehouse">Склад</string>
+    <string name="row_quantity">Количество</string>
+    <string name="row_price">Цена</string>
+    <string name="row_sum">Сумма</string>
 </resources>

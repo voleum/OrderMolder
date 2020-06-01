@@ -15,4 +15,9 @@
     <style name="Widget.OrderMolder.TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="android:backgroundTint">@android:color/transparent</item>
     </style>
+
+    <style name="Widget.OrderMolder.Button.Circle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.OrderMolder.Button.Circle</item>
+    </style>
 </resources>

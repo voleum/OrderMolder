@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="row"
             type="dev.voleum.ordermolder.viewmodels.GoodsOrderListItemViewModel" />
@@ -15,7 +17,8 @@
         android:background="@drawable/shape_rounded_recycler_view_item"
         android:elevation="@dimen/elevation_recycler_view_item"
         android:orientation="horizontal"
-        android:outlineProvider="bounds">
+        android:outlineProvider="bounds"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/good_name"
@@ -29,58 +32,101 @@
             android:textSize="20sp"
             tools:text="Good name" />
 
-        <Button
-            android:id="@+id/good_minus"
-            style="@android:style/Widget.Material.Button.Borderless.Small"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:onClick="@{(v) -> row.onClick(v)}"
-            android:text="@string/sign_minus" />
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:minWidth="150dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/good_quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="10"
-            android:autofillHints=""
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:text="@={row.quantity}"
-            android:textAlignment="center"
-            tools:text="10" />
+            <!--                        <LinearLayout-->
+            <!--                            android:layout_width="wrap_content"-->
+            <!--                            android:layout_height="wrap_content"-->
+            <!--                            android:orientation="horizontal">-->
 
-        <Button
-            android:id="@+id/good_plus"
-            style="@android:style/Widget.Material.Button.Borderless.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:onClick="@{(v) -> row.onClick(v)}"
-            android:text="@string/sign_plus" />
+            <!--            <Button-->
+            <!--                android:id="@+id/good_minus"-->
+            <!--                style="@style/Widget.OrderMolder.Button.Circle"-->
+            <!--                android:layout_width="@dimen/rounded_button_width"-->
+            <!--                android:layout_height="@dimen/rounded_button_height"-->
+            <!--                android:layout_gravity="center_vertical"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:insetLeft="@dimen/rounded_button_inset"-->
+            <!--                android:insetTop="@dimen/rounded_button_inset"-->
+            <!--                android:insetRight="@dimen/rounded_button_inset"-->
+            <!--                android:insetBottom="@dimen/rounded_button_inset"-->
+            <!--                android:onClick="@{(v) -> row.onClick(v)}"-->
+            <!--                android:text="@string/sign_minus" />-->
 
-        <EditText
-            android:id="@+id/good_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:text="@={row.price}"
-            android:textAlignment="center"
-            tools:text="1000" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/good_quantity_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:hint="@string/row_quantity"
+                android:maxWidth="200dp"
+                android:minWidth="150dp"
+                app:endIconDrawable="@drawable/ic_add_24dp"
+                app:endIconMode="custom"
+                app:startIconDrawable="@drawable/ic_remove_24">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="10"
-            android:text="@string/sign_currency_ruble"
-            android:textSize="20sp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/good_quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:text="@={row.quantity}"
+                    android:textAlignment="center"
+                    tools:text="10.00" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--            <Button-->
+            <!--                android:id="@+id/good_plus"-->
+            <!--                style="@style/Widget.OrderMolder.Button.Circle"-->
+            <!--                android:layout_width="@dimen/rounded_button_width"-->
+            <!--                android:layout_height="@dimen/rounded_button_height"-->
+            <!--                android:layout_gravity="center_vertical"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:insetLeft="@dimen/rounded_button_inset"-->
+            <!--                android:insetTop="@dimen/rounded_button_inset"-->
+            <!--                android:insetRight="@dimen/rounded_button_inset"-->
+            <!--                android:insetBottom="@dimen/rounded_button_inset"-->
+            <!--                android:onClick="@{(v) -> row.onClick(v)}"-->
+            <!--                android:text="@string/sign_plus" />-->
+            <!--                        </LinearLayout>-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/good_price_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:hint="@string/row_price"
+                android:maxWidth="200dp"
+                android:minWidth="150dp"
+                app:endIconDrawable="@drawable/ic_ruble_currency_sign"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/good_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:text="@={row.price}"
+                    android:textAlignment="textEnd"
+                    tools:text="1000.00" />
+
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_gravity="center_vertical|end"-->
+                <!--                    android:text="@string/sign_currency_ruble"-->
+                <!--                    android:textSize="20sp" />-->
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
     </LinearLayout>
 </layout>

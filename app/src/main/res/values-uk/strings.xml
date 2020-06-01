@@ -1,77 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--  DIALOGS  -->
-    <string name="dialog_yes">Да</string>
-    <string name="dialog_no">Нет</string>
-    <string name="dialog_cancel">Отмена</string>
-    <string name="dialog_save_doc">Сохранить документ?</string>
+    <string name="dialog_yes">Так</string>
+    <string name="dialog_no">Ні</string>
+    <string name="dialog_cancel">Скасування</string>
+    <string name="dialog_save_doc">Зберегти документ?</string>
 
     <!--  MENU ITEMS  -->
-    <string name="menu_save">Сохранить</string>
-    <string name="menu_delete">Удалить</string>
+    <string name="menu_save">Зберегти</string>
+    <string name="menu_delete">Видалити</string>
 
     <!--  SNACKBAR  -->
     <string name="snackbar_soon">Скоро&#8230;</string>
-    <string name="snackbar_action_undo">Отменить</string>
-    <string name="snackbar_doc_created">Документ создан</string>
-    <string name="snackbar_doc_saved">Документ сохранён</string>
-    <string name="snackbar_doc_deleted">Документ удалён</string>
-    <string name="snackbar_empty_goods_list">Список товаров пуст!</string>
-    <string name="snackbar_empty_objects_list">Список объектов расчётов пуст!</string>
-    <string name="snackbar_unknown_doc_type">Неизвестный тип документа</string>
-    <string name="snackbar_successful">Успешно!</string>
-    <string name="snackbar_unsuccessful">Что-то пошло не так!</string>
-    <string name="snackbar_empty_hostname">Пустое имя хоста!</string>
-    <string name="snackbar_empty_username">Пустое имя пользователя!</string>
-    <string name="snackbar_empty_password">Пустой пароль!</string>
-    <string name="snackbar_couldnt_send_data">Не удалось отправить данные!</string>
-    <string name="snackbar_couldnt_receive_data">Не удалось получить данные!</string>
+    <string name="snackbar_action_undo">Скасувати</string>
+    <string name="snackbar_doc_created">Документ створено</string>
+    <string name="snackbar_doc_saved">Документ збережено</string>
+    <string name="snackbar_doc_deleted">Документ видалено</string>
+    <string name="snackbar_empty_goods_list">Список товарів порожній!</string>
+    <string name="snackbar_empty_objects_list">Список об\'єктів розрахунків порожній!</string>
+    <string name="snackbar_unknown_doc_type">Невідомий тип документа</string>
+    <string name="snackbar_successful">Успішно!</string>
+    <string name="snackbar_unsuccessful">Щось пішло не так!</string>
+    <string name="snackbar_empty_hostname">Порожнє ім\'я хоста!</string>
+    <string name="snackbar_empty_username">Порожнє ім\'я користувача!</string>
+    <string name="snackbar_empty_password">Порожній пароль!</string>
+    <string name="snackbar_couldnt_send_data">Не вдалося надіслати дані!</string>
+    <string name="snackbar_couldnt_receive_data">Не вдалося отримати дані!</string>
 
     <!--  BUTTONS  -->
-    <string name="button_exchange">Обмен данными</string>
+    <string name="button_exchange">Обмін даними</string>
 
     <!-- SETTINGS -->
-    <string name="settings_category_interface">Интерфейс</string>
+    <string name="settings_category_interface">Інтерфейс</string>
     <string name="settings_item_theme">Тема</string>
     <string name="settings_item_port">Порт</string>
-    <string name="settings_item_username">Имя пользователя</string>
+    <string name="settings_item_username">Ім\'я користувача</string>
     <string name="settings_item_password">Пароль</string>
-    <string name="settings_item_passive">Пассивный режим</string>
+    <string name="settings_item_passive">Пасивний режим</string>
 
     <!--  TITLES  -->
-    <string name="title_main">Главная</string>
-    <string name="title_documents">Документы</string>
-    <string name="title_catalogs">Справочники</string>
-    <string name="title_reports">Отчёты</string>
+    <string name="title_main">Головна</string>
+    <string name="title_documents">Документи</string>
+    <string name="title_catalogs">Довідники</string>
+    <string name="title_reports">Звіти</string>
     <string name="title_activity_settings">Настройки</string>
-    <string name="title_activity_orders">Заказы</string>
-    <string name="title_activity_cash_receipts">Приходные кассовые ордера</string>
-    <string name="title_activity_companies">Организации</string>
-    <string name="title_activity_partners">Партнёры</string>
-    <string name="title_activity_warehouses">Склады</string>
-    <string name="title_activity_goods">Товары</string>
-    <string name="title_activity_units">Единицы измерения</string>
-    <string name="title_activity_unknown_cat">Неизвестные справочники</string>
-    <string name="title_activity_unknown_doc">Неизвестные документы</string>
-    <string name="title_new_order">Новый заказ</string>
-    <string name="title_new_cash_receipt">Новый приходный кассовый ордер</string>
+    <string name="title_activity_orders">Замовлення</string>
+    <string name="title_activity_cash_receipts">Прибуткові касові ордери</string>
+    <string name="title_activity_companies">Організації</string>
+    <string name="title_activity_partners">Партнери</string>
+    <string name="title_activity_warehouses">Склади</string>
+    <string name="title_activity_goods">Товари</string>
+    <string name="title_activity_units">Одиниці виміру</string>
+    <string name="title_activity_unknown_cat">Невідомі довідники</string>
+    <string name="title_activity_unknown_doc">Невідомі документи</string>
+    <string name="title_new_order">Нове замовлення</string>
+    <string name="title_new_cash_receipt">Новий прибутковий касовий ордер</string>
 
     <!--  TABS  -->
-    <string name="tab_main">Основное</string>
-    <string name="tab_order_goods">Товары</string>
-    <string name="tab_cash_receipt_objects">Объекты расчётов</string>
+    <string name="tab_main">Основне</string>
+    <string name="tab_order_goods">Товари</string>
+    <string name="tab_cash_receipt_objects">Об\'єкти розрахунків</string>
 
     <!--  OBJECTS FIELDS  -->
     <string name="object_number">Номер</string>
     <string name="object_date">Дата</string>
-    <string name="object_name">Наименование</string>
-    <string name="object_group">Группа</string>
+    <string name="object_name">Найменування</string>
+    <string name="object_group">Група</string>
     <string name="object_code">Код</string>
-    <string name="object_full_name">Полное наименование</string>
-    <string name="object_sum">Сумма</string>
-    <string name="object_tin">ИНН</string>
-    <string name="object_unit">Единица измерения</string>
-    <string name="object_company">Организация</string>
-    <string name="object_partner">Партнёр</string>
+    <string name="object_full_name">Повне найменування</string>
+    <string name="object_sum">Сума</string>
+    <string name="object_tin">ИНПП</string>
+    <string name="object_unit">Одиниця виміру</string>
+    <string name="object_company">Організація</string>
+    <string name="object_partner">Партнер</string>
     <string name="object_warehouse">Склад</string>
+    <string name="row_quantity">Кількість</string>
+    <string name="row_price">Ціна</string>
+    <string name="row_sum">Сума</string>
 </resources>
