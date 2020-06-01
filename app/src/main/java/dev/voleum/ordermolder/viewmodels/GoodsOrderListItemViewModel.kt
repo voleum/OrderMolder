@@ -29,8 +29,10 @@ class GoodsOrderListItemViewModel(table: TableGoods, viewModel: OrderViewModel) 
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.good_plus -> table.increaseQuantity()
-            R.id.good_minus -> table.decreaseQuantity()
+            R.id.text_input_start_icon -> table.decreaseQuantity()
+            R.id.text_input_end_icon -> table.increaseQuantity()
+//            R.id.good_plus -> table.increaseQuantity()
+//            R.id.good_minus -> table.decreaseQuantity()
         }
         notifyChange()
     }
