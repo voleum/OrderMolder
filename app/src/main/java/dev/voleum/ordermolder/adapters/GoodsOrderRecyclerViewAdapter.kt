@@ -19,6 +19,8 @@ class GoodsOrderRecyclerViewAdapter(list: List<TableGoods>, val viewModel: Order
                         R.layout.order_good_holder,
                         parent,
                         false)
+        binding.goodQuantityLayout.setStartIconOnClickListener { v -> binding.row!!.onClick(v) }
+        binding.goodQuantityLayout.setEndIconOnClickListener { v -> binding.row!!.onClick(v) }
         return GoodViewHolder(binding)
     }
 
