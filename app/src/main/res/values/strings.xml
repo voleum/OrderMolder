@@ -82,4 +82,7 @@
     <string name="object_company">Company</string>
     <string name="object_partner">Partner</string>
     <string name="object_warehouse">Warehouse</string>
+    <string name="row_quantity">Quantity</string>
+    <string name="row_price">Price</string>
+    <string name="row_sum">Sum</string>
 </resources>

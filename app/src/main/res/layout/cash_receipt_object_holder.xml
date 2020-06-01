@@ -32,16 +32,18 @@
             tools:text="Object name" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:hint="@string/row_sum"
+            android:maxWidth="200dp"
             android:minWidth="150dp"
-            android:layout_gravity="end"
-            android:hint="Sum"
             app:endIconDrawable="@drawable/ic_ruble_currency_sign"
             app:endIconMode="custom"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/object_sum"
