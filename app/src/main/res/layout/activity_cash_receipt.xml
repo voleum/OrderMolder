@@ -56,8 +56,7 @@
             android:id="@+id/progress_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorBehindProgressBar"
-            android:visibility="gone">
+            android:background="@color/colorBehindProgressBar">
 
             <ProgressBar
                 android:layout_width="wrap_content"
