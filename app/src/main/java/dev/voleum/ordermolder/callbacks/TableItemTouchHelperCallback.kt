@@ -15,8 +15,8 @@ class TableItemTouchHelperCallback(val adapter: TableViewModelItemTouchHelper) :
     }
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        val dragFlags: Int = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-        val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
+        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+        val swipeFlags = ItemTouchHelper.START //or ItemTouchHelper.END
         return makeMovementFlags(dragFlags, swipeFlags)
     }
 
