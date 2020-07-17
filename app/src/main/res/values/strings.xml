@@ -27,6 +27,7 @@
     <string name="snackbar_empty_password">Password is empty!</string>
     <string name="snackbar_couldnt_send_data">Couldn\'t send the data!</string>
     <string name="snackbar_couldnt_receive_data">Couldn\'t receive the data!</string>
+    <string name="snackbar_no_file_on_server">No file on server!</string>
 
     <!--  BUTTONS  -->
     <string name="button_exchange">Exchange</string>
