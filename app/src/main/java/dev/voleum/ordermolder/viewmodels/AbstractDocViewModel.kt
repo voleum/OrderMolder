@@ -92,16 +92,11 @@ abstract class AbstractDocViewModel<D : Document<T>, T : Table, E : RecyclerView
         notifyPropertyChanged(BR.sum)
     }
 
-    open fun initSpinnersData(): Completable {
-
-        return Completable.create {
-
+    open fun initSpinnersData() {
             val db = OrderMolder.getApplication().database
             initCompanies(db)
             initPartners(db)
             initOthers(db)
-            it.onComplete()
-        }
     }
 
     private fun initCompanies(db: DbRoom) {
@@ -138,7 +133,7 @@ abstract class AbstractDocViewModel<D : Document<T>, T : Table, E : RecyclerView
         table!!.forEach { it.position = table!!.indexOf(it) }
     }
 
-    abstract fun getDocByUid(uid: String): Completable
+    abstract fun getDocByUid(uid: String)
 
     abstract fun saveDoc(document: D?): Completable
 }

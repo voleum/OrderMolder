@@ -23,8 +23,6 @@ import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.models.TableGoods;
 import dev.voleum.ordermolder.models.Warehouse;
 import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, GoodsOrderRecyclerViewAdapter> implements Spinner.OnItemSelectedListener {
 
@@ -73,20 +71,15 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
         setDocument(new Order());
         setTable(getDocument().getTable());
         setAdapter(new GoodsOrderRecyclerViewAdapter(getTable(), this));
-        initSpinnersData()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        notifyPropertyChanged(BR.title);
+        initSpinnersData();
     }
 
     public void setOrder(String uid) {
         if (getDocument() != null) return;
         setDocument(new Order());
-        getDocByUid(uid)
-                .andThen(initSpinnersData())
-                .subscribeOn(Schedulers.newThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        getDocByUid(uid);
+        initSpinnersData();
     }
 
     public void addRow(String goodUid, double price, String goodName) {
@@ -102,15 +95,12 @@ public class OrderViewModel extends AbstractDocViewModel<Order, TableGoods, Good
     }
 
     @NonNull
-    public Completable getDocByUid(String uid) {
-        return Completable.create(subscriber -> {
+    public void getDocByUid(String uid) {
             DbRoom db = OrderMolder.getApplication().getDatabase();
             setDocument(db.getOrderDao().getByUid(uid));
             setTable(db.getTableGoodsDao().getByUid(uid));
             setAdapter(new GoodsOrderRecyclerViewAdapter(getTable(), this));
             notifyPropertyChanged(BR.title);
-            subscriber.onComplete();
-        });
     }
 
     @NonNull

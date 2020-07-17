@@ -20,8 +20,6 @@ import dev.voleum.ordermolder.models.CashReceipt;
 import dev.voleum.ordermolder.models.Order;
 import dev.voleum.ordermolder.models.TableObjects;
 import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, TableObjects, ObjectsCashReceiptRecyclerViewAdapter> implements Spinner.OnItemSelectedListener {
 
@@ -49,21 +47,16 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
         setDocument(new CashReceipt());
         setTable(getDocument().getTable());
         setAdapter(new ObjectsCashReceiptRecyclerViewAdapter(getTable(), this));
-        initSpinnersData()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        notifyPropertyChanged(BR.title);
+        initSpinnersData();
     }
 
     public void setCashReceipt(String uid) {
         if (getDocument() != null) return;
         setDocument(new CashReceipt());
         setTable(getDocument().getTable());
-        getDocByUid(uid)
-                .andThen(initSpinnersData())
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        getDocByUid(uid);
+        initSpinnersData();
     }
 
     public void addRow(Order order) {
@@ -77,15 +70,12 @@ public class CashReceiptViewModel extends AbstractDocViewModel<CashReceipt, Tabl
     }
 
     @NonNull
-    public Completable getDocByUid(String uid) {
-        return Completable.create(subscriber -> {
+    public void getDocByUid(String uid) {
             DbRoom db = OrderMolder.getApplication().getDatabase();
             setDocument(db.getCashReceiptDao().getByUid(uid));
             setTable(db.getTableObjectsDao().getByUid(uid));
             setAdapter(new ObjectsCashReceiptRecyclerViewAdapter(getTable(), this));
             notifyPropertyChanged(BR.title);
-            subscriber.onComplete();
-        });
     }
 
     @NonNull

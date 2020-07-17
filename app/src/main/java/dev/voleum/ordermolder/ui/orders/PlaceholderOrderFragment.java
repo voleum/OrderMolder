@@ -103,7 +103,7 @@ public class PlaceholderOrderFragment extends Fragment {
                 ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
                 touchHelper.attachToRecyclerView(recyclerGoods);
 
-                FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
+                FloatingActionButton fab = requireActivity().findViewById(R.id.fab);
                 fab.setOnClickListener(view -> {
                             startActivityForResult(new Intent(getActivity(), GoodsChooserActivity.class), GOOD_CHOOSE_REQUEST);
                         }

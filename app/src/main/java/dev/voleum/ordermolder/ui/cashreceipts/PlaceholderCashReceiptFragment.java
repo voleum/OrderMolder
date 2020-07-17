@@ -103,7 +103,7 @@ public class PlaceholderCashReceiptFragment extends Fragment {
                 ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
                 touchHelper.attachToRecyclerView(recyclerObjects);
 
-                FloatingActionButton fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
+                FloatingActionButton fab = requireActivity().findViewById(R.id.fab);
                 fab.setOnClickListener(view -> {
                             Intent intentOut = new Intent(getActivity(), ObjectsChooserActivity.class);
                             intentOut.putExtra(ObjectsChooserActivity.COMPANY_UID, (cashReceiptViewModel.getDocument().getCompanyUid()));
