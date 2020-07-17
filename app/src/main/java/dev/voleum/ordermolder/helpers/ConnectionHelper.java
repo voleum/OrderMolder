@@ -37,6 +37,7 @@ class ConnectionHelper {
         if (password.isEmpty()) return OrderMolder.getApplication().getResources().getString(R.string.snackbar_empty_password);
 
         FTPClient ftp = new FTPClient();
+//        ftp.setDefaultTimeout(1000);
 
         try {
             // region Connect

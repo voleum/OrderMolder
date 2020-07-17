@@ -26,6 +26,7 @@
     <string name="snackbar_empty_password">Порожній пароль!</string>
     <string name="snackbar_couldnt_send_data">Не вдалося надіслати дані!</string>
     <string name="snackbar_couldnt_receive_data">Не вдалося отримати дані!</string>
+    <string name="snackbar_no_file_on_server">Немає файлу на сервері!</string>
 
     <!--  BUTTONS  -->
     <string name="button_exchange">Обмін даними</string>

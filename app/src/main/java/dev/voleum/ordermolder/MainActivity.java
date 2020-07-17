@@ -161,7 +161,10 @@ public class MainActivity extends AppCompatActivity {
 
                                        @Override
                                        public void onError(Throwable e) {
-                                           if (e != null) Log.d(OrderMolder.LOG_TAG, e.getMessage());
+                                           if (e != null) {
+                                               Log.d(OrderMolder.LOG_TAG, e.getMessage());
+                                               showSnackbar(v, e.getMessage());
+                                           }
                                        }
                                    }
                         );
@@ -183,7 +186,10 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(Throwable e) {
-                                if (e != null) Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                                if (e != null) {
+                                    Log.d(OrderMolder.LOG_TAG, e.getMessage());
+                                    showSnackbar(v, e.getMessage());
+                                }
                             }
                         });
                 break;
